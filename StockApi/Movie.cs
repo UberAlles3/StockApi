@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MattWebApi
+namespace StockApi
 {
     class Movie
     {

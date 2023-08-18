@@ -1,5 +1,5 @@
 ﻿
-namespace MattWebApi
+namespace StockApi
 {
     partial class Form1
     {

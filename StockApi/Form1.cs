@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 // 2dadcc0b -- API key
 
-namespace MattWebApi
+namespace StockApi
 {
     public partial class Form1 : Form
     {
