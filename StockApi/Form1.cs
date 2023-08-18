@@ -51,7 +51,7 @@ namespace MattWebApi
                 decimal beta = 0;
                 bool success = decimal.TryParse(stock.summaryDetail.beta.ToString(), out beta);
 
-
+                ///
                 Debug.WriteLine(beta);
             }
         }
