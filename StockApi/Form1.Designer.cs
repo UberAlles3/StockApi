@@ -43,12 +43,13 @@ namespace StockApi
             // 
             // btnGetOne
             // 
-            this.btnGetOne.Location = new System.Drawing.Point(33, 41);
+            this.btnGetOne.BackColor = System.Drawing.Color.Transparent;
+            this.btnGetOne.Location = new System.Drawing.Point(33, 43);
             this.btnGetOne.Name = "btnGetOne";
             this.btnGetOne.Size = new System.Drawing.Size(161, 35);
             this.btnGetOne.TabIndex = 0;
             this.btnGetOne.Text = "Get individual stock data";
-            this.btnGetOne.UseVisualStyleBackColor = true;
+            this.btnGetOne.UseVisualStyleBackColor = false;
             this.btnGetOne.Click += new System.EventHandler(this.btnGetOne_click);
             // 
             // txtStockTicker
@@ -63,7 +64,9 @@ namespace StockApi
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(33, 20);
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(23)))), ((int)(((byte)(32)))));
+            this.label1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label1.Location = new System.Drawing.Point(33, 17);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 15);
             this.label1.TabIndex = 2;
@@ -105,7 +108,7 @@ namespace StockApi
             this.panel1.Controls.Add(this.label3);
             this.panel1.Location = new System.Drawing.Point(260, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(313, 184);
+            this.panel1.Size = new System.Drawing.Size(313, 101);
             this.panel1.TabIndex = 6;
             // 
             // label3
@@ -123,12 +126,15 @@ namespace StockApi
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(615, 450);
+            this.BackgroundImage = global::StockApi.Properties.Resources.background;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(611, 354);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnGetAll);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtStockTicker);
             this.Controls.Add(this.btnGetOne);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Stock Data";
