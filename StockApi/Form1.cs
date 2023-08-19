@@ -21,6 +21,7 @@ namespace StockApi
     public partial class Form1 : Form
     {
         private static StockData _StockData;
+        private static string url = "https://finance.yahoo.com/quote/";
 
         public Form1()
         {
@@ -32,84 +33,23 @@ namespace StockApi
         {
             EquitySummaryData equitySummaryData = new EquitySummaryData();
 
-            string url = "https://finance.yahoo.com/quote/intc";
-            HttpClient cl = new HttpClient();
-            HttpResponseMessage hrm = await cl.GetAsync(url);
-            string web = await hrm.Content.ReadAsStringAsync();
-
-            equitySummaryData.Beta =  System.Convert.ToSingle(GetDataByDataTestName(web, "BETA_5Y-value"));
-
-
-
-            
-
-            string jsonResponse = "";
-            
-            if(string.IsNullOrEmpty(txtStockTicker.Text))
+            if (string.IsNullOrEmpty(txtStockTicker.Text))
             {
                 MessageBox.Show("Enter a valid stock ticker.");
                 return;
             }
-            
-            HttpRequestMessage request = CreateHttpRequest(txtStockTicker.Text);
-            await GetHttpResponse(request, jsonResponse);
+
+            lblBeta.Text = "...";
+
+            HttpClient cl = new HttpClient();
+            HttpResponseMessage hrm = await cl.GetAsync(url + txtStockTicker.Text);
+            string web = await hrm.Content.ReadAsStringAsync();
+
+            equitySummaryData.Beta =  System.Convert.ToSingle(GetDataByDataTestName(web, "BETA_5Y-value"));
+            lblBeta.Text = equitySummaryData.Beta.ToString();
         }
 
-        private static HttpRequestMessage CreateHttpRequest(string stockTicker)
-        {
-            return new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("https://yh-finance-complete.p.rapidapi.com/yhf?ticker=" + stockTicker),
-                Headers =
-                {
-                    { "X-RapidAPI-Key", "5b43e47e81msh209d3a319f60d02p1e399ajsne949d592c311" },
-                    { "X-RapidAPI-Host", "yh-finance-complete.p.rapidapi.com" },
-                },
-            };
-        }
-
-        private static async Task GetHttpResponse(HttpRequestMessage request, string jsonReponse)
-        {
-            var client = new HttpClient();
-
-            using (var response = client.SendAsync(request))
-            {
-                string jsonResponse = await response.Result.Content.ReadAsStringAsync();
-                ParseJsonResponse(jsonResponse);
-            }
-        }
-
-        private static void ParseJsonResponse(string body)
-        {
-            dynamic stock = JsonConvert.DeserializeObject(body);
-
-            try
-            {
-                string error = stock.error;
-                if (error != null)
-                {
-                    MessageBox.Show("API Error:" + Environment.NewLine + error + Environment.NewLine + "Possibly an invalid ticker.");
-                    return;
-                }
-            }
-            catch
-            {
-            }
-
-            decimal beta = 0;
-            bool success = decimal.TryParse(stock.summaryDetail.beta.ToString(), out beta);
-
-            if (success)
-            {
-                _StockData = new StockData();
-                _StockData.Beta = beta;
-            }
-
-
-            Debug.WriteLine(beta);
-        }
-
+ 
         private string GetDataByDataTestName(string web_data, string data_test_name)
         {
             int loc1 = 0;
