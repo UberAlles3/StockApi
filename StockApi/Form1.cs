@@ -28,7 +28,7 @@ namespace StockApi
         {
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             lblTicker.Text = "";
-            txtTickerList.Text = "INTC" + Environment.NewLine + "DHC" + Environment.NewLine + "VZ" + Environment.NewLine;
+            txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine + "AM" + Environment.NewLine;
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -49,9 +49,28 @@ namespace StockApi
             PostWebCall(_stockData); // displays the data returned
         }
 
-        private void btnGetAll_Click(object sender, EventArgs e)
+        private async void btnGetAll_Click(object sender, EventArgs e)
         {
+            StringBuilder builder = new StringBuilder();
+            
+            List<string> stockList = new List<string>();
+            stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
+            stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
 
+            txtTickerList.Text = ".";
+            foreach (string ticker in stockList)
+            {
+                string trimmedTicker = ticker.Substring(0, (ticker + ",").IndexOf(","));
+
+                string html = await YahooFinance.GetHtmlForTicker(trimmedTicker);
+                txtTickerList.Text += ".";
+
+                // Extract the individual data values from the html
+                YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
+
+                builder.Append($"{trimmedTicker}, {_stockData.Beta}, {_stockData.EarningsPerShare}, {_stockData.OneYearTargetPrice}, {_stockData.FairValue}, {_stockData.EstimatedReturn}{Environment.NewLine}");
+            }
+            txtTickerList.Text = builder.ToString();
         }
 
         private void PreWebCall()
