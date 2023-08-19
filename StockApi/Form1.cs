@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http.Headers;
 using System.Net.Http;
@@ -19,8 +18,7 @@ namespace StockApi
 {
     public partial class Form1 : Form
     {
-        private static string _url = "https://finance.yahoo.com/quote/";
-        private static StockData _stockData = new StockData();
+        private static YahooFinance.StockData _stockData = new YahooFinance.StockData();
         
         public Form1()
         {
@@ -44,20 +42,16 @@ namespace StockApi
             PreWebCall(); // Sets the form display while the request is executing
 
             // Execute the request to get html from Yahoo Finance
-            string web = await GetHtmlFromYahooFinance(txtStockTicker.Text);
-
+            string html = await YahooFinance.GetHtmlForTicker(txtStockTicker.Text);
             // Extract the individual data values from the html
-            YahooFinanceHtmlParser.ExtractDataFromHtml(_stockData, web);
+            YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
 
             PostWebCall(_stockData); // displays the data returned
         }
 
-        private async Task<string> GetHtmlFromYahooFinance(string ticker)
+        private void btnGetAll_Click(object sender, EventArgs e)
         {
-            HttpClient cl = new HttpClient();
-            HttpResponseMessage hrm = await cl.GetAsync(_url + ticker);
-            string web = await hrm.Content.ReadAsStringAsync();
-            return web;
+
         }
 
         private void PreWebCall()
@@ -67,16 +61,11 @@ namespace StockApi
             lblBeta.Text = "...";
             lblEPS.Text = "...";
         }
-        private void PostWebCall(StockData stockData)
+        private void PostWebCall(YahooFinance.StockData stockData)
         {
             btnGetOne.Enabled = true;
             lblBeta.Text = stockData.Beta.ToString();
             lblEPS.Text = stockData.EarningsPerShare.ToString();
-        }
-
-        private void btnGetAll_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
