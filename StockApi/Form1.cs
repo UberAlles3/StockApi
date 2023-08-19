@@ -12,7 +12,6 @@ using System.Windows.Forms;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Diagnostics;
-using Yahoo.Finance;
 
 // 2dadcc0b -- API key
 
@@ -20,52 +19,64 @@ namespace StockApi
 {
     public partial class Form1 : Form
     {
-        private static StockData _StockData;
-        private static string url = "https://finance.yahoo.com/quote/";
-
+        private static string _url = "https://finance.yahoo.com/quote/";
+        private static StockData _stockData = new StockData();
+        
         public Form1()
         {
             InitializeComponent();
         }
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
+            lblTicker.Text = "";
+            txtTickerList.Text = "INTC" + Environment.NewLine + "DHC" + Environment.NewLine + "VZ" + Environment.NewLine;
+        }
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-            EquitySummaryData equitySummaryData = new EquitySummaryData();
-
             if (string.IsNullOrEmpty(txtStockTicker.Text))
             {
                 MessageBox.Show("Enter a valid stock ticker.");
                 return;
             }
 
-            lblBeta.Text = "...";
+            PreWebCall(); // Sets the form display while the request is executing
 
-            HttpClient cl = new HttpClient();
-            HttpResponseMessage hrm = await cl.GetAsync(url + txtStockTicker.Text);
-            string web = await hrm.Content.ReadAsStringAsync();
+            // Execute the request to get html from Yahoo Finance
+            string web = await GetHtmlFromYahooFinance(txtStockTicker.Text);
 
-            equitySummaryData.Beta =  System.Convert.ToSingle(GetDataByDataTestName(web, "BETA_5Y-value"));
-            lblBeta.Text = equitySummaryData.Beta.ToString();
+            // Extract the individual data values from the html
+            YahooFinanceHtmlParser.ExtractDataFromHtml(_stockData, web);
+
+            PostWebCall(_stockData); // displays the data returned
         }
 
- 
-        private string GetDataByDataTestName(string web_data, string data_test_name)
+        private async Task<string> GetHtmlFromYahooFinance(string ticker)
         {
-            int loc1 = 0;
-            int loc2 = 0;
+            HttpClient cl = new HttpClient();
+            HttpResponseMessage hrm = await cl.GetAsync(_url + ticker);
+            string web = await hrm.Content.ReadAsStringAsync();
+            return web;
+        }
 
-            loc1 = web_data.IndexOf("data-test=\"" + data_test_name + "\"");
-            if (loc1 == -1)
-            {
-                throw new Exception("Unable to find data with data test name '" + web_data + "' inside web data.");
-            }
+        private void PreWebCall()
+        {
+            btnGetOne.Enabled = false;
+            lblTicker.Text = txtStockTicker.Text.ToUpper();
+            lblBeta.Text = "...";
+            lblEPS.Text = "...";
+        }
+        private void PostWebCall(StockData stockData)
+        {
+            btnGetOne.Enabled = true;
+            lblBeta.Text = stockData.Beta.ToString();
+            lblEPS.Text = stockData.EarningsPerShare.ToString();
+        }
 
-            loc1 = web_data.IndexOf(">", loc1 + 1);
-            loc2 = web_data.IndexOf("<", loc1 + 1);
+        private void btnGetAll_Click(object sender, EventArgs e)
+        {
 
-            string middle = web_data.Substring(loc1 + 1, loc2 - loc1 - 1);
-            return middle;
         }
     }
 }

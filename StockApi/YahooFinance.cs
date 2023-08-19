@@ -4,9 +4,9 @@ using System.Text;
 
 namespace StockApi
 {
-    public class StockData
+    public class YahooFinance
     {
-        public float Beta = 0;
-        public float EarningsPerShare = 0;
+    
+    
     }
 }
