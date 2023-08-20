@@ -38,6 +38,8 @@ namespace StockApi
                 stockData.Beta = GetFloatValueFromHtml(html, "BETA_5Y-value", 1.0F);
                 stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", 0.0F);
                 stockData.OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", stockData.Price);
+                
+                // Fair Value
                 stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Overvalued<", "");
                 if (stockData.FairValue == "")
                 {
@@ -122,12 +124,12 @@ namespace StockApi
         public class StockData
         {
             public string Ticker = "";
-            public float Price = 0;
-            public float Beta = 1;
-            public float EarningsPerShare = 0;
-            public float OneYearTargetPrice = 0;
+            public float  Price = 0;
+            public float  Beta = 1;
+            public float  EarningsPerShare = 0;
+            public float  OneYearTargetPrice = 0;
             public string FairValue = "";
-            public float EstimatedReturn = 0;
+            public float  EstimatedReturn = 0;
         }
     }
 }
