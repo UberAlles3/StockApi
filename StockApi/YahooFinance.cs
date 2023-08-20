@@ -34,7 +34,7 @@ namespace StockApi
             public static void ExtractDataFromHtml(StockData stockData, string html)
             {
                 stockData.Ticker = Ticker;
-                stockData.Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)"));
+                stockData.Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
                 stockData.Beta = GetFloatValueFromHtml(html, "BETA_5Y-value", 1.0F);
                 stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", 0.0F);
                 stockData.OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", stockData.Price);
@@ -45,6 +45,8 @@ namespace StockApi
                     if (stockData.FairValue == "")
                     {
                         stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Undervalued<", "FV");
+                        if (stockData.FairValue != "")
+                            stockData.FairValue = "UV";
                     }
                     else
                         stockData.FairValue = "FV";
@@ -67,12 +69,13 @@ namespace StockApi
                     return defaultValue;
             }
 
-            private static string GetDataByClassName(string html, string class_name)
+            private static string GetDataByClassName(string html, string class_name, string defaultValue)
             {
                 int loc1 = html.IndexOf("class=\"" + class_name + "\"");
                 if (loc1 == -1)
                 {
-                    throw new Exception("Unable to find class with name '" + class_name + "' in the web data.");
+                    //throw new Exception("Unable to find class with name '" + class_name + "' in the web data.");
+                    return defaultValue;
                 }
                 loc1 = html.IndexOf(">", loc1 + 1);
                 int loc2 = html.IndexOf("<", loc1 + 1);
