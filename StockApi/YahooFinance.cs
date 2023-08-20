@@ -11,8 +11,18 @@ namespace StockApi
         private static string _url = "https://finance.yahoo.com/quote/";
         public static string Html { get; set;}
 
+        private static string _ticker;
+        public static string Ticker
+        {
+            get { return _ticker; }
+            set { _ticker = value.ToUpper(); }
+        }
+
+
         public static async Task<string> GetHtmlForTicker(string ticker)
         {
+            Ticker = ticker;
+
             HttpClient cl = new HttpClient();
             HttpResponseMessage hrm = await cl.GetAsync(_url + ticker);
             string Html = await hrm.Content.ReadAsStringAsync();
@@ -21,37 +31,56 @@ namespace StockApi
 
         public class HtmlParser
         {
-            public static void ExtractDataFromHtml(StockData equitySummaryData, string html)
+            public static void ExtractDataFromHtml(StockData stockData, string html)
             {
-                equitySummaryData.Beta = System.Convert.ToSingle(GetValueFromHtml(html, "BETA_5Y-value"));
-                equitySummaryData.EarningsPerShare = System.Convert.ToSingle(GetValueFromHtml(html, "EPS_RATIO-value"));
-                equitySummaryData.OneYearTargetPrice = System.Convert.ToSingle(GetValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value"));
-                equitySummaryData.FairValue = GetValueFromHtmlBySearchText(html, ">Overvalued<");
-                if (equitySummaryData.FairValue == "")
+                stockData.Ticker = Ticker;
+                stockData.Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)"));
+                stockData.Beta = GetFloatValueFromHtml(html, "BETA_5Y-value", 1.0F);
+                stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", 0.0F);
+                stockData.OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", stockData.Price);
+                stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Overvalued<", "");
+                if (stockData.FairValue == "")
                 {
-                    equitySummaryData.FairValue = GetValueFromHtmlBySearchText(html, ">Near Fair Value<");
-                    if (equitySummaryData.FairValue == "")
+                    stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Near Fair Value<", "");
+                    if (stockData.FairValue == "")
                     {
-                        equitySummaryData.FairValue = GetValueFromHtmlBySearchText(html, ">Undervalued<");
-                        if (equitySummaryData.FairValue != "")
-                            equitySummaryData.FairValue = "UV";
+                        stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Undervalued<", "FV");
                     }
                     else
-                        equitySummaryData.FairValue = "FV";
+                        stockData.FairValue = "FV";
                 }
                 else
-                    equitySummaryData.FairValue = "OV";
+                    stockData.FairValue = "OV";
 
                 //% Est. Return<
-                string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<");
-                if (estReturn != "")
-                {
-                    estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
-                    equitySummaryData.EstimatedReturn = System.Convert.ToSingle(estReturn);
-                }
+                string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<", "0%");
+                estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
+                stockData.EstimatedReturn = System.Convert.ToSingle(estReturn);
             }
 
-            private static string GetValueFromHtml(string html, string data_test_name)
+            private static float GetFloatValueFromHtml(string html, string data_test_name, float defaultValue)
+            {
+                string temp = GetValueFromHtml(html, data_test_name, defaultValue);
+                if (temp != "N/A")
+                    return System.Convert.ToSingle(temp);
+                else
+                    return defaultValue;
+            }
+
+            private static string GetDataByClassName(string html, string class_name)
+            {
+                int loc1 = html.IndexOf("class=\"" + class_name + "\"");
+                if (loc1 == -1)
+                {
+                    throw new Exception("Unable to find class with name '" + class_name + "' in the web data.");
+                }
+                loc1 = html.IndexOf(">", loc1 + 1);
+                int loc2 = html.IndexOf("<", loc1 + 1);
+                string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
+                return middle;
+            }
+
+            private static string GetValueFromHtml(string html, string data_test_name, float defaultValue)
             {
                 int loc1 = 0;
                 int loc2 = 0;
@@ -59,7 +88,7 @@ namespace StockApi
                 loc1 = html.IndexOf("data-test=\"" + data_test_name + "\"");
                 if (loc1 == -1)
                 {
-                    throw new Exception("Unable to find data with data test name '" + html + "' inside web data.");
+                    return defaultValue.ToString();
                 }
 
                 loc1 = html.IndexOf(">", loc1 + 1);
@@ -69,7 +98,7 @@ namespace StockApi
                 return middle;
             }
 
-            private static string GetValueFromHtmlBySearchText(string html, string searchText)
+            private static string GetValueFromHtmlBySearchText(string html, string searchText, string defaultValue)
             {
                 int loc1 = 0;
                 int loc2 = 0;
@@ -77,7 +106,7 @@ namespace StockApi
                 loc1 = html.IndexOf(searchText);
                 if (loc1 == -1)
                 {
-                    return "";
+                    return defaultValue;
                 }
 
                 loc1 = html.IndexOf(">", loc1 - 4);
@@ -89,7 +118,9 @@ namespace StockApi
         }
         public class StockData
         {
-            public float Beta = 0;
+            public string Ticker = "";
+            public float Price = 0;
+            public float Beta = 1;
             public float EarningsPerShare = 0;
             public float OneYearTargetPrice = 0;
             public string FairValue = "";

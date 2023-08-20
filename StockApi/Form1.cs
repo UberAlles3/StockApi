@@ -44,6 +44,7 @@ namespace StockApi
             // Execute the request to get html from Yahoo Finance
             string html = await YahooFinance.GetHtmlForTicker(txtStockTicker.Text);
             // Extract the individual data values from the html
+            _stockData.Ticker = txtStockTicker.Text;
             YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
 
             PostWebCall(_stockData); // displays the data returned
@@ -60,15 +61,15 @@ namespace StockApi
             txtTickerList.Text = ".";
             foreach (string ticker in stockList)
             {
-                string trimmedTicker = ticker.Substring(0, (ticker + ",").IndexOf(","));
+                _stockData.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
 
-                string html = await YahooFinance.GetHtmlForTicker(trimmedTicker);
+                string html = await YahooFinance.GetHtmlForTicker(_stockData.Ticker);
                 txtTickerList.Text += ".";
 
                 // Extract the individual data values from the html
                 YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
 
-                builder.Append($"{trimmedTicker}, {_stockData.Beta}, {_stockData.EarningsPerShare}, {_stockData.OneYearTargetPrice}, {_stockData.FairValue}, {_stockData.EstimatedReturn}{Environment.NewLine}");
+                builder.Append($"{_stockData.Ticker}, {_stockData.Beta}, {_stockData.EarningsPerShare}, {_stockData.OneYearTargetPrice}, {_stockData.FairValue}, {_stockData.EstimatedReturn}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
