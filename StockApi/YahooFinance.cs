@@ -154,7 +154,7 @@ namespace StockApi
             if (beginDate.DayOfWeek == DayOfWeek.Sunday)
                 beginDate = beginDate.AddDays(-2);
 
-            string html = await YahooFinance.GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
+            string html = await YahooFinance.GetHistoryHtmlForTicker(YahooFinance.Ticker, beginDate, endDate);
 
             for(int i = 0; i < endDate.Subtract(beginDate).TotalDays; i++)
             {
@@ -215,6 +215,12 @@ namespace StockApi
             public DateTime PriceDate;
             public float Price = 0;
             public int Volume = 0;
+            public override string ToString()
+            {
+                return string.Format(
+                    $"{Ticker}, {PriceDate.ToString("MMM dd, yyyy")}, {Price}"
+                ); ;
+            }
         }
     }
 }
