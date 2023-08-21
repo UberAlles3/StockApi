@@ -143,16 +143,16 @@ namespace StockApi
         //                 HISTORIC STOCK DATA
         //********************************************************
 
-        public static async Task<List<HistoricData>> GetHistoricalData(string ticker, DateTime beginDate, DateTime endDate)
+        public static HistoricData GetHistoricalDataForDate(string html, DateTime beginDate)
         {
-            String yahooURL = String.Format("http://ichart.finance.yahoo.com/table.csv?s={0}&a={1}&b={2}&c={3}&d={4}&e={5}&f={6}&g=d&ignore=.csv", ticker, "8", "15", "2023", "8", "20", "2023");
+            //string html = await GetHistoryHtmlForTicker(ticker);
 
-            string html = await GetHistoryHtmlForTicker(ticker);
 
-            string part = html.Substring(html.IndexOf("Aug 18, 2023") - 5, 320);
+            int historyLocation = html.IndexOf("data-test=\"historical - prices\"");
+            string data = html.Substring(html.IndexOf("Aug 18, 2023", historyLocation) - 5, 320);
 
             var items = new List<string>();
-            foreach (Match match in Regex.Matches(part, "span>(.*?)</span"))
+            foreach (Match match in Regex.Matches(data, "span>(.*?)</span"))
                 items.Add(match.Groups[1].Value);
             string output = String.Join(" ", items);
 
@@ -166,6 +166,9 @@ namespace StockApi
             HttpClient cl = new HttpClient();
             HttpResponseMessage hrm = await cl.GetAsync(_url);
             string html = await hrm.Content.ReadAsStringAsync();
+
+            int historyLocation = html.IndexOf("data-test=\"historical-prices\"");
+            html = html.Substring(historyLocation);
 
             return html;
         }

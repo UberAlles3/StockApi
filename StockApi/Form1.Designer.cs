@@ -68,6 +68,7 @@ namespace StockApi
             this.txtStockTicker.Name = "txtStockTicker";
             this.txtStockTicker.Size = new System.Drawing.Size(166, 23);
             this.txtStockTicker.TabIndex = 1;
+            this.txtStockTicker.Text = "intc";
             // 
             // label1
             // 

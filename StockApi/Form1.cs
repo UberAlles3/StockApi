@@ -91,9 +91,15 @@ namespace StockApi
 
         private async void btnGetHistory_Click(object sender, EventArgs e)
         {
-            List<YahooFinance.HistoricData> historicData = new List<YahooFinance.HistoricData>();
+            if (string.IsNullOrEmpty(txtStockTicker.Text))
+            {
+                MessageBox.Show("Enter a valid stock ticker.");
+                return;
+            }
 
-            historicData = await YahooFinance.GetHistoricalData("INTC", DateTime.Now.AddDays(-1), DateTime.Now);
+            string html = await YahooFinance.GetHistoryHtmlForTicker(txtStockTicker.Text);
+
+            //historicData = await YahooFinance.GetHistoricalData("INTC", DateTime.Now.AddDays(-1), DateTime.Now);
         }
     }
 }
