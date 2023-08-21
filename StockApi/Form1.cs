@@ -48,6 +48,13 @@ namespace StockApi
             _stockData.Ticker = txtStockTicker.Text;
             YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
 
+            // Get price history, Today, month ago, year ago to determine long and short trend
+            //html = await YahooFinance.GetHistoryHtmlForTicker(txtStockTicker.Text);
+
+            YahooFinance.HistoricData historicData1 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now, DateTime.Now.AddDays(2));
+//            YahooFinance.HistoricData historicData2 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddMonths(-1));
+//            YahooFinance.HistoricData historicData3 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddYears(-1).AddDays(2));
+
             PostWebCall(_stockData); // displays the data returned
         }
 
@@ -89,18 +96,16 @@ namespace StockApi
             lblEPS.Text = stockData.EarningsPerShare.ToString();
         }
 
-        private async void btnGetHistory_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(txtStockTicker.Text))
-            {
-                MessageBox.Show("Enter a valid stock ticker.");
-                return;
-            }
+        //private async void btnGetHistory_Click(object sender, EventArgs e)
+        //{
+        //    if (string.IsNullOrEmpty(txtStockTicker.Text))
+        //    {
+        //        MessageBox.Show("Enter a valid stock ticker.");
+        //        return;
+        //    }
 
-            string html = await YahooFinance.GetHistoryHtmlForTicker(txtStockTicker.Text);
+        //    YahooFinance.HistoricData historicData = await YahooFinance.GetHistoricalDataForDate(DateTime.Now);
 
-            YahooFinance.HistoricData historicData = YahooFinance.GetHistoricalDataForDate(html, DateTime.Now);
-
-        }
+        //}
     }
 }

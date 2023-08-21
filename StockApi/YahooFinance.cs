@@ -14,7 +14,8 @@ namespace StockApi
     public class YahooFinance
     {
         private static string _url = "https://finance.yahoo.com/quote/";
-        private static string _historicalDataUrl = "https://finance.yahoo.com/quote/???/history?p=???";
+        //private static string _historicalDataUrl = "https://finance.yahoo.com/quote/???/history?p=???";
+        private static string _historicalDataUrl = "https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
 
         public static string Html { get; set;}
 
@@ -143,9 +144,16 @@ namespace StockApi
         //                 HISTORIC STOCK DATA
         //********************************************************
 
-        public static HistoricData GetHistoricalDataForDate(string html, DateTime theDate)
+        public static async Task<HistoricData> GetHistoricalDataForDate(DateTime beginDate, DateTime endDate)
         {
-            string formattedDate = theDate.ToString("MMM dd, yyyy");
+            if (beginDate.DayOfWeek == DayOfWeek.Saturday)
+                beginDate = beginDate.AddDays(-1);
+            if (beginDate.DayOfWeek == DayOfWeek.Sunday)
+                beginDate = beginDate.AddDays(-2);
+
+            string formattedDate = beginDate.ToString("MMM dd, yyyy");
+
+            string html = await YahooFinance.GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
 
             string data = html.Substring(html.IndexOf(formattedDate), 480);
             data = data.Substring(data.IndexOf("<span>"));
@@ -157,17 +165,25 @@ namespace StockApi
 
             HistoricData historicData = new HistoricData();
             historicData.Ticker = Ticker;
-            historicData.PriceDate = theDate;
+            historicData.PriceDate = beginDate;
             historicData.Price = Convert.ToSingle(items[3]);
             historicData.Volume = Convert.ToInt32(items[5].Replace(",",""));
 
-            return null;
+            return historicData;
         }
 
-        public static async Task<string> GetHistoryHtmlForTicker(string ticker)
+        public static async Task<string> GetHistoryHtmlForTicker(string ticker, DateTime beginDate, DateTime endDate)
         {
             Ticker = ticker;
-            _url = _historicalDataUrl.Replace("???", ticker);
+            _url = _historicalDataUrl.Replace("?ticker?", ticker);
+
+            // Get seconds pasesed since 1/1/1970
+            double beginEpoch = beginDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            double endEpoch = endDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+            _url = _url.Replace("?period1?", Convert.ToInt32(beginEpoch).ToString());
+            _url = _url.Replace("?period2?", Convert.ToInt32(endEpoch).ToString());
+
 
             HttpClient cl = new HttpClient();
             HttpResponseMessage hrm = await cl.GetAsync(_url);

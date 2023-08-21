@@ -126,7 +126,7 @@ namespace StockApi
             this.panel1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel1.Location = new System.Drawing.Point(270, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(313, 304);
+            this.panel1.Size = new System.Drawing.Size(318, 281);
             this.panel1.TabIndex = 6;
             // 
             // lblTicker
@@ -217,13 +217,12 @@ namespace StockApi
             // 
             // btnGetHistory
             // 
-            this.btnGetHistory.Location = new System.Drawing.Point(373, 322);
+            this.btnGetHistory.Location = new System.Drawing.Point(270, 305);
             this.btnGetHistory.Name = "btnGetHistory";
-            this.btnGetHistory.Size = new System.Drawing.Size(75, 23);
+            this.btnGetHistory.Size = new System.Drawing.Size(92, 33);
             this.btnGetHistory.TabIndex = 12;
             this.btnGetHistory.Text = "Get History";
             this.btnGetHistory.UseVisualStyleBackColor = true;
-            this.btnGetHistory.Click += new System.EventHandler(this.btnGetHistory_Click);
             // 
             // Form1
             // 
@@ -232,7 +231,7 @@ namespace StockApi
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.BackgroundImage = global::StockApi.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(613, 367);
+            this.ClientSize = new System.Drawing.Size(630, 410);
             this.Controls.Add(this.btnGetHistory);
             this.Controls.Add(this.txtTickerList);
             this.Controls.Add(this.label7);
