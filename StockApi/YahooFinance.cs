@@ -144,32 +144,47 @@ namespace StockApi
         //                 HISTORIC STOCK DATA
         //********************************************************
 
-        public static async Task<HistoricData> GetHistoricalDataForDate(DateTime beginDate, DateTime endDate)
+        public static async Task<List<HistoricData>> GetHistoricalDataForDate(DateTime beginDate, DateTime endDate)
         {
+            string formattedDate = "";
+            List<HistoricData> historicDataList = new List<HistoricData>();
+
             if (beginDate.DayOfWeek == DayOfWeek.Saturday)
                 beginDate = beginDate.AddDays(-1);
             if (beginDate.DayOfWeek == DayOfWeek.Sunday)
                 beginDate = beginDate.AddDays(-2);
 
-            string formattedDate = beginDate.ToString("MMM dd, yyyy");
-
             string html = await YahooFinance.GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
 
-            string data = html.Substring(html.IndexOf(formattedDate), 480);
-            data = data.Substring(data.IndexOf("<span>"));
+            for(int i = 0; i < endDate.Subtract(beginDate).TotalDays; i++)
+            {
+                formattedDate = beginDate.AddDays(i).ToString("MMM dd, yyyy");
+                int index = html.IndexOf(formattedDate);
 
-            var items = new List<string>();
-            foreach (Match match in Regex.Matches(data, "span>(.*?)</span"))
-                items.Add(match.Groups[1].Value);
-            string output = String.Join(" ", items);
+                if (index < 0)
+                    continue;
 
-            HistoricData historicData = new HistoricData();
-            historicData.Ticker = Ticker;
-            historicData.PriceDate = beginDate;
-            historicData.Price = Convert.ToSingle(items[3]);
-            historicData.Volume = Convert.ToInt32(items[5].Replace(",",""));
+                string htmlForDate = html.Substring(index, 480);
+                htmlForDate = htmlForDate.Substring(htmlForDate.IndexOf("<span>"));
 
-            return historicData;
+                var items = new List<string>();
+                foreach (Match match in Regex.Matches(htmlForDate, "span>(.*?)</span"))
+                    items.Add(match.Groups[1].Value);
+
+                if (items.Count < 5)
+                    continue;
+
+                HistoricData historicData = new HistoricData();
+
+                historicData.Ticker = Ticker;
+                historicData.PriceDate = beginDate.AddDays(i).Date;
+                historicData.Price = Convert.ToSingle(items[3]);
+                historicData.Volume = Convert.ToInt32(items[5].Replace(",",""));
+
+                historicDataList.Add(historicData);
+            }
+
+            return historicDataList;
         }
 
         public static async Task<string> GetHistoryHtmlForTicker(string ticker, DateTime beginDate, DateTime endDate)

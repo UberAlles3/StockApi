@@ -51,7 +51,7 @@ namespace StockApi
             // Get price history, Today, month ago, year ago to determine long and short trend
             //html = await YahooFinance.GetHistoryHtmlForTicker(txtStockTicker.Text);
 
-            YahooFinance.HistoricData historicData1 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now, DateTime.Now.AddDays(2));
+            List<YahooFinance.HistoricData> historicData1 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddMonths(-1), DateTime.Now);
 //            YahooFinance.HistoricData historicData2 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddMonths(-1));
 //            YahooFinance.HistoricData historicData3 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddYears(-1).AddDays(2));
 
