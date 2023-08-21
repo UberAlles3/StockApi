@@ -143,24 +143,30 @@ namespace StockApi
         //                 HISTORIC STOCK DATA
         //********************************************************
 
-        public static HistoricData GetHistoricalDataForDate(string html, DateTime beginDate)
+        public static HistoricData GetHistoricalDataForDate(string html, DateTime theDate)
         {
-            //string html = await GetHistoryHtmlForTicker(ticker);
+            string formattedDate = theDate.ToString("MMM dd, yyyy");
 
-
-            int historyLocation = html.IndexOf("data-test=\"historical - prices\"");
-            string data = html.Substring(html.IndexOf("Aug 18, 2023", historyLocation) - 5, 320);
+            string data = html.Substring(html.IndexOf(formattedDate), 480);
+            data = data.Substring(data.IndexOf("<span>"));
 
             var items = new List<string>();
             foreach (Match match in Regex.Matches(data, "span>(.*?)</span"))
                 items.Add(match.Groups[1].Value);
             string output = String.Join(" ", items);
 
+            HistoricData historicData = new HistoricData();
+            historicData.Ticker = Ticker;
+            historicData.PriceDate = theDate;
+            historicData.Price = Convert.ToSingle(items[3]);
+            historicData.Volume = Convert.ToInt32(items[5].Replace(",",""));
+
             return null;
         }
 
         public static async Task<string> GetHistoryHtmlForTicker(string ticker)
         {
+            Ticker = ticker;
             _url = _historicalDataUrl.Replace("???", ticker);
 
             HttpClient cl = new HttpClient();

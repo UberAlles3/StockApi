@@ -99,7 +99,8 @@ namespace StockApi
 
             string html = await YahooFinance.GetHistoryHtmlForTicker(txtStockTicker.Text);
 
-            //historicData = await YahooFinance.GetHistoricalData("INTC", DateTime.Now.AddDays(-1), DateTime.Now);
+            YahooFinance.HistoricData historicData = YahooFinance.GetHistoricalDataForDate(html, DateTime.Now);
+
         }
     }
 }
