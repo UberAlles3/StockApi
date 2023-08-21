@@ -93,7 +93,7 @@ namespace StockApi
         {
             List<YahooFinance.HistoricData> historicData = new List<YahooFinance.HistoricData>();
 
-            historicData = await GetHistoricalData("INTC", DateTime.Now.AddDays(-1), DateTime.Now);
+            historicData = await YahooFinance.GetHistoricalData("INTC", DateTime.Now.AddDays(-1), DateTime.Now);
         }
     }
 }
