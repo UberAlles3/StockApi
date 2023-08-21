@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Net;
+using System.IO;
+using System.Collections;
+using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace StockApi
 {
     public class YahooFinance
     {
         private static string _url = "https://finance.yahoo.com/quote/";
+        private static string _historicalDataUrl = "https://finance.yahoo.com/quote/???/history?p=???";
+
         public static string Html { get; set;}
 
         private static string _ticker;
@@ -124,12 +131,51 @@ namespace StockApi
         public class StockData
         {
             public string Ticker = "";
-            public float  Price = 0;
-            public float  Beta = 1;
-            public float  EarningsPerShare = 0;
-            public float  OneYearTargetPrice = 0;
+            public float Price = 0;
+            public float Beta = 1;
+            public float EarningsPerShare = 0;
+            public float OneYearTargetPrice = 0;
             public string FairValue = "";
-            public float  EstimatedReturn = 0;
+            public float EstimatedReturn = 0;
+                    }
+
+        //********************************************************
+        //                 HISTORIC STOCK DATA
+        //********************************************************
+
+        public static async Task<List<HistoricData>> GetHistoricalData(string ticker, DateTime beginDate, DateTime endDate)
+        {
+            String yahooURL = String.Format("http://ichart.finance.yahoo.com/table.csv?s={0}&a={1}&b={2}&c={3}&d={4}&e={5}&f={6}&g=d&ignore=.csv", ticker, "8", "15", "2023", "8", "20", "2023");
+
+            string html = await GetHistoryHtmlForTicker(ticker);
+
+            string part = html.Substring(html.IndexOf("Aug 18, 2023") - 5, 320);
+
+            var items = new List<string>();
+            foreach (Match match in Regex.Matches(part, "span>(.*?)</span"))
+                items.Add(match.Groups[1].Value);
+            string output = String.Join(" ", items);
+
+            return null;
+        }
+
+        public static async Task<string> GetHistoryHtmlForTicker(string ticker)
+        {
+            _url = _historicalDataUrl.Replace("???", ticker);
+
+            HttpClient cl = new HttpClient();
+            HttpResponseMessage hrm = await cl.GetAsync(_url);
+            string html = await hrm.Content.ReadAsStringAsync();
+
+            return html;
+        }
+        public class HistoricData
+        {
+            public string Ticker = "";
+            public DateTime PriceDate;
+            public float Price = 0;
+            public int Volume = 0;
         }
     }
 }
+

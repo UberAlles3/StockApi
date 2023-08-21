@@ -45,6 +45,7 @@ namespace StockApi
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtTickerList = new System.Windows.Forms.TextBox();
+            this.btnGetHistory = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -213,6 +214,16 @@ namespace StockApi
             this.txtTickerList.TabIndex = 11;
             this.txtTickerList.Text = "INTC";
             // 
+            // btnGetHistory
+            // 
+            this.btnGetHistory.Location = new System.Drawing.Point(373, 322);
+            this.btnGetHistory.Name = "btnGetHistory";
+            this.btnGetHistory.Size = new System.Drawing.Size(75, 23);
+            this.btnGetHistory.TabIndex = 12;
+            this.btnGetHistory.Text = "Get History";
+            this.btnGetHistory.UseVisualStyleBackColor = true;
+            this.btnGetHistory.Click += new System.EventHandler(this.btnGetHistory_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -221,6 +232,7 @@ namespace StockApi
             this.BackgroundImage = global::StockApi.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(613, 367);
+            this.Controls.Add(this.btnGetHistory);
             this.Controls.Add(this.txtTickerList);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
@@ -258,6 +270,7 @@ namespace StockApi
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtTickerList;
         private System.Windows.Forms.Label lblTicker;
+        private System.Windows.Forms.Button btnGetHistory;
     }
 }
 

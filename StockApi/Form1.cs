@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 // 2dadcc0b -- API key
 
@@ -86,6 +87,13 @@ namespace StockApi
             btnGetOne.Enabled = true;
             lblBeta.Text = stockData.Beta.ToString();
             lblEPS.Text = stockData.EarningsPerShare.ToString();
+        }
+
+        private async void btnGetHistory_Click(object sender, EventArgs e)
+        {
+            List<YahooFinance.HistoricData> historicData = new List<YahooFinance.HistoricData>();
+
+            historicData = await GetHistoricalData("INTC", DateTime.Now.AddDays(-1), DateTime.Now);
         }
     }
 }
