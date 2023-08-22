@@ -29,6 +29,10 @@ namespace StockApi
         {
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             panel1.Visible = false;
+
+            panel2.BackColor = Color.FromArgb(100, 0, 0, 0);
+            panel2.Visible = false;
+
             picSpinner.Visible = false;
             picSpinner.Left = panel1.Left + panel1.Width/2 - 50;
             picSpinner.Top = panel1.Top + panel1.Height / 2 - 30;
@@ -79,6 +83,8 @@ namespace StockApi
             List<YahooFinance.HistoricData> historicDataList = new List<YahooFinance.HistoricData>();
             historicDataList.Add(historicDataToday);
             historicDataList.Add(historicDataWeekAgo);
+            historicDataList.Add(historicDataMonthAgo);
+            historicDataList.Add(historicDataYearAgo);
 
             var bindingList = new BindingList<YahooFinance.HistoricData>(historicDataList);
             var source = new BindingSource(bindingList, null);
@@ -123,6 +129,7 @@ namespace StockApi
             btnGetOne.Enabled = false;
             lblTicker.Text = txtStockTicker.Text.ToUpper();
             panel1.Visible = false;
+            panel2.Visible = false;
             picSpinner.Visible = true;
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -133,6 +140,7 @@ namespace StockApi
             lblEPS.Text = stockData.EarningsPerShare;
             lblPrice.Text = stockData.Price.ToString();
             panel1.Visible = true;
+            panel2.Visible = true;
             picSpinner.Visible = false;
             Cursor.Current = Cursors.Default;
         }

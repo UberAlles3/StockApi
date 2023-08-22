@@ -33,8 +33,8 @@ namespace StockApi
 
             HttpClient cl = new HttpClient();
             HttpResponseMessage hrm = await cl.GetAsync(_url.Replace("???", ticker));
-            string Html = await hrm.Content.ReadAsStringAsync();
-            return Html;
+            string html = await hrm.Content.ReadAsStringAsync();
+            return html;
         }
 
         public class HtmlParser

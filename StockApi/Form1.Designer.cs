@@ -38,6 +38,7 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblBeta = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label9 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -57,10 +58,15 @@ namespace StockApi
             this.label7 = new System.Windows.Forms.Label();
             this.txtTickerList = new System.Windows.Forms.TextBox();
             this.btnGetHistory = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.txtSharesOwned = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSpinner)).BeginInit();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGetOne
@@ -87,7 +93,7 @@ namespace StockApi
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(23)))), ((int)(((byte)(32)))));
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.label1.Location = new System.Drawing.Point(33, 17);
             this.label1.Name = "label1";
@@ -150,8 +156,19 @@ namespace StockApi
             this.panel1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel1.Location = new System.Drawing.Point(270, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(332, 419);
+            this.panel1.Size = new System.Drawing.Size(332, 432);
             this.panel1.TabIndex = 6;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.Color.Transparent;
+            this.label11.ForeColor = System.Drawing.Color.DarkGray;
+            this.label11.Location = new System.Drawing.Point(14, 34);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(312, 15);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "_____________________________________________________________";
             // 
             // dataGridView1
             // 
@@ -212,7 +229,7 @@ namespace StockApi
             // 
             this.label13.BackColor = System.Drawing.Color.Transparent;
             this.label13.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label13.Location = new System.Drawing.Point(60, 246);
+            this.label13.Location = new System.Drawing.Point(58, 246);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(233, 29);
             this.label13.TabIndex = 10;
@@ -301,7 +318,7 @@ namespace StockApi
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.ForeColor = System.Drawing.Color.DarkGray;
-            this.label6.Location = new System.Drawing.Point(190, 76);
+            this.label6.Location = new System.Drawing.Point(190, 69);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(137, 15);
             this.label6.TabIndex = 9;
@@ -332,7 +349,7 @@ namespace StockApi
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(23)))), ((int)(((byte)(32)))));
+            this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.label5.Location = new System.Drawing.Point(33, 118);
             this.label5.Name = "label5";
@@ -362,23 +379,63 @@ namespace StockApi
             // 
             // btnGetHistory
             // 
-            this.btnGetHistory.Location = new System.Drawing.Point(12, 423);
+            this.btnGetHistory.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnGetHistory.Location = new System.Drawing.Point(17, 119);
             this.btnGetHistory.Name = "btnGetHistory";
-            this.btnGetHistory.Size = new System.Drawing.Size(92, 33);
+            this.btnGetHistory.Size = new System.Drawing.Size(284, 33);
             this.btnGetHistory.TabIndex = 12;
-            this.btnGetHistory.Text = "Get History";
+            this.btnGetHistory.Text = "Analyze";
             this.btnGetHistory.UseVisualStyleBackColor = true;
             // 
-            // label11
+            // panel2
             // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.Color.Transparent;
-            this.label11.ForeColor = System.Drawing.Color.DarkGray;
-            this.label11.Location = new System.Drawing.Point(14, 34);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(312, 15);
-            this.label11.TabIndex = 15;
-            this.label11.Text = "_____________________________________________________________";
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.Controls.Add(this.textBox1);
+            this.panel2.Controls.Add(this.label16);
+            this.panel2.Controls.Add(this.btnGetHistory);
+            this.panel2.Controls.Add(this.label15);
+            this.panel2.Controls.Add(this.txtSharesOwned);
+            this.panel2.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.panel2.Location = new System.Drawing.Point(630, 12);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(332, 432);
+            this.panel2.TabIndex = 14;
+            // 
+            // txtSharesOwned
+            // 
+            this.txtSharesOwned.Location = new System.Drawing.Point(106, 11);
+            this.txtSharesOwned.Name = "txtSharesOwned";
+            this.txtSharesOwned.Size = new System.Drawing.Size(100, 23);
+            this.txtSharesOwned.TabIndex = 15;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.BackColor = System.Drawing.Color.Transparent;
+            this.label15.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label15.Location = new System.Drawing.Point(17, 17);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(85, 15);
+            this.label15.TabIndex = 16;
+            this.label15.Text = "Shares Owned:";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.BackColor = System.Drawing.Color.Transparent;
+            this.label16.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label16.Location = new System.Drawing.Point(17, 48);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(82, 15);
+            this.label16.TabIndex = 17;
+            this.label16.Text = "Shares Traded:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(106, 42);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 23);
+            this.textBox1.TabIndex = 18;
             // 
             // Form1
             // 
@@ -387,8 +444,7 @@ namespace StockApi
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.BackgroundImage = global::StockApi.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(643, 492);
-            this.Controls.Add(this.btnGetHistory);
+            this.ClientSize = new System.Drawing.Size(993, 477);
             this.Controls.Add(this.txtTickerList);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
@@ -398,6 +454,7 @@ namespace StockApi
             this.Controls.Add(this.picSpinner);
             this.Controls.Add(this.txtStockTicker);
             this.Controls.Add(this.btnGetOne);
+            this.Controls.Add(this.panel2);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
@@ -407,6 +464,8 @@ namespace StockApi
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSpinner)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -441,6 +500,11 @@ namespace StockApi
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox txtSharesOwned;
     }
 }
 
