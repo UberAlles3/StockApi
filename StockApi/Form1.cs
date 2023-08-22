@@ -29,6 +29,9 @@ namespace StockApi
         {
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             lblTicker.Text = "";
+            picSpinner.Visible = false;
+            picSpinner.Left = panel1.Left + panel1.Width/2 - 50;
+            picSpinner.Top = panel1.Top + panel1.Height / 2 - 30;
             txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine + "AM" + Environment.NewLine;
         }
 
@@ -42,18 +45,49 @@ namespace StockApi
 
             PreWebCall(); // Sets the form display while the request is executing
 
+            YahooFinance.Ticker = txtStockTicker.Text;
+
             // Execute the request to get html from Yahoo Finance
-            string html = await YahooFinance.GetHtmlForTicker(txtStockTicker.Text);
-            // Extract the individual data values from the html
-            _stockData.Ticker = txtStockTicker.Text;
-            YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
+            //////string html = await YahooFinance.GetHtmlForTicker(txtStockTicker.Text);
+            //////// Extract the individual data values from the html
+            //////_stockData.Ticker = txtStockTicker.Text;
+            //////YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
 
-            // Get price history, Today, month ago, year ago to determine long and short trend
-            //html = await YahooFinance.GetHistoryHtmlForTicker(txtStockTicker.Text);
+            // Get price history, Today, week ago, month ago, year ago to determine long and short trend
+            List<YahooFinance.HistoricData> historicData = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddMonths(-1), DateTime.Now);
+            YahooFinance.HistoricData historicDataToday = historicData.Last();
+            YahooFinance.HistoricData historicDataWeekAgo = historicData.Find(x => x.PriceDate.Date == DateTime.Now.AddDays(-7).Date);
 
-            List<YahooFinance.HistoricData> historicData1 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddMonths(-1), DateTime.Now);
-//            YahooFinance.HistoricData historicData2 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddMonths(-1));
-//            YahooFinance.HistoricData historicData3 = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddYears(-1).AddDays(2));
+            DateTime monthAgo = DateTime.Now.AddMonths(-1).Date;
+            if (monthAgo.DayOfWeek == DayOfWeek.Saturday)
+                monthAgo = monthAgo.AddDays(-1);
+            if (monthAgo.DayOfWeek == DayOfWeek.Sunday)
+                monthAgo = monthAgo.AddDays(-2);
+
+            YahooFinance.HistoricData historicDataMonthAgo = historicData.Find(x => x.PriceDate.Date == monthAgo.Date);
+
+            historicData = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(-1).AddDays(2));
+            DateTime yearAgo = DateTime.Now.AddYears(-1).Date;
+            if (yearAgo.DayOfWeek == DayOfWeek.Saturday)
+                yearAgo = yearAgo.AddDays(-1); // Get Friday
+            if (yearAgo.DayOfWeek == DayOfWeek.Sunday)
+                yearAgo = yearAgo.AddDays(1); // Get Monday
+
+            YahooFinance.HistoricData historicDataYearAgo = historicData.Find(x => x.PriceDate.Date == yearAgo.Date);
+
+            List<YahooFinance.HistoricData> historicDataList = new List<YahooFinance.HistoricData>();
+            historicDataList.Add(historicDataToday);
+            historicDataList.Add(historicDataWeekAgo);
+
+            var bindingList = new BindingList<YahooFinance.HistoricData>(historicDataList);
+            var source = new BindingSource(bindingList, null);
+            dataGridView1.DataSource = source.DataSource;
+            dataGridView1.Columns[0].Visible = false;
+            dataGridView1.Columns[1].HeaderText = "Date";
+            dataGridView1.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Refresh();
+
 
             PostWebCall(_stockData); // displays the data returned
         }
@@ -86,14 +120,19 @@ namespace StockApi
         {
             btnGetOne.Enabled = false;
             lblTicker.Text = txtStockTicker.Text.ToUpper();
-            lblBeta.Text = "...";
-            lblEPS.Text = "...";
+            panel1.Visible = false;
+            picSpinner.Visible = true;
+            Cursor.Current = Cursors.WaitCursor;
         }
         private void PostWebCall(YahooFinance.StockData stockData)
         {
             btnGetOne.Enabled = true;
-            lblBeta.Text = stockData.Beta.ToString();
-            lblEPS.Text = stockData.EarningsPerShare.ToString();
+            lblBeta.Text = stockData.Beta;
+            lblEPS.Text = stockData.EarningsPerShare;
+            lblPrice.Text = stockData.Price.ToString();
+            panel1.Visible = true;
+            picSpinner.Visible = false;
+            Cursor.Current = Cursors.Default;
         }
 
         //private async void btnGetHistory_Click(object sender, EventArgs e)

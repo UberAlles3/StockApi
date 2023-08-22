@@ -43,9 +43,9 @@ namespace StockApi
             {
                 stockData.Ticker = Ticker;
                 stockData.Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
-                stockData.Beta = GetFloatValueFromHtml(html, "BETA_5Y-value", 1.0F);
-                stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", 0.0F);
-                stockData.OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", stockData.Price);
+                stockData.Beta = GetValueFromHtml(html, "BETA_5Y-value", "N/A");
+                stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", "N/A");
+                stockData.OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", stockData.Price.ToString());
                 
                 // Fair Value
                 stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Overvalued<", "");
@@ -70,11 +70,11 @@ namespace StockApi
                 stockData.EstimatedReturn = System.Convert.ToSingle(estReturn);
             }
 
-            private static float GetFloatValueFromHtml(string html, string data_test_name, float defaultValue)
+            private static string GetFloatValueFromHtml(string html, string data_test_name, string defaultValue)
             {
                 string temp = GetValueFromHtml(html, data_test_name, defaultValue);
                 if (temp != "N/A")
-                    return System.Convert.ToSingle(temp);
+                    return temp;
                 else
                     return defaultValue;
             }
@@ -93,7 +93,7 @@ namespace StockApi
                 return middle;
             }
 
-            private static string GetValueFromHtml(string html, string data_test_name, float defaultValue)
+            private static string GetValueFromHtml(string html, string data_test_name, string defaultValue)
             {
                 int loc1 = 0;
                 int loc2 = 0;
@@ -131,14 +131,22 @@ namespace StockApi
         }
         public class StockData
         {
-            public string Ticker = "";
-            public float Price = 0;
-            public float Beta = 1;
-            public float EarningsPerShare = 0;
-            public float OneYearTargetPrice = 0;
-            public string FairValue = "";
-            public float EstimatedReturn = 0;
-                    }
+            private string ticker = "";
+            private float price = 0;
+            private string beta = "N/A";
+            private string earningsPerShare = "N/A";
+            private string oneYearTargetPrice = "N/A";
+            private string fairValue = "";
+            private float estimatedReturn = 0;
+
+            public string Ticker { get => ticker; set => ticker = value; }
+            public float Price { get => price; set => price = value; }
+            public string Beta { get => beta; set => beta = value; }
+            public string EarningsPerShare { get => earningsPerShare; set => earningsPerShare = value; }
+            public string OneYearTargetPrice { get => oneYearTargetPrice; set => oneYearTargetPrice = value; }
+            public string FairValue { get => fairValue; set => fairValue = value; }
+            public float EstimatedReturn { get => estimatedReturn; set => estimatedReturn = value; }
+        }
 
         //********************************************************
         //                 HISTORIC STOCK DATA
@@ -179,7 +187,7 @@ namespace StockApi
                 historicData.Ticker = Ticker;
                 historicData.PriceDate = beginDate.AddDays(i).Date;
                 historicData.Price = Convert.ToSingle(items[3]);
-                historicData.Volume = Convert.ToInt32(items[5].Replace(",",""));
+                historicData.Volume = items[5];
 
                 historicDataList.Add(historicData);
             }
@@ -211,10 +219,16 @@ namespace StockApi
         }
         public class HistoricData
         {
-            public string Ticker = "";
-            public DateTime PriceDate;
-            public float Price = 0;
-            public int Volume = 0;
+            private string ticker = "";
+            private DateTime priceDate;
+            private float price = 0;
+            private string volume = "N/A";
+
+            public string Ticker { get => ticker; set => ticker = value; }
+            public DateTime PriceDate { get => priceDate; set => priceDate = value; }
+            public float Price { get => price; set => price = value; }
+            public string Volume { get => volume; set => volume = value; }
+
             public override string ToString()
             {
                 return string.Format(
