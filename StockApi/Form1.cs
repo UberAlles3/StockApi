@@ -12,14 +12,13 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-
 // 2dadcc0b -- API key
 
 namespace StockApi
 {
     public partial class Form1 : Form
     {
-        private static YahooFinance.StockData _stockData = new YahooFinance.StockData();
+        private static StockSummary.StockData _stockData = new StockSummary.StockData();
         
         public Form1()
         {
@@ -58,15 +57,14 @@ namespace StockApi
 
 
             // Execute the request to get html from Yahoo Finance
-            YahooFinance.Ticker = _stockData.Ticker = txtStockTicker.Text.ToUpper();
-            string html = await YahooFinance.GetHtmlForTicker(YahooFinance.Ticker);
+            string html = await StockSummary.GetHtmlForTicker(txtStockTicker.Text);
             // Extract the individual data values from the html
-            YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
+            StockSummary.ExtractDataFromHtml(_stockData, html);
 
             // Get price history, Today, week ago, month ago, year ago to determine long and short trend
-            List<YahooFinance.HistoricData> historicData = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddMonths(-1), DateTime.Now);
-            YahooFinance.HistoricData historicDataToday = historicData.Last();
-            YahooFinance.HistoricData historicDataWeekAgo = historicData.Find(x => x.PriceDate.Date == DateTime.Now.AddDays(-7).Date);
+            List<StockHistory.HistoricData> historicData = await StockHistory.GetHistoricalDataForDate(txtStockTicker.Text,DateTime.Now.AddMonths(-1), DateTime.Now);
+            StockHistory.HistoricData historicDataToday = historicData.Last();
+            StockHistory.HistoricData historicDataWeekAgo = historicData.Find(x => x.PriceDate.Date == DateTime.Now.AddDays(-7).Date);
 
             DateTime monthAgo = DateTime.Now.AddMonths(-1).Date;
             if (monthAgo.DayOfWeek == DayOfWeek.Saturday)
@@ -74,24 +72,24 @@ namespace StockApi
             if (monthAgo.DayOfWeek == DayOfWeek.Sunday)
                 monthAgo = monthAgo.AddDays(-2);
 
-            YahooFinance.HistoricData historicDataMonthAgo = historicData.Find(x => x.PriceDate.Date == monthAgo.Date);
+            StockHistory.HistoricData historicDataMonthAgo = historicData.Find(x => x.PriceDate.Date == monthAgo.Date);
 
-            historicData = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(-1).AddDays(2));
+            historicData = await StockHistory.GetHistoricalDataForDate(txtStockTicker.Text, DateTime.Now.AddYears(-1), DateTime.Now.AddYears(-1).AddDays(2));
             DateTime yearAgo = DateTime.Now.AddYears(-1).Date;
             if (yearAgo.DayOfWeek == DayOfWeek.Saturday)
                 yearAgo = yearAgo.AddDays(-1); // Get Friday
             if (yearAgo.DayOfWeek == DayOfWeek.Sunday)
                 yearAgo = yearAgo.AddDays(1); // Get Monday
 
-            YahooFinance.HistoricData historicDataYearAgo = historicData.Find(x => x.PriceDate.Date == yearAgo.Date);
+            StockHistory.HistoricData historicDataYearAgo = historicData.Find(x => x.PriceDate.Date == yearAgo.Date);
 
-            List<YahooFinance.HistoricData> historicDataList = new List<YahooFinance.HistoricData>();
+            List<StockHistory.HistoricData> historicDataList = new List<StockHistory.HistoricData>();
             historicDataList.Add(historicDataToday);
             historicDataList.Add(historicDataWeekAgo);
             historicDataList.Add(historicDataMonthAgo);
             historicDataList.Add(historicDataYearAgo);
 
-            var bindingList = new BindingList<YahooFinance.HistoricData>(historicDataList);
+            var bindingList = new BindingList<StockHistory.HistoricData>(historicDataList);
             var source = new BindingSource(bindingList, null);
             dataGridView1.DefaultCellStyle.ForeColor = Color.White;
             dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
@@ -137,11 +135,11 @@ namespace StockApi
             {
                 _stockData.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
 
-                string html = await YahooFinance.GetHtmlForTicker(_stockData.Ticker);
+                string html = await StockSummary.GetHtmlForTicker(_stockData.Ticker);
                 txtTickerList.Text += ".";
 
                 // Extract the individual data values from the html
-                YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
+                StockSummary.ExtractDataFromHtml(_stockData, html);
 
                 builder.Append($"{_stockData.Ticker}, {_stockData.Beta}, {_stockData.EarningsPerShare}, {_stockData.OneYearTargetPrice}, {_stockData.FairValue}, {_stockData.EstimatedReturn}{Environment.NewLine}");
             }
@@ -156,7 +154,7 @@ namespace StockApi
             picSpinner.Visible = true;
             Cursor.Current = Cursors.WaitCursor;
         }
-        private void PostWebCall(YahooFinance.StockData stockData)
+        private void PostWebCall(StockSummary.StockData stockData)
         {
             btnGetOne.Enabled = true;
             lblTicker.Text = stockData.CompanyName;
@@ -177,7 +175,7 @@ namespace StockApi
         //        return;
         //    }
 
-        //    YahooFinance.HistoricData historicData = await YahooFinance.GetHistoricalDataForDate(DateTime.Now);
+        //    HistoricData historicData = await GetHistoricalDataForDate(DateTime.Now);
 
         //}
     }
