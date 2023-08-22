@@ -37,8 +37,11 @@ namespace StockApi
             this.label1 = new System.Windows.Forms.Label();
             this.btnGetAll = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.lblBeta = new System.Windows.Forms.Label();
+            this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label23 = new System.Windows.Forms.Label();
+            this.lblFairValue = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
             this.picYearTrend = new System.Windows.Forms.PictureBox();
             this.picWeekTrend = new System.Windows.Forms.PictureBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -141,21 +144,24 @@ namespace StockApi
             this.label2.TabIndex = 4;
             this.label2.Text = "Volatility";
             // 
-            // lblBeta
+            // lblVolatility
             // 
-            this.lblBeta.BackColor = System.Drawing.Color.Transparent;
-            this.lblBeta.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblBeta.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblBeta.Location = new System.Drawing.Point(105, 94);
-            this.lblBeta.Name = "lblBeta";
-            this.lblBeta.Size = new System.Drawing.Size(46, 22);
-            this.lblBeta.TabIndex = 5;
-            this.lblBeta.Text = "0.00";
-            this.lblBeta.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblVolatility.BackColor = System.Drawing.Color.Transparent;
+            this.lblVolatility.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblVolatility.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblVolatility.Location = new System.Drawing.Point(105, 94);
+            this.lblVolatility.Name = "lblVolatility";
+            this.lblVolatility.Size = new System.Drawing.Size(46, 22);
+            this.lblVolatility.TabIndex = 5;
+            this.lblVolatility.Text = "0.00";
+            this.lblVolatility.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.label23);
+            this.panel1.Controls.Add(this.lblFairValue);
+            this.panel1.Controls.Add(this.label25);
             this.panel1.Controls.Add(this.picYearTrend);
             this.panel1.Controls.Add(this.picWeekTrend);
             this.panel1.Controls.Add(this.label22);
@@ -177,7 +183,7 @@ namespace StockApi
             this.panel1.Controls.Add(this.lblEPS);
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.lblBeta);
+            this.panel1.Controls.Add(this.lblVolatility);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.picMonthTrend);
             this.panel1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
@@ -185,6 +191,39 @@ namespace StockApi
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(332, 432);
             this.panel1.TabIndex = 6;
+            // 
+            // label23
+            // 
+            this.label23.BackColor = System.Drawing.Color.Transparent;
+            this.label23.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label23.Location = new System.Drawing.Point(191, 92);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(57, 22);
+            this.label23.TabIndex = 24;
+            this.label23.Text = "Fair Value";
+            // 
+            // lblFairValue
+            // 
+            this.lblFairValue.BackColor = System.Drawing.Color.Transparent;
+            this.lblFairValue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblFairValue.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblFairValue.Location = new System.Drawing.Point(248, 92);
+            this.lblFairValue.Name = "lblFairValue";
+            this.lblFairValue.Size = new System.Drawing.Size(79, 22);
+            this.lblFairValue.TabIndex = 25;
+            this.lblFairValue.Text = "0.00";
+            this.lblFairValue.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.BackColor = System.Drawing.Color.Transparent;
+            this.label25.ForeColor = System.Drawing.Color.DarkGray;
+            this.label25.Location = new System.Drawing.Point(190, 101);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(137, 15);
+            this.label25.TabIndex = 26;
+            this.label25.Text = "__________________________";
             // 
             // picYearTrend
             // 
@@ -671,7 +710,7 @@ namespace StockApi
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnGetAll;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lblBeta;
+        private System.Windows.Forms.Label lblVolatility;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -712,6 +751,9 @@ namespace StockApi
         private System.Windows.Forms.PictureBox picUpTrend;
         private System.Windows.Forms.PictureBox picDownTrend;
         private System.Windows.Forms.PictureBox picWeekTrend;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label lblFairValue;
+        private System.Windows.Forms.Label label25;
     }
 }
 

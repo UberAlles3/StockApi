@@ -100,8 +100,6 @@ namespace StockApi
             dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
             dataGridView1.Refresh();
 
-
-
             // Trends
             StockHistory.SetTrends();
             picYearTrend.Image = StockHistory.YearTrend ? picUpTrend.Image : picDownTrend.Image;
@@ -143,7 +141,7 @@ namespace StockApi
                 // Extract the individual data values from the html
                 StockSummary.ExtractDataFromHtml(_stockData, html);
 
-                builder.Append($"{_stockData.Ticker}, {_stockData.Beta}, {_stockData.EarningsPerShare}, {_stockData.OneYearTargetPrice}, {_stockData.FairValue}, {_stockData.EstimatedReturn}{Environment.NewLine}");
+                builder.Append($"{_stockData.Ticker}, {_stockData.Volatility}, {_stockData.EarningsPerShare}, {_stockData.OneYearTargetPrice}, {_stockData.FairValue}, {_stockData.EstimatedReturn}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
@@ -160,8 +158,11 @@ namespace StockApi
         {
             btnGetOne.Enabled = true;
             lblTicker.Text = stockData.CompanyName;
-            lblBeta.Text = stockData.Beta;
+            lblVolatility.Text = stockData.Volatility;
             lblEPS.Text = stockData.EarningsPerShare;
+            lblEPS.ForeColor = YahooFinance.EPSColor;
+            lblFairValue.Text = stockData.FairValue.ToString();
+            lblFairValue.ForeColor = YahooFinance.FairValueColor;
             lblPrice.Text = stockData.Price.ToString();
             panel1.Visible = true;
             panel2.Visible = true;

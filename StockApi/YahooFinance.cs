@@ -8,11 +8,24 @@ using System.IO;
 using System.Collections;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Drawing;
 
 namespace StockApi
 {
     public class YahooFinance // General purpose functions
     {
+        public static string NotApplicable = "N/A";
+
+        public enum FairValue
+        {
+            Overvalued,
+            FairValue,
+            Undervalued
+        }
+
+        public static Color FairValueColor = Color.White;
+        public static Color EPSColor = Color.White;
+
         protected static async Task<string> GetHtml(string url)
         {
             HttpClient cl = new HttpClient();
@@ -50,26 +63,27 @@ namespace StockApi
             stockData.CompanyName = GetDataByTagName(html, "title", Ticker);
             stockData.CompanyName = stockData.CompanyName.Substring(0, stockData.CompanyName.IndexOf(")") + 1);
             stockData.Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
-            stockData.Beta = GetValueFromHtml(html, "BETA_5Y-value", "N/A");
-            stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", "N/A");
+            stockData.Volatility = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
+            stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
             stockData.OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", stockData.Price.ToString());
 
             // Fair Value
-            stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Overvalued<", "");
-            if (stockData.FairValue == "")
+            if (GetValueFromHtmlBySearchText(html, ">Overvalued<", "") != "")
             {
-                stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Near Fair Value<", "");
-                if (stockData.FairValue == "")
-                {
-                    stockData.FairValue = GetValueFromHtmlBySearchText(html, ">Undervalued<", "FV");
-                    if (stockData.FairValue != "")
-                        stockData.FairValue = "UV";
-                }
-                else
-                    stockData.FairValue = "FV";
+                stockData.FairValue = FairValue.Overvalued;
+            }
+            else if (GetValueFromHtmlBySearchText(html, ">Near Fair Value<", "") != "")
+            {
+                stockData.FairValue = FairValue.FairValue;
+            }
+            else if (GetValueFromHtmlBySearchText(html, ">Undervalued<", "") != "")
+            {
+                stockData.FairValue = FairValue.Undervalued;
             }
             else
-                stockData.FairValue = "OV";
+            {
+                stockData.FairValue = FairValue.FairValue;
+            }
 
             //% Est. Return<
             string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<", "0%");
@@ -80,7 +94,7 @@ namespace StockApi
         private static string GetFloatValueFromHtml(string html, string data_test_name, string defaultValue)
         {
             string temp = GetValueFromHtml(html, data_test_name, defaultValue);
-            if (temp != "N/A")
+            if (temp != YahooFinance.NotApplicable)
                 return temp;
             else
                 return defaultValue;
@@ -153,19 +167,49 @@ namespace StockApi
             private string ticker = "";
             private string companyName = "";
             private float price = 0;
-            private string beta = "N/A";
-            private string earningsPerShare = "N/A";
-            private string oneYearTargetPrice = "N/A";
-            private string fairValue = "";
+            private string volatility = YahooFinance.NotApplicable;
+            private string earningsPerShare = YahooFinance.NotApplicable;
+            private string oneYearTargetPrice = YahooFinance.NotApplicable;
+            private FairValue fairValue = YahooFinance.FairValue.FairValue;
             private float estimatedReturn = 0;
 
             public string Ticker { get => ticker; set => ticker = value; }
             public string CompanyName { get => companyName; set => companyName = value; }
             public float Price { get => price; set => price = value; }
-            public string Beta { get => beta; set => beta = value; }
-            public string EarningsPerShare { get => earningsPerShare; set => earningsPerShare = value; }
+            public string Volatility { get => volatility; set => volatility = value; } 
+            public string EarningsPerShare { get => earningsPerShare; 
+                set
+                {
+                    earningsPerShare = value;
+                    if (earningsPerShare == YahooFinance.NotApplicable || earningsPerShare == "")
+                        YahooFinance.EPSColor = Color.White;
+                    else
+                    {
+                        if (Convert.ToSingle(earningsPerShare) < -1)
+                            YahooFinance.EPSColor = Color.Red;
+                        else if (Convert.ToSingle(earningsPerShare) < 1)
+                            YahooFinance.EPSColor = Color.White;
+                        else if (Convert.ToSingle(earningsPerShare) > 1)
+                            YahooFinance.EPSColor = Color.Red;
+                        else
+                            YahooFinance.EPSColor = Color.White;
+                    }
+                }
+
+            }
             public string OneYearTargetPrice { get => oneYearTargetPrice; set => oneYearTargetPrice = value; }
-            public string FairValue { get => fairValue; set => fairValue = value; }
+            public FairValue FairValue { get => fairValue; 
+                set 
+                { 
+                    fairValue = value;
+                    if (fairValue == FairValue.Overvalued)
+                        YahooFinance.FairValueColor = Color.Red;
+                    if (fairValue == FairValue.FairValue)
+                        YahooFinance.FairValueColor = Color.White;
+                    if (fairValue == FairValue.Undervalued)
+                        YahooFinance.FairValueColor = Color.Green;
+                }
+            }
             public float EstimatedReturn { get => estimatedReturn; set => estimatedReturn = value; }
         }
     }
@@ -283,7 +327,7 @@ namespace StockApi
             private string ticker = "";
             private DateTime priceDate;
             private float price = 0;
-            private string volume = "N/A";
+            private string volume = YahooFinance.NotApplicable;
 
             public string Ticker { get => ticker; set => ticker = value; }
             public DateTime PriceDate { get => priceDate; set => priceDate = value; }
