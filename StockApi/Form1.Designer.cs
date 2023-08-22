@@ -39,6 +39,9 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label24 = new System.Windows.Forms.Label();
+            this.lblEstimatedReturn = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.lblFairValue = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -58,7 +61,6 @@ namespace StockApi
             this.label8 = new System.Windows.Forms.Label();
             this.lblPrice = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.lblTicker = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.lblEPS = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -81,6 +83,10 @@ namespace StockApi
             this.txtSharesOwned = new System.Windows.Forms.TextBox();
             this.picUpTrend = new System.Windows.Forms.PictureBox();
             this.picDownTrend = new System.Windows.Forms.PictureBox();
+            this.lblTicker = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
+            this.lblOneYearTarget = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -159,12 +165,19 @@ namespace StockApi
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.label53);
+            this.panel1.Controls.Add(this.lblOneYearTarget);
+            this.panel1.Controls.Add(this.label55);
+            this.panel1.Controls.Add(this.label24);
+            this.panel1.Controls.Add(this.lblEstimatedReturn);
+            this.panel1.Controls.Add(this.label27);
             this.panel1.Controls.Add(this.label23);
             this.panel1.Controls.Add(this.lblFairValue);
             this.panel1.Controls.Add(this.label25);
             this.panel1.Controls.Add(this.picYearTrend);
             this.panel1.Controls.Add(this.picWeekTrend);
             this.panel1.Controls.Add(this.label22);
+            this.panel1.Controls.Add(this.lblTicker);
             this.panel1.Controls.Add(this.label21);
             this.panel1.Controls.Add(this.label20);
             this.panel1.Controls.Add(this.label19);
@@ -178,7 +191,6 @@ namespace StockApi
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.lblPrice);
             this.panel1.Controls.Add(this.label10);
-            this.panel1.Controls.Add(this.lblTicker);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.lblEPS);
             this.panel1.Controls.Add(this.label6);
@@ -189,8 +201,41 @@ namespace StockApi
             this.panel1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel1.Location = new System.Drawing.Point(270, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(332, 432);
+            this.panel1.Size = new System.Drawing.Size(344, 432);
             this.panel1.TabIndex = 6;
+            // 
+            // label24
+            // 
+            this.label24.BackColor = System.Drawing.Color.Transparent;
+            this.label24.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label24.Location = new System.Drawing.Point(15, 128);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(98, 22);
+            this.label24.TabIndex = 27;
+            this.label24.Text = "Estimated Return";
+            // 
+            // lblEstimatedReturn
+            // 
+            this.lblEstimatedReturn.BackColor = System.Drawing.Color.Transparent;
+            this.lblEstimatedReturn.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblEstimatedReturn.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblEstimatedReturn.Location = new System.Drawing.Point(105, 128);
+            this.lblEstimatedReturn.Name = "lblEstimatedReturn";
+            this.lblEstimatedReturn.Size = new System.Drawing.Size(46, 22);
+            this.lblEstimatedReturn.TabIndex = 28;
+            this.lblEstimatedReturn.Text = "0.00";
+            this.lblEstimatedReturn.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.BackColor = System.Drawing.Color.Transparent;
+            this.label27.ForeColor = System.Drawing.Color.DarkGray;
+            this.label27.Location = new System.Drawing.Point(15, 137);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(137, 15);
+            this.label27.TabIndex = 29;
+            this.label27.Text = "__________________________";
             // 
             // label23
             // 
@@ -417,17 +462,6 @@ namespace StockApi
             this.label10.Size = new System.Drawing.Size(137, 15);
             this.label10.TabIndex = 13;
             this.label10.Text = "__________________________";
-            // 
-            // lblTicker
-            // 
-            this.lblTicker.BackColor = System.Drawing.Color.Transparent;
-            this.lblTicker.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblTicker.Location = new System.Drawing.Point(9, 4);
-            this.lblTicker.Name = "lblTicker";
-            this.lblTicker.Size = new System.Drawing.Size(318, 32);
-            this.lblTicker.TabIndex = 10;
-            this.lblTicker.Text = "lblTicker";
-            this.lblTicker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label4
             // 
@@ -659,6 +693,50 @@ namespace StockApi
             this.picDownTrend.TabIndex = 19;
             this.picDownTrend.TabStop = false;
             // 
+            // lblTicker
+            // 
+            this.lblTicker.BackColor = System.Drawing.Color.Transparent;
+            this.lblTicker.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTicker.Location = new System.Drawing.Point(9, 11);
+            this.lblTicker.Name = "lblTicker";
+            this.lblTicker.Size = new System.Drawing.Size(318, 32);
+            this.lblTicker.TabIndex = 10;
+            this.lblTicker.Text = "lblTicker";
+            this.lblTicker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.BackColor = System.Drawing.Color.Transparent;
+            this.label55.ForeColor = System.Drawing.Color.DarkGray;
+            this.label55.Location = new System.Drawing.Point(190, 137);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(137, 15);
+            this.label55.TabIndex = 32;
+            this.label55.Text = "__________________________";
+            // 
+            // lblOneYearTarget
+            // 
+            this.lblOneYearTarget.BackColor = System.Drawing.Color.Transparent;
+            this.lblOneYearTarget.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblOneYearTarget.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblOneYearTarget.Location = new System.Drawing.Point(280, 128);
+            this.lblOneYearTarget.Name = "lblOneYearTarget";
+            this.lblOneYearTarget.Size = new System.Drawing.Size(46, 22);
+            this.lblOneYearTarget.TabIndex = 31;
+            this.lblOneYearTarget.Text = "0.00";
+            this.lblOneYearTarget.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label53
+            // 
+            this.label53.BackColor = System.Drawing.Color.Transparent;
+            this.label53.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label53.Location = new System.Drawing.Point(190, 128);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(98, 22);
+            this.label53.TabIndex = 30;
+            this.label53.Text = "One Year Target";
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -719,7 +797,6 @@ namespace StockApi
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtTickerList;
-        private System.Windows.Forms.Label lblTicker;
         private System.Windows.Forms.Button btnGetHistory;
         private System.Windows.Forms.PictureBox picSpinner;
         private System.Windows.Forms.Label label8;
@@ -754,6 +831,13 @@ namespace StockApi
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label lblFairValue;
         private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label lblEstimatedReturn;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label lblOneYearTarget;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Label lblTicker;
     }
 }
 

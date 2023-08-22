@@ -164,6 +164,8 @@ namespace StockApi
             lblFairValue.Text = stockData.FairValue.ToString();
             lblFairValue.ForeColor = YahooFinance.FairValueColor;
             lblPrice.Text = stockData.Price.ToString();
+            lblEstimatedReturn.Text = stockData.EstimatedReturn.ToString() + "%";
+            lblEstimatedReturn.ForeColor = YahooFinance.EstReturnColor;
             panel1.Visible = true;
             panel2.Visible = true;
             picSpinner.Visible = false;

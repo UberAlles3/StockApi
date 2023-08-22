@@ -25,6 +25,7 @@ namespace StockApi
 
         public static Color FairValueColor = Color.White;
         public static Color EPSColor = Color.White;
+        public static Color EstReturnColor = Color.White;
 
         protected static async Task<string> GetHtml(string url)
         {
@@ -210,7 +211,18 @@ namespace StockApi
                         YahooFinance.FairValueColor = Color.Green;
                 }
             }
-            public float EstimatedReturn { get => estimatedReturn; set => estimatedReturn = value; }
+            public float EstimatedReturn { get => estimatedReturn;
+                set
+                {
+                    estimatedReturn = value;
+                    if (estimatedReturn < -2)
+                        YahooFinance.EstReturnColor = Color.Red;
+                    else if (estimatedReturn > 2)
+                        YahooFinance.EstReturnColor = Color.Green;
+                    else
+                        YahooFinance.EstReturnColor = Color.White;
+                }
+            }
         }
     }
 
