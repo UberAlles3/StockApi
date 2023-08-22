@@ -65,27 +65,27 @@ namespace StockApi
             List<StockHistory.HistoricData> historicDataList = await StockHistory.GetHistoricalDataForDateRange(txtStockTicker.Text, DateTime.Now.AddMonths(-1), DateTime.Now);
 
             // Today will be the last in the list
-            StockHistory.HistoricData historicDataToday = historicDataList.Last();
+            StockHistory.HistoricDataToday = historicDataList.Last();
 
             // Last Week
             DateTime findDate = GetMondayIfWeeekend(DateTime.Now.AddDays(-7).Date);
-            StockHistory.HistoricData historicDataWeekAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.AddDays(1));
+            StockHistory.HistoricDataWeekAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.AddDays(1));
 
             // Last Month (really 31 days ago)
             findDate = GetMondayIfWeeekend(DateTime.Now.AddDays(-31).Date);
-            StockHistory.HistoricData historicDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
+            StockHistory.HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
 
             /////// Get price history for a year ago to determine long trend
             historicDataList = await StockHistory.GetHistoricalDataForDateRange(txtStockTicker.Text, DateTime.Now.AddYears(-1), DateTime.Now.AddYears(-1).AddDays(2));
             // Last Year
             findDate = GetMondayIfWeeekend(DateTime.Now.AddYears(-1).Date);
-            StockHistory.HistoricData historicDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
+            StockHistory.HistoricDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
 
             List<StockHistory.HistoricData> historicDisplayList = new List<StockHistory.HistoricData>();
-            historicDisplayList.Add(historicDataToday);
-            historicDisplayList.Add(historicDataWeekAgo);
-            historicDisplayList.Add(historicDataMonthAgo);
-            historicDisplayList.Add(historicDataYearAgo);
+            historicDisplayList.Add(StockHistory.HistoricDataToday);
+            historicDisplayList.Add(StockHistory.HistoricDataWeekAgo);
+            historicDisplayList.Add(StockHistory.HistoricDataMonthAgo);
+            historicDisplayList.Add(StockHistory.HistoricDataYearAgo);
 
             var bindingList = new BindingList<StockHistory.HistoricData>(historicDisplayList);
             var source = new BindingSource(bindingList, null);
@@ -100,21 +100,13 @@ namespace StockApi
             dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
             dataGridView1.Refresh();
 
-            // Trend
-            if (historicDataToday.Price < historicDataYearAgo.Price) // year
-                picYearTrend.Image = picDownTrend.Image;
-            else
-                picYearTrend.Image = picUpTrend.Image;
 
-            if (historicDataToday.Price < historicDataMonthAgo.Price) // month
-                picMonthTrend.Image = picDownTrend.Image;
-            else
-                picMonthTrend.Image = picUpTrend.Image;
 
-            if (historicDataToday.Price < historicDataWeekAgo.Price) // week
-                picWeekTrend.Image = picDownTrend.Image;
-            else
-                picWeekTrend.Image = picUpTrend.Image;
+            // Trends
+            StockHistory.SetTrends();
+            picYearTrend.Image = StockHistory.YearTrend ? picUpTrend.Image : picDownTrend.Image;
+            picMonthTrend.Image = StockHistory.MonthTrend ? picUpTrend.Image : picDownTrend.Image;
+            picWeekTrend.Image = StockHistory.WeekTrend ? picUpTrend.Image : picDownTrend.Image;
 
             PostWebCall(_stockData); // displays the data returned
         }

@@ -177,6 +177,14 @@ namespace StockApi
     {
         private static readonly string _url = "https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
 
+        public static HistoricData HistoricDataToday;
+        public static HistoricData HistoricDataWeekAgo;
+        public static HistoricData HistoricDataMonthAgo;
+        public static HistoricData HistoricDataYearAgo;
+        public static bool WeekTrend = false;
+        public static bool MonthTrend = false;
+        public static bool YearTrend = false;
+
         private static string _ticker;
         public static string Ticker
         {
@@ -250,6 +258,24 @@ namespace StockApi
             }
 
             return historicDataList;
+        }
+
+        public static void SetTrends()
+        {
+            if (HistoricDataToday.Price < HistoricDataYearAgo.Price) // year
+                YearTrend = false;
+            else
+                YearTrend = true;
+
+            if (HistoricDataToday.Price < HistoricDataMonthAgo.Price) // month
+                MonthTrend = false;
+            else
+                MonthTrend = true;
+
+            if (HistoricDataToday.Price < HistoricDataWeekAgo.Price) // week
+                WeekTrend = false;
+            else
+                WeekTrend = true;
         }
 
         public class HistoricData
