@@ -34,8 +34,11 @@ namespace StockApi
             panel2.Visible = false;
 
             picSpinner.Visible = false;
-            picSpinner.Left = panel1.Left + panel1.Width/2 - 50;
-            picSpinner.Top = panel1.Top + panel1.Height / 2 - 30;
+            picSpinner.Left = 220; // panel1.Left + panel1.Width/2 - 50;
+            picSpinner.Top = 8;    //panel1.Top + panel1.Height / 2 - 30;
+
+            picUpTrend.Visible = false;
+            picDownTrend.Visible = false;
 
             lblTicker.Text = "";
             txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine + "AM" + Environment.NewLine;
@@ -95,6 +98,22 @@ namespace StockApi
             dataGridView1.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
             dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
             dataGridView1.Refresh();
+
+            // Trend
+            if (historicDataToday.Price < historicDataYearAgo.Price) // year
+                picYearTrend.Image = picDownTrend.Image;
+            else
+                picYearTrend.Image = picUpTrend.Image;
+
+            if (historicDataToday.Price < historicDataMonthAgo.Price) // month
+                picMonthTrend.Image = picDownTrend.Image;
+            else
+                picMonthTrend.Image = picUpTrend.Image;
+
+            if (historicDataToday.Price < historicDataWeekAgo.Price) // week
+                picWeekTrend.Image = picDownTrend.Image;
+            else
+                picWeekTrend.Image = picUpTrend.Image;
 
 
             PostWebCall(_stockData); // displays the data returned

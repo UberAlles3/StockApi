@@ -73,6 +73,26 @@ namespace StockApi.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap downTrend {
+            get {
+                object obj = ResourceManager.GetObject("downTrend", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap downTrend1 {
+            get {
+                object obj = ResourceManager.GetObject("downTrend1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Spin {
             get {
                 object obj = ResourceManager.GetObject("Spin", resourceCulture);
@@ -86,6 +106,26 @@ namespace StockApi.Properties {
         internal static System.Drawing.Bitmap Spin1 {
             get {
                 object obj = ResourceManager.GetObject("Spin1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UpTrend {
+            get {
+                object obj = ResourceManager.GetObject("UpTrend", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UpTrend1 {
+            get {
+                object obj = ResourceManager.GetObject("UpTrend1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
