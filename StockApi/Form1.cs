@@ -28,6 +28,7 @@ namespace StockApi
         private void Form1_Load(object sender, EventArgs e)
         {
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
+            panel1.Visible = false;
             lblTicker.Text = "";
             picSpinner.Visible = false;
             picSpinner.Left = panel1.Left + panel1.Width/2 - 50;

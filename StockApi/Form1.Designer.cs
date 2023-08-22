@@ -69,7 +69,7 @@ namespace StockApi
             this.btnGetOne.Name = "btnGetOne";
             this.btnGetOne.Size = new System.Drawing.Size(213, 35);
             this.btnGetOne.TabIndex = 0;
-            this.btnGetOne.Text = "Get individual stock data";
+            this.btnGetOne.Text = "Get Stock Info";
             this.btnGetOne.UseVisualStyleBackColor = false;
             this.btnGetOne.Click += new System.EventHandler(this.btnGetOne_click);
             // 
@@ -158,7 +158,6 @@ namespace StockApi
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.dataGridView1.CausesValidation = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -166,7 +165,7 @@ namespace StockApi
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.Location = new System.Drawing.Point(15, 303);
