@@ -58,8 +58,8 @@ namespace StockApi
 
 
             // Execute the request to get html from Yahoo Finance
-            YahooFinance.Ticker = _stockData.Ticker = txtStockTicker.Text;
-            string html = await YahooFinance.GetHtmlForTicker(txtStockTicker.Text);
+            YahooFinance.Ticker = _stockData.Ticker = txtStockTicker.Text.ToUpper();
+            string html = await YahooFinance.GetHtmlForTicker(YahooFinance.Ticker);
             // Extract the individual data values from the html
             YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
 
@@ -151,7 +151,6 @@ namespace StockApi
         private void PreWebCall()
         {
             btnGetOne.Enabled = false;
-            lblTicker.Text = txtStockTicker.Text.ToUpper();
             panel1.Visible = false;
             panel2.Visible = false;
             picSpinner.Visible = true;
@@ -160,6 +159,7 @@ namespace StockApi
         private void PostWebCall(YahooFinance.StockData stockData)
         {
             btnGetOne.Enabled = true;
+            lblTicker.Text = stockData.CompanyName;
             lblBeta.Text = stockData.Beta;
             lblEPS.Text = stockData.EarningsPerShare;
             lblPrice.Text = stockData.Price.ToString();

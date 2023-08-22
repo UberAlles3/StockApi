@@ -30,9 +30,10 @@ namespace StockApi
         public static async Task<string> GetHtmlForTicker(string ticker)
         {
             Ticker = ticker;
+            string formattedUrl = _url.Replace("???", Ticker);
 
             HttpClient cl = new HttpClient();
-            HttpResponseMessage hrm = await cl.GetAsync(_url.Replace("???", ticker));
+            HttpResponseMessage hrm = await cl.GetAsync(formattedUrl);
             string html = await hrm.Content.ReadAsStringAsync();
             return html;
         }
@@ -42,6 +43,8 @@ namespace StockApi
             public static void ExtractDataFromHtml(StockData stockData, string html)
             {
                 stockData.Ticker = Ticker;
+                stockData.CompanyName = GetDataByTagName(html, "title", Ticker);
+                stockData.CompanyName = stockData.CompanyName.Substring(0, stockData.CompanyName.IndexOf(")") + 1);
                 stockData.Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
                 stockData.Beta = GetValueFromHtml(html, "BETA_5Y-value", "N/A");
                 stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", "N/A");
@@ -77,6 +80,19 @@ namespace StockApi
                     return temp;
                 else
                     return defaultValue;
+            }
+
+            private static string GetDataByTagName(string html, string tagName, string defaultValue)
+            {
+                int loc1 = html.IndexOf("<" + tagName) + 1;
+                int loc2 = html.IndexOf("</" + tagName, loc1 + 5); //</title
+                if (loc1 == -1)
+                {
+                    //throw new Exception("Unable to find class with name '" + class_name + "' in the web data.");
+                    return defaultValue;
+                }
+                string middle = html.Substring(loc1 + 1 + tagName.Length, loc2 - loc1 - 1);
+                return middle;
             }
 
             private static string GetDataByClassName(string html, string class_name, string defaultValue)
@@ -132,6 +148,7 @@ namespace StockApi
         public class StockData
         {
             private string ticker = "";
+            private string companyName = "";
             private float price = 0;
             private string beta = "N/A";
             private string earningsPerShare = "N/A";
@@ -140,6 +157,7 @@ namespace StockApi
             private float estimatedReturn = 0;
 
             public string Ticker { get => ticker; set => ticker = value; }
+            public string CompanyName { get => companyName; set => companyName = value; }
             public float Price { get => price; set => price = value; }
             public string Beta { get => beta; set => beta = value; }
             public string EarningsPerShare { get => earningsPerShare; set => earningsPerShare = value; }
@@ -198,18 +216,18 @@ namespace StockApi
         public static async Task<string> GetHistoryHtmlForTicker(string ticker, DateTime beginDate, DateTime endDate)
         {
             Ticker = ticker;
-            _url = _historicalDataUrl.Replace("?ticker?", ticker);
+            string formattedUrl = _historicalDataUrl.Replace("?ticker?", ticker);
 
             // Get seconds pasesed since 1/1/1970
             double beginEpoch = beginDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
             double endEpoch = endDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
-            _url = _url.Replace("?period1?", Convert.ToInt32(beginEpoch).ToString());
-            _url = _url.Replace("?period2?", Convert.ToInt32(endEpoch).ToString());
+            formattedUrl = formattedUrl.Replace("?period1?", Convert.ToInt32(beginEpoch).ToString());
+            formattedUrl = formattedUrl.Replace("?period2?", Convert.ToInt32(endEpoch).ToString());
 
 
             HttpClient cl = new HttpClient();
-            HttpResponseMessage hrm = await cl.GetAsync(_url);
+            HttpResponseMessage hrm = await cl.GetAsync(formattedUrl);
             string html = await hrm.Content.ReadAsStringAsync();
 
             int historyLocation = html.IndexOf("data-test=\"historical-prices\"");

@@ -383,10 +383,10 @@ namespace StockApi
             // lblTicker
             // 
             this.lblTicker.BackColor = System.Drawing.Color.Transparent;
-            this.lblTicker.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblTicker.Location = new System.Drawing.Point(49, 4);
+            this.lblTicker.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTicker.Location = new System.Drawing.Point(9, 4);
             this.lblTicker.Name = "lblTicker";
-            this.lblTicker.Size = new System.Drawing.Size(233, 32);
+            this.lblTicker.Size = new System.Drawing.Size(318, 32);
             this.lblTicker.TabIndex = 10;
             this.lblTicker.Text = "lblTicker";
             this.lblTicker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
