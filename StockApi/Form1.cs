@@ -166,6 +166,8 @@ namespace StockApi
             lblPrice.Text = stockData.Price.ToString();
             lblEstimatedReturn.Text = stockData.EstimatedReturn.ToString() + "%";
             lblEstimatedReturn.ForeColor = YahooFinance.EstReturnColor;
+            lblOneYearTarget.Text = stockData.OneYearTargetPrice;
+            lblOneYearTarget.ForeColor = YahooFinance.OneYearTargetColor;
             panel1.Visible = true;
             panel2.Visible = true;
             picSpinner.Visible = false;

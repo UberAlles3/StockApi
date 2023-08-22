@@ -26,6 +26,7 @@ namespace StockApi
         public static Color FairValueColor = Color.White;
         public static Color EPSColor = Color.White;
         public static Color EstReturnColor = Color.White;
+        public static Color OneYearTargetColor = Color.White;
 
         protected static async Task<string> GetHtml(string url)
         {
@@ -188,17 +189,31 @@ namespace StockApi
                     {
                         if (Convert.ToSingle(earningsPerShare) < -1)
                             YahooFinance.EPSColor = Color.Red;
-                        else if (Convert.ToSingle(earningsPerShare) < 1)
-                            YahooFinance.EPSColor = Color.White;
                         else if (Convert.ToSingle(earningsPerShare) > 1)
-                            YahooFinance.EPSColor = Color.Red;
+                            YahooFinance.EPSColor = Color.Lime;
                         else
                             YahooFinance.EPSColor = Color.White;
                     }
                 }
 
             }
-            public string OneYearTargetPrice { get => oneYearTargetPrice; set => oneYearTargetPrice = value; }
+            public string OneYearTargetPrice { get => oneYearTargetPrice; set
+                {
+                    oneYearTargetPrice = value;
+                    if (oneYearTargetPrice == YahooFinance.NotApplicable || oneYearTargetPrice == "")
+                        YahooFinance.OneYearTargetColor = Color.White;
+                    else
+                    {
+                        if (Convert.ToSingle(oneYearTargetPrice) < price * .9)
+                            YahooFinance.OneYearTargetColor = Color.Red;
+                        else if (Convert.ToSingle(oneYearTargetPrice) > price * 1.1)
+                            YahooFinance.OneYearTargetColor = Color.Lime;
+                        else
+                            YahooFinance.OneYearTargetColor = Color.White;
+                    }
+                }
+            }
+
             public FairValue FairValue { get => fairValue; 
                 set 
                 { 
@@ -208,7 +223,7 @@ namespace StockApi
                     if (fairValue == FairValue.FairValue)
                         YahooFinance.FairValueColor = Color.White;
                     if (fairValue == FairValue.Undervalued)
-                        YahooFinance.FairValueColor = Color.Green;
+                        YahooFinance.FairValueColor = Color.Lime;
                 }
             }
             public float EstimatedReturn { get => estimatedReturn;
@@ -218,7 +233,7 @@ namespace StockApi
                     if (estimatedReturn < -2)
                         YahooFinance.EstReturnColor = Color.Red;
                     else if (estimatedReturn > 2)
-                        YahooFinance.EstReturnColor = Color.Green;
+                        YahooFinance.EstReturnColor = Color.Lime;
                     else
                         YahooFinance.EstReturnColor = Color.White;
                 }
