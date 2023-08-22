@@ -39,10 +39,11 @@ namespace StockApi
             picUpTrend.Visible = false;
             picDownTrend.Visible = false;
 
-            //picYearTrend.BackColor = Color.FromArgb(100, 0, 0, 0);
-
             lblTicker.Text = "";
-            txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine + "AM" + Environment.NewLine;
+
+            // temporary for testing
+            txtStockTicker.Text = "intc";
+            txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -166,17 +167,5 @@ namespace StockApi
             picSpinner.Visible = false;
             Cursor.Current = Cursors.Default;
         }
-
-        //private async void btnGetHistory_Click(object sender, EventArgs e)
-        //{
-        //    if (string.IsNullOrEmpty(txtStockTicker.Text))
-        //    {
-        //        MessageBox.Show("Enter a valid stock ticker.");
-        //        return;
-        //    }
-
-        //    HistoricData historicData = await GetHistoricalDataForDate(DateTime.Now);
-
-        //}
     }
 }
