@@ -40,6 +40,8 @@ namespace StockApi
             picUpTrend.Visible = false;
             picDownTrend.Visible = false;
 
+            //picYearTrend.BackColor = Color.FromArgb(100, 0, 0, 0);
+
             lblTicker.Text = "";
             txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine + "AM" + Environment.NewLine;
         }
@@ -91,7 +93,10 @@ namespace StockApi
 
             var bindingList = new BindingList<YahooFinance.HistoricData>(historicDataList);
             var source = new BindingSource(bindingList, null);
-            dataGridView1.DefaultCellStyle.ForeColor = Color.Black;
+            dataGridView1.DefaultCellStyle.ForeColor = Color.White;
+            dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
+            dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
+            dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
             dataGridView1.DataSource = source.DataSource;
             dataGridView1.Columns[0].Visible = false;
             dataGridView1.Columns[1].HeaderText = "Date";

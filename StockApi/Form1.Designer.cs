@@ -29,6 +29,7 @@ namespace StockApi
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnGetOne = new System.Windows.Forms.Button();
@@ -38,10 +39,10 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblBeta = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label22 = new System.Windows.Forms.Label();
-            this.picMonthTrend = new System.Windows.Forms.PictureBox();
-            this.label21 = new System.Windows.Forms.Label();
             this.picYearTrend = new System.Windows.Forms.PictureBox();
+            this.picWeekTrend = new System.Windows.Forms.PictureBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -59,6 +60,7 @@ namespace StockApi
             this.lblEPS = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.picMonthTrend = new System.Windows.Forms.PictureBox();
             this.picSpinner = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -76,17 +78,16 @@ namespace StockApi
             this.txtSharesOwned = new System.Windows.Forms.TextBox();
             this.picUpTrend = new System.Windows.Forms.PictureBox();
             this.picDownTrend = new System.Windows.Forms.PictureBox();
-            this.picWeekTrend = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picMonthTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picMonthTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSpinner)).BeginInit();
             this.panel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picUpTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDownTrend)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGetOne
@@ -156,11 +157,10 @@ namespace StockApi
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.picYearTrend);
             this.panel1.Controls.Add(this.picWeekTrend);
             this.panel1.Controls.Add(this.label22);
-            this.panel1.Controls.Add(this.picMonthTrend);
             this.panel1.Controls.Add(this.label21);
-            this.panel1.Controls.Add(this.picYearTrend);
             this.panel1.Controls.Add(this.label20);
             this.panel1.Controls.Add(this.label19);
             this.panel1.Controls.Add(this.label11);
@@ -180,11 +180,34 @@ namespace StockApi
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.lblBeta);
             this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.picMonthTrend);
             this.panel1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel1.Location = new System.Drawing.Point(270, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(332, 432);
             this.panel1.TabIndex = 6;
+            // 
+            // picYearTrend
+            // 
+            this.picYearTrend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
+            this.picYearTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
+            this.picYearTrend.Location = new System.Drawing.Point(62, 395);
+            this.picYearTrend.Name = "picYearTrend";
+            this.picYearTrend.Size = new System.Drawing.Size(32, 29);
+            this.picYearTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picYearTrend.TabIndex = 19;
+            this.picYearTrend.TabStop = false;
+            // 
+            // picWeekTrend
+            // 
+            this.picWeekTrend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(24)))), ((int)(((byte)(36)))));
+            this.picWeekTrend.Image = global::StockApi.Properties.Resources.downTrend1;
+            this.picWeekTrend.Location = new System.Drawing.Point(266, 394);
+            this.picWeekTrend.Name = "picWeekTrend";
+            this.picWeekTrend.Size = new System.Drawing.Size(33, 29);
+            this.picWeekTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picWeekTrend.TabIndex = 23;
+            this.picWeekTrend.TabStop = false;
             // 
             // label22
             // 
@@ -196,16 +219,6 @@ namespace StockApi
             this.label22.TabIndex = 22;
             this.label22.Text = "Week";
             // 
-            // picMonthTrend
-            // 
-            this.picMonthTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
-            this.picMonthTrend.Location = new System.Drawing.Point(171, 395);
-            this.picMonthTrend.Name = "picMonthTrend";
-            this.picMonthTrend.Size = new System.Drawing.Size(33, 29);
-            this.picMonthTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picMonthTrend.TabIndex = 21;
-            this.picMonthTrend.TabStop = false;
-            // 
             // label21
             // 
             this.label21.BackColor = System.Drawing.Color.Transparent;
@@ -215,16 +228,6 @@ namespace StockApi
             this.label21.Size = new System.Drawing.Size(50, 22);
             this.label21.TabIndex = 20;
             this.label21.Text = "Month";
-            // 
-            // picYearTrend
-            // 
-            this.picYearTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
-            this.picYearTrend.Location = new System.Drawing.Point(62, 395);
-            this.picYearTrend.Name = "picYearTrend";
-            this.picYearTrend.Size = new System.Drawing.Size(32, 29);
-            this.picYearTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picYearTrend.TabIndex = 19;
-            this.picYearTrend.TabStop = false;
             // 
             // label20
             // 
@@ -264,19 +267,28 @@ namespace StockApi
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 251);
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView1.Location = new System.Drawing.Point(9, 251);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -287,7 +299,7 @@ namespace StockApi
             // 
             this.label9.BackColor = System.Drawing.Color.Transparent;
             this.label9.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label9.Location = new System.Drawing.Point(164, 226);
+            this.label9.Location = new System.Drawing.Point(167, 226);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(57, 22);
             this.label9.TabIndex = 11;
@@ -297,7 +309,7 @@ namespace StockApi
             // 
             this.label14.BackColor = System.Drawing.Color.Transparent;
             this.label14.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label14.Location = new System.Drawing.Point(253, 226);
+            this.label14.Location = new System.Drawing.Point(256, 226);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(67, 22);
             this.label14.TabIndex = 7;
@@ -307,7 +319,7 @@ namespace StockApi
             // 
             this.label17.BackColor = System.Drawing.Color.Transparent;
             this.label17.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label17.Location = new System.Drawing.Point(6, 226);
+            this.label17.Location = new System.Drawing.Point(9, 226);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(57, 22);
             this.label17.TabIndex = 4;
@@ -329,7 +341,7 @@ namespace StockApi
             this.label12.AutoSize = true;
             this.label12.BackColor = System.Drawing.Color.Transparent;
             this.label12.ForeColor = System.Drawing.Color.DarkGray;
-            this.label12.Location = new System.Drawing.Point(6, 235);
+            this.label12.Location = new System.Drawing.Point(9, 235);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(312, 15);
             this.label12.TabIndex = 13;
@@ -422,6 +434,17 @@ namespace StockApi
             this.label3.Size = new System.Drawing.Size(137, 15);
             this.label3.TabIndex = 6;
             this.label3.Text = "__________________________";
+            // 
+            // picMonthTrend
+            // 
+            this.picMonthTrend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(18)))), ((int)(((byte)(26)))));
+            this.picMonthTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
+            this.picMonthTrend.Location = new System.Drawing.Point(171, 395);
+            this.picMonthTrend.Name = "picMonthTrend";
+            this.picMonthTrend.Size = new System.Drawing.Size(33, 29);
+            this.picMonthTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picMonthTrend.TabIndex = 21;
+            this.picMonthTrend.TabStop = false;
             // 
             // picSpinner
             // 
@@ -598,18 +621,9 @@ namespace StockApi
             this.picDownTrend.TabIndex = 19;
             this.picDownTrend.TabStop = false;
             // 
-            // picWeekTrend
-            // 
-            this.picWeekTrend.Image = global::StockApi.Properties.Resources.downTrend1;
-            this.picWeekTrend.Location = new System.Drawing.Point(266, 394);
-            this.picWeekTrend.Name = "picWeekTrend";
-            this.picWeekTrend.Size = new System.Drawing.Size(33, 29);
-            this.picWeekTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picWeekTrend.TabIndex = 23;
-            this.picWeekTrend.TabStop = false;
-            // 
             // Form1
             // 
+            this.AcceptButton = this.btnGetOne;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
@@ -635,9 +649,10 @@ namespace StockApi
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picMonthTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picMonthTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSpinner)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -645,7 +660,6 @@ namespace StockApi
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picUpTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDownTrend)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
