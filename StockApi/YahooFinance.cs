@@ -13,7 +13,7 @@ namespace StockApi
 {
     public class YahooFinance
     {
-        private static string _url = "https://finance.yahoo.com/quote/";
+        private static string _url = "https://finance.yahoo.com/quote/????p=???";
         //private static string _historicalDataUrl = "https://finance.yahoo.com/quote/???/history?p=???";
         private static string _historicalDataUrl = "https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
 
@@ -32,7 +32,7 @@ namespace StockApi
             Ticker = ticker;
 
             HttpClient cl = new HttpClient();
-            HttpResponseMessage hrm = await cl.GetAsync(_url + ticker);
+            HttpResponseMessage hrm = await cl.GetAsync(_url.Replace("???", ticker));
             string Html = await hrm.Content.ReadAsStringAsync();
             return Html;
         }

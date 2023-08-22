@@ -29,10 +29,11 @@ namespace StockApi
         {
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             panel1.Visible = false;
-            lblTicker.Text = "";
             picSpinner.Visible = false;
             picSpinner.Left = panel1.Left + panel1.Width/2 - 50;
             picSpinner.Top = panel1.Top + panel1.Height / 2 - 30;
+
+            lblTicker.Text = "";
             txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine + "AM" + Environment.NewLine;
         }
 
@@ -46,13 +47,12 @@ namespace StockApi
 
             PreWebCall(); // Sets the form display while the request is executing
 
-            YahooFinance.Ticker = txtStockTicker.Text;
 
             // Execute the request to get html from Yahoo Finance
-            //////string html = await YahooFinance.GetHtmlForTicker(txtStockTicker.Text);
-            //////// Extract the individual data values from the html
-            //////_stockData.Ticker = txtStockTicker.Text;
-            //////YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
+            YahooFinance.Ticker = _stockData.Ticker = txtStockTicker.Text;
+            string html = await YahooFinance.GetHtmlForTicker(txtStockTicker.Text);
+            // Extract the individual data values from the html
+            YahooFinance.HtmlParser.ExtractDataFromHtml(_stockData, html);
 
             // Get price history, Today, week ago, month ago, year ago to determine long and short trend
             List<YahooFinance.HistoricData> historicData = await YahooFinance.GetHistoricalDataForDate(DateTime.Now.AddMonths(-1), DateTime.Now);
@@ -82,6 +82,7 @@ namespace StockApi
 
             var bindingList = new BindingList<YahooFinance.HistoricData>(historicDataList);
             var source = new BindingSource(bindingList, null);
+            dataGridView1.DefaultCellStyle.ForeColor = Color.Black;
             dataGridView1.DataSource = source.DataSource;
             dataGridView1.Columns[0].Visible = false;
             dataGridView1.Columns[1].HeaderText = "Date";
