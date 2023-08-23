@@ -38,6 +38,7 @@ namespace StockApi
             picSpinner.Top = 8; 
 
             picUpTrend.Visible = false;
+            picSidewaysTrend.Visible = false;
             picDownTrend.Visible = false;
 
             lblTicker.Text = "";
@@ -148,7 +149,7 @@ namespace StockApi
 
             // Analyze form fields
             Analyze.PersonalStockData personalStockData = Analyze.PreFillAnalyzeFormData();
-            //txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+            txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
 
         }
 

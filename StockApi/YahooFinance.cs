@@ -396,23 +396,23 @@ namespace StockApi
 
         public static void SetTrends()
         {
-            if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.1) // year
+            if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.08F) // year
                 YearTrend = TrendEnum.Up;
-            if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .9F) // year
+            if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92F) // year
                 YearTrend = TrendEnum.Down;
             else
                 YearTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.1) // year
+            if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.08F) // year
                 MonthTrend = TrendEnum.Up;
-            if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .9F) // year
+            if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .92F) // year
                 MonthTrend = TrendEnum.Down;
             else
                 MonthTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.1) // year
+            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.08F) // year
                 WeekTrend = TrendEnum.Up;
-            if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .9F) // year
+            if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .92F) // year
                 WeekTrend = TrendEnum.Down;
             else
                 WeekTrend = TrendEnum.Sideways;

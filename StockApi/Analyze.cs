@@ -66,13 +66,19 @@ namespace StockApi
             // Trend
             float trendMetric = Convert.ToInt16(StockHistory.YearTrend) + Convert.ToInt16(StockHistory.MonthTrend) + Convert.ToInt16(StockHistory.WeekTrend);
             if(trendMetric == 0) // Very downward trend
-                trendMetric = .9F;
+                trendMetric = .88F;
             else if (trendMetric == 1)
-                trendMetric = .95F;
+                trendMetric = .92F;
             else if (trendMetric == 2)
-                trendMetric = 1.05F;
-            else if (trendMetric == 2)
-                trendMetric = 1.1F; // Very upward trend
+                trendMetric = .96F;
+            else if (trendMetric == 3)
+                trendMetric = 1.00F;
+            else if (trendMetric == 4)
+                trendMetric = 1.04F; 
+            else if (trendMetric == 5)
+                trendMetric = 1.08F; 
+            else if (trendMetric == 5)
+                trendMetric = 1.12F; // Very upward trend
 
             // One Year Target
             float targetPriceMetric = 1F;
