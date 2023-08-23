@@ -183,7 +183,7 @@ namespace StockApi
 
             // Analyze form fields
             Analyze.PersonalStockData personalStockData = Analyze.PreFillAnalyzeFormData();
-            txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+            //txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
 
         }
 
