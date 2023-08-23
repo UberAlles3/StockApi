@@ -12,13 +12,13 @@ namespace StockApi
     class Analyze
     {
         static TextFile TF = new TextFile();
-        static List<PersonalStockData> personalStockData = new List<PersonalStockData>();
+        static List<PersonalStockData> personalStockDataList = new List<PersonalStockData>();
 
         static void ReadInStockData()
         {
             string[] parts;
 
-            if (personalStockData.Count > 0)
+            if (personalStockDataList.Count > 0)
                 return;
             
             TF.OpenFile(@"E:\Source Code\StockAPI\StockApi\StockApi\bin\Debug\netcoreapp3.1\Stocks.txt", TextFile.TextFileMode.InputMode);
@@ -28,7 +28,7 @@ namespace StockApi
                 parts = s.Split(",");
 
                 PersonalStockData personalStockData = new PersonalStockData { Ticker = parts[0], Shares = Convert.ToInt32(parts[1])};
-
+                personalStockDataList.Add(personalStockData);
 
                 Debug.WriteLine(s);
             }
@@ -38,10 +38,11 @@ namespace StockApi
         public static void AnalyzeStockData()
         {
             ReadInStockData();
+            
 
             string ticker = StockSummary.Ticker;
 
-            string stockCSV = personalStockData.Find(x => x.Ticker == ticker).ToString(); 
+            PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == ticker); 
 
 
         }
