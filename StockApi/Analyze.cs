@@ -25,7 +25,7 @@ namespace StockApi
 
             foreach (string s in TF)
             {
-                parts = s.Split(",");
+                parts = s.Split("\t");
 
                 PersonalStockData personalStockData = new PersonalStockData { Ticker = parts[0], Shares = Convert.ToInt32(parts[1])};
                 personalStockDataList.Add(personalStockData);
