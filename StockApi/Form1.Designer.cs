@@ -74,7 +74,7 @@ namespace StockApi
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtTickerList = new System.Windows.Forms.TextBox();
-            this.btnGetHistory = new System.Windows.Forms.Button();
+            this.btnAnalyze = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtTradePrice = new System.Windows.Forms.TextBox();
@@ -604,21 +604,22 @@ namespace StockApi
             this.txtTickerList.TabIndex = 11;
             this.txtTickerList.Text = "INTC";
             // 
-            // btnGetHistory
+            // btnAnalyze
             // 
-            this.btnGetHistory.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnGetHistory.Location = new System.Drawing.Point(17, 119);
-            this.btnGetHistory.Name = "btnGetHistory";
-            this.btnGetHistory.Size = new System.Drawing.Size(260, 33);
-            this.btnGetHistory.TabIndex = 12;
-            this.btnGetHistory.Text = "Analyze";
-            this.btnGetHistory.UseVisualStyleBackColor = true;
+            this.btnAnalyze.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnAnalyze.Location = new System.Drawing.Point(17, 119);
+            this.btnAnalyze.Name = "btnAnalyze";
+            this.btnAnalyze.Size = new System.Drawing.Size(260, 33);
+            this.btnAnalyze.TabIndex = 12;
+            this.btnAnalyze.Text = "Analyze";
+            this.btnAnalyze.UseVisualStyleBackColor = true;
+            this.btnAnalyze.Click += new System.EventHandler(this.btnAnalyze_Click);
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
             this.panel2.Controls.Add(this.groupBox1);
-            this.panel2.Controls.Add(this.btnGetHistory);
+            this.panel2.Controls.Add(this.btnAnalyze);
             this.panel2.Controls.Add(this.label15);
             this.panel2.Controls.Add(this.txtSharesOwned);
             this.panel2.ForeColor = System.Drawing.SystemColors.InactiveCaption;
@@ -797,7 +798,7 @@ namespace StockApi
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtTickerList;
-        private System.Windows.Forms.Button btnGetHistory;
+        private System.Windows.Forms.Button btnAnalyze;
         private System.Windows.Forms.PictureBox picSpinner;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label lblPrice;

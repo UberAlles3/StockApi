@@ -12,6 +12,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using CommonClasses;
 
 namespace StockApi
 {
@@ -43,6 +44,15 @@ namespace StockApi
             // temporary for testing
             txtStockTicker.Text = "intc";
             txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
+
+            TextFile TF = new TextFile();
+            TF.OpenFile(@"E:\Source Code\StockAPI\StockApi\StockApi\bin\Debug\netcoreapp3.1\Stocks.txt", TextFile.TextFileMode.InputMode);
+
+            foreach (string s in TF)
+            {
+                Debug.WriteLine(s);
+            }
+            TF.CloseFile();
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -172,6 +182,24 @@ namespace StockApi
             panel2.Visible = true;
             picSpinner.Visible = false;
             Cursor.Current = Cursors.Default;
+        }
+
+        /////////////////////////////////////////
+        ///            Analyze Stock
+        ////////////////////////////////////////
+        private void btnAnalyze_Click(object sender, EventArgs e)
+        {
+            // combine trends with
+            // one year target
+            // EPS
+            // Volatility
+            // Fair Value
+            // Estimated Return %
+            // Should we read in excel file?
+
+
+
+
         }
     }
 }
