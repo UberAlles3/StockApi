@@ -68,12 +68,15 @@ namespace StockApi
             stockData.Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
             stockData.Volatility = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
             string dividend = GetValueFromHtml(html, "DIVIDEND_AND_YIELD-value", YahooFinance.NotApplicable);
-            if (dividend != YahooFinance.NotApplicable && dividend.IndexOf("(") > 1)
+            if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
             {
                 dividend = dividend.Substring(dividend.IndexOf("(") + 1);
-                dividend = dividend.Substring(0, dividend.IndexOf(")") -1);
+                dividend = dividend.Substring(0, dividend.IndexOf(")") - 1);
             }
+            else
+                dividend = YahooFinance.NotApplicable;
             stockData.Dividend = dividend;
+
             stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
             stockData.OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", stockData.Price.ToString());
 
@@ -398,21 +401,21 @@ namespace StockApi
         {
             if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.08F) // year
                 YearTrend = TrendEnum.Up;
-            if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92F) // year
+            else if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92F) // year
                 YearTrend = TrendEnum.Down;
             else
                 YearTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.08F) // year
+            if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.06F) // year
                 MonthTrend = TrendEnum.Up;
-            if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .92F) // year
+            else if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .94F) // year
                 MonthTrend = TrendEnum.Down;
             else
                 MonthTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.08F) // year
+            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.04F) // year
                 WeekTrend = TrendEnum.Up;
-            if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .92F) // year
+            else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .96F) // year
                 WeekTrend = TrendEnum.Down;
             else
                 WeekTrend = TrendEnum.Sideways;
