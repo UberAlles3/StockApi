@@ -259,13 +259,20 @@ namespace StockApi
     {
         private static readonly string _url = "https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
 
+        public enum TrendEnum
+        {
+            Up,
+            Sideways,
+            Down
+        }
+
         public static HistoricData HistoricDataToday;
         public static HistoricData HistoricDataWeekAgo;
         public static HistoricData HistoricDataMonthAgo;
         public static HistoricData HistoricDataYearAgo;
-        public static bool WeekTrend = false;
-        public static bool MonthTrend = false;
-        public static bool YearTrend = false;
+        public static TrendEnum WeekTrend = TrendEnum.Sideways;
+        public static TrendEnum MonthTrend = TrendEnum.Sideways;
+        public static TrendEnum YearTrend = TrendEnum.Sideways;
 
         private static string _ticker;
         public static string Ticker
@@ -389,20 +396,26 @@ namespace StockApi
 
         public static void SetTrends()
         {
-            if (HistoricDataToday.Price < HistoricDataYearAgo.Price) // year
-                YearTrend = false;
+            if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.1) // year
+                YearTrend = TrendEnum.Up;
+            if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .9F) // year
+                YearTrend = TrendEnum.Down;
             else
-                YearTrend = true;
+                YearTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price < HistoricDataMonthAgo.Price) // month
-                MonthTrend = false;
+            if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.1) // year
+                MonthTrend = TrendEnum.Up;
+            if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .9F) // year
+                MonthTrend = TrendEnum.Down;
             else
-                MonthTrend = true;
+                MonthTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price < HistoricDataWeekAgo.Price) // week
-                WeekTrend = false;
+            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.1) // year
+                WeekTrend = TrendEnum.Up;
+            if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .9F) // year
+                WeekTrend = TrendEnum.Down;
             else
-                WeekTrend = true;
+                WeekTrend = TrendEnum.Sideways;
         }
 
         public class HistoricData

@@ -101,6 +101,7 @@ namespace StockApi
             this.txtSharesOwned = new System.Windows.Forms.TextBox();
             this.picUpTrend = new System.Windows.Forms.PictureBox();
             this.picDownTrend = new System.Windows.Forms.PictureBox();
+            this.picSidewaysTrend = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -111,6 +112,7 @@ namespace StockApi
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picUpTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDownTrend)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSidewaysTrend)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGetOne
@@ -605,7 +607,7 @@ namespace StockApi
             // picMonthTrend
             // 
             this.picMonthTrend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(18)))), ((int)(((byte)(26)))));
-            this.picMonthTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
+            this.picMonthTrend.Image = global::StockApi.Properties.Resources.RightArrow;
             this.picMonthTrend.Location = new System.Drawing.Point(171, 395);
             this.picMonthTrend.Name = "picMonthTrend";
             this.picMonthTrend.Size = new System.Drawing.Size(33, 29);
@@ -926,6 +928,16 @@ namespace StockApi
             this.picDownTrend.TabIndex = 19;
             this.picDownTrend.TabStop = false;
             // 
+            // picSidewaysTrend
+            // 
+            this.picSidewaysTrend.Image = global::StockApi.Properties.Resources.RightArrow;
+            this.picSidewaysTrend.Location = new System.Drawing.Point(192, 396);
+            this.picSidewaysTrend.Name = "picSidewaysTrend";
+            this.picSidewaysTrend.Size = new System.Drawing.Size(35, 34);
+            this.picSidewaysTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSidewaysTrend.TabIndex = 20;
+            this.picSidewaysTrend.TabStop = false;
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -935,6 +947,7 @@ namespace StockApi
             this.BackgroundImage = global::StockApi.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(965, 477);
+            this.Controls.Add(this.picSidewaysTrend);
             this.Controls.Add(this.picDownTrend);
             this.Controls.Add(this.picUpTrend);
             this.Controls.Add(this.txtTickerList);
@@ -966,6 +979,7 @@ namespace StockApi
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picUpTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDownTrend)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSidewaysTrend)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1042,6 +1056,7 @@ namespace StockApi
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label lblDividend;
         private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.PictureBox picSidewaysTrend;
     }
 }
 

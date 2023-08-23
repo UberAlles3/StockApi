@@ -64,7 +64,6 @@ namespace StockApi
 
             PreWebCall(); // Sets the form display while the request is executing
 
-
             // Execute the request to get html from Yahoo Finance
             string html = await StockSummary.GetHtmlForTicker(txtStockTicker.Text);
             // Extract the individual data values from the html
@@ -89,10 +88,9 @@ namespace StockApi
 
             // Trends
             StockHistory.SetTrends();
-            picYearTrend.Image = StockHistory.YearTrend ? picUpTrend.Image : picDownTrend.Image;
-            picMonthTrend.Image = StockHistory.MonthTrend ? picUpTrend.Image : picDownTrend.Image;
-            picWeekTrend.Image = StockHistory.WeekTrend ? picUpTrend.Image : picDownTrend.Image;
-
+            picYearTrend.Image = StockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : StockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            picMonthTrend.Image = StockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : StockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image; 
+            picWeekTrend.Image = StockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : StockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
             PostWebCall(_stockData); // displays the data returned
         }
 
