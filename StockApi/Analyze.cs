@@ -38,11 +38,8 @@ namespace StockApi
         public static void AnalyzeStockData()
         {
             ReadInStockData();
-            
 
-            string ticker = StockSummary.Ticker;
-
-            PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == ticker); 
+            PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == StockSummary.Ticker); 
 
 
         }
@@ -56,7 +53,12 @@ namespace StockApi
             public string Ticker { get => ticker; set => ticker = value; }
             public int Shares { get => shares; set => shares = value; }
 
-
+            public override string ToString()
+            {
+                return string.Format(
+                    $"{Ticker}, {Shares}"
+                );
+            }
         }
     }
 }
