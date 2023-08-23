@@ -172,6 +172,7 @@ namespace StockApi
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 
             _analyzeResults = Analyze.AnalyzeStockData(analyzeInputs);
+            txtAnalysisOutput.Text = _analyzeResults.AnalysisOutput;
         }
     }
 }

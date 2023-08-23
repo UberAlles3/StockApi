@@ -55,6 +55,7 @@ namespace StockApi
 
         public static AnalyzeResults AnalyzeStockData(AnalyzeInputs analyzeInputs)
         {
+            StringBuilder builder = new StringBuilder();
             // combine trends with
             // one year target
             // EPS
@@ -79,6 +80,8 @@ namespace StockApi
                 trendMetric = 1.08F; 
             else if (trendMetric == 5)
                 trendMetric = 1.12F; // Very upward trend
+
+            builder.AppendLine($"Price Trend Metric = {trendMetric}");
 
             // One Year Target
             float targetPriceMetric = 1F;
@@ -127,6 +130,8 @@ namespace StockApi
 
             analyzeResults.BuyPrice = buyPrice;
 
+            analyzeResults.AnalysisOutput = builder.ToString();
+
             return analyzeResults;
         }
 
@@ -160,6 +165,7 @@ namespace StockApi
             public float BuyPrice;
             public int SellQuantity;
             public float SellPrice = 0;
+            public string AnalysisOutput;
         }
     }
 }

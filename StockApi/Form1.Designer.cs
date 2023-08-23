@@ -79,6 +79,7 @@ namespace StockApi
             this.txtTickerList = new System.Windows.Forms.TextBox();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.txtAnalysisOutput = new System.Windows.Forms.TextBox();
             this.lblSellQuantity = new System.Windows.Forms.Label();
             this.lblBuyQuantity = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
@@ -671,6 +672,7 @@ namespace StockApi
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.Controls.Add(this.txtAnalysisOutput);
             this.panel2.Controls.Add(this.lblSellQuantity);
             this.panel2.Controls.Add(this.lblBuyQuantity);
             this.panel2.Controls.Add(this.label32);
@@ -691,6 +693,16 @@ namespace StockApi
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(294, 432);
             this.panel2.TabIndex = 14;
+            // 
+            // txtAnalysisOutput
+            // 
+            this.txtAnalysisOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
+            this.txtAnalysisOutput.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.txtAnalysisOutput.Location = new System.Drawing.Point(20, 194);
+            this.txtAnalysisOutput.Multiline = true;
+            this.txtAnalysisOutput.Name = "txtAnalysisOutput";
+            this.txtAnalysisOutput.Size = new System.Drawing.Size(257, 149);
+            this.txtAnalysisOutput.TabIndex = 33;
             // 
             // lblSellQuantity
             // 
@@ -1057,6 +1069,7 @@ namespace StockApi
         private System.Windows.Forms.Label lblDividend;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.PictureBox picSidewaysTrend;
+        private System.Windows.Forms.TextBox txtAnalysisOutput;
     }
 }
 

@@ -264,9 +264,9 @@ namespace StockApi
 
         public enum TrendEnum
         {
-            Up,
+            Down,
             Sideways,
-            Down
+            Up
         }
 
         public static HistoricData HistoricDataToday;
