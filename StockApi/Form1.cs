@@ -45,14 +45,9 @@ namespace StockApi
             txtStockTicker.Text = "intc";
             txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
 
-            TextFile TF = new TextFile();
-            TF.OpenFile(@"E:\Source Code\StockAPI\StockApi\StockApi\bin\Debug\netcoreapp3.1\Stocks.txt", TextFile.TextFileMode.InputMode);
-
-            foreach (string s in TF)
-            {
-                Debug.WriteLine(s);
-            }
-            TF.CloseFile();
+            // for testing
+            StockSummary.Ticker = "INTC";
+            Analyze.AnalyzeStockData();
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -196,9 +191,7 @@ namespace StockApi
             // Fair Value
             // Estimated Return %
             // Should we read in excel file?
-
-
-
+            Analyze.AnalyzeStockData();
 
         }
     }

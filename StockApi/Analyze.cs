@@ -1,6 +1,7 @@
 ﻿using CommonClasses;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace StockApi
@@ -11,24 +12,50 @@ namespace StockApi
     class Analyze
     {
         static TextFile TF = new TextFile();
-
+        static List<PersonalStockData> personalStockData = new List<PersonalStockData>();
 
         static void ReadInStockData()
         {
-            TF.OpenFile(@"C:\FTP_Script.txt", TextFile.TextFileMode.InputMode);
+            string[] parts;
+
+            if (personalStockData.Count > 0)
+                return;
+            
+            TF.OpenFile(@"E:\Source Code\StockAPI\StockApi\StockApi\bin\Debug\netcoreapp3.1\Stocks.txt", TextFile.TextFileMode.InputMode);
 
             foreach (string s in TF)
             {
-                Console.WriteLine(s);
+                parts = s.Split(",");
+
+                PersonalStockData personalStockData = new PersonalStockData { Ticker = parts[0], Shares = Convert.ToInt32(parts[1])};
+
+
+                Debug.WriteLine(s);
             }
             TF.CloseFile();
         }
 
+        public static void AnalyzeStockData()
+        {
+            ReadInStockData();
+
+            string ticker = StockSummary.Ticker;
+
+            string stockCSV = personalStockData.Find(x => x.Ticker == ticker).ToString(); 
+
+
+        }
+
+
         public class PersonalStockData
         {
             private string ticker = "";
+            private int shares;
 
             public string Ticker { get => ticker; set => ticker = value; }
+            public int Shares { get => shares; set => shares = value; }
+
+
         }
     }
 }
