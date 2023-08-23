@@ -9,6 +9,7 @@ using System.Collections;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Drawing;
+using System.Linq;
 
 namespace StockApi
 {
@@ -66,6 +67,13 @@ namespace StockApi
             stockData.CompanyName = stockData.CompanyName.Substring(0, stockData.CompanyName.IndexOf(")") + 1);
             stockData.Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
             stockData.Volatility = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
+            string dividend = GetValueFromHtml(html, "DIVIDEND_AND_YIELD-value", YahooFinance.NotApplicable);
+            if (dividend != YahooFinance.NotApplicable && dividend.IndexOf("(") > 1)
+            {
+                dividend = dividend.Substring(dividend.IndexOf("(") + 1);
+                dividend = dividend.Substring(0, dividend.IndexOf(")") -1);
+            }
+            stockData.Dividend = dividend;
             stockData.EarningsPerShare = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
             stockData.OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", stockData.Price.ToString());
 
@@ -173,6 +181,7 @@ namespace StockApi
             private string earningsPerShare = YahooFinance.NotApplicable;
             private string oneYearTargetPrice = YahooFinance.NotApplicable;
             private FairValue fairValue = YahooFinance.FairValue.FairValue;
+            private string dividend = YahooFinance.NotApplicable;
             private float estimatedReturn = 0;
 
             public string Ticker { get => ticker; set => ticker = value; }
@@ -226,6 +235,8 @@ namespace StockApi
                         YahooFinance.FairValueColor = Color.Lime;
                 }
             }
+            public string Dividend { get => dividend; set => dividend = value; }
+
             public float EstimatedReturn { get => estimatedReturn;
                 set
                 {
@@ -262,6 +273,38 @@ namespace StockApi
             get { return _ticker; }
             set { _ticker = value.ToUpper(); }
         }
+
+        public static async Task<List<StockHistory.HistoricData>> GetPriceHistoryForTodayWeekMonthYear(string ticker)
+        {
+            /////// Get price history, today, week ago, month ago to determine short trend
+            List<StockHistory.HistoricData> historicDataList = await StockHistory.GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1), DateTime.Now);
+
+            // Today will be the last in the list
+            StockHistory.HistoricDataToday = historicDataList.Last();
+
+            // Last Week
+            DateTime findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
+            StockHistory.HistoricDataWeekAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.AddDays(1));
+
+            // Last Month (really 31 days ago)
+            findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-31).Date);
+            StockHistory.HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
+
+            /////// Get price history for a year ago to determine long trend
+            historicDataList = await StockHistory.GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-1), DateTime.Now.AddYears(-1).AddDays(2));
+            // Last Year
+            findDate = GetMondayIfWeekend(DateTime.Now.AddYears(-1).Date);
+            StockHistory.HistoricDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
+
+            List<StockHistory.HistoricData> historicDisplayList = new List<StockHistory.HistoricData>();
+            historicDisplayList.Add(StockHistory.HistoricDataToday);
+            historicDisplayList.Add(StockHistory.HistoricDataWeekAgo);
+            historicDisplayList.Add(StockHistory.HistoricDataMonthAgo);
+            historicDisplayList.Add(StockHistory.HistoricDataYearAgo);
+
+            return historicDisplayList;
+        }
+
 
 
         public static async Task<string> GetHistoryHtmlForTicker(string ticker, DateTime beginDate, DateTime endDate)
@@ -329,6 +372,19 @@ namespace StockApi
             }
 
             return historicDataList;
+        }
+
+        public static DateTime GetMondayIfWeekend(DateTime theDate)
+        {
+            if (theDate.DayOfWeek == DayOfWeek.Saturday)
+                theDate = theDate.AddDays(2); // return Monday
+
+            if (theDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                theDate = theDate.AddDays(1); // return Monday
+            }
+
+            return theDate;
         }
 
         public static void SetTrends()

@@ -39,6 +39,9 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label33 = new System.Windows.Forms.Label();
+            this.lblDividend = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
             this.lblOneYearTarget = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
@@ -76,6 +79,14 @@ namespace StockApi
             this.txtTickerList = new System.Windows.Forms.TextBox();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblSellQuantity = new System.Windows.Forms.Label();
+            this.lblBuyQuantity = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.lblSellAt = new System.Windows.Forms.Label();
+            this.lblBuyAt = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.txtMovementTargetPercent = new System.Windows.Forms.TextBox();
             this.label26 = new System.Windows.Forms.Label();
@@ -90,14 +101,6 @@ namespace StockApi
             this.txtSharesOwned = new System.Windows.Forms.TextBox();
             this.picUpTrend = new System.Windows.Forms.PictureBox();
             this.picDownTrend = new System.Windows.Forms.PictureBox();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.lblBuyAt = new System.Windows.Forms.Label();
-            this.lblSellAt = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.lblBuyQuantity = new System.Windows.Forms.Label();
-            this.lblSellQuantity = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -177,6 +180,9 @@ namespace StockApi
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.label33);
+            this.panel1.Controls.Add(this.lblDividend);
+            this.panel1.Controls.Add(this.label35);
             this.panel1.Controls.Add(this.label53);
             this.panel1.Controls.Add(this.lblOneYearTarget);
             this.panel1.Controls.Add(this.label55);
@@ -216,6 +222,39 @@ namespace StockApi
             this.panel1.Size = new System.Drawing.Size(344, 432);
             this.panel1.TabIndex = 6;
             // 
+            // label33
+            // 
+            this.label33.BackColor = System.Drawing.Color.Transparent;
+            this.label33.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label33.Location = new System.Drawing.Point(15, 127);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(98, 22);
+            this.label33.TabIndex = 33;
+            this.label33.Text = "Dividend";
+            // 
+            // lblDividend
+            // 
+            this.lblDividend.BackColor = System.Drawing.Color.Transparent;
+            this.lblDividend.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblDividend.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblDividend.Location = new System.Drawing.Point(86, 127);
+            this.lblDividend.Name = "lblDividend";
+            this.lblDividend.Size = new System.Drawing.Size(65, 22);
+            this.lblDividend.TabIndex = 34;
+            this.lblDividend.Text = "0.00";
+            this.lblDividend.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.BackColor = System.Drawing.Color.Transparent;
+            this.label35.ForeColor = System.Drawing.Color.DarkGray;
+            this.label35.Location = new System.Drawing.Point(15, 136);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(137, 15);
+            this.label35.TabIndex = 35;
+            this.label35.Text = "__________________________";
+            // 
             // label53
             // 
             this.label53.BackColor = System.Drawing.Color.Transparent;
@@ -253,7 +292,7 @@ namespace StockApi
             // 
             this.label24.BackColor = System.Drawing.Color.Transparent;
             this.label24.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label24.Location = new System.Drawing.Point(15, 128);
+            this.label24.Location = new System.Drawing.Point(15, 160);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(98, 22);
             this.label24.TabIndex = 27;
@@ -264,7 +303,7 @@ namespace StockApi
             this.lblEstimatedReturn.BackColor = System.Drawing.Color.Transparent;
             this.lblEstimatedReturn.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblEstimatedReturn.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblEstimatedReturn.Location = new System.Drawing.Point(105, 128);
+            this.lblEstimatedReturn.Location = new System.Drawing.Point(105, 160);
             this.lblEstimatedReturn.Name = "lblEstimatedReturn";
             this.lblEstimatedReturn.Size = new System.Drawing.Size(46, 22);
             this.lblEstimatedReturn.TabIndex = 28;
@@ -276,7 +315,7 @@ namespace StockApi
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.Color.Transparent;
             this.label27.ForeColor = System.Drawing.Color.DarkGray;
-            this.label27.Location = new System.Drawing.Point(15, 137);
+            this.label27.Location = new System.Drawing.Point(15, 169);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(137, 15);
             this.label27.TabIndex = 29;
@@ -651,6 +690,94 @@ namespace StockApi
             this.panel2.Size = new System.Drawing.Size(294, 432);
             this.panel2.TabIndex = 14;
             // 
+            // lblSellQuantity
+            // 
+            this.lblSellQuantity.BackColor = System.Drawing.Color.Transparent;
+            this.lblSellQuantity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblSellQuantity.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblSellQuantity.Location = new System.Drawing.Point(51, 401);
+            this.lblSellQuantity.Name = "lblSellQuantity";
+            this.lblSellQuantity.Size = new System.Drawing.Size(46, 15);
+            this.lblSellQuantity.TabIndex = 32;
+            this.lblSellQuantity.Text = "0";
+            this.lblSellQuantity.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblBuyQuantity
+            // 
+            this.lblBuyQuantity.BackColor = System.Drawing.Color.Transparent;
+            this.lblBuyQuantity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBuyQuantity.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblBuyQuantity.Location = new System.Drawing.Point(51, 380);
+            this.lblBuyQuantity.Name = "lblBuyQuantity";
+            this.lblBuyQuantity.Size = new System.Drawing.Size(46, 15);
+            this.lblBuyQuantity.TabIndex = 31;
+            this.lblBuyQuantity.Text = "0";
+            this.lblBuyQuantity.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label32
+            // 
+            this.label32.BackColor = System.Drawing.Color.Transparent;
+            this.label32.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label32.Location = new System.Drawing.Point(107, 401);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(30, 22);
+            this.label32.TabIndex = 30;
+            this.label32.Text = "@";
+            // 
+            // label31
+            // 
+            this.label31.BackColor = System.Drawing.Color.Transparent;
+            this.label31.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label31.Location = new System.Drawing.Point(107, 381);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(30, 22);
+            this.label31.TabIndex = 29;
+            this.label31.Text = "@";
+            // 
+            // lblSellAt
+            // 
+            this.lblSellAt.BackColor = System.Drawing.Color.Transparent;
+            this.lblSellAt.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblSellAt.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblSellAt.Location = new System.Drawing.Point(135, 403);
+            this.lblSellAt.Name = "lblSellAt";
+            this.lblSellAt.Size = new System.Drawing.Size(46, 15);
+            this.lblSellAt.TabIndex = 28;
+            this.lblSellAt.Text = "0.00";
+            this.lblSellAt.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblBuyAt
+            // 
+            this.lblBuyAt.BackColor = System.Drawing.Color.Transparent;
+            this.lblBuyAt.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBuyAt.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblBuyAt.Location = new System.Drawing.Point(135, 381);
+            this.lblBuyAt.Name = "lblBuyAt";
+            this.lblBuyAt.Size = new System.Drawing.Size(46, 15);
+            this.lblBuyAt.TabIndex = 27;
+            this.lblBuyAt.Text = "0.00";
+            this.lblBuyAt.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label30
+            // 
+            this.label30.BackColor = System.Drawing.Color.Transparent;
+            this.label30.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label30.Location = new System.Drawing.Point(18, 402);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(48, 22);
+            this.label30.TabIndex = 26;
+            this.label30.Text = "Sell";
+            // 
+            // label29
+            // 
+            this.label29.BackColor = System.Drawing.Color.Transparent;
+            this.label29.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label29.Location = new System.Drawing.Point(17, 380);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(48, 22);
+            this.label29.TabIndex = 25;
+            this.label29.Text = "Buy ";
+            // 
             // label28
             // 
             this.label28.AutoSize = true;
@@ -799,94 +926,6 @@ namespace StockApi
             this.picDownTrend.TabIndex = 19;
             this.picDownTrend.TabStop = false;
             // 
-            // label29
-            // 
-            this.label29.BackColor = System.Drawing.Color.Transparent;
-            this.label29.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label29.Location = new System.Drawing.Point(17, 380);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(48, 22);
-            this.label29.TabIndex = 25;
-            this.label29.Text = "Buy ";
-            // 
-            // label30
-            // 
-            this.label30.BackColor = System.Drawing.Color.Transparent;
-            this.label30.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label30.Location = new System.Drawing.Point(18, 402);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(48, 22);
-            this.label30.TabIndex = 26;
-            this.label30.Text = "Sell";
-            // 
-            // lblBuyAt
-            // 
-            this.lblBuyAt.BackColor = System.Drawing.Color.Transparent;
-            this.lblBuyAt.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblBuyAt.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblBuyAt.Location = new System.Drawing.Point(135, 381);
-            this.lblBuyAt.Name = "lblBuyAt";
-            this.lblBuyAt.Size = new System.Drawing.Size(46, 15);
-            this.lblBuyAt.TabIndex = 27;
-            this.lblBuyAt.Text = "0.00";
-            this.lblBuyAt.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // lblSellAt
-            // 
-            this.lblSellAt.BackColor = System.Drawing.Color.Transparent;
-            this.lblSellAt.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblSellAt.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblSellAt.Location = new System.Drawing.Point(135, 403);
-            this.lblSellAt.Name = "lblSellAt";
-            this.lblSellAt.Size = new System.Drawing.Size(46, 15);
-            this.lblSellAt.TabIndex = 28;
-            this.lblSellAt.Text = "0.00";
-            this.lblSellAt.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label31
-            // 
-            this.label31.BackColor = System.Drawing.Color.Transparent;
-            this.label31.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label31.Location = new System.Drawing.Point(107, 381);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(30, 22);
-            this.label31.TabIndex = 29;
-            this.label31.Text = "@";
-            // 
-            // label32
-            // 
-            this.label32.BackColor = System.Drawing.Color.Transparent;
-            this.label32.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label32.Location = new System.Drawing.Point(107, 401);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(30, 22);
-            this.label32.TabIndex = 30;
-            this.label32.Text = "@";
-            // 
-            // lblBuyQuantity
-            // 
-            this.lblBuyQuantity.BackColor = System.Drawing.Color.Transparent;
-            this.lblBuyQuantity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblBuyQuantity.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblBuyQuantity.Location = new System.Drawing.Point(51, 380);
-            this.lblBuyQuantity.Name = "lblBuyQuantity";
-            this.lblBuyQuantity.Size = new System.Drawing.Size(46, 15);
-            this.lblBuyQuantity.TabIndex = 31;
-            this.lblBuyQuantity.Text = "0";
-            this.lblBuyQuantity.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // lblSellQuantity
-            // 
-            this.lblSellQuantity.BackColor = System.Drawing.Color.Transparent;
-            this.lblSellQuantity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblSellQuantity.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblSellQuantity.Location = new System.Drawing.Point(51, 401);
-            this.lblSellQuantity.Name = "lblSellQuantity";
-            this.lblSellQuantity.Size = new System.Drawing.Size(46, 15);
-            this.lblSellQuantity.TabIndex = 32;
-            this.lblSellQuantity.Text = "0";
-            this.lblSellQuantity.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -1000,6 +1039,9 @@ namespace StockApi
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label lblSellQuantity;
         private System.Windows.Forms.Label lblBuyQuantity;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label lblDividend;
+        private System.Windows.Forms.Label label35;
     }
 }
 

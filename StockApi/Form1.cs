@@ -19,7 +19,8 @@ namespace StockApi
     public partial class Form1 : Form
     {
         private static StockSummary.StockData _stockData = new StockSummary.StockData();
-        
+        private static Analyze.AnalyzeResults _analyzeResults = new Analyze.AnalyzeResults();
+
         public Form1()
         {
             InitializeComponent();
@@ -69,32 +70,10 @@ namespace StockApi
             // Extract the individual data values from the html
             StockSummary.ExtractDataFromHtml(_stockData, html);
 
-            /////// Get price history, today, week ago, month ago to determine short trend
-            List<StockHistory.HistoricData> historicDataList = await StockHistory.GetHistoricalDataForDateRange(txtStockTicker.Text, DateTime.Now.AddMonths(-1), DateTime.Now);
+            // Get some price history
+            List<StockHistory.HistoricData> historicDisplayList = await StockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text);
 
-            // Today will be the last in the list
-            StockHistory.HistoricDataToday = historicDataList.Last();
-
-            // Last Week
-            DateTime findDate = GetMondayIfWeeekend(DateTime.Now.AddDays(-7).Date);
-            StockHistory.HistoricDataWeekAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.AddDays(1));
-
-            // Last Month (really 31 days ago)
-            findDate = GetMondayIfWeeekend(DateTime.Now.AddDays(-31).Date);
-            StockHistory.HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
-
-            /////// Get price history for a year ago to determine long trend
-            historicDataList = await StockHistory.GetHistoricalDataForDateRange(txtStockTicker.Text, DateTime.Now.AddYears(-1), DateTime.Now.AddYears(-1).AddDays(2));
-            // Last Year
-            findDate = GetMondayIfWeeekend(DateTime.Now.AddYears(-1).Date);
-            StockHistory.HistoricDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
-
-            List<StockHistory.HistoricData> historicDisplayList = new List<StockHistory.HistoricData>();
-            historicDisplayList.Add(StockHistory.HistoricDataToday);
-            historicDisplayList.Add(StockHistory.HistoricDataWeekAgo);
-            historicDisplayList.Add(StockHistory.HistoricDataMonthAgo);
-            historicDisplayList.Add(StockHistory.HistoricDataYearAgo);
-
+            // bind data list to grid control
             var bindingList = new BindingList<StockHistory.HistoricData>(historicDisplayList);
             var source = new BindingSource(bindingList, null);
             dataGridView1.DefaultCellStyle.ForeColor = Color.White;
@@ -115,19 +94,6 @@ namespace StockApi
             picWeekTrend.Image = StockHistory.WeekTrend ? picUpTrend.Image : picDownTrend.Image;
 
             PostWebCall(_stockData); // displays the data returned
-        }
-
-        private static DateTime GetMondayIfWeeekend(DateTime theDate)
-        {
-            if (theDate.DayOfWeek == DayOfWeek.Saturday)
-                theDate = theDate.AddDays(2); // return Monday
-
-            if (theDate.DayOfWeek == DayOfWeek.Sunday)
-            {
-                theDate = theDate.AddDays(1); // return Monday
-            }
-
-            return theDate;
         }
 
         private async void btnGetAll_Click(object sender, EventArgs e)
@@ -172,6 +138,7 @@ namespace StockApi
             lblFairValue.Text = stockData.FairValue.ToString();
             lblFairValue.ForeColor = YahooFinance.FairValueColor;
             lblPrice.Text = stockData.Price.ToString();
+            lblDividend.Text = stockData.Dividend;
             lblEstimatedReturn.Text = stockData.EstimatedReturn.ToString() + "%";
             lblEstimatedReturn.ForeColor = YahooFinance.EstReturnColor;
             lblOneYearTarget.Text = stockData.OneYearTargetPrice;
@@ -205,7 +172,7 @@ namespace StockApi
             analyzeInputs.SharesTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 
-            Analyze.AnalyzeStockData(analyzeInputs);
+            _analyzeResults = Analyze.AnalyzeStockData(analyzeInputs);
         }
     }
 }

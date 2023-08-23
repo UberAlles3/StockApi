@@ -1,1 +1,3 @@
-﻿Add dividend to form and take into account as a metric
+﻿DONE Add dividend to form and take into account as a metric
+
+Add flat trend
