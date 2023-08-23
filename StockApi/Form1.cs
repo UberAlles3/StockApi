@@ -199,8 +199,13 @@ namespace StockApi
             // Fair Value
             // Estimated Return %
             // Should we read in excel file?
-            Analyze.AnalyzeStockData(Convert.ToInt32(txtSharesOwned.Text), radBuy.Checked, Convert.ToInt32(txtSharesTraded.Text), Convert.ToInt32(txtMovementTargetPercent.Text));
+            Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
+            analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
+            analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
+            analyzeInputs.SharesTraded = Convert.ToInt32(txtSharesTraded.Text);
+            analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 
+            Analyze.AnalyzeStockData(analyzeInputs);
         }
     }
 }

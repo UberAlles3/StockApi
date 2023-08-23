@@ -12,6 +12,12 @@ namespace StockApi
     /// </summary>
     class Analyze
     {
+        public enum BuyOrSell
+        {
+            Buy,
+            Sell
+        }
+
         static TextFile TF = new TextFile();
         static List<PersonalStockData> personalStockDataList = new List<PersonalStockData>();
 
@@ -47,7 +53,7 @@ namespace StockApi
         }
 
 
-        public static AnalyzeResults AnalyzeStockData(int sharesOwned, bool bought, int sharesTraded, int movementTargetPercent)
+        public static AnalyzeResults AnalyzeStockData(AnalyzeInputs analyzeInputs)
         {
             // combine trends with
             // one year target
@@ -92,25 +98,25 @@ namespace StockApi
 
             float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric;
 
-            float buyPrice = StockHistory.HistoricDataToday.Price * ((100F - movementTargetPercent) / 100F);
-            float sellPrice = StockHistory.HistoricDataToday.Price * ((100F + movementTargetPercent) / 100F);
+            float buyPrice = StockHistory.HistoricDataToday.Price * ((100F - analyzeInputs.MovementTargetPercent) / 100F);
+            float sellPrice = StockHistory.HistoricDataToday.Price * ((100F + analyzeInputs.MovementTargetPercent) / 100F);
             // Apply metrics
             buyPrice = buyPrice * totalMetric;
             sellPrice = sellPrice * totalMetric;
 
 
             AnalyzeResults analyzeResults = new AnalyzeResults();
-            if (bought)
+            if (analyzeInputs.LastTradeBuySell == BuyOrSell.Buy)
             {
-                analyzeResults.BuyQuantity = Convert.ToInt16(sharesTraded * .8F); // Buy less if you just bought
-                analyzeResults.SellQuantity = Convert.ToInt16(sharesTraded * 1.1F); // Sell more if you just bought
-                if (analyzeResults.SellQuantity > Convert.ToInt16(sharesOwned / 2.5F))
-                    analyzeResults.SellQuantity = Convert.ToInt16(sharesOwned / 2.5F);
+                analyzeResults.BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Buy less if you just bought
+                analyzeResults.SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.1F); // Sell more if you just bought
+                if (analyzeResults.SellQuantity > Convert.ToInt16(analyzeInputs.SharesTraded / 2.5F))
+                    analyzeResults.SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded / 2.5F);
             }
             else
             {
-                analyzeResults.BuyQuantity = Convert.ToInt16(sharesTraded * 1.2F); // Buy more if you just sold
-                analyzeResults.SellQuantity = Convert.ToInt16(sharesTraded * .8F); // Buy less if you just sold
+                analyzeResults.BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.2F); // Buy more if you just sold
+                analyzeResults.SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Buy less if you just sold
             }
 
             analyzeResults.BuyPrice = buyPrice;
@@ -134,12 +140,20 @@ namespace StockApi
             }
         }
 
+        public class AnalyzeInputs
+        {
+            public int SharesOwned;
+            public BuyOrSell LastTradeBuySell;
+            public int SharesTraded;
+            public float MovementTargetPercent;
+        }
+
         public class AnalyzeResults
         {
             public int BuyQuantity;
             public float BuyPrice;
             public int SellQuantity;
-            public float SellPrice;
+            public float SellPrice = 0;
         }
     }
 }
