@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 
 namespace StockApi
@@ -17,17 +18,18 @@ namespace StockApi
         static void ReadInStockData()
         {
             string[] parts;
+            string currentFolder = Environment.CurrentDirectory;
 
             if (personalStockDataList.Count > 0)
                 return;
             
-            TF.OpenFile(@"E:\Source Code\StockAPI\StockApi\StockApi\bin\Debug\netcoreapp3.1\Stocks.txt", TextFile.TextFileMode.InputMode);
+            TF.OpenFile(currentFolder + @"\Stocks.txt", TextFile.TextFileMode.InputMode);
 
             foreach (string s in TF)
             {
                 parts = s.Split("\t");
 
-                PersonalStockData personalStockData = new PersonalStockData { Ticker = parts[0], Shares = Convert.ToInt32(parts[1])};
+                PersonalStockData personalStockData = new PersonalStockData { Ticker = parts[0], SharesOwned = Convert.ToInt32(parts[1])};
                 personalStockDataList.Add(personalStockData);
 
                 Debug.WriteLine(s);
@@ -35,30 +37,98 @@ namespace StockApi
             TF.CloseFile();
         }
 
-        public static void AnalyzeStockData()
+        public static PersonalStockData PreFillAnalyzeFormData()
         {
             ReadInStockData();
 
-            PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == StockSummary.Ticker); 
+            PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == StockSummary.Ticker);
 
-
+            return personalStockData;
         }
 
+
+        public static AnalyzeResults AnalyzeStockData(int movementTargetPercent)
+        {
+            // combine trends with
+            // one year target
+            // EPS
+            // Fair Value
+            // Estimated Return %
+            // Should we read in excel file?
+            // Volatility
+
+            // Trend
+            float trendMetric = Convert.ToInt16(StockHistory.YearTrend) + Convert.ToInt16(StockHistory.MonthTrend) + Convert.ToInt16(StockHistory.WeekTrend);
+            if(trendMetric == 0) // Very downward trend
+                trendMetric = .9F;
+            else if (trendMetric == 1)
+                trendMetric = .95F;
+            else if (trendMetric == 2)
+                trendMetric = 1.05F;
+            else if (trendMetric == 2)
+                trendMetric = 1.1F; // Very upward trend
+
+            // One Year Target
+            float targetPriceMetric = 1F;
+            if (YahooFinance.OneYearTargetColor == Color.Red)
+                targetPriceMetric = .9F;
+            if (YahooFinance.OneYearTargetColor == Color.Lime)
+                targetPriceMetric = 1.1F;
+
+            // EPS
+            float epsMetric = 1F;
+            if (StockSummary.EPSColor == Color.Red)
+                epsMetric = .9F;
+            if (StockSummary.EPSColor == Color.Lime)
+                epsMetric = 1.1F;
+
+            // Fair Value
+            float fairValueMetric = 1F;
+            if (StockSummary.FairValueColor == Color.Red)
+                fairValueMetric = .9F;
+            if (StockSummary.FairValueColor == Color.Lime)
+                fairValueMetric = 1.1F;
+
+
+            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric;
+
+            float buyPrice = StockHistory.HistoricDataToday.Price * ((100F - movementTargetPercent) / 100F);
+            // Apply metrics
+            buyPrice = buyPrice * totalMetric;
+
+
+            AnalyzeResults analyzeResults = new AnalyzeResults();
+            analyzeResults.BuyPrice = buyPrice;
+
+
+
+
+
+
+            return analyzeResults;
+        }
 
         public class PersonalStockData
         {
             private string ticker = "";
-            private int shares;
+            private int sharesOwned;
 
             public string Ticker { get => ticker; set => ticker = value; }
-            public int Shares { get => shares; set => shares = value; }
+            public int SharesOwned { get => sharesOwned; set => sharesOwned = value; }
 
             public override string ToString()
             {
                 return string.Format(
-                    $"{Ticker}, {Shares}"
+                    $"{Ticker}, {SharesOwned}"
                 );
             }
+        }
+
+        public class AnalyzeResults
+        {
+            public float BuyPrice;
+
+
         }
     }
 }

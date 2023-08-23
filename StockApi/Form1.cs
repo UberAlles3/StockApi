@@ -46,8 +46,11 @@ namespace StockApi
             txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
 
             // for testing
-            StockSummary.Ticker = "INTC";
-            Analyze.AnalyzeStockData();
+            //StockSummary.Ticker = "INTC";
+            //Analyze.PersonalStockData personalStockData = Analyze.PreFillAnalyzeFormData();
+            //txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+
+            //Analyze.AnalyzeResults analyzeResults = Analyze.AnalyzeStockData();
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -177,6 +180,11 @@ namespace StockApi
             panel2.Visible = true;
             picSpinner.Visible = false;
             Cursor.Current = Cursors.Default;
+
+            // Analyze form fields
+            Analyze.PersonalStockData personalStockData = Analyze.PreFillAnalyzeFormData();
+            txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+
         }
 
         /////////////////////////////////////////
@@ -191,7 +199,7 @@ namespace StockApi
             // Fair Value
             // Estimated Return %
             // Should we read in excel file?
-            Analyze.AnalyzeStockData();
+            Analyze.AnalyzeStockData(Convert.ToInt32(txtMovementTargetPercent.Text));
 
         }
     }
