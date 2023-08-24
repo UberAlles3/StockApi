@@ -24,10 +24,10 @@ namespace StockApi
             Undervalued
         }
 
-        public static Color FairValueColor = Color.White;
-        public static Color EPSColor = Color.White;
-        public static Color EstReturnColor = Color.White;
-        public static Color OneYearTargetColor = Color.White;
+        public static Color FairValueColor = Color.LightSteelBlue;
+        public static Color EPSColor = Color.LightSteelBlue;
+        public static Color EstReturnColor = Color.LightSteelBlue;
+        public static Color OneYearTargetColor = Color.LightSteelBlue;
 
         protected static async Task<string> GetHtml(string url)
         {
@@ -52,6 +52,7 @@ namespace StockApi
             get { return _ticker; }
             set { _ticker = value.ToUpper(); }
         }
+        public static StockData StockSummaryData = new StockData();
 
         public static async Task<string> GetHtmlForTicker(string ticker)
         {
@@ -102,6 +103,7 @@ namespace StockApi
             string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<", "0%");
             estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
             stockData.EstimatedReturn = System.Convert.ToSingle(estReturn);
+            StockSummaryData = stockData;
         }
 
         private static string GetFloatValueFromHtml(string html, string data_test_name, string defaultValue)
@@ -196,7 +198,7 @@ namespace StockApi
                 {
                     earningsPerShare = value;
                     if (earningsPerShare == YahooFinance.NotApplicable || earningsPerShare == "")
-                        YahooFinance.EPSColor = Color.White;
+                        YahooFinance.EPSColor = Color.LightSteelBlue;
                     else
                     {
                         if (Convert.ToSingle(earningsPerShare) < -1)
@@ -204,7 +206,7 @@ namespace StockApi
                         else if (Convert.ToSingle(earningsPerShare) > 1)
                             YahooFinance.EPSColor = Color.Lime;
                         else
-                            YahooFinance.EPSColor = Color.White;
+                            YahooFinance.EPSColor = Color.LightSteelBlue;
                     }
                 }
 
@@ -213,7 +215,7 @@ namespace StockApi
                 {
                     oneYearTargetPrice = value;
                     if (oneYearTargetPrice == YahooFinance.NotApplicable || oneYearTargetPrice == "")
-                        YahooFinance.OneYearTargetColor = Color.White;
+                        YahooFinance.OneYearTargetColor = Color.LightSteelBlue;
                     else
                     {
                         if (Convert.ToSingle(oneYearTargetPrice) < price * .9)
@@ -221,7 +223,7 @@ namespace StockApi
                         else if (Convert.ToSingle(oneYearTargetPrice) > price * 1.1)
                             YahooFinance.OneYearTargetColor = Color.Lime;
                         else
-                            YahooFinance.OneYearTargetColor = Color.White;
+                            YahooFinance.OneYearTargetColor = Color.LightSteelBlue;
                     }
                 }
             }
@@ -233,7 +235,7 @@ namespace StockApi
                     if (fairValue == FairValue.Overvalued)
                         YahooFinance.FairValueColor = Color.Red;
                     if (fairValue == FairValue.FairValue)
-                        YahooFinance.FairValueColor = Color.White;
+                        YahooFinance.FairValueColor = Color.LightSteelBlue;
                     if (fairValue == FairValue.Undervalued)
                         YahooFinance.FairValueColor = Color.Lime;
                 }
@@ -249,7 +251,7 @@ namespace StockApi
                     else if (estimatedReturn > 2)
                         YahooFinance.EstReturnColor = Color.Lime;
                     else
-                        YahooFinance.EstReturnColor = Color.White;
+                        YahooFinance.EstReturnColor = Color.LightSteelBlue;
                 }
             }
         }

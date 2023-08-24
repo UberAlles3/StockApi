@@ -55,7 +55,7 @@ namespace StockApi
 
         public static AnalyzeResults AnalyzeStockData(AnalyzeInputs analyzeInputs)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder output = new StringBuilder();
             // combine trends with
             // one year target
             // EPS
@@ -81,7 +81,7 @@ namespace StockApi
             else if (trendMetric == 5)
                 trendMetric = 1.12F; // Very upward trend
 
-            builder.AppendLine($"Price Trend Metric = {trendMetric}");
+            output.AppendLine($"Price Trend Metric = {trendMetric}");
 
             // One Year Target
             float targetPriceMetric = 1F;
@@ -90,12 +90,16 @@ namespace StockApi
             if (YahooFinance.OneYearTargetColor == Color.Lime)
                 targetPriceMetric = 1.1F;
 
-            // EPS
+            output.AppendLine($"One Year Target Trend = {targetPriceMetric}");
+
+            // Earnings Per Share
             float epsMetric = 1F;
             if (StockSummary.EPSColor == Color.Red)
                 epsMetric = .9F;
-            if (StockSummary.EPSColor == Color.Lime)
+            else if (StockSummary.EPSColor == Color.Lime)
                 epsMetric = 1.1F;
+
+            output.AppendLine($"Earnings Metric = {epsMetric}");
 
             // Fair Value
             float fairValueMetric = 1F;
@@ -104,9 +108,40 @@ namespace StockApi
             if (StockSummary.FairValueColor == Color.Lime)
                 fairValueMetric = 1.1F;
 
+            output.AppendLine($"Fair Value Metric = {fairValueMetric}");
 
-            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric;
+            // One Year Target
+            float oneYearTargetMetric = 1F;
+            if (StockSummary.OneYearTargetColor == Color.Red)
+                oneYearTargetMetric = .9F;
+            if (StockSummary.OneYearTargetColor == Color.Lime)
+                oneYearTargetMetric = 1.1F;
 
+            output.AppendLine($"One Year Target Metric = {oneYearTargetMetric}");
+
+            // Dividend Metric
+            float dividendMetric = 1F;
+            if (StockSummary.StockSummaryData.Dividend != YahooFinance.NotApplicable)
+            {
+                dividendMetric = Convert.ToSingle(StockSummary.StockSummaryData.Dividend);
+                if (dividendMetric > 5)
+                    dividendMetric = 1.14F;
+                else if (dividendMetric > 2)
+                    dividendMetric = 1.08F;
+                else if (dividendMetric > .5)
+                    dividendMetric = 1.04F;
+                else
+                    dividendMetric = 1F;
+            }
+
+            output.AppendLine($"Dividend = {dividendMetric}");
+
+            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric;
+
+            output.AppendLine($"Total Metric = {totalMetric}");
+
+          
+            // Calculate future buy or sells
             float buyPrice = StockHistory.HistoricDataToday.Price * ((100F - analyzeInputs.MovementTargetPercent) / 100F);
             float sellPrice = StockHistory.HistoricDataToday.Price * ((100F + analyzeInputs.MovementTargetPercent) / 100F);
             // Apply metrics
@@ -130,7 +165,7 @@ namespace StockApi
 
             analyzeResults.BuyPrice = buyPrice;
 
-            analyzeResults.AnalysisOutput = builder.ToString();
+            analyzeResults.AnalysisOutput = output.ToString();
 
             return analyzeResults;
         }

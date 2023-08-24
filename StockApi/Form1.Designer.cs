@@ -885,7 +885,7 @@ namespace StockApi
             // 
             this.label16.AutoSize = true;
             this.label16.BackColor = System.Drawing.Color.Transparent;
-            this.label16.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label16.ForeColor = System.Drawing.Color.LightSteelBlue;
             this.label16.Location = new System.Drawing.Point(81, 20);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(82, 15);
