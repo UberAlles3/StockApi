@@ -61,7 +61,6 @@ namespace StockApi
             // EPS
             // Fair Value
             // Estimated Return %
-            // Should we read in excel file?
             // Volatility
 
             // Trend
@@ -87,10 +86,10 @@ namespace StockApi
             float targetPriceMetric = 1F;
             if (YahooFinance.OneYearTargetColor == Color.Red)
                 targetPriceMetric = .9F;
-            if (YahooFinance.OneYearTargetColor == Color.Lime)
+            else if (YahooFinance.OneYearTargetColor == Color.Lime)
                 targetPriceMetric = 1.1F;
 
-            output.AppendLine($"One Year Target Trend = {targetPriceMetric}");
+            output.AppendLine($"One Year Target Metric = {targetPriceMetric}");
 
             // Earnings Per Share
             float epsMetric = 1F;
@@ -114,7 +113,7 @@ namespace StockApi
             float oneYearTargetMetric = 1F;
             if (StockSummary.OneYearTargetColor == Color.Red)
                 oneYearTargetMetric = .9F;
-            if (StockSummary.OneYearTargetColor == Color.Lime)
+            else if (StockSummary.OneYearTargetColor == Color.Lime)
                 oneYearTargetMetric = 1.1F;
 
             output.AppendLine($"One Year Target Metric = {oneYearTargetMetric}");
@@ -134,7 +133,7 @@ namespace StockApi
                     dividendMetric = 1F;
             }
 
-            output.AppendLine($"Dividend = {dividendMetric}");
+            output.AppendLine($"Dividend Metric = {dividendMetric}");
 
             float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric;
 
