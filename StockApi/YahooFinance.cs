@@ -16,10 +16,6 @@ namespace StockApi
     public class YahooFinance // General purpose functions
     {
         public static string NotApplicable = "N/A";
-        public static Color FairValueColor = Color.LightSteelBlue;
-        public static Color EPSColor = Color.LightSteelBlue;
-        public static Color EstReturnColor = Color.LightSteelBlue;
-        public static Color OneYearTargetColor = Color.LightSteelBlue;
 
         private string _ticker;
 

@@ -9,6 +9,10 @@ namespace StockApi
     public class StockSummary : YahooFinance
     {
         private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
+        public Color FairValueColor = Color.LightSteelBlue;
+        public Color EPSColor = Color.LightSteelBlue;
+        public Color EstReturnColor = Color.LightSteelBlue;
+        public Color OneYearTargetColor = Color.LightSteelBlue;
 
         private string companyName = "";
         private float price = 0;
@@ -29,15 +33,15 @@ namespace StockApi
             {
                 earningsPerShare = value;
                 if (earningsPerShare == YahooFinance.NotApplicable || earningsPerShare == "")
-                    YahooFinance.EPSColor = Color.LightSteelBlue;
+                    EPSColor = Color.LightSteelBlue;
                 else
                 {
                     if (Convert.ToSingle(earningsPerShare) < -1)
-                        YahooFinance.EPSColor = Color.Red;
+                        EPSColor = Color.Red;
                     else if (Convert.ToSingle(earningsPerShare) > 1)
-                        YahooFinance.EPSColor = Color.Lime;
+                        EPSColor = Color.Lime;
                     else
-                        YahooFinance.EPSColor = Color.LightSteelBlue;
+                        EPSColor = Color.LightSteelBlue;
                 }
             }
 
@@ -48,15 +52,15 @@ namespace StockApi
             {
                 oneYearTargetPrice = value;
                 if (oneYearTargetPrice == YahooFinance.NotApplicable || oneYearTargetPrice == "")
-                    YahooFinance.OneYearTargetColor = Color.LightSteelBlue;
+                    OneYearTargetColor = Color.LightSteelBlue;
                 else
                 {
                     if (Convert.ToSingle(oneYearTargetPrice) < price * .9)
-                        YahooFinance.OneYearTargetColor = Color.Red;
+                        OneYearTargetColor = Color.Red;
                     else if (Convert.ToSingle(oneYearTargetPrice) > price * 1.1)
-                        YahooFinance.OneYearTargetColor = Color.Lime;
+                        OneYearTargetColor = Color.Lime;
                     else
-                        YahooFinance.OneYearTargetColor = Color.LightSteelBlue;
+                        OneYearTargetColor = Color.LightSteelBlue;
                 }
             }
         }
@@ -68,11 +72,11 @@ namespace StockApi
             {
                 fairValue = value;
                 if (fairValue == FairValueEnum.Overvalued)
-                    YahooFinance.FairValueColor = Color.Red;
+                    FairValueColor = Color.Red;
                 if (fairValue == FairValueEnum.FairValue)
-                    YahooFinance.FairValueColor = Color.LightSteelBlue;
+                    FairValueColor = Color.LightSteelBlue;
                 if (fairValue == FairValueEnum.Undervalued)
-                    YahooFinance.FairValueColor = Color.Lime;
+                    FairValueColor = Color.Lime;
             }
         }
 
@@ -85,11 +89,11 @@ namespace StockApi
             {
                 estimatedReturn = value;
                 if (estimatedReturn < -2)
-                    YahooFinance.EstReturnColor = Color.Red;
+                    EstReturnColor = Color.Red;
                 else if (estimatedReturn > 2)
-                    YahooFinance.EstReturnColor = Color.Lime;
+                    EstReturnColor = Color.Lime;
                 else
-                    YahooFinance.EstReturnColor = Color.LightSteelBlue;
+                    EstReturnColor = Color.LightSteelBlue;
             }
         }
 
@@ -100,10 +104,10 @@ namespace StockApi
         {
             Ticker = ticker;
             string formattedUrl = _url.Replace("???", Ticker);
-            return await YahooFinance.GetHtml(formattedUrl);
+            return await GetHtml(formattedUrl);
         }
 
-        public async void GetSummaryData(string ticker)
+        public async Task<bool> GetSummaryData(string ticker)
         {
             Ticker = ticker;
 
@@ -148,6 +152,8 @@ namespace StockApi
             string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<", "0%");
             estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
             EstimatedReturn = System.Convert.ToSingle(estReturn);
+
+            return true;
         }
 
         private static string GetFloatValueFromHtml(string html, string data_test_name, string defaultValue)

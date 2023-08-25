@@ -67,7 +67,7 @@ namespace StockApi
             PreWebCall(); // Sets the form display while the request is executing
 
             // Extract the individual data values from the html
-            _stockSummary.GetSummaryData(txtStockTicker.Text);
+            await _stockSummary.GetSummaryData(txtStockTicker.Text);
 
             // Get some price history
             List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text);
@@ -91,6 +91,7 @@ namespace StockApi
             picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
             picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image; 
             picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            
             PostWebCall(); // displays the data returned
         }
 
@@ -110,7 +111,7 @@ namespace StockApi
                 txtTickerList.Text += ".";
 
                 // Extract the individual data values from the html
-                _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                await _stockSummary.GetSummaryData(_stockSummary.Ticker);
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.FairValue}, {_stockSummary.EstimatedReturn}{Environment.NewLine}");
             }
@@ -132,15 +133,15 @@ namespace StockApi
             lblTicker.Text = _stockSummary.CompanyName;
             lblVolatility.Text = _stockSummary.Volatility;
             lblEPS.Text = _stockSummary.EarningsPerShare;
-            lblEPS.ForeColor = YahooFinance.EPSColor;
+            lblEPS.ForeColor = _stockSummary.EPSColor;
             lblFairValue.Text = _stockSummary.FairValue.ToString();
-            lblFairValue.ForeColor = YahooFinance.FairValueColor;
+            lblFairValue.ForeColor = _stockSummary.FairValueColor;
             lblPrice.Text = _stockSummary.Price.ToString();
             lblDividend.Text = _stockSummary.Dividend;
             lblEstimatedReturn.Text = _stockSummary.EstimatedReturn.ToString() + "%";
-            lblEstimatedReturn.ForeColor = YahooFinance.EstReturnColor;
+            lblEstimatedReturn.ForeColor = _stockSummary.EstReturnColor;
             lblOneYearTarget.Text = _stockSummary.OneYearTargetPrice;
-            lblOneYearTarget.ForeColor = YahooFinance.OneYearTargetColor;
+            lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
             panel1.Visible = true;
             panel2.Visible = true;
             picSpinner.Visible = false;

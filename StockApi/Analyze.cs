@@ -84,36 +84,36 @@ namespace StockApi
 
             // One Year Target
             float targetPriceMetric = 1F;
-            if (YahooFinance.OneYearTargetColor == Color.Red)
+            if (stockSummary.OneYearTargetColor == Color.Red)
                 targetPriceMetric = .9F;
-            else if (YahooFinance.OneYearTargetColor == Color.Lime)
+            else if (stockSummary.OneYearTargetColor == Color.Lime)
                 targetPriceMetric = 1.1F;
 
             output.AppendLine($"One Year Target Metric = {targetPriceMetric}");
 
             // Earnings Per Share
             float epsMetric = 1F;
-            if (StockSummary.EPSColor == Color.Red)
+            if (stockSummary.EPSColor == Color.Red)
                 epsMetric = .9F;
-            else if (StockSummary.EPSColor == Color.Lime)
+            else if (stockSummary.EPSColor == Color.Lime)
                 epsMetric = 1.1F;
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
             // Fair Value
             float fairValueMetric = 1F;
-            if (StockSummary.FairValueColor == Color.Red)
+            if (stockSummary.FairValueColor == Color.Red)
                 fairValueMetric = .9F;
-            if (StockSummary.FairValueColor == Color.Lime)
+            if (stockSummary.FairValueColor == Color.Lime)
                 fairValueMetric = 1.1F;
 
             output.AppendLine($"Fair Value Metric = {fairValueMetric}");
 
             // One Year Target
             float oneYearTargetMetric = 1F;
-            if (StockSummary.OneYearTargetColor == Color.Red)
+            if (stockSummary.OneYearTargetColor == Color.Red)
                 oneYearTargetMetric = .9F;
-            else if (StockSummary.OneYearTargetColor == Color.Lime)
+            else if (stockSummary.OneYearTargetColor == Color.Lime)
                 oneYearTargetMetric = 1.1F;
 
             output.AppendLine($"One Year Target Metric = {oneYearTargetMetric}");
