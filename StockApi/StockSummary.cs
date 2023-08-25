@@ -8,7 +8,7 @@ namespace StockApi
 {
     public class StockSummary : YahooFinance
     {
-        private static string _url = "https://finance.yahoo.com/quote/????p=???";
+        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
 
         private string companyName = "";
         private float price = 0;
@@ -93,8 +93,9 @@ namespace StockApi
             }
         }
 
-
-
+        ////////////////////////////////////////////
+        ///                Methods
+        ////////////////////////////////////////////
         public async Task<string> GetHtmlForTicker(string ticker)
         {
             Ticker = ticker;
@@ -102,9 +103,12 @@ namespace StockApi
             return await YahooFinance.GetHtml(formattedUrl);
         }
 
-        public void ExtractDataFromHtml(string html)
+        public async void GetSummaryData(string ticker)
         {
-            Ticker = Ticker;
+            Ticker = ticker;
+
+            string html = await GetHtmlForTicker(Ticker);
+
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
             Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));

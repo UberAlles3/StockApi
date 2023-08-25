@@ -21,7 +21,6 @@ namespace StockApi
         private static StockSummary _stockSummary = new StockSummary();
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
-        private static Analyze.AnalyzeResults _analyzeResults = new Analyze.AnalyzeResults();
 
         public Form1()
         {
@@ -67,10 +66,8 @@ namespace StockApi
 
             PreWebCall(); // Sets the form display while the request is executing
 
-            // Execute the request to get html from Yahoo Finance
-            string html = await _stockSummary.GetHtmlForTicker(txtStockTicker.Text);
             // Extract the individual data values from the html
-            _stockSummary.ExtractDataFromHtml(html);
+            _stockSummary.GetSummaryData(txtStockTicker.Text);
 
             // Get some price history
             List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text);
@@ -110,11 +107,10 @@ namespace StockApi
             {
                 _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
 
-                string html = await _stockSummary.GetHtmlForTicker(_stockSummary.Ticker);
                 txtTickerList.Text += ".";
 
                 // Extract the individual data values from the html
-                _stockSummary.ExtractDataFromHtml(html);
+                _stockSummary.GetSummaryData(_stockSummary.Ticker);
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.FairValue}, {_stockSummary.EstimatedReturn}{Environment.NewLine}");
             }
@@ -166,13 +162,15 @@ namespace StockApi
             // Estimated Return %
             // Should we read in excel file?
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
+            Analyze.AnalyzeResults analyzeResults = new Analyze.AnalyzeResults();
+
             analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
             analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
             analyzeInputs.SharesTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 
-            _analyzeResults = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);
-            txtAnalysisOutput.Text = _analyzeResults.AnalysisOutput;
+            analyzeResults = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);
+            txtAnalysisOutput.Text = analyzeResults.AnalysisOutput;
         }
     }
 }
