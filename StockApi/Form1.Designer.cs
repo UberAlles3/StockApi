@@ -319,7 +319,7 @@ namespace StockApi
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.Color.Transparent;
             this.label27.ForeColor = System.Drawing.Color.DarkGray;
-            this.label27.Location = new System.Drawing.Point(15, 169);
+            this.label27.Location = new System.Drawing.Point(15, 171);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(137, 15);
             this.label27.TabIndex = 29;
