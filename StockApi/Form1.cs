@@ -42,6 +42,8 @@ namespace StockApi
             picSidewaysTrend.Visible = false;
             picDownTrend.Visible = false;
 
+            //picYearTrend.BackColor = Color.FromArgb(10, 0, 0, 0);
+
             lblTicker.Text = "";
 
             // temporary for testing
@@ -75,7 +77,7 @@ namespace StockApi
             // bind data list to grid control
             var bindingList = new BindingList<StockHistory.HistoricData>(historicDisplayList);
             var source = new BindingSource(bindingList, null);
-            dataGridView1.DefaultCellStyle.ForeColor = Color.White;
+            dataGridView1.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
             dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
             dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
             dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
@@ -131,13 +133,13 @@ namespace StockApi
         {
             btnGetOne.Enabled = true;
             lblTicker.Text = _stockSummary.CompanyName;
-            lblVolatility.Text = _stockSummary.Volatility;
+            lblVolatility.Text = _stockSummary.VolatilityString;
             lblEPS.Text = _stockSummary.EarningsPerShareString;
             lblEPS.ForeColor = _stockSummary.EPSColor;
             lblFairValue.Text = _stockSummary.FairValue.ToString();
             lblFairValue.ForeColor = _stockSummary.FairValueColor;
             lblPrice.Text = _stockSummary.Price.ToString();
-            lblDividend.Text = _stockSummary.DividendString;
+            lblDividend.Text = _stockSummary.Dividend.ToString() + "%";
             lblDividend.ForeColor = _stockSummary.DividendColor;
             lblEstimatedReturn.Text = _stockSummary.EstimatedReturn.ToString() + "%";
             lblEstimatedReturn.ForeColor = _stockSummary.EstReturnColor;

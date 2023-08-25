@@ -15,19 +15,22 @@ namespace StockApi
         public Color EstReturnColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
-        private string companyName = "";
-        private float dividend = 0;
-        private string dividendString = NotApplicable;
-        private float  earningsPerShare = 0;
-        private string earningsPerShareString = NotApplicable;
-        private float  estimatedReturn = 0;
-        private float  oneYearTargetPrice = 0;
-        private string oneYearTargetPriceString = NotApplicable;
+        private string  companyName = "";
+        private string  dividendString = NotApplicable;
+        private float   dividend = 0;
+        private string  earningsPerShareString = NotApplicable;
+        private float   earningsPerShare = 0;
+        private string  estimatedReturnString = NotApplicable;
+        private float   estimatedReturn = 0;
         private FairValueEnum fairValue = FairValueEnum.FairValue;
-        private float  price = 0;
-        private string volatility = NotApplicable;
+        private float   oneYearTargetPrice = 0;
+        private string  oneYearTargetPriceString = NotApplicable;
+        private float   price = 0;
+        private string  volatilityString = NotApplicable;
+        private float   volatility = 0;
 
         public string CompanyName { get => companyName; set => companyName = value; }
+
         public string DividendString
         {
             get => dividendString;
@@ -37,7 +40,7 @@ namespace StockApi
                 if (dividendString == YahooFinance.NotApplicable || dividendString == "")
                     Dividend = 0;
                 else
-                    Dividend = Convert.ToSingle(dividend);
+                    Dividend = Convert.ToSingle(dividendString);
             }
         }
 
@@ -53,9 +56,6 @@ namespace StockApi
             }
         }
 
-        public float Price { get => price; set => price = value; }
-        public string Volatility { get => volatility; set => volatility = value; }
-
         public string EarningsPerShareString
         {
             get => earningsPerShareString;
@@ -68,6 +68,7 @@ namespace StockApi
                     EarningsPerShare = Convert.ToSingle(earningsPerShareString);
             }
         }
+
         public float EarningsPerShare
         {
             get => earningsPerShare;
@@ -82,30 +83,31 @@ namespace StockApi
             }
         }
 
-        public string OneYearTargetPriceString
+        public string EstimatedReturnString
         {
-            get => oneYearTargetPriceString;
+            get => earningsPerShareString;
             set
             {
-                oneYearTargetPriceString = value;
-                if (oneYearTargetPriceString == YahooFinance.NotApplicable || oneYearTargetPriceString == "")
-                    OneYearTargetPrice = 0;
+                estimatedReturnString = value;
+                if (estimatedReturnString == YahooFinance.NotApplicable || estimatedReturnString == "")
+                    EstimatedReturn = 0;
                 else
-                    OneYearTargetPrice = Convert.ToSingle(oneYearTargetPriceString);
+                    EstimatedReturn = Convert.ToSingle(estimatedReturnString);
             }
         }
 
-        public float OneYearTargetPrice
+        public float EstimatedReturn
         {
-            get => oneYearTargetPrice; 
+            get => estimatedReturn;
             set
             {
-                oneYearTargetPrice = value;
-                OneYearTargetColor = Color.LightSteelBlue;
-                if (oneYearTargetPrice < price * .9)
-                    OneYearTargetColor = Color.Red;
-                else if (oneYearTargetPrice > price * 1.1)
-                    OneYearTargetColor = Color.Lime;
+                estimatedReturn = value;
+                if (estimatedReturn < -2)
+                    EstReturnColor = Color.Red;
+                else if (estimatedReturn > 2)
+                    EstReturnColor = Color.Lime;
+                else
+                    EstReturnColor = Color.LightSteelBlue;
             }
         }
 
@@ -124,20 +126,54 @@ namespace StockApi
             }
         }
 
-        public float EstimatedReturn
+        public string OneYearTargetPriceString
         {
-            get => estimatedReturn;
+            get => oneYearTargetPriceString;
             set
             {
-                estimatedReturn = value;
-                if (estimatedReturn < -2)
-                    EstReturnColor = Color.Red;
-                else if (estimatedReturn > 2)
-                    EstReturnColor = Color.Lime;
+                oneYearTargetPriceString = value;
+                if (oneYearTargetPriceString == YahooFinance.NotApplicable || oneYearTargetPriceString == "")
+                    OneYearTargetPrice = Price;
                 else
-                    EstReturnColor = Color.LightSteelBlue;
+                    OneYearTargetPrice = Convert.ToSingle(oneYearTargetPriceString);
             }
         }
+
+        public float OneYearTargetPrice
+        {
+            get => oneYearTargetPrice;
+            set
+            {
+                oneYearTargetPrice = value;
+                OneYearTargetColor = Color.LightSteelBlue;
+                if (oneYearTargetPrice < price * .9)
+                    OneYearTargetColor = Color.Red;
+                else if (oneYearTargetPrice > price * 1.1)
+                    OneYearTargetColor = Color.Lime;
+            }
+        }
+
+        public float Price { get => price; set => price = value; }
+
+        public string VolatilityString
+        {
+            get => volatilityString;
+            set
+            {
+                volatilityString = value;
+                if (volatilityString == YahooFinance.NotApplicable || volatilityString == "")
+                    Volatility = 1;
+                else
+                    Volatility = Convert.ToSingle(volatilityString);
+            }
+        }
+
+        public float Volatility
+        {
+            get => volatility;
+            set { volatility = value; }
+        }
+
 
         ////////////////////////////////////////////
         ///                Methods
@@ -157,8 +193,8 @@ namespace StockApi
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
-            Price = System.Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
-            Volatility = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
+            Price = Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
+            VolatilityString = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
             string dividend = GetValueFromHtml(html, "DIVIDEND_AND_YIELD-value", YahooFinance.NotApplicable);
             if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
             {
@@ -173,27 +209,20 @@ namespace StockApi
             OneYearTargetPriceString = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
 
             // Fair Value
+            FairValue = FairValueEnum.FairValue;
             if (GetValueFromHtmlBySearchText(html, ">Overvalued<", "") != "")
             {
                 FairValue = FairValueEnum.Overvalued;
-            }
-            else if (GetValueFromHtmlBySearchText(html, ">Near Fair Value<", "") != "")
-            {
-                FairValue = FairValueEnum.FairValue;
             }
             else if (GetValueFromHtmlBySearchText(html, ">Undervalued<", "") != "")
             {
                 FairValue = FairValueEnum.Undervalued;
             }
-            else
-            {
-                FairValue = FairValueEnum.FairValue;
-            }
 
-            //% Est. Return<
+            //% Est. Return
             string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<", "0%");
             estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
-            EstimatedReturn = System.Convert.ToSingle(estReturn);
+            EstimatedReturnString = estReturn;
 
             return true;
         }
