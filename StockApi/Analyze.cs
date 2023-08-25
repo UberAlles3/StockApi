@@ -99,10 +99,10 @@ namespace StockApi
 
             // Earnings Per Share
             float epsMetric = 1F;
-            if (stockSummary.EPSColor == Color.Red)
-                epsMetric = .9F;
-            else if (stockSummary.EPSColor == Color.Lime)
-                epsMetric = 1.1F;
+            if (stockSummary.EarningsPerShare < -1)
+                epsMetric = .92F;
+            else if (stockSummary.EarningsPerShare > 1)
+                epsMetric = 1.08F;
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
@@ -145,18 +145,32 @@ namespace StockApi
 
             output.AppendLine($"Total Metric = {totalMetric}");
 
-
+            // Volatility  Change movement % 
             analyzeInputs.MovementTargetPercent *= Convert.ToSingle(stockSummary.Volatility);
-
             output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent}");
 
             // Calculate future buy or sells
             float buyPrice = stockHistory.HistoricDataToday.Price * ((100F - analyzeInputs.MovementTargetPercent) / 100F);
             float sellPrice = stockHistory.HistoricDataToday.Price * ((100F + analyzeInputs.MovementTargetPercent) / 100F);
+
             // Apply metrics
             buyPrice = buyPrice * totalMetric;
             sellPrice = sellPrice * totalMetric;
 
+            if(stockSummary.EarningsPerShare > 1)
+            {
+                double f = (stockSummary.EarningsPerShare + 9) / 10;
+                double g = Math.Log10(f) + 1D;
+                double newPrice = buyPrice * g;
+                float limitPrice = stockSummary.Price * ((100F - analyzeInputs.MovementTargetPercent / 2) / 100F);
+
+                if (newPrice > limitPrice)
+                    newPrice = limitPrice;
+
+                buyPrice = (float)newPrice;
+            }
+
+            // Buy Quantity
             if (analyzeInputs.LastTradeBuySell == BuyOrSell.Buy)
             {
                 BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Buy less if you just bought
@@ -169,6 +183,8 @@ namespace StockApi
                 BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.2F); // Buy more if you just sold
                 SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Buy less if you just sold
             }
+
+            // Math.Log(21.1, 10) + 1
 
             BuyPrice = buyPrice;
 

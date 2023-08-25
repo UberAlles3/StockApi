@@ -132,7 +132,7 @@ namespace StockApi
             btnGetOne.Enabled = true;
             lblTicker.Text = _stockSummary.CompanyName;
             lblVolatility.Text = _stockSummary.Volatility;
-            lblEPS.Text = _stockSummary.EarningsPerShare;
+            lblEPS.Text = _stockSummary.EarningsPerShareString;
             lblEPS.ForeColor = _stockSummary.EPSColor;
             lblFairValue.Text = _stockSummary.FairValue.ToString();
             lblFairValue.ForeColor = _stockSummary.FairValueColor;
@@ -173,6 +173,9 @@ namespace StockApi
             txtAnalysisOutput.Text = _analyze.AnalysisOutput;
 
             lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
+            lblBuyPrice.Text = _analyze.BuyPrice.ToString();
+            lblSellQuantity.Text = _analyze.SellQuantity.ToString();
+            lblSellPrice.Text = _analyze.SellQuantity.ToString();
         }
     }
 }
