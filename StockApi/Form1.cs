@@ -163,15 +163,16 @@ namespace StockApi
             // Estimated Return %
             // Should we read in excel file?
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
-            Analyze.AnalyzeResults analyzeResults = new Analyze.AnalyzeResults();
 
             analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
             analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
             analyzeInputs.SharesTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 
-            analyzeResults = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);
-            txtAnalysisOutput.Text = analyzeResults.AnalysisOutput;
+            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);
+            txtAnalysisOutput.Text = _analyze.AnalysisOutput;
+
+            lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
         }
     }
 }
