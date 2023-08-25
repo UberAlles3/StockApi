@@ -12,9 +12,6 @@ namespace StockApi
     /// </summary>
     class Analyze : YahooFinance
     {
-        private TextFile TF = new TextFile();
-        private List<PersonalStockData> personalStockDataList = new List<PersonalStockData>();
-
         public enum BuyOrSell
         {
             Buy,
@@ -26,38 +23,6 @@ namespace StockApi
         public int SellQuantity;
         public float SellPrice = 0;
         public string AnalysisOutput;
-
-        private void ReadInStockData()
-        {
-            string[] parts;
-            string currentFolder = Environment.CurrentDirectory;
-
-            if (personalStockDataList.Count > 0)
-                return;
-            
-            TF.OpenFile(currentFolder + @"\Stocks.txt", TextFile.TextFileMode.InputMode);
-
-            foreach (string s in TF)
-            {
-                parts = s.Split("\t");
-
-                PersonalStockData personalStockData = new PersonalStockData { Ticker = parts[0], SharesOwned = Convert.ToInt32(parts[1])};
-                personalStockDataList.Add(personalStockData);
-
-                Debug.WriteLine(s);
-            }
-            TF.CloseFile();
-        }
-
-        public PersonalStockData PreFillAnalyzeFormData(StockSummary stockSummary)
-        {
-            ReadInStockData();
-
-            PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == stockSummary.Ticker);
-
-            return personalStockData;
-        }
-
 
         public void AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, AnalyzeInputs analyzeInputs)
         {
@@ -187,22 +152,6 @@ namespace StockApi
             BuyPrice = buyPrice;
 
             AnalysisOutput = output.ToString();
-        }
-
-        public class PersonalStockData
-        {
-            private string ticker = "";
-            private int sharesOwned;
-
-            public string Ticker { get => ticker; set => ticker = value; }
-            public int SharesOwned { get => sharesOwned; set => sharesOwned = value; }
-
-            public override string ToString()
-            {
-                return string.Format(
-                    $"{Ticker}, {SharesOwned}"
-                );
-            }
         }
 
         public class AnalyzeInputs

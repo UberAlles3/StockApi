@@ -151,9 +151,8 @@ namespace StockApi
             Cursor.Current = Cursors.Default;
 
             // Analyze form fields
-            Analyze.PersonalStockData personal_stockSummary = _analyze.PreFillAnalyzeFormData(_stockSummary);
-            txtSharesOwned.Text = personal_stockSummary.SharesOwned.ToString();
-
+            PersonalStockData personalStockData = PersonalStockData.GetPersonalDataForTicker(_stockSummary.Ticker);
+            txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
         }
 
         private void btnAnalyze_Click(object sender, EventArgs e)
