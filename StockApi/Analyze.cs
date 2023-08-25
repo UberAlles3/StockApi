@@ -90,9 +90,9 @@ namespace StockApi
 
             // One Year Target
             float targetPriceMetric = 1F;
-            if (stockSummary.OneYearTargetColor == Color.Red)
+            if (stockSummary.OneYearTargetPrice < stockSummary.Price * .9)
                 targetPriceMetric = .9F;
-            else if (stockSummary.OneYearTargetColor == Color.Lime)
+            else if (stockSummary.OneYearTargetPrice > stockSummary.Price * 1.1)
                 targetPriceMetric = 1.1F;
 
             output.AppendLine($"One Year Target Metric = {targetPriceMetric}");
@@ -126,18 +126,16 @@ namespace StockApi
 
             // Dividend Metric
             float dividendMetric = 1F;
-            if (stockSummary.Dividend != YahooFinance.NotApplicable)
-            {
-                dividendMetric = Convert.ToSingle(stockSummary.Dividend);
-                if (dividendMetric > 5)
-                    dividendMetric = 1.14F;
-                else if (dividendMetric > 2)
-                    dividendMetric = 1.08F;
-                else if (dividendMetric > .5)
-                    dividendMetric = 1.04F;
-                else
-                    dividendMetric = 1F;
-            }
+            if (stockSummary.Dividend > 8)
+                dividendMetric = 1.14F;
+            else if (stockSummary.Dividend > 5)
+                dividendMetric = 1.10F;
+            else if (stockSummary.Dividend > 2)
+                dividendMetric = 1.06F;
+            else if (stockSummary.Dividend > .5)
+                dividendMetric = 1.02F;
+            else
+                dividendMetric = .98F;
 
             output.AppendLine($"Dividend Metric = {dividendMetric}");
 

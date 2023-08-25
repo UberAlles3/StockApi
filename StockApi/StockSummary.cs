@@ -9,22 +9,50 @@ namespace StockApi
     public class StockSummary : YahooFinance
     {
         private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
-        public Color FairValueColor = Color.LightSteelBlue;
+        public Color DividendColor = Color.LightSteelBlue;
         public Color EPSColor = Color.LightSteelBlue;
+        public Color FairValueColor = Color.LightSteelBlue;
         public Color EstReturnColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
         private string companyName = "";
-        private float price = 0;
-        private string volatility = NotApplicable;
+        private float dividend = 0;
+        private string dividendString = NotApplicable;
+        private float  earningsPerShare = 0;
         private string earningsPerShareString = NotApplicable;
-        private float earningsPerShare = 0;
-        private string oneYearTargetPrice = NotApplicable;
+        private float  estimatedReturn = 0;
+        private float  oneYearTargetPrice = 0;
+        private string oneYearTargetPriceString = NotApplicable;
         private FairValueEnum fairValue = FairValueEnum.FairValue;
-        private string dividend = NotApplicable;
-        private float estimatedReturn = 0;
+        private float  price = 0;
+        private string volatility = NotApplicable;
 
         public string CompanyName { get => companyName; set => companyName = value; }
+        public string DividendString
+        {
+            get => dividendString;
+            set
+            {
+                dividendString = value;
+                if (dividendString == YahooFinance.NotApplicable || dividendString == "")
+                    Dividend = 0;
+                else
+                    Dividend = Convert.ToSingle(dividend);
+            }
+        }
+
+        public float Dividend
+        {
+            get => dividend;
+            set
+            {
+                dividend = value;
+                DividendColor = Color.LightSteelBlue;
+                if (dividend > 1)
+                    DividendColor = Color.Lime;
+            }
+        }
+
         public float Price { get => price; set => price = value; }
         public string Volatility { get => volatility; set => volatility = value; }
 
@@ -46,36 +74,38 @@ namespace StockApi
             set
             {
                 earningsPerShare = value;
-                if (earningsPerShare == 0)
-                    EPSColor = Color.LightSteelBlue;
-                else
-                {
-                    if (earningsPerShare < -1)
-                        EPSColor = Color.Red;
-                    else if (earningsPerShare > 1)
-                        EPSColor = Color.Lime;
-                    else
-                        EPSColor = Color.LightSteelBlue;
-                }
+                EPSColor = Color.LightSteelBlue;
+                if (earningsPerShare < -1)
+                    EPSColor = Color.Red;
+                else if (earningsPerShare > 1)
+                    EPSColor = Color.Lime;
             }
         }
 
-        public string OneYearTargetPrice
+        public string OneYearTargetPriceString
         {
-            get => oneYearTargetPrice; set
+            get => oneYearTargetPriceString;
+            set
+            {
+                oneYearTargetPriceString = value;
+                if (oneYearTargetPriceString == YahooFinance.NotApplicable || oneYearTargetPriceString == "")
+                    OneYearTargetPrice = 0;
+                else
+                    OneYearTargetPrice = Convert.ToSingle(oneYearTargetPriceString);
+            }
+        }
+
+        public float OneYearTargetPrice
+        {
+            get => oneYearTargetPrice; 
+            set
             {
                 oneYearTargetPrice = value;
-                if (oneYearTargetPrice == YahooFinance.NotApplicable || oneYearTargetPrice == "")
-                    OneYearTargetColor = Color.LightSteelBlue;
-                else
-                {
-                    if (Convert.ToSingle(oneYearTargetPrice) < price * .9)
-                        OneYearTargetColor = Color.Red;
-                    else if (Convert.ToSingle(oneYearTargetPrice) > price * 1.1)
-                        OneYearTargetColor = Color.Lime;
-                    else
-                        OneYearTargetColor = Color.LightSteelBlue;
-                }
+                OneYearTargetColor = Color.LightSteelBlue;
+                if (oneYearTargetPrice < price * .9)
+                    OneYearTargetColor = Color.Red;
+                else if (oneYearTargetPrice > price * 1.1)
+                    OneYearTargetColor = Color.Lime;
             }
         }
 
@@ -93,8 +123,6 @@ namespace StockApi
                     FairValueColor = Color.Lime;
             }
         }
-
-        public string Dividend { get => dividend; set => dividend = value; }
 
         public float EstimatedReturn
         {
@@ -139,10 +167,10 @@ namespace StockApi
             }
             else
                 dividend = YahooFinance.NotApplicable;
-            Dividend = dividend;
+            DividendString = dividend;
 
             EarningsPerShareString = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
-            OneYearTargetPrice = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
+            OneYearTargetPriceString = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
 
             // Fair Value
             if (GetValueFromHtmlBySearchText(html, ">Overvalued<", "") != "")

@@ -137,10 +137,11 @@ namespace StockApi
             lblFairValue.Text = _stockSummary.FairValue.ToString();
             lblFairValue.ForeColor = _stockSummary.FairValueColor;
             lblPrice.Text = _stockSummary.Price.ToString();
-            lblDividend.Text = _stockSummary.Dividend;
+            lblDividend.Text = _stockSummary.DividendString;
+            lblDividend.ForeColor = _stockSummary.DividendColor;
             lblEstimatedReturn.Text = _stockSummary.EstimatedReturn.ToString() + "%";
             lblEstimatedReturn.ForeColor = _stockSummary.EstReturnColor;
-            lblOneYearTarget.Text = _stockSummary.OneYearTargetPrice;
+            lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString;
             lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
             panel1.Visible = true;
             panel2.Visible = true;
