@@ -139,7 +139,11 @@ namespace StockApi
 
             output.AppendLine($"Total Metric = {totalMetric}");
 
-          
+
+            analyzeInputs.MovementTargetPercent *= Convert.ToSingle(stockSummary.Volatility);
+
+            output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent}");
+
             // Calculate future buy or sells
             float buyPrice = stockHistory.HistoricDataToday.Price * ((100F - analyzeInputs.MovementTargetPercent) / 100F);
             float sellPrice = stockHistory.HistoricDataToday.Price * ((100F + analyzeInputs.MovementTargetPercent) / 100F);
