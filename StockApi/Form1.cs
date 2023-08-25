@@ -18,7 +18,9 @@ namespace StockApi
 {
     public partial class Form1 : Form
     {
-        private static StockSummary.StockData _stockData = new StockSummary.StockData();
+        private static StockSummary _stockSummary = new StockSummary();
+        private static StockHistory _stockHistory = new StockHistory();
+        private static Analyze _analyze = new Analyze();
         private static Analyze.AnalyzeResults _analyzeResults = new Analyze.AnalyzeResults();
 
         public Form1()
@@ -49,10 +51,10 @@ namespace StockApi
 
             // for testing
             //StockSummary.Ticker = "INTC";
-            //Analyze.PersonalStockData personalStockData = Analyze.PreFillAnalyzeFormData();
-            //txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+            //Analyze.Personal_stockSummary personal_stockSummary = Analyze.PreFillAnalyzeFormData();
+            //txtSharesOwned.Text = personal_stockSummary.SharesOwned.ToString();
 
-            //Analyze.AnalyzeResults analyzeResults = Analyze.AnalyzeStockData();
+            //Analyze.AnalyzeResults analyzeResults = Analyze.Analyze_stockSummary();
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -66,12 +68,12 @@ namespace StockApi
             PreWebCall(); // Sets the form display while the request is executing
 
             // Execute the request to get html from Yahoo Finance
-            string html = await StockSummary.GetHtmlForTicker(txtStockTicker.Text);
+            string html = await _stockSummary.GetHtmlForTicker(txtStockTicker.Text);
             // Extract the individual data values from the html
-            StockSummary.ExtractDataFromHtml(_stockData, html);
+            _stockSummary.ExtractDataFromHtml(html);
 
             // Get some price history
-            List<StockHistory.HistoricData> historicDisplayList = await StockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text);
+            List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text);
 
             // bind data list to grid control
             var bindingList = new BindingList<StockHistory.HistoricData>(historicDisplayList);
@@ -88,11 +90,11 @@ namespace StockApi
             dataGridView1.Refresh();
 
             // Trends
-            StockHistory.SetTrends();
-            picYearTrend.Image = StockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : StockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-            picMonthTrend.Image = StockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : StockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image; 
-            picWeekTrend.Image = StockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : StockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-            PostWebCall(_stockData); // displays the data returned
+            _stockHistory.SetTrends();
+            picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image; 
+            picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            PostWebCall(); // displays the data returned
         }
 
         private async void btnGetAll_Click(object sender, EventArgs e)
@@ -106,15 +108,15 @@ namespace StockApi
             txtTickerList.Text = ".";
             foreach (string ticker in stockList)
             {
-                _stockData.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
+                _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
 
-                string html = await StockSummary.GetHtmlForTicker(_stockData.Ticker);
+                string html = await _stockSummary.GetHtmlForTicker(_stockSummary.Ticker);
                 txtTickerList.Text += ".";
 
                 // Extract the individual data values from the html
-                StockSummary.ExtractDataFromHtml(_stockData, html);
+                _stockSummary.ExtractDataFromHtml(html);
 
-                builder.Append($"{_stockData.Ticker}, {_stockData.Volatility}, {_stockData.EarningsPerShare}, {_stockData.OneYearTargetPrice}, {_stockData.FairValue}, {_stockData.EstimatedReturn}{Environment.NewLine}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.FairValue}, {_stockSummary.EstimatedReturn}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
@@ -127,20 +129,21 @@ namespace StockApi
             picSpinner.Visible = true;
             Cursor.Current = Cursors.WaitCursor;
         }
-        private void PostWebCall(StockSummary.StockData stockData)
+
+        private void PostWebCall()
         {
             btnGetOne.Enabled = true;
-            lblTicker.Text = stockData.CompanyName;
-            lblVolatility.Text = stockData.Volatility;
-            lblEPS.Text = stockData.EarningsPerShare;
+            lblTicker.Text = _stockSummary.CompanyName;
+            lblVolatility.Text = _stockSummary.Volatility;
+            lblEPS.Text = _stockSummary.EarningsPerShare;
             lblEPS.ForeColor = YahooFinance.EPSColor;
-            lblFairValue.Text = stockData.FairValue.ToString();
+            lblFairValue.Text = _stockSummary.FairValue.ToString();
             lblFairValue.ForeColor = YahooFinance.FairValueColor;
-            lblPrice.Text = stockData.Price.ToString();
-            lblDividend.Text = stockData.Dividend;
-            lblEstimatedReturn.Text = stockData.EstimatedReturn.ToString() + "%";
+            lblPrice.Text = _stockSummary.Price.ToString();
+            lblDividend.Text = _stockSummary.Dividend;
+            lblEstimatedReturn.Text = _stockSummary.EstimatedReturn.ToString() + "%";
             lblEstimatedReturn.ForeColor = YahooFinance.EstReturnColor;
-            lblOneYearTarget.Text = stockData.OneYearTargetPrice;
+            lblOneYearTarget.Text = _stockSummary.OneYearTargetPrice;
             lblOneYearTarget.ForeColor = YahooFinance.OneYearTargetColor;
             panel1.Visible = true;
             panel2.Visible = true;
@@ -148,14 +151,11 @@ namespace StockApi
             Cursor.Current = Cursors.Default;
 
             // Analyze form fields
-            Analyze.PersonalStockData personalStockData = Analyze.PreFillAnalyzeFormData();
-            txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+            Analyze.PersonalStockData personal_stockSummary = _analyze.PreFillAnalyzeFormData(_stockSummary);
+            txtSharesOwned.Text = personal_stockSummary.SharesOwned.ToString();
 
         }
 
-        /////////////////////////////////////////
-        ///            Analyze Stock
-        ////////////////////////////////////////
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
             // combine trends with
@@ -171,7 +171,7 @@ namespace StockApi
             analyzeInputs.SharesTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 
-            _analyzeResults = Analyze.AnalyzeStockData(analyzeInputs);
+            _analyzeResults = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);
             txtAnalysisOutput.Text = _analyzeResults.AnalysisOutput;
         }
     }

@@ -10,7 +10,7 @@ namespace StockApi
     /// <summary>
     /// 
     /// </summary>
-    class Analyze
+    class Analyze : YahooFinance
     {
         public enum BuyOrSell
         {
@@ -43,17 +43,17 @@ namespace StockApi
             TF.CloseFile();
         }
 
-        public static PersonalStockData PreFillAnalyzeFormData()
+        public PersonalStockData PreFillAnalyzeFormData(StockSummary stockSummary)
         {
             ReadInStockData();
 
-            PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == StockSummary.Ticker);
+            PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == stockSummary.Ticker);
 
             return personalStockData;
         }
 
 
-        public static AnalyzeResults AnalyzeStockData(AnalyzeInputs analyzeInputs)
+        public AnalyzeResults AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, AnalyzeInputs analyzeInputs)
         {
             StringBuilder output = new StringBuilder();
             // combine trends with
@@ -64,7 +64,7 @@ namespace StockApi
             // Volatility
 
             // Trend
-            float trendMetric = Convert.ToInt16(StockHistory.YearTrend) + Convert.ToInt16(StockHistory.MonthTrend) + Convert.ToInt16(StockHistory.WeekTrend);
+            float trendMetric = Convert.ToInt16(stockHistory.YearTrend) + Convert.ToInt16(stockHistory.MonthTrend) + Convert.ToInt16(stockHistory.WeekTrend);
             if(trendMetric == 0) // Very downward trend
                 trendMetric = .88F;
             else if (trendMetric == 1)
@@ -120,9 +120,9 @@ namespace StockApi
 
             // Dividend Metric
             float dividendMetric = 1F;
-            if (StockSummary.StockSummaryData.Dividend != YahooFinance.NotApplicable)
+            if (stockSummary.Dividend != YahooFinance.NotApplicable)
             {
-                dividendMetric = Convert.ToSingle(StockSummary.StockSummaryData.Dividend);
+                dividendMetric = Convert.ToSingle(stockSummary.Dividend);
                 if (dividendMetric > 5)
                     dividendMetric = 1.14F;
                 else if (dividendMetric > 2)
@@ -141,8 +141,8 @@ namespace StockApi
 
           
             // Calculate future buy or sells
-            float buyPrice = StockHistory.HistoricDataToday.Price * ((100F - analyzeInputs.MovementTargetPercent) / 100F);
-            float sellPrice = StockHistory.HistoricDataToday.Price * ((100F + analyzeInputs.MovementTargetPercent) / 100F);
+            float buyPrice = stockHistory.HistoricDataToday.Price * ((100F - analyzeInputs.MovementTargetPercent) / 100F);
+            float sellPrice = stockHistory.HistoricDataToday.Price * ((100F + analyzeInputs.MovementTargetPercent) / 100F);
             // Apply metrics
             buyPrice = buyPrice * totalMetric;
             sellPrice = sellPrice * totalMetric;
