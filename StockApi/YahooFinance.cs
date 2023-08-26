@@ -13,23 +13,15 @@ using System.Linq;
 
 namespace StockApi
 {
-    public class YahooFinance // General purpose functions
+    public class YahooFinance
     {
         public static string NotApplicable = "N/A";
 
         private string _ticker;
-
         public string Ticker
         {
             get { return _ticker; }
             set { _ticker = value.ToUpper(); }
-        }
-
-        public enum FairValueEnum
-        {
-            Overvalued,
-            FairValue,
-            Undervalued
         }
 
         protected static async Task<string> GetHtml(string url)

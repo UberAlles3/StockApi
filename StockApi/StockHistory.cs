@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace StockApi
 {
+    /// <summary>
+    /// Goes out on the web to the Yahoo financial page and gets stock history data.
+    /// It determines long and short term price trends for the stock.
+    /// </summary>
     public class StockHistory : YahooFinance
     {
         private static readonly string _url = "https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";

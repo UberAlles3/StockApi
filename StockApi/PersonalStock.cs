@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace StockApi
 {
@@ -44,8 +43,6 @@ namespace StockApi
 
             return personalStockData;
         }
-
-
 
         public class PersonalStockData
         {

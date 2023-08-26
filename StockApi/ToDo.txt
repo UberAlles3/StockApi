@@ -1,3 +1,4 @@
 ﻿DONE Add dividend to form and take into account as a metric
+DONE Add flat trend
 
-Add flat trend
+Add 3 year trend

@@ -9,6 +9,14 @@ namespace StockApi
     public class StockSummary : YahooFinance
     {
         private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
+
+        public enum FairValueEnum
+        {
+            Overvalued,
+            FairValue,
+            Undervalued
+        }
+
         public Color DividendColor = Color.LightSteelBlue;
         public Color EPSColor = Color.LightSteelBlue;
         public Color FairValueColor = Color.LightSteelBlue;
