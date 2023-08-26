@@ -23,8 +23,8 @@ namespace StockApi
         private string  estimatedReturnString = NotApplicable;
         private float   estimatedReturn = 0;
         private FairValueEnum fairValue = FairValueEnum.FairValue;
-        private float   oneYearTargetPrice = 0;
         private string  oneYearTargetPriceString = NotApplicable;
+        private float   oneYearTargetPrice = 0;
         private float   price = 0;
         private string  volatilityString = NotApplicable;
         private float   volatility = 0;
@@ -193,8 +193,8 @@ namespace StockApi
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
-            Price = Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
-            VolatilityString = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
+            
+            // Dividend
             string dividend = GetValueFromHtml(html, "DIVIDEND_AND_YIELD-value", YahooFinance.NotApplicable);
             if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
             {
@@ -206,7 +206,6 @@ namespace StockApi
             DividendString = dividend;
 
             EarningsPerShareString = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
-            OneYearTargetPriceString = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
 
             // Fair Value
             FairValue = FairValueEnum.FairValue;
@@ -219,14 +218,22 @@ namespace StockApi
                 FairValue = FairValueEnum.Undervalued;
             }
 
-            //% Est. Return
+            //Estimated Return %
             string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<", "0%");
             estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
             EstimatedReturnString = estReturn;
 
+            OneYearTargetPriceString = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
+            Price = Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
+            VolatilityString = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
+
             return true;
         }
 
+
+        ////////////////////////////
+        ///    Parsing methods
+        ////////////////////////////
         private static string GetFloatValueFromHtml(string html, string data_test_name, string defaultValue)
         {
             string temp = GetValueFromHtml(html, data_test_name, defaultValue);
@@ -242,9 +249,9 @@ namespace StockApi
             int loc2 = html.IndexOf("</" + tagName, loc1 + 5); //</title
             if (loc1 == -1)
             {
-                //throw new Exception("Unable to find class with name '" + class_name + "' in the web data.");
                 return defaultValue;
             }
+
             string middle = html.Substring(loc1 + 1 + tagName.Length, loc2 - loc1 - 1);
             return middle;
         }
@@ -254,7 +261,6 @@ namespace StockApi
             int loc1 = html.IndexOf("class=\"" + class_name + "\"");
             if (loc1 == -1)
             {
-                //throw new Exception("Unable to find class with name '" + class_name + "' in the web data.");
                 return defaultValue;
             }
             loc1 = html.IndexOf(">", loc1 + 1);

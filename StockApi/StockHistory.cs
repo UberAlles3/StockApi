@@ -56,31 +56,20 @@ namespace StockApi
 
             return historicDisplayList;
         }
-
-
-
-        public async Task<string> GetHistoryHtmlForTicker(string ticker, DateTime beginDate, DateTime endDate)
+        private static DateTime GetMondayIfWeekend(DateTime theDate)
         {
-            string formattedUrl = _url.Replace("?ticker?", ticker);
+            if (theDate.DayOfWeek == DayOfWeek.Saturday)
+                theDate = theDate.AddDays(2); // return Monday
 
-            Ticker = ticker;
+            if (theDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                theDate = theDate.AddDays(1); // return Monday
+            }
 
-            // Get seconds pasesed since 1/1/1970
-            double beginEpoch = beginDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            double endEpoch = endDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-
-            formattedUrl = formattedUrl.Replace("?period1?", Convert.ToInt32(beginEpoch).ToString());
-            formattedUrl = formattedUrl.Replace("?period2?", Convert.ToInt32(endEpoch).ToString());
-
-            string html = await YahooFinance.GetHtml(formattedUrl);
-
-            int historyLocation = html.IndexOf("data-test=\"historical-prices\"");
-            html = html.Substring(historyLocation);
-
-            return html;
+            return theDate;
         }
 
-        public async Task<List<HistoricData>> GetHistoricalDataForDateRange(string ticker, DateTime beginDate, DateTime endDate)
+        private async Task<List<HistoricData>> GetHistoricalDataForDateRange(string ticker, DateTime beginDate, DateTime endDate)
         {
             string formattedDate = "";
 
@@ -126,17 +115,25 @@ namespace StockApi
             return historicDataList;
         }
 
-        public static DateTime GetMondayIfWeekend(DateTime theDate)
+        private async Task<string> GetHistoryHtmlForTicker(string ticker, DateTime beginDate, DateTime endDate)
         {
-            if (theDate.DayOfWeek == DayOfWeek.Saturday)
-                theDate = theDate.AddDays(2); // return Monday
+            string formattedUrl = _url.Replace("?ticker?", ticker);
 
-            if (theDate.DayOfWeek == DayOfWeek.Sunday)
-            {
-                theDate = theDate.AddDays(1); // return Monday
-            }
+            Ticker = ticker;
 
-            return theDate;
+            // Get seconds pasesed since 1/1/1970
+            double beginEpoch = beginDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            double endEpoch = endDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+            formattedUrl = formattedUrl.Replace("?period1?", Convert.ToInt32(beginEpoch).ToString());
+            formattedUrl = formattedUrl.Replace("?period2?", Convert.ToInt32(endEpoch).ToString());
+
+            string html = await YahooFinance.GetHtml(formattedUrl);
+
+            int historyLocation = html.IndexOf("data-test=\"historical-prices\"");
+            html = html.Substring(historyLocation);
+
+            return html;
         }
 
         public void SetTrends()

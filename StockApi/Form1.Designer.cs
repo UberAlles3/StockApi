@@ -54,7 +54,7 @@ namespace StockApi
             this.picYearTrend = new System.Windows.Forms.PictureBox();
             this.picWeekTrend = new System.Windows.Forms.PictureBox();
             this.label22 = new System.Windows.Forms.Label();
-            this.lblTicker = new System.Windows.Forms.Label();
+            this.lblCompanyNameAndTicker = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -199,7 +199,7 @@ namespace StockApi
             this.panel1.Controls.Add(this.picYearTrend);
             this.panel1.Controls.Add(this.picWeekTrend);
             this.panel1.Controls.Add(this.label22);
-            this.panel1.Controls.Add(this.lblTicker);
+            this.panel1.Controls.Add(this.lblCompanyNameAndTicker);
             this.panel1.Controls.Add(this.label21);
             this.panel1.Controls.Add(this.label20);
             this.panel1.Controls.Add(this.label19);
@@ -390,16 +390,16 @@ namespace StockApi
             this.label22.TabIndex = 22;
             this.label22.Text = "Week";
             // 
-            // lblTicker
+            // lblCompanyNameAndTicker
             // 
-            this.lblTicker.BackColor = System.Drawing.Color.Transparent;
-            this.lblTicker.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblTicker.Location = new System.Drawing.Point(9, 11);
-            this.lblTicker.Name = "lblTicker";
-            this.lblTicker.Size = new System.Drawing.Size(318, 32);
-            this.lblTicker.TabIndex = 10;
-            this.lblTicker.Text = "lblTicker";
-            this.lblTicker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblCompanyNameAndTicker.BackColor = System.Drawing.Color.Transparent;
+            this.lblCompanyNameAndTicker.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblCompanyNameAndTicker.Location = new System.Drawing.Point(9, 11);
+            this.lblCompanyNameAndTicker.Name = "lblCompanyNameAndTicker";
+            this.lblCompanyNameAndTicker.Size = new System.Drawing.Size(318, 32);
+            this.lblCompanyNameAndTicker.TabIndex = 10;
+            this.lblCompanyNameAndTicker.Text = "lblCompanyNameAndTicker";
+            this.lblCompanyNameAndTicker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label21
             // 
@@ -1055,7 +1055,7 @@ namespace StockApi
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.Label lblOneYearTarget;
         private System.Windows.Forms.Label label55;
-        private System.Windows.Forms.Label lblTicker;
+        private System.Windows.Forms.Label lblCompanyNameAndTicker;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.TextBox txtMovementTargetPercent;

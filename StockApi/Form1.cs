@@ -44,18 +44,11 @@ namespace StockApi
 
             //picYearTrend.BackColor = Color.FromArgb(10, 0, 0, 0);
 
-            lblTicker.Text = "";
+            lblCompanyNameAndTicker.Text = "";
 
             // temporary for testing
             txtStockTicker.Text = "intc";
             txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
-
-            // for testing
-            //StockSummary.Ticker = "INTC";
-            //Analyze.Personal_stockSummary personal_stockSummary = Analyze.PreFillAnalyzeFormData();
-            //txtSharesOwned.Text = personal_stockSummary.SharesOwned.ToString();
-
-            //Analyze.AnalyzeResults analyzeResults = Analyze.Analyze_stockSummary();
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -66,7 +59,7 @@ namespace StockApi
                 return;
             }
 
-            PreWebCall(); // Sets the form display while the request is executing
+            PreSummaryWebCall(); // Sets the form display while the request is executing
 
             // Extract the individual data values from the html
             await _stockSummary.GetSummaryData(txtStockTicker.Text);
@@ -94,7 +87,7 @@ namespace StockApi
             picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image; 
             picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
             
-            PostWebCall(); // displays the data returned
+            PostSummaryWebCall(); // displays the data returned
         }
 
         private async void btnGetAll_Click(object sender, EventArgs e)
@@ -120,7 +113,7 @@ namespace StockApi
             txtTickerList.Text = builder.ToString();
         }
 
-        private void PreWebCall()
+        private void PreSummaryWebCall()
         {
             btnGetOne.Enabled = false;
             panel1.Visible = false;
@@ -129,10 +122,10 @@ namespace StockApi
             Cursor.Current = Cursors.WaitCursor;
         }
 
-        private void PostWebCall()
+        private void PostSummaryWebCall()
         {
             btnGetOne.Enabled = true;
-            lblTicker.Text = _stockSummary.CompanyName;
+            lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
             lblVolatility.Text = _stockSummary.VolatilityString;
             lblEPS.Text = _stockSummary.EarningsPerShareString;
             lblEPS.ForeColor = _stockSummary.EPSColor;
@@ -150,20 +143,14 @@ namespace StockApi
             picSpinner.Visible = false;
             Cursor.Current = Cursors.Default;
 
-            // Analyze form fields
-            PersonalStockData personalStockData = PersonalStockData.GetPersonalDataForTicker(_stockSummary.Ticker);
+            // Set some analyze form fields for later use
+            PersonalStock personalStock = new PersonalStock();
+            PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
             txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
         }
 
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
-            // combine trends with
-            // one year target
-            // EPS
-            // Volatility
-            // Fair Value
-            // Estimated Return %
-            // Should we read in excel file?
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
 
             analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);

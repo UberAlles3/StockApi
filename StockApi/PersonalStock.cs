@@ -6,19 +6,16 @@ using System.Text;
 
 namespace StockApi
 {
-    public class PersonalStockData
+    public class PersonalStock
     {
         private static List<PersonalStockData> personalStockDataList = new List<PersonalStockData>();
 
-        private string ticker = "";
-        private float sharesOwned;
+        public PersonalStock()
+        {
+            ReadInStockData();
+        }
 
-        public string Ticker { get => ticker; set => ticker = value; }
-        public float SharesOwned { get => sharesOwned; set => sharesOwned = value; }
-
-        // No constructor that calls ReadInStockData! It'll loop.
-
-        private static void ReadInStockData()
+        private void ReadInStockData()
         {
             TextFile TF = new TextFile();
             string[] parts;
@@ -41,20 +38,29 @@ namespace StockApi
             TF.CloseFile();
         }
 
-        public static PersonalStockData GetPersonalDataForTicker(string ticker)
+        public PersonalStockData GetPersonalDataForTicker(string ticker)
         {
-            ReadInStockData();
-
             PersonalStockData personalStockData = personalStockDataList.Find(x => x.Ticker == ticker);
 
             return personalStockData;
         }
 
-        public override string ToString()
+
+
+        public class PersonalStockData
         {
-            return string.Format(
-                $"{Ticker}, {SharesOwned}"
-            );
+            private string ticker = "";
+            private float sharesOwned;
+
+            public string Ticker { get => ticker; set => ticker = value; }
+            public float SharesOwned { get => sharesOwned; set => sharesOwned = value; }
+
+            public override string ToString()
+            {
+                return string.Format(
+                    $"{Ticker}, {SharesOwned}"
+                );
+            }
         }
     }
 }
