@@ -162,12 +162,12 @@ namespace StockApi
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 
             _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);
-            txtAnalysisOutput.Text = _analyze.AnalysisOutput;
+            txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
 
             lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
             lblBuyPrice.Text = _analyze.BuyPrice.ToString();
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
-            lblSellPrice.Text = _analyze.SellQuantity.ToString();
+            lblSellPrice.Text = _analyze.SellPrice.ToString();
         }
     }
 }

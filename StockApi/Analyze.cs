@@ -22,7 +22,7 @@ namespace StockApi
         public float BuyPrice;
         public int SellQuantity;
         public float SellPrice = 0;
-        public string AnalysisOutput;
+        public string AnalysisMetricsOutputText;
 
         public void AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, AnalyzeInputs analyzeInputs)
         {
@@ -124,6 +124,8 @@ namespace StockApi
             {
                 double f = (stockSummary.EarningsPerShare + 9) / 10;
                 double g = Math.Log10(f) + 1D;
+
+                // calc buyprice
                 double newPrice = buyPrice * g;
                 float limitPrice = stockSummary.Price * ((100F - analyzeInputs.MovementTargetPercent / 2) / 100F);
 
@@ -132,6 +134,16 @@ namespace StockApi
                     newPrice = limitPrice;
 
                 buyPrice = (float)newPrice;
+
+                // calc sellprice
+                newPrice = sellPrice * (1/g); 
+                limitPrice = stockSummary.Price * ((100F + analyzeInputs.MovementTargetPercent / 2) / 100F);
+
+                // Don't let newPrice go above half way between current price and normal buy price.
+                if (newPrice < limitPrice)
+                    newPrice = limitPrice;
+
+                sellPrice = (float)newPrice;  
             }
 
             // Buy Quantity
@@ -151,8 +163,9 @@ namespace StockApi
             // Math.Log(21.1, 10) + 1
 
             BuyPrice = buyPrice;
+            SellPrice = sellPrice;
 
-            AnalysisOutput = output.ToString();
+            AnalysisMetricsOutputText = output.ToString();
         }
 
         public class AnalyzeInputs
