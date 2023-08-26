@@ -44,11 +44,12 @@ namespace StockApi
 
             //picYearTrend.BackColor = Color.FromArgb(10, 0, 0, 0);
 
-            lblCompanyNameAndTicker.Text = "";
+            lblCompanyNameAndTicker.Text = txtSharesTraded.Text = "";
 
             // temporary for testing
-            txtStockTicker.Text = "intc";
-            txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
+            txtStockTicker.Text = "uan";
+            txtSharesTraded.Text = "4";
+            //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -147,6 +148,7 @@ namespace StockApi
             PersonalStock personalStock = new PersonalStock();
             PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
             txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+            txtSharesTradePrice.Text = _stockSummary.Price.ToString();
         }
 
         private void btnAnalyze_Click(object sender, EventArgs e)
@@ -156,6 +158,7 @@ namespace StockApi
             analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
             analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
             analyzeInputs.SharesTraded = Convert.ToInt32(txtSharesTraded.Text);
+            analyzeInputs.SharesTradedPrice = Convert.ToSingle(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 
             _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);

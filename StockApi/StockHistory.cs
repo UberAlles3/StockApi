@@ -60,6 +60,7 @@ namespace StockApi
 
             return historicDisplayList;
         }
+
         private static DateTime GetMondayIfWeekend(DateTime theDate)
         {
             if (theDate.DayOfWeek == DayOfWeek.Saturday)

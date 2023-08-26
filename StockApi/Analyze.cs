@@ -127,6 +127,7 @@ namespace StockApi
                 double newPrice = buyPrice * g;
                 float limitPrice = stockSummary.Price * ((100F - analyzeInputs.MovementTargetPercent / 2) / 100F);
 
+                // Don't let newPrice go above half way between current price and normal buy price.
                 if (newPrice > limitPrice)
                     newPrice = limitPrice;
 
@@ -159,6 +160,7 @@ namespace StockApi
             public int SharesOwned;
             public BuyOrSell LastTradeBuySell;
             public int SharesTraded;
+            public float SharesTradedPrice;
             public float MovementTargetPercent;
         }
     }

@@ -92,7 +92,7 @@ namespace StockApi
             this.txtMovementTargetPercent = new System.Windows.Forms.TextBox();
             this.label26 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.txtTradePrice = new System.Windows.Forms.TextBox();
+            this.txtSharesTradePrice = new System.Windows.Forms.TextBox();
             this.radSell = new System.Windows.Forms.RadioButton();
             this.label18 = new System.Windows.Forms.Label();
             this.radBuy = new System.Windows.Forms.RadioButton();
@@ -827,7 +827,7 @@ namespace StockApi
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.txtTradePrice);
+            this.groupBox1.Controls.Add(this.txtSharesTradePrice);
             this.groupBox1.Controls.Add(this.radSell);
             this.groupBox1.Controls.Add(this.label18);
             this.groupBox1.Controls.Add(this.radBuy);
@@ -843,12 +843,12 @@ namespace StockApi
             // 
             // txtTradePrice
             // 
-            this.txtTradePrice.Location = new System.Drawing.Point(167, 44);
-            this.txtTradePrice.Name = "txtTradePrice";
-            this.txtTradePrice.Size = new System.Drawing.Size(70, 23);
-            this.txtTradePrice.TabIndex = 21;
-            this.txtTradePrice.Text = "27";
-            this.txtTradePrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtSharesTradePrice.Location = new System.Drawing.Point(167, 44);
+            this.txtSharesTradePrice.Name = "txtTradePrice";
+            this.txtSharesTradePrice.Size = new System.Drawing.Size(70, 23);
+            this.txtSharesTradePrice.TabIndex = 21;
+            this.txtSharesTradePrice.Text = "27";
+            this.txtSharesTradePrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // radSell
             // 
@@ -1035,7 +1035,7 @@ namespace StockApi
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radSell;
         private System.Windows.Forms.RadioButton radBuy;
-        private System.Windows.Forms.TextBox txtTradePrice;
+        private System.Windows.Forms.TextBox txtSharesTradePrice;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.PictureBox picMonthTrend;
