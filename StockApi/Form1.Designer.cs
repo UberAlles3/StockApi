@@ -705,7 +705,7 @@ namespace StockApi
             this.txtAnalysisOutput.Location = new System.Drawing.Point(20, 202);
             this.txtAnalysisOutput.Multiline = true;
             this.txtAnalysisOutput.Name = "txtAnalysisOutput";
-            this.txtAnalysisOutput.Size = new System.Drawing.Size(272, 174);
+            this.txtAnalysisOutput.Size = new System.Drawing.Size(272, 184);
             this.txtAnalysisOutput.TabIndex = 33;
             // 
             // lblSellQuantity
