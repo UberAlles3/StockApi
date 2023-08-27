@@ -662,9 +662,9 @@ namespace StockApi
             // btnAnalyze
             // 
             this.btnAnalyze.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAnalyze.Location = new System.Drawing.Point(17, 149);
+            this.btnAnalyze.Location = new System.Drawing.Point(17, 153);
             this.btnAnalyze.Name = "btnAnalyze";
-            this.btnAnalyze.Size = new System.Drawing.Size(260, 33);
+            this.btnAnalyze.Size = new System.Drawing.Size(275, 33);
             this.btnAnalyze.TabIndex = 12;
             this.btnAnalyze.Text = "Analyze for Next Trades";
             this.btnAnalyze.UseVisualStyleBackColor = true;
@@ -692,7 +692,7 @@ namespace StockApi
             this.panel2.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel2.Location = new System.Drawing.Point(679, 12);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(294, 480);
+            this.panel2.Size = new System.Drawing.Size(310, 480);
             this.panel2.TabIndex = 14;
             // 
             // txtAnalysisOutput
@@ -700,10 +700,10 @@ namespace StockApi
             this.txtAnalysisOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.txtAnalysisOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAnalysisOutput.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.txtAnalysisOutput.Location = new System.Drawing.Point(20, 198);
+            this.txtAnalysisOutput.Location = new System.Drawing.Point(20, 202);
             this.txtAnalysisOutput.Multiline = true;
             this.txtAnalysisOutput.Name = "txtAnalysisOutput";
-            this.txtAnalysisOutput.Size = new System.Drawing.Size(257, 174);
+            this.txtAnalysisOutput.Size = new System.Drawing.Size(272, 174);
             this.txtAnalysisOutput.TabIndex = 33;
             // 
             // lblSellQuantity
@@ -799,17 +799,17 @@ namespace StockApi
             this.label28.AutoSize = true;
             this.label28.BackColor = System.Drawing.Color.Transparent;
             this.label28.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label28.Location = new System.Drawing.Point(17, 125);
+            this.label28.Location = new System.Drawing.Point(17, 129);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(155, 15);
+            this.label28.Size = new System.Drawing.Size(150, 15);
             this.label28.TabIndex = 22;
-            this.label28.Text = "Normal Trade Movement %:";
+            this.label28.Text = "Targetl Trade Movement %:";
             // 
             // txtMovementTargetPercent
             // 
-            this.txtMovementTargetPercent.Location = new System.Drawing.Point(187, 117);
+            this.txtMovementTargetPercent.Location = new System.Drawing.Point(206, 121);
             this.txtMovementTargetPercent.Name = "txtMovementTargetPercent";
-            this.txtMovementTargetPercent.Size = new System.Drawing.Size(51, 23);
+            this.txtMovementTargetPercent.Size = new System.Drawing.Size(69, 23);
             this.txtMovementTargetPercent.TabIndex = 21;
             this.txtMovementTargetPercent.Text = "20";
             this.txtMovementTargetPercent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -834,17 +834,17 @@ namespace StockApi
             this.groupBox1.Controls.Add(this.label16);
             this.groupBox1.Controls.Add(this.txtSharesTraded);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.groupBox1.Location = new System.Drawing.Point(20, 38);
+            this.groupBox1.Location = new System.Drawing.Point(20, 42);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(257, 75);
+            this.groupBox1.Size = new System.Drawing.Size(272, 75);
             this.groupBox1.TabIndex = 19;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Last Trade";
             // 
-            // txtTradePrice
+            // txtSharesTradePrice
             // 
-            this.txtSharesTradePrice.Location = new System.Drawing.Point(167, 44);
-            this.txtSharesTradePrice.Name = "txtTradePrice";
+            this.txtSharesTradePrice.Location = new System.Drawing.Point(185, 44);
+            this.txtSharesTradePrice.Name = "txtSharesTradePrice";
             this.txtSharesTradePrice.Size = new System.Drawing.Size(70, 23);
             this.txtSharesTradePrice.TabIndex = 21;
             this.txtSharesTradePrice.Text = "27";
@@ -865,7 +865,7 @@ namespace StockApi
             this.label18.AutoSize = true;
             this.label18.BackColor = System.Drawing.Color.Transparent;
             this.label18.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label18.Location = new System.Drawing.Point(125, 49);
+            this.label18.Location = new System.Drawing.Point(143, 49);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(36, 15);
             this.label18.TabIndex = 20;
@@ -888,7 +888,7 @@ namespace StockApi
             this.label16.AutoSize = true;
             this.label16.BackColor = System.Drawing.Color.Transparent;
             this.label16.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.label16.Location = new System.Drawing.Point(81, 20);
+            this.label16.Location = new System.Drawing.Point(99, 20);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(82, 15);
             this.label16.TabIndex = 17;
@@ -896,7 +896,7 @@ namespace StockApi
             // 
             // txtSharesTraded
             // 
-            this.txtSharesTraded.Location = new System.Drawing.Point(167, 15);
+            this.txtSharesTraded.Location = new System.Drawing.Point(185, 15);
             this.txtSharesTraded.Name = "txtSharesTraded";
             this.txtSharesTraded.Size = new System.Drawing.Size(70, 23);
             this.txtSharesTraded.TabIndex = 18;
@@ -916,9 +916,9 @@ namespace StockApi
             // 
             // txtSharesOwned
             // 
-            this.txtSharesOwned.Location = new System.Drawing.Point(106, 11);
+            this.txtSharesOwned.Location = new System.Drawing.Point(205, 14);
             this.txtSharesOwned.Name = "txtSharesOwned";
-            this.txtSharesOwned.Size = new System.Drawing.Size(51, 23);
+            this.txtSharesOwned.Size = new System.Drawing.Size(70, 23);
             this.txtSharesOwned.TabIndex = 15;
             this.txtSharesOwned.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -960,7 +960,7 @@ namespace StockApi
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1008, 519);
+            this.ClientSize = new System.Drawing.Size(1025, 519);
             this.Controls.Add(this.picSidewaysTrend);
             this.Controls.Add(this.picDownTrend);
             this.Controls.Add(this.picUpTrend);

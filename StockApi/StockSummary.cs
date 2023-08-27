@@ -231,8 +231,9 @@ namespace StockApi
             estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
             EstimatedReturnString = estReturn;
 
-            OneYearTargetPriceString = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
             Price = Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
+            OneYearTargetPriceString = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
+
             VolatilityString = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
 
             return true;

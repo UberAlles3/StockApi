@@ -65,9 +65,9 @@ namespace StockApi
             // Earnings Per Share
             float epsMetric = 1F;
             if (stockSummary.EarningsPerShare < -1)
-                epsMetric = .92F;
+                epsMetric = .96F;
             else if (stockSummary.EarningsPerShare > 1)
-                epsMetric = 1.08F;
+                epsMetric = 1.04F;
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
@@ -112,15 +112,20 @@ namespace StockApi
             analyzeInputs.MovementTargetPercent *= Convert.ToSingle(stockSummary.Volatility);
             output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent}");
 
-            // Calculate future buy or sells
+            // Calculate future buy or sells based on how much it moves and what our target movement is. 
             float buyPrice = stockHistory.HistoricDataToday.Price * ((100F - analyzeInputs.MovementTargetPercent) / 100F);
             float sellPrice = stockHistory.HistoricDataToday.Price * ((100F + analyzeInputs.MovementTargetPercent) / 100F);
 
-            // Apply metrics
+            output.AppendLine($"Buy price  after volat. & targt movemnt% = {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price after volat. & targt movemnt% = {sellPrice.ToString("##.##")}");
+
             buyPrice = buyPrice * totalMetric;
             sellPrice = sellPrice * totalMetric;
 
-            if(stockSummary.EarningsPerShare > 1)
+            output.AppendLine($"Buy price  applying total metric = {buyPrice}");
+            output.AppendLine($"Sell price applying total metric = {sellPrice}");
+
+            if (stockSummary.EarningsPerShare > 1)
             {
                 double f = (stockSummary.EarningsPerShare + 9) / 10;
                 double g = Math.Log10(f) + 1D;
