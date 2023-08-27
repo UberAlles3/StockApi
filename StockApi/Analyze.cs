@@ -108,16 +108,19 @@ namespace StockApi
 
             output.AppendLine($"Total Metric = {totalMetric}");
 
+            ///////////// Setting Price Movement Multipliers
             // Volatility  Change movement % 
             analyzeInputs.MovementTargetPercent *= Convert.ToSingle(stockSummary.Volatility);
-            output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent}");
+            output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}");
+            float lowerMovementMultiplier = ((100F - analyzeInputs.MovementTargetPercent) / 100F); // if movement is 20% will assign .8
+            float upperMovementMultiplier = ((100F + analyzeInputs.MovementTargetPercent) / 100F); // if movement is 20% will assign 1.2
 
             // Calculate future buy or sells based on how much it moves and what our target movement is. 
-            float buyPrice = stockHistory.HistoricDataToday.Price * ((100F - analyzeInputs.MovementTargetPercent) / 100F);
-            float sellPrice = stockHistory.HistoricDataToday.Price * ((100F + analyzeInputs.MovementTargetPercent) / 100F);
+            float buyPrice = stockHistory.HistoricDataToday.Price * lowerMovementMultiplier;
+            float sellPrice = stockHistory.HistoricDataToday.Price * upperMovementMultiplier;
 
-            output.AppendLine($"Buy price  after volat. & targt movemnt% = {buyPrice.ToString("##.##")}");
-            output.AppendLine($"Sell price after volat. & targt movemnt% = {sellPrice.ToString("##.##")}");
+            output.AppendLine($"Buy price  - volatility, movement% = {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price - volatility, movement% = {sellPrice.ToString("##.##")}");
 
             buyPrice = buyPrice * totalMetric;
             sellPrice = sellPrice * totalMetric;
@@ -130,26 +133,27 @@ namespace StockApi
                 double f = (stockSummary.EarningsPerShare + 9) / 10;
                 double g = Math.Log10(f) + 1D;
 
-                // calc buyprice
+                ////// calculate buy price
                 double newPrice = buyPrice * g;
-                float limitPrice = stockSummary.Price * ((100F - analyzeInputs.MovementTargetPercent / 2) / 100F);
 
                 // Don't let newPrice go above half way between current price and normal buy price.
+                float limitPrice = stockSummary.Price * ((100F - analyzeInputs.MovementTargetPercent / 2) / 100F);
                 if (newPrice > limitPrice)
                     newPrice = limitPrice;
 
                 buyPrice = (float)newPrice;
 
                 // calc sellprice
-                newPrice = sellPrice * (1/g); 
-                limitPrice = stockSummary.Price * ((100F + analyzeInputs.MovementTargetPercent / 2) / 100F);
+                newPrice = sellPrice * (1/g);
 
-                // Don't let newPrice go above half way between current price and normal buy price.
-                if (newPrice < limitPrice)
+                // Don't let new sell price to go above upper price + 10%.
+                limitPrice = stockSummary.Price * upperMovementMultiplier * 1.1F;
+                if (newPrice >  limitPrice)
                     newPrice = limitPrice;
 
                 sellPrice = (float)newPrice;  
             }
+
 
             // Buy Quantity
             if (analyzeInputs.LastTradeBuySell == BuyOrSell.Buy)
