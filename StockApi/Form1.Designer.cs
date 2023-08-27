@@ -103,6 +103,7 @@ namespace StockApi
             this.picUpTrend = new System.Windows.Forms.PictureBox();
             this.picDownTrend = new System.Windows.Forms.PictureBox();
             this.picSidewaysTrend = new System.Windows.Forms.PictureBox();
+            this.label34 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -220,6 +221,7 @@ namespace StockApi
             this.panel1.Controls.Add(this.lblVolatility);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.picMonthTrend);
+            this.panel1.Controls.Add(this.label34);
             this.panel1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel1.Location = new System.Drawing.Point(293, 12);
             this.panel1.Name = "panel1";
@@ -491,9 +493,9 @@ namespace StockApi
             // 
             this.label14.BackColor = System.Drawing.Color.Transparent;
             this.label14.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label14.Location = new System.Drawing.Point(256, 237);
+            this.label14.Location = new System.Drawing.Point(256, 238);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(67, 22);
+            this.label14.Size = new System.Drawing.Size(67, 21);
             this.label14.TabIndex = 7;
             this.label14.Text = "Volume";
             // 
@@ -501,9 +503,9 @@ namespace StockApi
             // 
             this.label17.BackColor = System.Drawing.Color.Transparent;
             this.label17.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label17.Location = new System.Drawing.Point(9, 237);
+            this.label17.Location = new System.Drawing.Point(9, 238);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(57, 22);
+            this.label17.Size = new System.Drawing.Size(57, 21);
             this.label17.TabIndex = 4;
             this.label17.Text = "Date";
             // 
@@ -511,7 +513,7 @@ namespace StockApi
             // 
             this.label13.BackColor = System.Drawing.Color.Transparent;
             this.label13.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label13.Location = new System.Drawing.Point(49, 205);
+            this.label13.Location = new System.Drawing.Point(56, 201);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(233, 29);
             this.label13.TabIndex = 10;
@@ -952,6 +954,17 @@ namespace StockApi
             this.picSidewaysTrend.TabIndex = 20;
             this.picSidewaysTrend.TabStop = false;
             // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.BackColor = System.Drawing.Color.Transparent;
+            this.label34.ForeColor = System.Drawing.Color.DarkGray;
+            this.label34.Location = new System.Drawing.Point(9, 219);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(312, 15);
+            this.label34.TabIndex = 36;
+            this.label34.Text = "_____________________________________________________________";
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -1072,6 +1085,7 @@ namespace StockApi
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.PictureBox picSidewaysTrend;
         private System.Windows.Forms.TextBox txtAnalysisOutput;
+        private System.Windows.Forms.Label label34;
     }
 }
 
