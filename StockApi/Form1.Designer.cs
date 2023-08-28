@@ -73,6 +73,7 @@ namespace StockApi
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.picMonthTrend = new System.Windows.Forms.PictureBox();
+            this.label34 = new System.Windows.Forms.Label();
             this.picSpinner = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -103,7 +104,6 @@ namespace StockApi
             this.picUpTrend = new System.Windows.Forms.PictureBox();
             this.picDownTrend = new System.Windows.Forms.PictureBox();
             this.picSidewaysTrend = new System.Windows.Forms.PictureBox();
-            this.label34 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -619,6 +619,17 @@ namespace StockApi
             this.picMonthTrend.TabIndex = 21;
             this.picMonthTrend.TabStop = false;
             // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.BackColor = System.Drawing.Color.Transparent;
+            this.label34.ForeColor = System.Drawing.Color.DarkGray;
+            this.label34.Location = new System.Drawing.Point(9, 219);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(312, 15);
+            this.label34.TabIndex = 36;
+            this.label34.Text = "_____________________________________________________________";
+            // 
             // picSpinner
             // 
             this.picSpinner.BackColor = System.Drawing.Color.Transparent;
@@ -701,6 +712,7 @@ namespace StockApi
             // 
             this.txtAnalysisOutput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.txtAnalysisOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtAnalysisOutput.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtAnalysisOutput.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.txtAnalysisOutput.Location = new System.Drawing.Point(20, 202);
             this.txtAnalysisOutput.Multiline = true;
@@ -953,17 +965,6 @@ namespace StockApi
             this.picSidewaysTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picSidewaysTrend.TabIndex = 20;
             this.picSidewaysTrend.TabStop = false;
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.BackColor = System.Drawing.Color.Transparent;
-            this.label34.ForeColor = System.Drawing.Color.DarkGray;
-            this.label34.Location = new System.Drawing.Point(9, 219);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(312, 15);
-            this.label34.TabIndex = 36;
-            this.label34.Text = "_____________________________________________________________";
             // 
             // Form1
             // 

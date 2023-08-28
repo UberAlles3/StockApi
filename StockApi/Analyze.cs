@@ -120,8 +120,8 @@ namespace StockApi
             float buyPrice = stockHistory.HistoricDataToday.Price * lowerMovementMultiplier;
             float sellPrice = stockHistory.HistoricDataToday.Price * upperMovementMultiplier;
 
-            output.AppendLine($"Buy price  - volatility, movement% = {buyPrice.ToString("##.##")}");
-            output.AppendLine($"Sell price - volatility, movement% = {sellPrice.ToString("##.##")}");
+            output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
 
             buyPrice = buyPrice * totalMetric;
             sellPrice = sellPrice * totalMetric;
@@ -136,25 +136,27 @@ namespace StockApi
                 double g = Math.Log10(f) + 1D;
 
                 ////// calculate buy price
-                double newPrice = buyPrice * g;
-
-                // Don't let newPrice go above half way between current price and normal buy price.
-                float limitPrice = stockSummary.Price * ((100F - analyzeInputs.MovementTargetPercent / 2) / 100F);
-                if (newPrice > limitPrice)
-                    newPrice = limitPrice;
-
-                buyPrice = (float)newPrice;
+                buyPrice = (float)buyPrice * (float)g; 
 
                 // calc sellprice
-                newPrice = sellPrice * (1/g);
-
-                // Don't let new sell price to go above upper price + 10%.
-                limitPrice = stockSummary.Price * upperMovementMultiplier * 1.1F;
-                if (newPrice >  limitPrice)
-                    newPrice = limitPrice;
-
-                sellPrice = (float)newPrice;  
+                sellPrice = (float)sellPrice * (1 / (float)g);  
             }
+
+            ///////// Limit price so it's with a range
+            float limitPrice = (stockSummary.Price * lowerMovementMultiplier) * .8F; // lower buy limit
+            if (buyPrice < limitPrice)
+                buyPrice = limitPrice;
+            limitPrice = (stockSummary.Price * lowerMovementMultiplier) * 1.1F; // upper buy limit
+            if (buyPrice < limitPrice)
+                buyPrice = limitPrice;
+            limitPrice = (stockSummary.Price * upperMovementMultiplier) * .9F; // lower sell limit
+            if (sellPrice < limitPrice)
+                sellPrice = limitPrice;
+            limitPrice = (stockSummary.Price * upperMovementMultiplier) * 1.1F; // upper sell limit
+            if (sellPrice > limitPrice)
+                sellPrice = limitPrice;
+
+
 
 
             // Buy Quantity
