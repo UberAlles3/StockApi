@@ -48,7 +48,7 @@ namespace StockApi
                 trendMetric = 1.04F; 
             else if (trendMetric == 5)
                 trendMetric = 1.08F; 
-            else if (trendMetric == 5)
+            else if (trendMetric == 6)
                 trendMetric = 1.12F; // Very upward trend
 
             output.AppendLine($"Price Trend Metric = {trendMetric}");
@@ -80,14 +80,14 @@ namespace StockApi
 
             output.AppendLine($"Fair Value Metric = {fairValueMetric}");
 
-            // One Year Target
-            float oneYearTargetMetric = 1F;
-            if (stockSummary.OneYearTargetColor == Color.Red)
-                oneYearTargetMetric = .9F;
-            else if (stockSummary.OneYearTargetColor == Color.Lime)
-                oneYearTargetMetric = 1.1F;
+            // Estimated Return Metric
+            float estimatedReturnMetric = 1F;
+            if (stockSummary.EstimatedReturn > 2)
+                estimatedReturnMetric = .9F;
+            else if (stockSummary.EstimatedReturn < -2)
+                estimatedReturnMetric = 1.1F;
 
-            output.AppendLine($"One Year Target Metric = {oneYearTargetMetric}");
+            output.AppendLine($"Estimated Return Metric = {estimatedReturnMetric}");
 
             // Dividend Metric
             float dividendMetric = 1F;
@@ -104,13 +104,14 @@ namespace StockApi
 
             output.AppendLine($"Dividend Metric = {dividendMetric}");
 
-            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric;
+            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric * estimatedReturnMetric;
 
             output.AppendLine($"Total Metric = {totalMetric}");
 
             ///////////// Setting Price Movement Multipliers
-            // Volatility  Change movement % 
-            analyzeInputs.MovementTargetPercent *= Convert.ToSingle(stockSummary.Volatility);
+            // Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
+            double volitilityFactor = 1 + Math.Log10(1 + Math.Log10(stockSummary.Volatility + 1) + 1); 
+            analyzeInputs.MovementTargetPercent *= (float)volitilityFactor; // Applying volatility
             output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}");
             float lowerMovementMultiplier = ((100F - analyzeInputs.MovementTargetPercent) / 100F); // if movement is 20% will assign .8
             float upperMovementMultiplier = ((100F + analyzeInputs.MovementTargetPercent) / 100F); // if movement is 20% will assign 1.2
@@ -128,6 +129,7 @@ namespace StockApi
             output.AppendLine($"Buy price  applying total metric = {buyPrice}");
             output.AppendLine($"Sell price applying total metric = {sellPrice}");
 
+            // Earnings Per Share deep dive.
             if (stockSummary.EarningsPerShare > 1)
             {
                 double f = (stockSummary.EarningsPerShare + 9) / 10;
@@ -168,8 +170,6 @@ namespace StockApi
                 BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.2F); // Buy more if you just sold
                 SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Buy less if you just sold
             }
-
-            // Math.Log(21.1, 10) + 1
 
             BuyPrice = buyPrice;
             SellPrice = sellPrice;
