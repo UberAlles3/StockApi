@@ -157,7 +157,7 @@ namespace StockApi
 
             analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
             analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
-            analyzeInputs.SharesTraded = Convert.ToInt32(txtSharesTraded.Text);
+            analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.SharesTradedPrice = Convert.ToSingle(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
 

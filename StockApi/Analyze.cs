@@ -160,22 +160,38 @@ namespace StockApi
             SellPrice = sellPrice;
 
 
-            ////////////////////////////
-            //   Quantitie to Trade
-            ////////////////////////////
+            //////////////////////////////////
+            //      Quantity to Buy/Sell
+            //////////////////////////////////
+            float buyQuantity = 0F;
+            float sellQuantity = 0F;
+
+
             if (analyzeInputs.LastTradeBuySell == BuyOrSell.Buy)
             {
-                BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Buy less if you just bought
-                SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.08F); // Sell more if you just bought
+                buyQuantity = analyzeInputs.QuantityTraded * .8F; // Buy less if you just bought
+                sellQuantity = analyzeInputs.QuantityTraded * 1.08F; // Sell more if you just bought
             }
             else
             {
-                BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.08F); // Buy more if you just sold
-                SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Sell less if you just sold
+                buyQuantity = analyzeInputs.QuantityTraded * 1.08F; // Buy more if you just sold
+                sellQuantity = analyzeInputs.QuantityTraded * .8F; // Sell less if you just sold
             }
 
-            if (SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.5F)) // Don't sell more than half your shares
-                SellQuantity = Convert.ToInt16(analyzeInputs.SharesOwned / 2.5F);
+            // Dividend 
+            if (stockSummary.Dividend > 8)
+            {
+                buyQuantity = buyQuantity * 1.2F;
+                sellQuantity = sellQuantity / 1.2F;
+            }
+            else if (stockSummary.Dividend > 4)
+            {
+                buyQuantity = buyQuantity * 1.1F;
+                sellQuantity = sellQuantity / 1.1F;
+            }
+
+            if (SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.4F)) // Don't sell close to more than half your shares
+                SellQuantity = Convert.ToInt16((analyzeInputs.SharesOwned / 2.4F) + .5F);
 
             AnalysisMetricsOutputText = output.ToString();
         }
@@ -184,7 +200,7 @@ namespace StockApi
         {
             public int SharesOwned;
             public BuyOrSell LastTradeBuySell;
-            public int SharesTraded;
+            public int QuantityTraded;
             public float SharesTradedPrice;
             public float MovementTargetPercent;
         }
