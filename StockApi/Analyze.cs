@@ -34,7 +34,7 @@ namespace StockApi
             // Estimated Return %
             // Volatility
 
-            // Trend
+            // Price Trend
             float trendMetric = Convert.ToInt16(stockHistory.YearTrend) + Convert.ToInt16(stockHistory.MonthTrend) + Convert.ToInt16(stockHistory.WeekTrend);
             if(trendMetric == 0) // Very downward trend
                 trendMetric = .88F;
@@ -55,19 +55,27 @@ namespace StockApi
 
             // One Year Target
             float targetPriceMetric = 1F;
-            if (stockSummary.OneYearTargetPrice < stockSummary.Price * .9)
-                targetPriceMetric = .9F;
-            else if (stockSummary.OneYearTargetPrice > stockSummary.Price * 1.1)
-                targetPriceMetric = 1.1F;
+            if (stockSummary.OneYearTargetPrice < stockSummary.Price * .95)
+                targetPriceMetric = .96F;
+            else if (stockSummary.OneYearTargetPrice > stockSummary.Price * 1.05)
+                targetPriceMetric = 1.04F;
 
             output.AppendLine($"One Year Target Metric = {targetPriceMetric}");
 
             // Earnings Per Share
             float epsMetric = 1F;
-            if (stockSummary.EarningsPerShare < -1)
+            if (stockSummary.EarningsPerShare < -6)
+                epsMetric = .94F;
+            else if (stockSummary.EarningsPerShare < -3)
                 epsMetric = .96F;
-            else if (stockSummary.EarningsPerShare > 1)
+            else if (stockSummary.EarningsPerShare < -1)
+                epsMetric = .98F;
+            else if (stockSummary.EarningsPerShare > 6)
+                epsMetric = 1.06F;
+            else if (stockSummary.EarningsPerShare > 3)
                 epsMetric = 1.04F;
+            else if (stockSummary.EarningsPerShare > 1)
+                epsMetric = 1.02F;
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
@@ -82,10 +90,14 @@ namespace StockApi
 
             // Estimated Return Metric
             float estimatedReturnMetric = 1F;
-            if (stockSummary.EstimatedReturn > 2)
-                estimatedReturnMetric = 1.08F;
+            if (stockSummary.EstimatedReturn < -6)
+                estimatedReturnMetric = .96F;
             else if (stockSummary.EstimatedReturn < -2)
-                estimatedReturnMetric = .92F;
+                estimatedReturnMetric = .98F;
+            else if (stockSummary.EstimatedReturn > 6)
+                estimatedReturnMetric = 1.04F;
+            else if (stockSummary.EstimatedReturn > 2)
+                estimatedReturnMetric = 1.02F;
 
             output.AppendLine($"Estimated Return Metric = {estimatedReturnMetric}");
 
@@ -110,9 +122,18 @@ namespace StockApi
 
             ///////////// Setting Price Movement Multipliers
             // Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
-            double volitilityFactor = 1 + Math.Log10(1 + Math.Log10(stockSummary.Volatility + 1) + 1); 
+            double volitilityFactor = Math.Log((Math.Log10(stockSummary.Volatility) + 1)) + 1; 
             analyzeInputs.MovementTargetPercent *= (float)volitilityFactor; // Applying volatility
             output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}");
+            
+            // if stock is like XOM where your not sell a large percentage of shares owned
+            // Make the lower and upper movement less
+            if(analyzeInputs.QuantityTraded < analyzeInputs.SharesOwned / 4)
+            {
+                analyzeInputs.MovementTargetPercent = analyzeInputs.MovementTargetPercent * .9F;
+                output.AppendLine($"Movement reduced, low share quantity = {analyzeInputs.MovementTargetPercent.ToString("##.##")}");
+            }
+
             float lowerMovementMultiplier = ((100F - analyzeInputs.MovementTargetPercent) / 100F); // if movement is 20% will assign .8
             float upperMovementMultiplier = ((100F + analyzeInputs.MovementTargetPercent) / 100F); // if movement is 20% will assign 1.2
 
@@ -129,25 +150,12 @@ namespace StockApi
             output.AppendLine($"Buy price  applying total metric = {buyPrice}");
             output.AppendLine($"Sell price applying total metric = {sellPrice}");
 
-            // Earnings Per Share deep dive.
-            if (stockSummary.EarningsPerShare > 1)
-            {
-                double f = (stockSummary.EarningsPerShare + 9) / 10;
-                double g = Math.Log10(f) + 1D;
-
-                ////// calculate buy price
-                buyPrice = (float)buyPrice * (float)g; 
-
-                // calc sellprice
-                sellPrice = (float)sellPrice * (1 / (float)g);  
-            }
-
-            ///////// Limit price so it's with a range
-            float limitPrice = (stockSummary.Price * lowerMovementMultiplier) * .8F; // lower buy limit
+             ///////// Limit price so it's with a range
+            float limitPrice = (stockSummary.Price * lowerMovementMultiplier) * .8F; // lower buy limit price to low
             if (buyPrice < limitPrice)
                 buyPrice = limitPrice;
             limitPrice = (stockSummary.Price * lowerMovementMultiplier) * 1.1F; // upper buy limit
-            if (buyPrice < limitPrice)
+            if (buyPrice > limitPrice)
                 buyPrice = limitPrice;
             limitPrice = (stockSummary.Price * upperMovementMultiplier) * .9F; // lower sell limit
             if (sellPrice < limitPrice)
@@ -189,6 +197,14 @@ namespace StockApi
                 buyQuantity = buyQuantity * 1.1F;
                 sellQuantity = sellQuantity / 1.1F;
             }
+            else if (stockSummary.Dividend > 2)
+            {
+                buyQuantity = buyQuantity * 1.05F;
+                sellQuantity = sellQuantity / 1.05F;
+            }
+
+            BuyQuantity = Convert.ToInt32(buyQuantity);
+            SellQuantity = Convert.ToInt32(sellQuantity);
 
             if (SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.4F)) // Don't sell close to more than half your shares
                 SellQuantity = Convert.ToInt16((analyzeInputs.SharesOwned / 2.4F) + .5F);
