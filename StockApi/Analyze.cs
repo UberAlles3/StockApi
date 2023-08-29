@@ -83,9 +83,9 @@ namespace StockApi
             // Estimated Return Metric
             float estimatedReturnMetric = 1F;
             if (stockSummary.EstimatedReturn > 2)
-                estimatedReturnMetric = .9F;
+                estimatedReturnMetric = 1.08F;
             else if (stockSummary.EstimatedReturn < -2)
-                estimatedReturnMetric = 1.1F;
+                estimatedReturnMetric = .92F;
 
             output.AppendLine($"Estimated Return Metric = {estimatedReturnMetric}");
 
@@ -156,25 +156,26 @@ namespace StockApi
             if (sellPrice > limitPrice)
                 sellPrice = limitPrice;
 
+            BuyPrice = buyPrice;
+            SellPrice = sellPrice;
 
 
-
-            // Buy Quantity
+            ////////////////////////////
+            //   Quantitie to Trade
+            ////////////////////////////
             if (analyzeInputs.LastTradeBuySell == BuyOrSell.Buy)
             {
                 BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Buy less if you just bought
-                SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.1F); // Sell more if you just bought
-                if (SellQuantity > Convert.ToInt16(analyzeInputs.SharesTraded / 2.5F))
-                    SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded / 2.5F);
+                SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.08F); // Sell more if you just bought
             }
             else
             {
-                BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.2F); // Buy more if you just sold
-                SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Buy less if you just sold
+                BuyQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * 1.08F); // Buy more if you just sold
+                SellQuantity = Convert.ToInt16(analyzeInputs.SharesTraded * .8F); // Sell less if you just sold
             }
 
-            BuyPrice = buyPrice;
-            SellPrice = sellPrice;
+            if (SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.5F)) // Don't sell more than half your shares
+                SellQuantity = Convert.ToInt16(analyzeInputs.SharesOwned / 2.5F);
 
             AnalysisMetricsOutputText = output.ToString();
         }

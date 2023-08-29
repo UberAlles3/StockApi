@@ -815,9 +815,9 @@ namespace StockApi
             this.label28.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.label28.Location = new System.Drawing.Point(17, 129);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(150, 15);
+            this.label28.Size = new System.Drawing.Size(117, 15);
             this.label28.TabIndex = 22;
-            this.label28.Text = "Targetl Trade Movement %:";
+            this.label28.Text = "Price Move Target %:";
             // 
             // txtMovementTargetPercent
             // 

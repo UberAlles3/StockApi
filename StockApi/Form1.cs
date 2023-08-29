@@ -47,8 +47,8 @@ namespace StockApi
             lblCompanyNameAndTicker.Text = txtSharesTraded.Text = "";
 
             // temporary for testing
-            txtStockTicker.Text = "bgfv";
-            txtSharesTraded.Text = "20";
+            txtStockTicker.Text = "uec";
+            txtSharesTraded.Text = "80";
             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
