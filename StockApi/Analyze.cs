@@ -71,9 +71,9 @@ namespace StockApi
             else if (stockSummary.EarningsPerShare < -1)
                 epsMetric = .98F;
             else if (stockSummary.EarningsPerShare > 6)
-                epsMetric = 1.06F;
+                epsMetric = 1.08F;
             else if (stockSummary.EarningsPerShare > 3)
-                epsMetric = 1.04F;
+                epsMetric = 1.05F;
             else if (stockSummary.EarningsPerShare > 1)
                 epsMetric = 1.02F;
 
@@ -82,9 +82,9 @@ namespace StockApi
             // Fair Value
             float fairValueMetric = 1F;
             if (stockSummary.FairValueColor == Color.Red)
-                fairValueMetric = .9F;
+                fairValueMetric = .96F;
             if (stockSummary.FairValueColor == Color.Lime)
-                fairValueMetric = 1.1F;
+                fairValueMetric = 1.04F;
 
             output.AppendLine($"Fair Value Metric = {fairValueMetric}");
 
@@ -112,7 +112,7 @@ namespace StockApi
             else if (stockSummary.Dividend > .5)
                 dividendMetric = 1.02F;
             else
-                dividendMetric = .98F;
+                dividendMetric = .99F;
 
             output.AppendLine($"Dividend Metric = {dividendMetric}");
 
@@ -191,6 +191,7 @@ namespace StockApi
             {
                 buyQuantity = buyQuantity * 1.2F;
                 sellQuantity = sellQuantity / 1.2F;
+                output.AppendLine($"Great dividend. Buy more or sell less. {buyQuantity} {sellQuantity}");
             }
             else if (stockSummary.Dividend > 4)
             {
@@ -201,6 +202,20 @@ namespace StockApi
             {
                 buyQuantity = buyQuantity * 1.05F;
                 sellQuantity = sellQuantity / 1.05F;
+            }
+
+            // Year price trend. Lower and Raise based on that.
+            if (stockHistory.YearTrend == StockHistory.TrendEnum.Up)
+            {
+                buyQuantity = buyQuantity * 1.05F;
+                sellQuantity = sellQuantity / 1.05F;
+                output.AppendLine($"Year up trend applied. {buyQuantity} {sellQuantity}");
+            }
+            if (stockHistory.YearTrend == StockHistory.TrendEnum.Down)
+            {
+                buyQuantity = buyQuantity * .95F;
+                sellQuantity = sellQuantity / .95F;
+                output.AppendLine($"Year down trend applied. {buyQuantity} {sellQuantity}");
             }
 
             BuyQuantity = Convert.ToInt32(buyQuantity);
