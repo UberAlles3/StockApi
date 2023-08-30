@@ -232,7 +232,7 @@ namespace StockApi
             // 
             this.label33.BackColor = System.Drawing.Color.Transparent;
             this.label33.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label33.Location = new System.Drawing.Point(190, 92);
+            this.label33.Location = new System.Drawing.Point(198, 92);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(98, 22);
             this.label33.TabIndex = 33;
@@ -243,7 +243,7 @@ namespace StockApi
             this.lblDividend.BackColor = System.Drawing.Color.Transparent;
             this.lblDividend.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblDividend.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblDividend.Location = new System.Drawing.Point(261, 92);
+            this.lblDividend.Location = new System.Drawing.Point(269, 92);
             this.lblDividend.Name = "lblDividend";
             this.lblDividend.Size = new System.Drawing.Size(65, 22);
             this.lblDividend.TabIndex = 34;
@@ -255,7 +255,7 @@ namespace StockApi
             this.label35.AutoSize = true;
             this.label35.BackColor = System.Drawing.Color.Transparent;
             this.label35.ForeColor = System.Drawing.Color.DarkGray;
-            this.label35.Location = new System.Drawing.Point(190, 101);
+            this.label35.Location = new System.Drawing.Point(198, 101);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(137, 15);
             this.label35.TabIndex = 35;
@@ -331,7 +331,7 @@ namespace StockApi
             // 
             this.label23.BackColor = System.Drawing.Color.Transparent;
             this.label23.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label23.Location = new System.Drawing.Point(191, 125);
+            this.label23.Location = new System.Drawing.Point(199, 125);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(57, 22);
             this.label23.TabIndex = 24;
@@ -342,7 +342,7 @@ namespace StockApi
             this.lblFairValue.BackColor = System.Drawing.Color.Transparent;
             this.lblFairValue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFairValue.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFairValue.Location = new System.Drawing.Point(248, 125);
+            this.lblFairValue.Location = new System.Drawing.Point(256, 125);
             this.lblFairValue.Name = "lblFairValue";
             this.lblFairValue.Size = new System.Drawing.Size(79, 22);
             this.lblFairValue.TabIndex = 25;
@@ -354,7 +354,7 @@ namespace StockApi
             this.label25.AutoSize = true;
             this.label25.BackColor = System.Drawing.Color.Transparent;
             this.label25.ForeColor = System.Drawing.Color.DarkGray;
-            this.label25.Location = new System.Drawing.Point(190, 134);
+            this.label25.Location = new System.Drawing.Point(198, 134);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(137, 15);
             this.label25.TabIndex = 26;
@@ -375,7 +375,7 @@ namespace StockApi
             // 
             this.picWeekTrend.BackColor = System.Drawing.Color.Transparent;
             this.picWeekTrend.Image = global::StockApi.Properties.Resources.downTrend1;
-            this.picWeekTrend.Location = new System.Drawing.Point(266, 428);
+            this.picWeekTrend.Location = new System.Drawing.Point(271, 428);
             this.picWeekTrend.Name = "picWeekTrend";
             this.picWeekTrend.Size = new System.Drawing.Size(33, 29);
             this.picWeekTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -386,7 +386,7 @@ namespace StockApi
             // 
             this.label22.BackColor = System.Drawing.Color.Transparent;
             this.label22.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label22.Location = new System.Drawing.Point(228, 436);
+            this.label22.Location = new System.Drawing.Point(233, 436);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(50, 22);
             this.label22.TabIndex = 22;
@@ -407,7 +407,7 @@ namespace StockApi
             // 
             this.label21.BackColor = System.Drawing.Color.Transparent;
             this.label21.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label21.Location = new System.Drawing.Point(124, 436);
+            this.label21.Location = new System.Drawing.Point(125, 436);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(50, 22);
             this.label21.TabIndex = 20;
@@ -429,7 +429,7 @@ namespace StockApi
             this.label19.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label19.Location = new System.Drawing.Point(51, 405);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(233, 25);
+            this.label19.Size = new System.Drawing.Size(248, 25);
             this.label19.TabIndex = 16;
             this.label19.Text = "Price Trend";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -441,9 +441,9 @@ namespace StockApi
             this.label11.ForeColor = System.Drawing.Color.DarkGray;
             this.label11.Location = new System.Drawing.Point(14, 34);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(312, 15);
+            this.label11.Size = new System.Drawing.Size(322, 15);
             this.label11.TabIndex = 15;
-            this.label11.Text = "_____________________________________________________________";
+            this.label11.Text = "_______________________________________________________________";
             // 
             // dataGridView1
             // 
@@ -476,14 +476,14 @@ namespace StockApi
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(312, 124);
+            this.dataGridView1.Size = new System.Drawing.Size(327, 124);
             this.dataGridView1.TabIndex = 14;
             // 
             // label9
             // 
             this.label9.BackColor = System.Drawing.Color.Transparent;
             this.label9.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label9.Location = new System.Drawing.Point(167, 237);
+            this.label9.Location = new System.Drawing.Point(169, 237);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(57, 22);
             this.label9.TabIndex = 11;
@@ -493,7 +493,7 @@ namespace StockApi
             // 
             this.label14.BackColor = System.Drawing.Color.Transparent;
             this.label14.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label14.Location = new System.Drawing.Point(256, 238);
+            this.label14.Location = new System.Drawing.Point(260, 238);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(67, 21);
             this.label14.TabIndex = 7;
@@ -527,9 +527,9 @@ namespace StockApi
             this.label12.ForeColor = System.Drawing.Color.DarkGray;
             this.label12.Location = new System.Drawing.Point(9, 246);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(312, 15);
+            this.label12.Size = new System.Drawing.Size(322, 15);
             this.label12.TabIndex = 13;
-            this.label12.Text = "_____________________________________________________________";
+            this.label12.Text = "_______________________________________________________________";
             // 
             // label8
             // 
@@ -568,7 +568,7 @@ namespace StockApi
             // 
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label4.Location = new System.Drawing.Point(190, 60);
+            this.label4.Location = new System.Drawing.Point(198, 60);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(67, 16);
             this.label4.TabIndex = 7;
@@ -579,7 +579,7 @@ namespace StockApi
             this.lblEPS.BackColor = System.Drawing.Color.Transparent;
             this.lblEPS.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblEPS.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblEPS.Location = new System.Drawing.Point(280, 60);
+            this.lblEPS.Location = new System.Drawing.Point(288, 60);
             this.lblEPS.Name = "lblEPS";
             this.lblEPS.Size = new System.Drawing.Size(46, 15);
             this.lblEPS.TabIndex = 8;
@@ -591,7 +591,7 @@ namespace StockApi
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.ForeColor = System.Drawing.Color.DarkGray;
-            this.label6.Location = new System.Drawing.Point(190, 69);
+            this.label6.Location = new System.Drawing.Point(198, 69);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(137, 15);
             this.label6.TabIndex = 9;
@@ -612,7 +612,7 @@ namespace StockApi
             // 
             this.picMonthTrend.BackColor = System.Drawing.Color.Transparent;
             this.picMonthTrend.Image = global::StockApi.Properties.Resources.RightArrow;
-            this.picMonthTrend.Location = new System.Drawing.Point(171, 429);
+            this.picMonthTrend.Location = new System.Drawing.Point(172, 429);
             this.picMonthTrend.Name = "picMonthTrend";
             this.picMonthTrend.Size = new System.Drawing.Size(33, 29);
             this.picMonthTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -626,9 +626,9 @@ namespace StockApi
             this.label34.ForeColor = System.Drawing.Color.DarkGray;
             this.label34.Location = new System.Drawing.Point(9, 219);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(312, 15);
+            this.label34.Size = new System.Drawing.Size(322, 15);
             this.label34.TabIndex = 36;
-            this.label34.Text = "_____________________________________________________________";
+            this.label34.Text = "_______________________________________________________________";
             // 
             // picSpinner
             // 
