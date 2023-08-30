@@ -364,7 +364,7 @@ namespace StockApi
             // 
             this.picYearTrend.BackColor = System.Drawing.Color.Transparent;
             this.picYearTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
-            this.picYearTrend.Location = new System.Drawing.Point(62, 429);
+            this.picYearTrend.Location = new System.Drawing.Point(62, 439);
             this.picYearTrend.Name = "picYearTrend";
             this.picYearTrend.Size = new System.Drawing.Size(32, 29);
             this.picYearTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -375,7 +375,7 @@ namespace StockApi
             // 
             this.picWeekTrend.BackColor = System.Drawing.Color.Transparent;
             this.picWeekTrend.Image = global::StockApi.Properties.Resources.downTrend1;
-            this.picWeekTrend.Location = new System.Drawing.Point(271, 428);
+            this.picWeekTrend.Location = new System.Drawing.Point(271, 438);
             this.picWeekTrend.Name = "picWeekTrend";
             this.picWeekTrend.Size = new System.Drawing.Size(33, 29);
             this.picWeekTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -386,7 +386,7 @@ namespace StockApi
             // 
             this.label22.BackColor = System.Drawing.Color.Transparent;
             this.label22.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label22.Location = new System.Drawing.Point(233, 436);
+            this.label22.Location = new System.Drawing.Point(233, 446);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(50, 22);
             this.label22.TabIndex = 22;
@@ -398,7 +398,7 @@ namespace StockApi
             this.lblCompanyNameAndTicker.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblCompanyNameAndTicker.Location = new System.Drawing.Point(9, 11);
             this.lblCompanyNameAndTicker.Name = "lblCompanyNameAndTicker";
-            this.lblCompanyNameAndTicker.Size = new System.Drawing.Size(318, 32);
+            this.lblCompanyNameAndTicker.Size = new System.Drawing.Size(325, 32);
             this.lblCompanyNameAndTicker.TabIndex = 10;
             this.lblCompanyNameAndTicker.Text = "lblCompanyNameAndTicker";
             this.lblCompanyNameAndTicker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -407,7 +407,7 @@ namespace StockApi
             // 
             this.label21.BackColor = System.Drawing.Color.Transparent;
             this.label21.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label21.Location = new System.Drawing.Point(125, 436);
+            this.label21.Location = new System.Drawing.Point(125, 446);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(50, 22);
             this.label21.TabIndex = 20;
@@ -417,7 +417,7 @@ namespace StockApi
             // 
             this.label20.BackColor = System.Drawing.Color.Transparent;
             this.label20.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label20.Location = new System.Drawing.Point(27, 436);
+            this.label20.Location = new System.Drawing.Point(27, 446);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(38, 22);
             this.label20.TabIndex = 17;
@@ -427,7 +427,7 @@ namespace StockApi
             // 
             this.label19.BackColor = System.Drawing.Color.Transparent;
             this.label19.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label19.Location = new System.Drawing.Point(51, 405);
+            this.label19.Location = new System.Drawing.Point(51, 415);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(248, 25);
             this.label19.TabIndex = 16;
@@ -612,7 +612,7 @@ namespace StockApi
             // 
             this.picMonthTrend.BackColor = System.Drawing.Color.Transparent;
             this.picMonthTrend.Image = global::StockApi.Properties.Resources.RightArrow;
-            this.picMonthTrend.Location = new System.Drawing.Point(172, 429);
+            this.picMonthTrend.Location = new System.Drawing.Point(172, 439);
             this.picMonthTrend.Name = "picMonthTrend";
             this.picMonthTrend.Size = new System.Drawing.Size(33, 29);
             this.picMonthTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
