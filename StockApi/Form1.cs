@@ -65,8 +65,8 @@ namespace StockApi
             // Extract the individual data values from the html
             await _stockSummary.GetSummaryData(txtStockTicker.Text);
 
-            // Get some price history
-            List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text);
+            // Get some price history. Todays price will be replaced with summary data's latest price
+            List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary);
 
             // bind data list to grid control
             var bindingList = new BindingList<StockHistory.HistoricData>(historicDisplayList);

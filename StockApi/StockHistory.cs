@@ -30,13 +30,14 @@ namespace StockApi
         public TrendEnum MonthTrend = TrendEnum.Sideways;
         public TrendEnum YearTrend = TrendEnum.Sideways;
 
-        public async Task<List<StockHistory.HistoricData>> GetPriceHistoryForTodayWeekMonthYear(string ticker)
+        public async Task<List<StockHistory.HistoricData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary)
         {
             /////// Get price history, today, week ago, month ago to determine short trend
             List<StockHistory.HistoricData> historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1), DateTime.Now);
 
             // Today will be the last in the list
             HistoricDataToday = historicDataList.Last();
+            HistoricDataToday.Price = summary.Price; // Use latest price for todays data.
 
             // Last Week
             DateTime findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
@@ -57,6 +58,7 @@ namespace StockApi
             historicDisplayList.Add(HistoricDataWeekAgo);
             historicDisplayList.Add(HistoricDataMonthAgo);
             historicDisplayList.Add(HistoricDataYearAgo);
+
 
             return historicDisplayList;
         }
@@ -150,16 +152,16 @@ namespace StockApi
             else
                 YearTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.06F) // year
+            if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.06F) // month
                 MonthTrend = TrendEnum.Up;
-            else if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .94F) // year
+            else if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .94F) // month
                 MonthTrend = TrendEnum.Down;
             else
                 MonthTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.04F) // year
+            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.04F) // week
                 WeekTrend = TrendEnum.Up;
-            else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .96F) // year
+            else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .96F) // week
                 WeekTrend = TrendEnum.Down;
             else
                 WeekTrend = TrendEnum.Sideways;
