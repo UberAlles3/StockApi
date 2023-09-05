@@ -28,6 +28,10 @@ namespace StockApi
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            ApplyStyles();
+
+            label37.BackColor = label38.BackColor = trackBar1.BackColor;
+
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             panel1.Visible = false;
 
@@ -160,6 +164,7 @@ namespace StockApi
             analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.SharesTradedPrice = Convert.ToSingle(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
+            analyzeInputs.EconomyHealth = trackBar1.Value;
 
             _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
@@ -169,5 +174,33 @@ namespace StockApi
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
             lblSellPrice.Text = _analyze.SellPrice.ToString();
         }
+        
+        private void ApplyStyles()
+        {
+            Color forecolor = Color.FromArgb(220, 235, 245);
+
+            foreach (Control control in this.Controls)
+            {
+                if (control.GetType() == typeof(System.Windows.Forms.Label))
+                {
+                    control.ForeColor = forecolor;
+                }
+            }
+            foreach (Control control in panel1.Controls)
+            {
+                if (control.GetType() == typeof(System.Windows.Forms.Label))
+                {
+                    control.ForeColor = forecolor;
+                }
+            }
+            foreach (Control control in panel2.Controls)
+            {
+                if (control.GetType() == typeof(System.Windows.Forms.Label))
+                {
+                    control.ForeColor = forecolor;
+                }
+            }
+        }
+
     }
 }

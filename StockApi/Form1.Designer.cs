@@ -80,6 +80,8 @@ namespace StockApi
             this.txtTickerList = new System.Windows.Forms.TextBox();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.label36 = new System.Windows.Forms.Label();
             this.txtAnalysisOutput = new System.Windows.Forms.TextBox();
             this.lblSellQuantity = new System.Windows.Forms.Label();
             this.lblBuyQuantity = new System.Windows.Forms.Label();
@@ -104,8 +106,8 @@ namespace StockApi
             this.picUpTrend = new System.Windows.Forms.PictureBox();
             this.picDownTrend = new System.Windows.Forms.PictureBox();
             this.picSidewaysTrend = new System.Windows.Forms.PictureBox();
-            this.label36 = new System.Windows.Forms.Label();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -113,11 +115,11 @@ namespace StockApi
             ((System.ComponentModel.ISupportInitialize)(this.picMonthTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSpinner)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picUpTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDownTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSidewaysTrend)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGetOne
@@ -689,6 +691,8 @@ namespace StockApi
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.Controls.Add(this.label38);
+            this.panel2.Controls.Add(this.label37);
             this.panel2.Controls.Add(this.trackBar1);
             this.panel2.Controls.Add(this.label36);
             this.panel2.Controls.Add(this.txtAnalysisOutput);
@@ -712,6 +716,27 @@ namespace StockApi
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(331, 525);
             this.panel2.TabIndex = 14;
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.AutoSize = false;
+            this.trackBar1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(24)))), ((int)(((byte)(36)))));
+            this.trackBar1.Location = new System.Drawing.Point(86, 147);
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(225, 44);
+            this.trackBar1.TabIndex = 35;
+            this.trackBar1.Value = 5;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.BackColor = System.Drawing.Color.Transparent;
+            this.label36.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label36.Location = new System.Drawing.Point(20, 160);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(60, 15);
+            this.label36.TabIndex = 34;
+            this.label36.Text = "Economy:";
             // 
             // txtAnalysisOutput
             // 
@@ -972,25 +997,27 @@ namespace StockApi
             this.picSidewaysTrend.TabIndex = 20;
             this.picSidewaysTrend.TabStop = false;
             // 
-            // label36
+            // label37
             // 
-            this.label36.AutoSize = true;
-            this.label36.BackColor = System.Drawing.Color.Transparent;
-            this.label36.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label36.Location = new System.Drawing.Point(20, 160);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(60, 15);
-            this.label36.TabIndex = 34;
-            this.label36.Text = "Economy:";
+            this.label37.AutoSize = true;
+            this.label37.BackColor = System.Drawing.Color.Transparent;
+            this.label37.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label37.Location = new System.Drawing.Point(94, 175);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(27, 15);
+            this.label37.TabIndex = 36;
+            this.label37.Text = "Bad";
             // 
-            // trackBar1
+            // label38
             // 
-            this.trackBar1.AutoSize = false;
-            this.trackBar1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(24)))), ((int)(((byte)(36)))));
-            this.trackBar1.Location = new System.Drawing.Point(86, 154);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(225, 30);
-            this.trackBar1.TabIndex = 35;
+            this.label38.AutoSize = true;
+            this.label38.BackColor = System.Drawing.Color.Transparent;
+            this.label38.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label38.Location = new System.Drawing.Point(270, 175);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(36, 15);
+            this.label38.TabIndex = 37;
+            this.label38.Text = "Good";
             // 
             // Form1
             // 
@@ -998,7 +1025,7 @@ namespace StockApi
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImage = global::StockApi.Properties.Resources.background1;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1052, 568);
             this.Controls.Add(this.picSidewaysTrend);
@@ -1018,7 +1045,7 @@ namespace StockApi
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Stock Data";
+            this.Text = "Stock Analyzer";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -1029,12 +1056,12 @@ namespace StockApi
             ((System.ComponentModel.ISupportInitialize)(this.picSpinner)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picUpTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDownTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSidewaysTrend)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1116,6 +1143,8 @@ namespace StockApi
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label label37;
     }
 }
 

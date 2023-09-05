@@ -116,7 +116,11 @@ namespace StockApi
 
             output.AppendLine($"Dividend Metric = {dividendMetric}");
 
-            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric * estimatedReturnMetric;
+            // Economy
+            float ecoMetric =  1 + ((analyzeInputs.EconomyHealth - 5) / 100);
+            output.AppendLine($"Economy Metric = {ecoMetric}");
+
+            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric * estimatedReturnMetric * ecoMetric;
 
             output.AppendLine($"Total Metric = {totalMetric}");
 
@@ -234,6 +238,7 @@ namespace StockApi
             public int QuantityTraded;
             public float SharesTradedPrice;
             public float MovementTargetPercent;
+            public float EconomyHealth;
         }
     }
 }
