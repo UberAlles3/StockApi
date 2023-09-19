@@ -126,7 +126,17 @@ namespace StockApi
 
             ///////////// Setting Price Movement Multipliers
             // Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
-            double volitilityFactor = Math.Log((Math.Log10(stockSummary.Volatility) + 1)) + 1; 
+            double volitilityFactor = 1; // Math.Log((Math.Log10(stockSummary.Volatility) + 1)) + 1; 
+            if (stockSummary.Volatility < .5)
+                volitilityFactor = .86;
+            else if (stockSummary.Volatility < .8)
+                volitilityFactor = .93;
+            else if (stockSummary.Volatility > 2)
+                volitilityFactor = 1.14;
+            else if (stockSummary.Volatility > 1.2)
+                volitilityFactor = 1.07;
+            output.AppendLine($"Volitility Factor = { volitilityFactor.ToString("##.##")}");
+
             analyzeInputs.MovementTargetPercent *= (float)volitilityFactor; // Applying volatility
             output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}");
             
