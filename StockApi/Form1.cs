@@ -41,8 +41,8 @@ namespace StockApi
             picSpinner.Visible = false;
             //picSpinner.Left = 220;
             //picSpinner.Top = 8; 
-            picSpinner.Left = (this.Width / 2) + 50;
-            picSpinner.Top = this.Height / 2 - 50; 
+            picSpinner.Left = (this.Width / 2) + 56;
+            picSpinner.Top = this.Height / 2 - 56; 
 
             picUpTrend.Visible = false;
             picSidewaysTrend.Visible = false;

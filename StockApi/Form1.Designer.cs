@@ -638,10 +638,10 @@ namespace StockApi
             // picSpinner
             // 
             this.picSpinner.BackColor = System.Drawing.Color.Transparent;
-            this.picSpinner.Image = global::StockApi.Properties.Resources.Spin2;
+            this.picSpinner.Image = ((System.Drawing.Image)(resources.GetObject("picSpinner.Image")));
             this.picSpinner.Location = new System.Drawing.Point(33, 371);
             this.picSpinner.Name = "picSpinner";
-            this.picSpinner.Size = new System.Drawing.Size(256, 176);
+            this.picSpinner.Size = new System.Drawing.Size(90, 86);
             this.picSpinner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picSpinner.TabIndex = 13;
             this.picSpinner.TabStop = false;
