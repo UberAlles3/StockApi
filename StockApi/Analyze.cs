@@ -138,7 +138,7 @@ namespace StockApi
             output.AppendLine($"Volitility Factor = { volitilityFactor.ToString("##.##")}");
 
             analyzeInputs.MovementTargetPercent *= (float)volitilityFactor; // Applying volatility
-            output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}");
+            output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}%");
             
             // if stock is like XOM where your not sell a large percentage of shares owned
             // Make the lower and upper movement less
@@ -161,8 +161,8 @@ namespace StockApi
             buyPrice = buyPrice * totalMetric;
             sellPrice = sellPrice * totalMetric;
 
-            output.AppendLine($"Buy price  applying total metric = {buyPrice}");
-            output.AppendLine($"Sell price applying total metric = {sellPrice}");
+            output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
 
              ///////// Limit price so it's with a range
             float limitPrice = (stockSummary.Price * lowerMovementMultiplier) * .8F; // lower buy limit price to low
@@ -205,7 +205,7 @@ namespace StockApi
             {
                 buyQuantity = buyQuantity * 1.2F;
                 sellQuantity = sellQuantity / 1.2F;
-                output.AppendLine($"Great dividend. Buy more or sell less. {buyQuantity} {sellQuantity}");
+                output.AppendLine($"Great dividend. Buy more or sell less. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
             }
             else if (stockSummary.Dividend > 4)
             {
@@ -223,13 +223,13 @@ namespace StockApi
             {
                 buyQuantity = buyQuantity * 1.05F;
                 sellQuantity = sellQuantity / 1.05F;
-                output.AppendLine($"Year up trend applied. {buyQuantity} {sellQuantity}");
+                output.AppendLine($"Year up trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
             }
             if (stockHistory.YearTrend == StockHistory.TrendEnum.Down)
             {
                 buyQuantity = buyQuantity * .95F;
                 sellQuantity = sellQuantity / .95F;
-                output.AppendLine($"Year down trend applied. {buyQuantity} {sellQuantity}");
+                output.AppendLine($"Year down trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
             }
 
             BuyQuantity = Convert.ToInt32(buyQuantity);
@@ -237,6 +237,14 @@ namespace StockApi
 
             if (SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.4F)) // Don't sell close to more than half your shares
                 SellQuantity = Convert.ToInt16((analyzeInputs.SharesOwned / 2.4F) + .5F);
+
+            // Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
+            float profit = (SellPrice - stockSummary.Price) * (float)SellQuantity;
+            if (profit < 30F)
+            {
+                SellPrice = (30F / SellQuantity) + stockSummary.Price;
+                output.AppendLine($"Minimum profit set to $30. Sell Price: {SellPrice.ToString("##.##")}");
+            }
 
             AnalysisMetricsOutputText = output.ToString();
         }
