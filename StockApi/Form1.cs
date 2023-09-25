@@ -131,32 +131,45 @@ namespace StockApi
 
         private void PostSummaryWebCall()
         {
-            btnGetOne.Enabled = true;
-            lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
-            lblVolatility.Text = _stockSummary.VolatilityString;
-            lblEPS.Text = _stockSummary.EarningsPerShareString;
-            lblEPS.ForeColor = _stockSummary.EPSColor;
-            lblFairValue.Text = _stockSummary.FairValue.ToString();
-            lblFairValue.ForeColor = _stockSummary.FairValueColor;
-            lblPrice.Text = _stockSummary.Price.ToString();
-            lblDividend.Text = _stockSummary.Dividend.ToString() + "%";
-            lblDividend.ForeColor = _stockSummary.DividendColor;
-            lblEstimatedReturn.Text = _stockSummary.EstimatedReturn.ToString() + "%";
-            lblEstimatedReturn.ForeColor = _stockSummary.EstReturnColor;
-            lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString;
-            lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
-            panel1.Visible = true;
-            panel2.Visible = true;
-            picSpinner.Visible = false;
-            Cursor.Current = Cursors.Default;
+            try
+            {
+                btnGetOne.Enabled = true;
+                lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
+                lblVolatility.Text = _stockSummary.VolatilityString;
+                lblEPS.Text = _stockSummary.EarningsPerShareString;
+                lblEPS.ForeColor = _stockSummary.EPSColor;
+                lblFairValue.Text = _stockSummary.FairValue.ToString();
+                lblFairValue.ForeColor = _stockSummary.FairValueColor;
+                lblPrice.Text = _stockSummary.Price.ToString();
+                lblDividend.Text = _stockSummary.Dividend.ToString() + "%";
+                lblDividend.ForeColor = _stockSummary.DividendColor;
+                lblEstimatedReturn.Text = _stockSummary.EstimatedReturn.ToString() + "%";
+                lblEstimatedReturn.ForeColor = _stockSummary.EstReturnColor;
+                lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString;
+                lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
+                panel1.Visible = true;
+                panel2.Visible = true;
+                picSpinner.Visible = false;
+                Cursor.Current = Cursors.Default;
 
-            // Set some analyze form fields for later use
-            PersonalStock personalStock = new PersonalStock();
-            PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
-            txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
-            txtSharesTradePrice.Text = _stockSummary.Price.ToString();
+                // Set some analyze form fields for later use
+                PersonalStock personalStock = new PersonalStock();
+                PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
+                if(personalStockData != null)
+                {
+                    txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+                }
+                else
+                {
+                    txtSharesOwned.Text = "1";
+                }
+                txtSharesTradePrice.Text = _stockSummary.Price.ToString();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error: {e.Message} {e.InnerException} {e.StackTrace}");
+            }
         }
-
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
