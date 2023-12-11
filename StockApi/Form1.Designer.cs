@@ -878,7 +878,7 @@ namespace StockApi
             this.txtMovementTargetPercent.Name = "txtMovementTargetPercent";
             this.txtMovementTargetPercent.Size = new System.Drawing.Size(69, 23);
             this.txtMovementTargetPercent.TabIndex = 21;
-            this.txtMovementTargetPercent.Text = "20";
+            this.txtMovementTargetPercent.Text = "22";
             this.txtMovementTargetPercent.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label26
