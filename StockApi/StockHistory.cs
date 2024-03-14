@@ -45,7 +45,7 @@ namespace StockApi
 
             // Last Month (really 31 days ago)
             findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-31).Date);
-            HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
+            HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(2));
 
             /////// Get price history for a year ago to determine long trend
             historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-1), DateTime.Now.AddYears(-1).AddDays(3));
