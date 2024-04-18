@@ -108,6 +108,7 @@ namespace StockApi
             this.picUpTrend = new System.Windows.Forms.PictureBox();
             this.picDownTrend = new System.Windows.Forms.PictureBox();
             this.picSidewaysTrend = new System.Windows.Forms.PictureBox();
+            this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -120,6 +121,7 @@ namespace StockApi
             ((System.ComponentModel.ISupportInitialize)(this.picUpTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDownTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSidewaysTrend)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGetOne
@@ -1019,6 +1021,17 @@ namespace StockApi
             this.picSidewaysTrend.TabIndex = 20;
             this.picSidewaysTrend.TabStop = false;
             // 
+            // webView21
+            // 
+            this.webView21.AllowExternalDrop = true;
+            this.webView21.CreationProperties = null;
+            this.webView21.DefaultBackgroundColor = System.Drawing.Color.White;
+            this.webView21.Location = new System.Drawing.Point(1048, 12);
+            this.webView21.Name = "webView21";
+            this.webView21.Size = new System.Drawing.Size(419, 466);
+            this.webView21.TabIndex = 21;
+            this.webView21.ZoomFactor = 1D;
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -1027,7 +1040,8 @@ namespace StockApi
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.BackgroundImage = global::StockApi.Properties.Resources.background1;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1052, 568);
+            this.ClientSize = new System.Drawing.Size(1479, 568);
+            this.Controls.Add(this.webView21);
             this.Controls.Add(this.picSidewaysTrend);
             this.Controls.Add(this.picDownTrend);
             this.Controls.Add(this.picUpTrend);
@@ -1062,6 +1076,7 @@ namespace StockApi
             ((System.ComponentModel.ISupportInitialize)(this.picUpTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picDownTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSidewaysTrend)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1145,6 +1160,7 @@ namespace StockApi
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label38;
         private System.Windows.Forms.Label label37;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
     }
 }
 

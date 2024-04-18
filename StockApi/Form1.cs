@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using CommonClasses;
+using System.Configuration;
 
 namespace StockApi
 {
@@ -53,13 +54,26 @@ namespace StockApi
             lblCompanyNameAndTicker.Text = txtSharesTraded.Text = "";
 
             // temporary for testing
-            txtStockTicker.Text = "uec";
+            txtStockTicker.Text = "INTC";
             txtSharesTraded.Text = "80";
+
             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
+            //WebView wb = new WebView();
+            //wb.Show();
+            //wb.Navigate("https://finance.yahoo.com/quote/UEC?p=UEC");
+            //while(wb.NavigationComplete == false)
+            //{
+            //    Application.DoEvents();
+            //}
+
+            //string html = wb.Html;
+
+            //return;
+
             if (string.IsNullOrEmpty(txtStockTicker.Text))
             {
                 MessageBox.Show("Enter a valid stock ticker.");
@@ -216,6 +230,5 @@ namespace StockApi
                 }
             }
         }
-
     }
 }

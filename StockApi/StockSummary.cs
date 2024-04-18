@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace StockApi
@@ -36,6 +38,8 @@ namespace StockApi
         private float   price = 0;
         private string  volatilityString = NotApplicable;
         private float   volatility = 0;
+
+        private List<string> SearchTerms = new List<string>();
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
@@ -196,14 +200,23 @@ namespace StockApi
         public async Task<bool> GetSummaryData(string ticker)
         {
             Ticker = ticker;
+            List<SearchTerm> searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
 
             string html = await GetHtmlForTicker(Ticker);
 
+            //html = Regex.Replace(html, @"[^\u0020-\u007e]", "");
+
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
-            
+
+            // Price
+            string searchTerm = searchTerms.Find(x => x.Name == "Price").Term;
+            string price = GetValueFromHtmlBySearchTextNew(html, searchTerm, YahooFinance.NotApplicable, 2);
+            Price = Convert.ToSingle(price);
+
             // Dividend
-            string dividend = GetValueFromHtml(html, "DIVIDEND_AND_YIELD-value", YahooFinance.NotApplicable);
+            searchTerm = searchTerms.Find(x => x.Name == "Dividend").Term;
+            string dividend = GetValueFromHtmlBySearchTextNew(html, searchTerm, YahooFinance.NotApplicable, 2);
             if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
             {
                 dividend = dividend.Substring(dividend.IndexOf("(") + 1);
@@ -231,7 +244,6 @@ namespace StockApi
             estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
             EstimatedReturnString = estReturn;
 
-            Price = Convert.ToSingle(GetDataByClassName(html, "Fw(b) Fz(36px) Mb(-4px) D(ib)", "0.00"));
             OneYearTargetPriceString = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
 
             VolatilityString = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
@@ -313,5 +325,25 @@ namespace StockApi
             string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
             return middle;
         }
+        private static string GetValueFromHtmlBySearchTextNew(string html, string searchText, string defaultValue, int tagPosition)
+        {
+            int loc1 = 0;
+            int loc2 = 0;
+
+            loc1 = html.IndexOf(searchText);
+            if (loc1 == -1)
+            {
+                return defaultValue;
+            }
+
+            string htmlSnippet = html.Substring(loc1 + 1, 200);
+            string[] parts = htmlSnippet.Split(">");
+
+            loc2 = parts[tagPosition].IndexOf("<");
+
+            string middle = parts[tagPosition].Substring(0, loc2);
+            return middle;
+        }
+
     }
 }

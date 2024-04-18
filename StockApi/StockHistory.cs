@@ -59,7 +59,6 @@ namespace StockApi
             historicDisplayList.Add(HistoricDataMonthAgo);
             historicDisplayList.Add(HistoricDataYearAgo);
 
-
             return historicDisplayList;
         }
 
@@ -99,12 +98,20 @@ namespace StockApi
                 if (index < 0)
                     continue;
 
-                string htmlForDate = html.Substring(index, 480);
-                htmlForDate = htmlForDate.Substring(htmlForDate.IndexOf("<span>"));
+                string htmlForDate = html.Substring(index, 600);
+                htmlForDate = htmlForDate.Substring(htmlForDate.IndexOf("<span"));
 
                 var items = new List<string>();
-                foreach (Match match in Regex.Matches(htmlForDate, "span>(.*?)</span"))
-                    items.Add(match.Groups[1].Value);
+                string[] split = htmlForDate.Split(">");
+                string num;
+                foreach(string s in split)
+                {
+                    if("0123456789.".IndexOf(s.Substring(0,1)) > 0)
+                    {
+                        num = s.Substring(0, s.IndexOf("<"));
+                        items.Add(num);
+                    }
+                }
 
                 if (items.Count < 5)
                     continue;
@@ -137,7 +144,11 @@ namespace StockApi
 
             string html = await YahooFinance.GetHtml(formattedUrl);
 
-            int historyLocation = html.IndexOf("data-test=\"historical-prices\"");
+            int historyLocation = html.IndexOf("data-testid=\"history-table");
+            historyLocation = html.IndexOf("<table");
+
+
+
             html = html.Substring(historyLocation);
 
             return html;
