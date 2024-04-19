@@ -31,7 +31,7 @@ namespace StockApi
             // one year target
             // EPS
             // Fair Value
-            // Estimated Return %
+            // Profit Margin %
             // Volatility
 
             // Price Trend
@@ -88,18 +88,18 @@ namespace StockApi
 
             output.AppendLine($"Fair Value Metric = {fairValueMetric}");
 
-            // Estimated Return Metric
-            float estimatedReturnMetric = 1F;
-            if (stockSummary.EstimatedReturn < -6)
-                estimatedReturnMetric = .96F;
-            else if (stockSummary.EstimatedReturn < -2)
-                estimatedReturnMetric = .98F;
-            else if (stockSummary.EstimatedReturn > 6)
-                estimatedReturnMetric = 1.04F;
-            else if (stockSummary.EstimatedReturn > 2)
-                estimatedReturnMetric = 1.02F;
+            // Profit Margin Metric
+            float ProfitMarginMetric = 1F;
+            if (stockSummary.ProfitMargin < -6)
+                ProfitMarginMetric = .96F;
+            else if (stockSummary.ProfitMargin < -2)
+                ProfitMarginMetric = .98F;
+            else if (stockSummary.ProfitMargin > 6)
+                ProfitMarginMetric = 1.04F;
+            else if (stockSummary.ProfitMargin > 2)
+                ProfitMarginMetric = 1.02F;
 
-            output.AppendLine($"Estimated Return Metric = {estimatedReturnMetric}");
+            output.AppendLine($"Profit Margin Metric = {ProfitMarginMetric}");
 
             // Dividend Metric
             float dividendMetric = 1F;
@@ -120,7 +120,7 @@ namespace StockApi
             float ecoMetric =  1 + ((analyzeInputs.EconomyHealth - 5) / 100);
             output.AppendLine($"Economy Metric = {ecoMetric}");
 
-            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric * estimatedReturnMetric * ecoMetric;
+            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric * ProfitMarginMetric * ecoMetric;
 
             output.AppendLine($"Total Metric = {totalMetric}");
 

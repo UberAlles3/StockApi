@@ -129,7 +129,7 @@ namespace StockApi
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.FairValue}, {_stockSummary.EstimatedReturn}{Environment.NewLine}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.FairValue}, {_stockSummary.ProfitMargin}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
@@ -157,8 +157,8 @@ namespace StockApi
                 lblPrice.Text = _stockSummary.Price.ToString();
                 lblDividend.Text = _stockSummary.Dividend.ToString() + "%";
                 lblDividend.ForeColor = _stockSummary.DividendColor;
-                lblEstimatedReturn.Text = _stockSummary.EstimatedReturn.ToString() + "%";
-                lblEstimatedReturn.ForeColor = _stockSummary.EstReturnColor;
+                lblProfitMargin.Text = _stockSummary.ProfitMargin.ToString() + "%";
+                lblProfitMargin.ForeColor = _stockSummary.ProfitMarginColor;
                 lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString;
                 lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
                 panel1.Visible = true;

@@ -46,7 +46,7 @@ namespace StockApi
             this.lblOneYearTarget = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
-            this.lblEstimatedReturn = new System.Windows.Forms.Label();
+            this.lblProfitMargin = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.lblFairValue = new System.Windows.Forms.Label();
@@ -199,7 +199,7 @@ namespace StockApi
             this.panel1.Controls.Add(this.lblOneYearTarget);
             this.panel1.Controls.Add(this.label55);
             this.panel1.Controls.Add(this.label24);
-            this.panel1.Controls.Add(this.lblEstimatedReturn);
+            this.panel1.Controls.Add(this.lblProfitMargin);
             this.panel1.Controls.Add(this.label27);
             this.panel1.Controls.Add(this.label23);
             this.panel1.Controls.Add(this.lblFairValue);
@@ -309,19 +309,19 @@ namespace StockApi
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(98, 22);
             this.label24.TabIndex = 27;
-            this.label24.Text = "Estimated Return";
+            this.label24.Text = "Profit Margin";
             // 
-            // lblEstimatedReturn
+            // lblProfitMargin
             // 
-            this.lblEstimatedReturn.BackColor = System.Drawing.Color.Transparent;
-            this.lblEstimatedReturn.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblEstimatedReturn.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblEstimatedReturn.Location = new System.Drawing.Point(105, 160);
-            this.lblEstimatedReturn.Name = "lblEstimatedReturn";
-            this.lblEstimatedReturn.Size = new System.Drawing.Size(46, 22);
-            this.lblEstimatedReturn.TabIndex = 28;
-            this.lblEstimatedReturn.Text = "0.00";
-            this.lblEstimatedReturn.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblProfitMargin.BackColor = System.Drawing.Color.Transparent;
+            this.lblProfitMargin.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblProfitMargin.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblProfitMargin.Location = new System.Drawing.Point(105, 160);
+            this.lblProfitMargin.Name = "lblProfitMargin";
+            this.lblProfitMargin.Size = new System.Drawing.Size(46, 22);
+            this.lblProfitMargin.TabIndex = 28;
+            this.lblProfitMargin.Text = "0.00";
+            this.lblProfitMargin.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label27
             // 
@@ -1040,7 +1040,7 @@ namespace StockApi
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.BackgroundImage = global::StockApi.Properties.Resources.background1;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1479, 568);
+            this.ClientSize = new System.Drawing.Size(1041, 568);
             this.Controls.Add(this.webView21);
             this.Controls.Add(this.picSidewaysTrend);
             this.Controls.Add(this.picDownTrend);
@@ -1133,7 +1133,7 @@ namespace StockApi
         private System.Windows.Forms.Label lblFairValue;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label lblEstimatedReturn;
+        private System.Windows.Forms.Label lblProfitMargin;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.Label lblOneYearTarget;

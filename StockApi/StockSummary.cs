@@ -22,7 +22,7 @@ namespace StockApi
         public Color DividendColor = Color.LightSteelBlue;
         public Color EPSColor = Color.LightSteelBlue;
         public Color FairValueColor = Color.LightSteelBlue;
-        public Color EstReturnColor = Color.LightSteelBlue;
+        public Color ProfitMarginColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
         private string  companyName = "";
@@ -30,8 +30,8 @@ namespace StockApi
         private float   dividend = 0;
         private string  earningsPerShareString = NotApplicable;
         private float   earningsPerShare = 0;
-        private string  estimatedReturnString = NotApplicable;
-        private float   estimatedReturn = 0;
+        private string  profitMarginString = NotApplicable;
+        private float   profitMargin = 0;
         private FairValueEnum fairValue = FairValueEnum.FairValue;
         private string  oneYearTargetPriceString = NotApplicable;
         private float   oneYearTargetPrice = 0;
@@ -95,31 +95,31 @@ namespace StockApi
             }
         }
 
-        public string EstimatedReturnString
+        public string ProfitMarginString
         {
-            get => earningsPerShareString;
+            get => profitMarginString;
             set
             {
-                estimatedReturnString = value;
-                if (estimatedReturnString == YahooFinance.NotApplicable || estimatedReturnString == "")
-                    EstimatedReturn = 0;
+                profitMarginString = value;
+                if (ProfitMarginString == YahooFinance.NotApplicable || ProfitMarginString == "")
+                    ProfitMargin = 0;
                 else
-                    EstimatedReturn = Convert.ToSingle(estimatedReturnString);
+                    ProfitMargin = Convert.ToSingle(ProfitMarginString);
             }
         }
 
-        public float EstimatedReturn
+        public float ProfitMargin
         {
-            get => estimatedReturn;
+            get => profitMargin;
             set
             {
-                estimatedReturn = value;
-                if (estimatedReturn < -2)
-                    EstReturnColor = Color.Red;
-                else if (estimatedReturn > 2)
-                    EstReturnColor = Color.Lime;
+                profitMargin = value;
+                if (profitMargin < -2)
+                    ProfitMarginColor = Color.Red;
+                else if (ProfitMargin > 2)
+                    ProfitMarginColor = Color.Lime;
                 else
-                    EstReturnColor = Color.LightSteelBlue;
+                    ProfitMarginColor = Color.LightSteelBlue;
             }
         }
 
@@ -211,12 +211,21 @@ namespace StockApi
 
             // Price
             string searchTerm = searchTerms.Find(x => x.Name == "Price").Term;
-            string price = GetValueFromHtmlBySearchTextNew(html, searchTerm, YahooFinance.NotApplicable, 2);
+            string price = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             Price = Convert.ToSingle(price);
+
+            // EPS
+            searchTerm = searchTerms.Find(x => x.Name == "EPS").Term;
+            EarningsPerShareString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
+            //EarningsPerShareString = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
+
+            // Volatility
+            searchTerm = searchTerms.Find(x => x.Name == "Volatility").Term;
+            VolatilityString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
             // Dividend
             searchTerm = searchTerms.Find(x => x.Name == "Dividend").Term;
-            string dividend = GetValueFromHtmlBySearchTextNew(html, searchTerm, YahooFinance.NotApplicable, 2);
+            string dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
             {
                 dividend = dividend.Substring(dividend.IndexOf("(") + 1);
@@ -226,7 +235,9 @@ namespace StockApi
                 dividend = YahooFinance.NotApplicable;
             DividendString = dividend;
 
-            EarningsPerShareString = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
+            // One year target
+            searchTerm = searchTerms.Find(x => x.Name == "One Year Target").Term;
+            OneYearTargetPriceString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
 
             // Fair Value
             FairValue = FairValueEnum.FairValue;
@@ -239,14 +250,13 @@ namespace StockApi
                 FairValue = FairValueEnum.Undervalued;
             }
 
-            //Estimated Return %
-            string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<", "0%");
-            estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
-            EstimatedReturnString = estReturn;
-
-            OneYearTargetPriceString = GetFloatValueFromHtml(html, "ONE_YEAR_TARGET_PRICE-value", Price.ToString());
-
-            VolatilityString = GetValueFromHtml(html, "BETA_5Y-value", YahooFinance.NotApplicable);
+            //Profit Margin %
+            searchTerm = searchTerms.Find(x => x.Name == "Profit Margin").Term;
+            string profitMarginString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            ProfitMarginString = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
+            //string estReturn = GetValueFromHtmlBySearchText(html, "% Est. Return<", "0%");
+            //estReturn = estReturn.Substring(0, estReturn.IndexOf("%"));
+            //ProfitMarginString = estReturn;
 
             return true;
         }
@@ -325,7 +335,7 @@ namespace StockApi
             string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
             return middle;
         }
-        private static string GetValueFromHtmlBySearchTextNew(string html, string searchText, string defaultValue, int tagPosition)
+        private static string GetValueFromHtmlBySearchTerm(string html, string searchText, string defaultValue, int tagPosition)
         {
             int loc1 = 0;
             int loc2 = 0;
