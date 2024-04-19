@@ -30,11 +30,13 @@ namespace StockApi
 
         protected static async Task<string> GetHtml(string url)
         {
-            //HttpClient cl = new HttpClient();
-            //HttpResponseMessage hrm = await cl.GetAsync(url); 
-            //string html = await hrm.Content.ReadAsStringAsync();
-            //return html;
             string html;
+
+            HttpClient cl = new HttpClient();
+            cl.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36");
+            HttpResponseMessage hrm = await cl.GetAsync(url); 
+            html = await hrm.Content.ReadAsStringAsync();
+            return html;
 
             lock (syncObj)
             {
