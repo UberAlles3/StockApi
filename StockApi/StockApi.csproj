@@ -10,6 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="ExcelInterop.cs" />
+    <Compile Remove="WebView.cs" />
+    <Compile Remove="WebView.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="WebView.cs" />
+    <None Include="WebView.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

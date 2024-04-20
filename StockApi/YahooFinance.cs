@@ -38,20 +38,20 @@ namespace StockApi
             html = await hrm.Content.ReadAsStringAsync();
             return html;
 
-            lock (syncObj)
-            {
-                WebView wb = new WebView();
-                //wb.Show();
-                wb.Navigate(url);
-                while (wb.NavigationComplete == false)
-                {
-                    Application.DoEvents();
-                }
-                html = wb.Html;
-                wb.Close();
-                wb.Dispose();
-            }
-            return html;
+            //lock (syncObj)
+            //{
+            //    WebView wb = new WebView();
+            //    //wb.Show();
+            //    wb.Navigate(url);
+            //    while (wb.NavigationComplete == false)
+            //    {
+            //        Application.DoEvents();
+            //    }
+            //    html = wb.Html;
+            //    wb.Close();
+            //    wb.Dispose();
+            //}
+            //return html;
         }
 
     }
