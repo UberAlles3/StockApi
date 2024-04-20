@@ -49,7 +49,7 @@ namespace StockApi
             this.lblProfitMargin = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
-            this.lblFairValue = new System.Windows.Forms.Label();
+            this.lblPriceBook = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.picYearTrend = new System.Windows.Forms.PictureBox();
             this.picWeekTrend = new System.Windows.Forms.PictureBox();
@@ -202,7 +202,7 @@ namespace StockApi
             this.panel1.Controls.Add(this.lblProfitMargin);
             this.panel1.Controls.Add(this.label27);
             this.panel1.Controls.Add(this.label23);
-            this.panel1.Controls.Add(this.lblFairValue);
+            this.panel1.Controls.Add(this.lblPriceBook);
             this.panel1.Controls.Add(this.label25);
             this.panel1.Controls.Add(this.picYearTrend);
             this.panel1.Controls.Add(this.picWeekTrend);
@@ -340,21 +340,21 @@ namespace StockApi
             this.label23.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.label23.Location = new System.Drawing.Point(199, 125);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(57, 22);
+            this.label23.Size = new System.Drawing.Size(66, 22);
             this.label23.TabIndex = 24;
-            this.label23.Text = "Fair Value";
+            this.label23.Text = "Price/Book";
             // 
-            // lblFairValue
+            // lblPriceBook
             // 
-            this.lblFairValue.BackColor = System.Drawing.Color.Transparent;
-            this.lblFairValue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblFairValue.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFairValue.Location = new System.Drawing.Point(256, 125);
-            this.lblFairValue.Name = "lblFairValue";
-            this.lblFairValue.Size = new System.Drawing.Size(79, 22);
-            this.lblFairValue.TabIndex = 25;
-            this.lblFairValue.Text = "0.00";
-            this.lblFairValue.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblPriceBook.BackColor = System.Drawing.Color.Transparent;
+            this.lblPriceBook.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblPriceBook.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblPriceBook.Location = new System.Drawing.Point(256, 125);
+            this.lblPriceBook.Name = "lblPriceBook";
+            this.lblPriceBook.Size = new System.Drawing.Size(79, 22);
+            this.lblPriceBook.TabIndex = 25;
+            this.lblPriceBook.Text = "0.00";
+            this.lblPriceBook.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label25
             // 
@@ -1130,7 +1130,7 @@ namespace StockApi
         private System.Windows.Forms.PictureBox picDownTrend;
         private System.Windows.Forms.PictureBox picWeekTrend;
         private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.Label lblFairValue;
+        private System.Windows.Forms.Label lblPriceBook;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label lblProfitMargin;

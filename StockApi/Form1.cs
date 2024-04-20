@@ -99,6 +99,7 @@ namespace StockApi
             dataGridView1.Columns[0].Visible = false;
             dataGridView1.Columns[1].HeaderText = "Date";
             dataGridView1.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[2].DefaultCellStyle.Format = "N2";
             dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
             dataGridView1.Refresh();
 
@@ -129,7 +130,7 @@ namespace StockApi
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.FairValue}, {_stockSummary.ProfitMargin}{Environment.NewLine}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
@@ -149,12 +150,12 @@ namespace StockApi
             {
                 btnGetOne.Enabled = true;
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
+                lblPrice.Text = _stockSummary.Price.ToString("####.##");
                 lblVolatility.Text = _stockSummary.VolatilityString;
                 lblEPS.Text = _stockSummary.EarningsPerShareString;
                 lblEPS.ForeColor = _stockSummary.EPSColor;
-                lblFairValue.Text = _stockSummary.FairValue.ToString();
-                lblFairValue.ForeColor = _stockSummary.FairValueColor;
-                lblPrice.Text = _stockSummary.Price.ToString();
+                lblPriceBook.Text = _stockSummary.PriceBook.ToString();
+                lblPriceBook.ForeColor = _stockSummary.PriceBookColor;
                 lblDividend.Text = _stockSummary.Dividend.ToString() + "%";
                 lblDividend.ForeColor = _stockSummary.DividendColor;
                 lblProfitMargin.Text = _stockSummary.ProfitMargin.ToString() + "%";

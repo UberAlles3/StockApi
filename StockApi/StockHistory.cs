@@ -99,7 +99,7 @@ namespace StockApi
                     continue;
 
                 string htmlForDate = html.Substring(index, 600);
-                htmlForDate = htmlForDate.Substring(htmlForDate.IndexOf("<span"));
+                //htmlForDate = htmlForDate.Substring(htmlForDate.IndexOf("</tbody>"));
 
                 var items = new List<string>();
                 string[] split = htmlForDate.Split(">");
@@ -111,6 +111,8 @@ namespace StockApi
                         num = s.Substring(0, s.IndexOf("<"));
                         items.Add(num);
                     }
+                    if (items.Count > 5)
+                        break;
                 }
 
                 if (items.Count < 5)

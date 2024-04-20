@@ -80,13 +80,13 @@ namespace StockApi
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
             // Fair Value
-            float fairValueMetric = 1F;
-            if (stockSummary.FairValueColor == Color.Red)
-                fairValueMetric = .96F;
-            if (stockSummary.FairValueColor == Color.Lime)
-                fairValueMetric = 1.04F;
+            float priceBookMetric = 1F;
+            if (stockSummary.PriceBookColor == Color.Red)
+                priceBookMetric = .96F;
+            if (stockSummary.PriceBookColor == Color.Lime)
+                priceBookMetric = 1.04F;
 
-            output.AppendLine($"Fair Value Metric = {fairValueMetric}");
+            output.AppendLine($"Fair Value Metric = {priceBookMetric}");
 
             // Profit Margin Metric
             float ProfitMarginMetric = 1F;
@@ -120,7 +120,7 @@ namespace StockApi
             float ecoMetric =  1 + ((analyzeInputs.EconomyHealth - 5) / 100);
             output.AppendLine($"Economy Metric = {ecoMetric}");
 
-            float totalMetric = trendMetric * targetPriceMetric * epsMetric * fairValueMetric * dividendMetric * ProfitMarginMetric * ecoMetric;
+            float totalMetric = trendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * ProfitMarginMetric * ecoMetric;
 
             output.AppendLine($"Total Metric = {totalMetric}");
 

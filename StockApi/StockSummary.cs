@@ -12,16 +12,9 @@ namespace StockApi
     {
         private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
 
-        public enum FairValueEnum
-        {
-            Overvalued,
-            FairValue,
-            Undervalued
-        }
-
         public Color DividendColor = Color.LightSteelBlue;
         public Color EPSColor = Color.LightSteelBlue;
-        public Color FairValueColor = Color.LightSteelBlue;
+        public Color PriceBookColor = Color.LightSteelBlue;
         public Color ProfitMarginColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
@@ -32,7 +25,8 @@ namespace StockApi
         private float   earningsPerShare = 0;
         private string  profitMarginString = NotApplicable;
         private float   profitMargin = 0;
-        private FairValueEnum fairValue = FairValueEnum.FairValue;
+        private string  priceBookString = NotApplicable;
+        private float   priceBook = 0;
         private string  oneYearTargetPriceString = NotApplicable;
         private float   oneYearTargetPrice = 0;
         private float   price = 0;
@@ -123,18 +117,31 @@ namespace StockApi
             }
         }
 
-        public FairValueEnum FairValue
+        public string PriceBookString
         {
-            get => fairValue;
+            get => priceBookString;
             set
             {
-                fairValue = value;
-                if (fairValue == FairValueEnum.Overvalued)
-                    FairValueColor = Color.Red;
-                if (fairValue == FairValueEnum.FairValue)
-                    FairValueColor = Color.LightSteelBlue;
-                if (fairValue == FairValueEnum.Undervalued)
-                    FairValueColor = Color.Lime;
+                priceBookString = value;
+                if (priceBookString == YahooFinance.NotApplicable || priceBookString == "")
+                    PriceBook = 0;
+                else
+                    PriceBook = Convert.ToSingle(priceBookString);
+            }
+        }
+
+        public float PriceBook
+        {
+            get => priceBook;
+            set
+            {
+                priceBook = value;
+                if (priceBook > 20)
+                    PriceBookColor = Color.Red;
+                else if (priceBook < 3)
+                    PriceBookColor = Color.Lime;
+                else
+                    PriceBookColor = Color.LightSteelBlue;
             }
         }
 
@@ -239,16 +246,9 @@ namespace StockApi
             searchTerm = searchTerms.Find(x => x.Name == "One Year Target").Term;
             OneYearTargetPriceString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
 
-            // Fair Value
-            FairValue = FairValueEnum.FairValue;
-            if (GetValueFromHtmlBySearchText(html, ">Overvalued<", "") != "")
-            {
-                FairValue = FairValueEnum.Overvalued;
-            }
-            else if (GetValueFromHtmlBySearchText(html, ">Undervalued<", "") != "")
-            {
-                FairValue = FairValueEnum.Undervalued;
-            }
+            // Price / Book
+            searchTerm = searchTerms.Find(x => x.Name == "Price/Book").Term;
+            PriceBookString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
             //Profit Margin %
             searchTerm = searchTerms.Find(x => x.Name == "Profit Margin").Term;
