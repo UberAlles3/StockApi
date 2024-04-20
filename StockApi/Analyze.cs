@@ -79,7 +79,7 @@ namespace StockApi
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
-            // Fair Value
+            // Price / Book
             float priceBookMetric = 1F;
             if (stockSummary.PriceBookColor == Color.Red)
                 priceBookMetric = .96F;

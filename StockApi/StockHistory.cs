@@ -106,7 +106,7 @@ namespace StockApi
                 string num;
                 foreach(string s in split)
                 {
-                    if("0123456789.".IndexOf(s.Substring(0,1)) > 0)
+                    if("0123456789.".IndexOf(s.Substring(0,1)) > -1)
                     {
                         num = s.Substring(0, s.IndexOf("<"));
                         items.Add(num);
@@ -115,8 +115,13 @@ namespace StockApi
                         break;
                 }
 
-                if (items.Count < 5)
-                    continue;
+                if (items.Count < 6)
+                {
+                    items.Add("0");
+                }
+
+                if (items[5].IndexOf(",") < 0)
+                    items[5] = "0";
 
                 HistoricData historicData = new HistoricData();
 

@@ -43,7 +43,7 @@ namespace StockApi
             set
             {
                 dividendString = value;
-                if (dividendString == YahooFinance.NotApplicable || dividendString == "")
+                if (dividendString == YahooFinance.NotApplicable || dividendString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     Dividend = 0;
                 else
                     Dividend = Convert.ToSingle(dividendString);
@@ -68,7 +68,7 @@ namespace StockApi
             set
             {
                 earningsPerShareString = value;
-                if (earningsPerShareString == YahooFinance.NotApplicable || earningsPerShareString == "")
+                if (earningsPerShareString == YahooFinance.NotApplicable || earningsPerShareString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     EarningsPerShare = 0;
                 else
                     EarningsPerShare = Convert.ToSingle(earningsPerShareString);
@@ -95,7 +95,7 @@ namespace StockApi
             set
             {
                 profitMarginString = value;
-                if (ProfitMarginString == YahooFinance.NotApplicable || ProfitMarginString == "")
+                if (ProfitMarginString == YahooFinance.NotApplicable || ProfitMarginString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     ProfitMargin = 0;
                 else
                     ProfitMargin = Convert.ToSingle(ProfitMarginString);
@@ -123,7 +123,7 @@ namespace StockApi
             set
             {
                 priceBookString = value;
-                if (priceBookString == YahooFinance.NotApplicable || priceBookString == "")
+                if (priceBookString == YahooFinance.NotApplicable || priceBookString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     PriceBook = 0;
                 else
                     PriceBook = Convert.ToSingle(priceBookString);
@@ -136,9 +136,9 @@ namespace StockApi
             set
             {
                 priceBook = value;
-                if (priceBook > 20)
+                if (priceBook > 5)
                     PriceBookColor = Color.Red;
-                else if (priceBook < 3)
+                else if (priceBook < 1)
                     PriceBookColor = Color.Lime;
                 else
                     PriceBookColor = Color.LightSteelBlue;
@@ -151,7 +151,7 @@ namespace StockApi
             set
             {
                 oneYearTargetPriceString = value;
-                if (oneYearTargetPriceString == YahooFinance.NotApplicable || oneYearTargetPriceString == "")
+                if (oneYearTargetPriceString == YahooFinance.NotApplicable || oneYearTargetPriceString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     OneYearTargetPrice = Price;
                 else
                     OneYearTargetPrice = Convert.ToSingle(oneYearTargetPriceString);
@@ -180,7 +180,7 @@ namespace StockApi
             set
             {
                 volatilityString = value;
-                if (volatilityString == YahooFinance.NotApplicable || volatilityString == "")
+                if (volatilityString == YahooFinance.NotApplicable || volatilityString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     Volatility = 1;
                 else
                     Volatility = Convert.ToSingle(volatilityString);
