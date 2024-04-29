@@ -33,7 +33,7 @@ namespace StockApi
         public async Task<List<StockHistory.HistoricData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary)
         {
             /////// Get price history, today, week ago, month ago to determine short trend
-            List<StockHistory.HistoricData> historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1), DateTime.Now);
+            List<StockHistory.HistoricData> historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), DateTime.Now.AddDays(1));
 
             // Today will be the last in the list
             HistoricDataToday = historicDataList.Last();
@@ -45,13 +45,16 @@ namespace StockApi
 
             // Last Month (really 31 days ago)
             findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-31).Date);
-            HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(2));
+            HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1) || x.PriceDate.Date == findDate.Date.AddDays(2) || x.PriceDate.Date == findDate.Date.AddDays(3));
 
             /////// Get price history for a year ago to determine long trend
-            historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-1), DateTime.Now.AddYears(-1).AddDays(3));
+            historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-1).AddDays(-1), DateTime.Now.AddYears(-1).AddDays(4));
             // Last Year
             findDate = GetMondayIfWeekend(DateTime.Now.AddYears(-1).Date);
             HistoricDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
+
+            if (HistoricDataYearAgo == null)
+                HistoricDataYearAgo = historicDataList.First();
 
             List<StockHistory.HistoricData> historicDisplayList = new List<StockHistory.HistoricData>();
             historicDisplayList.Add(HistoricDataToday);
@@ -94,6 +97,12 @@ namespace StockApi
             {
                 formattedDate = beginDate.AddDays(i).ToString("MMM dd, yyyy");
                 int index = html.IndexOf(formattedDate);
+
+                if (index < 0)
+                {
+                    formattedDate = beginDate.AddDays(i).ToString("MMM d, yyyy");
+                    index = html.IndexOf(formattedDate);
+                }
 
                 if (index < 0)
                     continue;
