@@ -182,7 +182,7 @@ namespace StockApi
             this.lblVolatility.BackColor = System.Drawing.Color.Transparent;
             this.lblVolatility.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblVolatility.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblVolatility.Location = new System.Drawing.Point(105, 92);
+            this.lblVolatility.Location = new System.Drawing.Point(107, 92);
             this.lblVolatility.Name = "lblVolatility";
             this.lblVolatility.Size = new System.Drawing.Size(46, 22);
             this.lblVolatility.TabIndex = 5;
@@ -241,7 +241,7 @@ namespace StockApi
             this.label33.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.label33.Location = new System.Drawing.Point(198, 92);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(98, 22);
+            this.label33.Size = new System.Drawing.Size(67, 22);
             this.label33.TabIndex = 33;
             this.label33.Text = "Dividend";
             // 
@@ -274,7 +274,7 @@ namespace StockApi
             this.label53.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.label53.Location = new System.Drawing.Point(15, 125);
             this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(92, 22);
+            this.label53.Size = new System.Drawing.Size(93, 22);
             this.label53.TabIndex = 30;
             this.label53.Text = "One Year Target";
             // 
@@ -283,7 +283,7 @@ namespace StockApi
             this.lblOneYearTarget.BackColor = System.Drawing.Color.Transparent;
             this.lblOneYearTarget.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblOneYearTarget.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblOneYearTarget.Location = new System.Drawing.Point(105, 125);
+            this.lblOneYearTarget.Location = new System.Drawing.Point(107, 125);
             this.lblOneYearTarget.Name = "lblOneYearTarget";
             this.lblOneYearTarget.Size = new System.Drawing.Size(46, 22);
             this.lblOneYearTarget.TabIndex = 31;
@@ -316,7 +316,7 @@ namespace StockApi
             this.lblProfitMargin.BackColor = System.Drawing.Color.Transparent;
             this.lblProfitMargin.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblProfitMargin.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblProfitMargin.Location = new System.Drawing.Point(94, 160);
+            this.lblProfitMargin.Location = new System.Drawing.Point(96, 160);
             this.lblProfitMargin.Name = "lblProfitMargin";
             this.lblProfitMargin.Size = new System.Drawing.Size(57, 22);
             this.lblProfitMargin.TabIndex = 28;
@@ -553,7 +553,7 @@ namespace StockApi
             this.lblPrice.BackColor = System.Drawing.Color.Transparent;
             this.lblPrice.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblPrice.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblPrice.Location = new System.Drawing.Point(105, 60);
+            this.lblPrice.Location = new System.Drawing.Point(107, 60);
             this.lblPrice.Name = "lblPrice";
             this.lblPrice.Size = new System.Drawing.Size(46, 22);
             this.lblPrice.TabIndex = 12;
