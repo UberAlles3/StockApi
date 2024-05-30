@@ -10,8 +10,9 @@ namespace StockApi
 {
     public class StockSummary : YahooFinance
     {
-        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
-
+//        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
+        private static readonly string _url = "https://finance.yahoo.com/quote/???";
+        
         public Color DividendColor = Color.LightSteelBlue;
         public Color EPSColor = Color.LightSteelBlue;
         public Color PriceBookColor = Color.LightSteelBlue;
