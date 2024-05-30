@@ -182,9 +182,9 @@ namespace StockApi
             this.lblVolatility.BackColor = System.Drawing.Color.Transparent;
             this.lblVolatility.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblVolatility.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblVolatility.Location = new System.Drawing.Point(107, 92);
+            this.lblVolatility.Location = new System.Drawing.Point(96, 92);
             this.lblVolatility.Name = "lblVolatility";
-            this.lblVolatility.Size = new System.Drawing.Size(46, 22);
+            this.lblVolatility.Size = new System.Drawing.Size(57, 22);
             this.lblVolatility.TabIndex = 5;
             this.lblVolatility.Text = "0.00";
             this.lblVolatility.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -283,9 +283,9 @@ namespace StockApi
             this.lblOneYearTarget.BackColor = System.Drawing.Color.Transparent;
             this.lblOneYearTarget.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblOneYearTarget.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblOneYearTarget.Location = new System.Drawing.Point(107, 125);
+            this.lblOneYearTarget.Location = new System.Drawing.Point(96, 125);
             this.lblOneYearTarget.Name = "lblOneYearTarget";
-            this.lblOneYearTarget.Size = new System.Drawing.Size(46, 22);
+            this.lblOneYearTarget.Size = new System.Drawing.Size(57, 22);
             this.lblOneYearTarget.TabIndex = 31;
             this.lblOneYearTarget.Text = "0.00";
             this.lblOneYearTarget.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -553,9 +553,9 @@ namespace StockApi
             this.lblPrice.BackColor = System.Drawing.Color.Transparent;
             this.lblPrice.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblPrice.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblPrice.Location = new System.Drawing.Point(107, 60);
+            this.lblPrice.Location = new System.Drawing.Point(96, 60);
             this.lblPrice.Name = "lblPrice";
-            this.lblPrice.Size = new System.Drawing.Size(46, 22);
+            this.lblPrice.Size = new System.Drawing.Size(57, 22);
             this.lblPrice.TabIndex = 12;
             this.lblPrice.Text = "0.00";
             this.lblPrice.TextAlign = System.Drawing.ContentAlignment.TopRight;
