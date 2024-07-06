@@ -254,7 +254,8 @@ namespace StockApi
             //Profit Margin %
             searchTerm = searchTerms.Find(x => x.Name == "Profit Margin").Term;
             string profitMarginString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
-            ProfitMarginString = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
+            if(profitMarginString != YahooFinance.NotApplicable)
+                ProfitMarginString = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
 
             return true;
         }
@@ -346,6 +347,11 @@ namespace StockApi
 
             string htmlSnippet = html.Substring(loc1 + 1, 200);
             string[] parts = htmlSnippet.Split(">");
+
+            if(parts.Length < 3)
+            {
+                return defaultValue;
+            }
 
             loc2 = parts[tagPosition].IndexOf("<");
 

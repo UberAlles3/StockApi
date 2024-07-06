@@ -121,6 +121,7 @@ namespace StockApi
             stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
 
             txtTickerList.Text = ".";
+            builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin{Environment.NewLine}");
             foreach (string ticker in stockList)
             {
                 _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
@@ -130,7 +131,7 @@ namespace StockApi
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}{Environment.NewLine}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Dividend}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
