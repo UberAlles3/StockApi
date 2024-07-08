@@ -43,8 +43,8 @@ namespace StockApi
             get => dividendString;
             set
             {
-                dividendString = value;
-                if (dividendString == YahooFinance.NotApplicable || dividendString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
+                dividendString = value.Replace("%", "");
+                if (dividendString == YahooFinance.NotApplicable || dividendString == "" || dividendString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     Dividend = 0;
                 else
                     Dividend = Convert.ToSingle(dividendString);
@@ -69,10 +69,17 @@ namespace StockApi
             set
             {
                 earningsPerShareString = value;
-                if (earningsPerShareString == YahooFinance.NotApplicable || earningsPerShareString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
+                if (earningsPerShareString == YahooFinance.NotApplicable || earningsPerShareString == "" || earningsPerShareString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     EarningsPerShare = 0;
                 else
-                    EarningsPerShare = Convert.ToSingle(earningsPerShareString);
+                    try
+                    {
+                        EarningsPerShare = Convert.ToSingle(earningsPerShareString);
+                    }
+                    catch (Exception)
+                    {
+                        EarningsPerShare = 0;
+                    }
             }
         }
 
@@ -96,7 +103,7 @@ namespace StockApi
             set
             {
                 profitMarginString = value;
-                if (ProfitMarginString == YahooFinance.NotApplicable || ProfitMarginString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
+                if (ProfitMarginString == YahooFinance.NotApplicable || ProfitMarginString == "" || ProfitMarginString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     ProfitMargin = 0;
                 else
                     ProfitMargin = Convert.ToSingle(ProfitMarginString);
@@ -124,10 +131,17 @@ namespace StockApi
             set
             {
                 priceBookString = value;
-                if (priceBookString == YahooFinance.NotApplicable || priceBookString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
+                if (priceBookString == YahooFinance.NotApplicable || priceBookString == "" || priceBookString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     PriceBook = 0;
                 else
-                    PriceBook = Convert.ToSingle(priceBookString);
+                    try
+                    {
+                        PriceBook = Convert.ToSingle(priceBookString);
+                    }
+                    catch (Exception)
+                    {
+                        PriceBook = 0;
+                    }
             }
         }
 
@@ -152,10 +166,17 @@ namespace StockApi
             set
             {
                 oneYearTargetPriceString = value;
-                if (oneYearTargetPriceString == YahooFinance.NotApplicable || oneYearTargetPriceString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
+                if (oneYearTargetPriceString == YahooFinance.NotApplicable || oneYearTargetPriceString == "" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     OneYearTargetPrice = Price;
                 else
-                    OneYearTargetPrice = Convert.ToSingle(oneYearTargetPriceString);
+                    try
+                    {
+                        OneYearTargetPrice = Convert.ToSingle(oneYearTargetPriceString);
+                    }
+                    catch (Exception)
+                    {
+                        OneYearTargetPrice = Price;
+                    }
             }
         }
 
@@ -181,7 +202,7 @@ namespace StockApi
             set
             {
                 volatilityString = value;
-                if (volatilityString == YahooFinance.NotApplicable || volatilityString == "" || "0123456789.".IndexOf(value.Substring(0, 1)) < 0)
+                if (volatilityString == YahooFinance.NotApplicable || volatilityString == "" || volatilityString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
                     Volatility = 1;
                 else
                     Volatility = Convert.ToSingle(volatilityString);
@@ -217,6 +238,12 @@ namespace StockApi
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
 
+            if (CompanyName == "")
+            {
+                CompanyName = "Not Found";
+                return false;
+            }
+
             // Price
             string searchTerm = searchTerms.Find(x => x.Name == "Price").Term;
             string price = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
@@ -240,7 +267,10 @@ namespace StockApi
                 dividend = dividend.Substring(0, dividend.IndexOf(")") - 1);
             }
             else
-                dividend = YahooFinance.NotApplicable;
+            {
+                searchTerm = "Yield";
+                dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            }
             DividendString = dividend;
 
             // One year target
@@ -254,9 +284,10 @@ namespace StockApi
             //Profit Margin %
             searchTerm = searchTerms.Find(x => x.Name == "Profit Margin").Term;
             string profitMarginString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
-            if(profitMarginString != YahooFinance.NotApplicable)
+            if (profitMarginString != YahooFinance.NotApplicable && profitMarginString.IndexOf("%") > 0)
                 ProfitMarginString = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
-
+            else
+                ProfitMarginString = YahooFinance.NotApplicable;
             return true;
         }
 

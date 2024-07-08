@@ -83,32 +83,35 @@ namespace StockApi
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
             // Extract the individual data values from the html
-            await _stockSummary.GetSummaryData(txtStockTicker.Text);
+            bool found = await _stockSummary.GetSummaryData(txtStockTicker.Text);
 
-            // Get some price history. Todays price will be replaced with summary data's latest price
-            List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary);
+            if(found)
+            {
+                // Get some price history. Todays price will be replaced with summary data's latest price
+                List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary);
 
-            // bind data list to grid control
-            var bindingList = new BindingList<StockHistory.HistoricData>(historicDisplayList);
-            var source = new BindingSource(bindingList, null);
-            dataGridView1.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
-            dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
-            dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
-            dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
-            dataGridView1.DataSource = source.DataSource;
-            dataGridView1.Columns[0].Visible = false;
-            dataGridView1.Columns[1].HeaderText = "Date";
-            dataGridView1.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
-            dataGridView1.Columns[2].DefaultCellStyle.Format = "N2";
-            dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
-            dataGridView1.Refresh();
+                // bind data list to grid control
+                var bindingList = new BindingList<StockHistory.HistoricData>(historicDisplayList);
+                var source = new BindingSource(bindingList, null);
+                dataGridView1.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
+                dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
+                dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
+                dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
+                dataGridView1.DataSource = source.DataSource;
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[1].HeaderText = "Date";
+                dataGridView1.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+                dataGridView1.Columns[2].DefaultCellStyle.Format = "N2";
+                dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+                dataGridView1.Refresh();
 
-            // Trends
-            _stockHistory.SetTrends();
-            picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-            picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image; 
-            picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-            
+                // Trends
+                _stockHistory.SetTrends();
+                picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            }
+
             PostSummaryWebCall(); // displays the data returned
         }
 
@@ -121,7 +124,7 @@ namespace StockApi
             stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
 
             txtTickerList.Text = ".";
-            builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin{Environment.NewLine}");
+            builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend{Environment.NewLine}");
             foreach (string ticker in stockList)
             {
                 _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
@@ -131,13 +134,18 @@ namespace StockApi
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Dividend}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}{Environment.NewLine}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
 
         private void PreSummaryWebCall()
         {
+            _stockSummary = new StockSummary(); // set values to zero
+            picYearTrend.Image = picSidewaysTrend.Image;
+            picMonthTrend.Image = picSidewaysTrend.Image; 
+            picWeekTrend.Image = picSidewaysTrend.Image; 
+
             btnGetOne.Enabled = false;
             panel1.Visible = false;
             panel2.Visible = false;
