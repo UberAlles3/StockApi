@@ -107,6 +107,7 @@ namespace StockApi
 
                 // Trends
                 _stockHistory.SetTrends();
+                pic3YearTrend.Image = _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
                 picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
                 picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
                 picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
@@ -142,6 +143,7 @@ namespace StockApi
         private void PreSummaryWebCall()
         {
             _stockSummary = new StockSummary(); // set values to zero
+            pic3YearTrend.Image = picSidewaysTrend.Image;
             picYearTrend.Image = picSidewaysTrend.Image;
             picMonthTrend.Image = picSidewaysTrend.Image; 
             picWeekTrend.Image = picSidewaysTrend.Image; 
@@ -240,5 +242,6 @@ namespace StockApi
                 }
             }
         }
+ 
     }
 }

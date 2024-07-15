@@ -34,8 +34,8 @@ namespace StockApi
             // Profit Margin %
             // Volatility
 
-            // Price Trend
-            float trendMetric = Convert.ToInt16(stockHistory.YearTrend) + Convert.ToInt16(stockHistory.MonthTrend) + Convert.ToInt16(stockHistory.WeekTrend);
+            // Long Term Price Trend
+            float trendMetric = Convert.ToInt16(stockHistory.ThreeYearTrend) + Convert.ToInt16(stockHistory.YearTrend) + Convert.ToInt16(stockHistory.MonthTrend);
             if(trendMetric == 0) // Very downward trend
                 trendMetric = .88F;
             else if (trendMetric == 1)
@@ -45,7 +45,7 @@ namespace StockApi
             else if (trendMetric == 3)
                 trendMetric = 1.00F;
             else if (trendMetric == 4)
-                trendMetric = 1.04F; 
+                trendMetric = 1.00F; 
             else if (trendMetric == 5)
                 trendMetric = 1.08F; 
             else if (trendMetric == 6)

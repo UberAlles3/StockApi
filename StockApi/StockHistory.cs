@@ -26,9 +26,11 @@ namespace StockApi
         public HistoricData HistoricDataWeekAgo;
         public HistoricData HistoricDataMonthAgo;
         public HistoricData HistoricDataYearAgo;
+        public HistoricData HistoricData3YearsAgo;
         public TrendEnum WeekTrend = TrendEnum.Sideways;
         public TrendEnum MonthTrend = TrendEnum.Sideways;
         public TrendEnum YearTrend = TrendEnum.Sideways;
+        public TrendEnum ThreeYearTrend = TrendEnum.Sideways;
 
         public async Task<List<StockHistory.HistoricData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary)
         {
@@ -56,11 +58,16 @@ namespace StockApi
             if (HistoricDataYearAgo == null)
                 HistoricDataYearAgo = historicDataList.First();
 
+            /////// Get price history for 3 year2 ago to determine long trend
+            historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
+            HistoricData3YearsAgo = historicDataList.First();
+
             List<StockHistory.HistoricData> historicDisplayList = new List<StockHistory.HistoricData>();
             historicDisplayList.Add(HistoricDataToday);
             historicDisplayList.Add(HistoricDataWeekAgo);
             historicDisplayList.Add(HistoricDataMonthAgo);
             historicDisplayList.Add(HistoricDataYearAgo);
+            historicDisplayList.Add(HistoricData3YearsAgo);
 
             return historicDisplayList;
         }
@@ -172,6 +179,13 @@ namespace StockApi
 
         public void SetTrends()
         {
+            if (HistoricDataToday.Price > HistoricData3YearsAgo.Price * 1.12F) // year
+                ThreeYearTrend = TrendEnum.Up;
+            else if (HistoricDataToday.Price < HistoricData3YearsAgo.Price * .88F) // year
+                ThreeYearTrend = TrendEnum.Down;
+            else
+                ThreeYearTrend = TrendEnum.Sideways;
+
             if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.08F) // year
                 YearTrend = TrendEnum.Up;
             else if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92F) // year
