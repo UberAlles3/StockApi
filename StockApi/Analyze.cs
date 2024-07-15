@@ -86,7 +86,7 @@ namespace StockApi
             if (stockSummary.PriceBookColor == Color.Lime)
                 priceBookMetric = 1.04F;
 
-            output.AppendLine($"Fair Value Metric = {priceBookMetric}");
+            output.AppendLine($"Price Book Metric = {priceBookMetric}");
 
             // Profit Margin Metric
             float ProfitMarginMetric = 1F;

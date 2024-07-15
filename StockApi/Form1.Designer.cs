@@ -192,6 +192,7 @@ namespace StockApi
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.lblProfitMargin);
             this.panel1.Controls.Add(this.label33);
             this.panel1.Controls.Add(this.lblDividend);
             this.panel1.Controls.Add(this.label35);
@@ -199,7 +200,6 @@ namespace StockApi
             this.panel1.Controls.Add(this.lblOneYearTarget);
             this.panel1.Controls.Add(this.label55);
             this.panel1.Controls.Add(this.label24);
-            this.panel1.Controls.Add(this.lblProfitMargin);
             this.panel1.Controls.Add(this.label27);
             this.panel1.Controls.Add(this.label23);
             this.panel1.Controls.Add(this.lblPriceBook);
@@ -307,7 +307,7 @@ namespace StockApi
             this.label24.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.label24.Location = new System.Drawing.Point(15, 160);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(98, 22);
+            this.label24.Size = new System.Drawing.Size(79, 22);
             this.label24.TabIndex = 27;
             this.label24.Text = "Profit Margin";
             // 
