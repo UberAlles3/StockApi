@@ -39,6 +39,7 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblProfitMargin = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.lblDividend = new System.Windows.Forms.Label();
             this.label35 = new System.Windows.Forms.Label();
@@ -46,7 +47,6 @@ namespace StockApi
             this.lblOneYearTarget = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
-            this.lblProfitMargin = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.lblPriceBook = new System.Windows.Forms.Label();
@@ -159,7 +159,7 @@ namespace StockApi
             // btnGetAll
             // 
             this.btnGetAll.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnGetAll.Location = new System.Drawing.Point(33, 327);
+            this.btnGetAll.Location = new System.Drawing.Point(33, 482);
             this.btnGetAll.Name = "btnGetAll";
             this.btnGetAll.Size = new System.Drawing.Size(213, 33);
             this.btnGetAll.TabIndex = 3;
@@ -234,6 +234,18 @@ namespace StockApi
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(344, 525);
             this.panel1.TabIndex = 6;
+            // 
+            // lblProfitMargin
+            // 
+            this.lblProfitMargin.BackColor = System.Drawing.Color.Transparent;
+            this.lblProfitMargin.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblProfitMargin.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblProfitMargin.Location = new System.Drawing.Point(96, 160);
+            this.lblProfitMargin.Name = "lblProfitMargin";
+            this.lblProfitMargin.Size = new System.Drawing.Size(57, 22);
+            this.lblProfitMargin.TabIndex = 28;
+            this.lblProfitMargin.Text = "0.00";
+            this.lblProfitMargin.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label33
             // 
@@ -310,18 +322,6 @@ namespace StockApi
             this.label24.Size = new System.Drawing.Size(79, 22);
             this.label24.TabIndex = 27;
             this.label24.Text = "Profit Margin";
-            // 
-            // lblProfitMargin
-            // 
-            this.lblProfitMargin.BackColor = System.Drawing.Color.Transparent;
-            this.lblProfitMargin.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblProfitMargin.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblProfitMargin.Location = new System.Drawing.Point(96, 160);
-            this.lblProfitMargin.Name = "lblProfitMargin";
-            this.lblProfitMargin.Size = new System.Drawing.Size(57, 22);
-            this.lblProfitMargin.TabIndex = 28;
-            this.lblProfitMargin.Text = "0.00";
-            this.lblProfitMargin.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label27
             // 
@@ -641,9 +641,9 @@ namespace StockApi
             // 
             this.picSpinner.BackColor = System.Drawing.Color.Transparent;
             this.picSpinner.Image = ((System.Drawing.Image)(resources.GetObject("picSpinner.Image")));
-            this.picSpinner.Location = new System.Drawing.Point(33, 371);
+            this.picSpinner.Location = new System.Drawing.Point(16, 521);
             this.picSpinner.Name = "picSpinner";
-            this.picSpinner.Size = new System.Drawing.Size(90, 86);
+            this.picSpinner.Size = new System.Drawing.Size(58, 56);
             this.picSpinner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picSpinner.TabIndex = 13;
             this.picSpinner.TabStop = false;
@@ -675,7 +675,7 @@ namespace StockApi
             this.txtTickerList.Location = new System.Drawing.Point(33, 163);
             this.txtTickerList.Multiline = true;
             this.txtTickerList.Name = "txtTickerList";
-            this.txtTickerList.Size = new System.Drawing.Size(213, 152);
+            this.txtTickerList.Size = new System.Drawing.Size(213, 297);
             this.txtTickerList.TabIndex = 11;
             this.txtTickerList.Text = "INTC";
             // 
@@ -994,7 +994,7 @@ namespace StockApi
             // picUpTrend
             // 
             this.picUpTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
-            this.picUpTrend.Location = new System.Drawing.Point(171, 371);
+            this.picUpTrend.Location = new System.Drawing.Point(103, 522);
             this.picUpTrend.Name = "picUpTrend";
             this.picUpTrend.Size = new System.Drawing.Size(35, 34);
             this.picUpTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1004,7 +1004,7 @@ namespace StockApi
             // picDownTrend
             // 
             this.picDownTrend.Image = global::StockApi.Properties.Resources.downTrend1;
-            this.picDownTrend.Location = new System.Drawing.Point(171, 423);
+            this.picDownTrend.Location = new System.Drawing.Point(185, 522);
             this.picDownTrend.Name = "picDownTrend";
             this.picDownTrend.Size = new System.Drawing.Size(35, 34);
             this.picDownTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1014,7 +1014,7 @@ namespace StockApi
             // picSidewaysTrend
             // 
             this.picSidewaysTrend.Image = global::StockApi.Properties.Resources.RightArrow;
-            this.picSidewaysTrend.Location = new System.Drawing.Point(192, 396);
+            this.picSidewaysTrend.Location = new System.Drawing.Point(144, 522);
             this.picSidewaysTrend.Name = "picSidewaysTrend";
             this.picSidewaysTrend.Size = new System.Drawing.Size(35, 34);
             this.picSidewaysTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1037,8 +1037,7 @@ namespace StockApi
             this.AcceptButton = this.btnGetOne;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.BackgroundImage = global::StockApi.Properties.Resources.background1;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1041, 568);
             this.Controls.Add(this.webView21);
