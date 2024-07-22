@@ -13,7 +13,7 @@ namespace StockApi
     /// </summary>
     public class StockHistory : YahooFinance
     {
-        private static readonly string _url = "https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true";
+        private static readonly string _url = "https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&filter=history&frequency=1d&includeAdjustedClose=true";
 
         public enum TrendEnum
         {
@@ -98,9 +98,17 @@ namespace StockApi
             if (beginDate.DayOfWeek == DayOfWeek.Sunday)
                 beginDate = beginDate.AddDays(-2);
 
+            double totalDays = endDate.Subtract(beginDate).TotalDays;
+
+            if (beginDate < DateTime.Today.AddYears(-2))
+            {
+                totalDays = 200;
+                endDate = beginDate.AddDays(200);
+            }
+
             string html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
 
-            for (int i = 0; i < endDate.Subtract(beginDate).TotalDays; i++)
+            for (int i = 0; i < totalDays; i++)
             {
                 formattedDate = beginDate.AddDays(i).ToString("MMM dd, yyyy");
                 int index = html.IndexOf(formattedDate);
@@ -154,7 +162,15 @@ namespace StockApi
 
         private async Task<string> GetHistoryHtmlForTicker(string ticker, DateTime beginDate, DateTime endDate)
         {
+            // https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true
+            // 3 year https://finance.yahoo.com/quote/IMPP/history/?frequency=1wk&period1=1563818349&period2=1721671130
+
             string formattedUrl = _url.Replace("?ticker?", ticker);
+
+            if(beginDate < DateTime.Today.AddYears(-2))
+            {
+                formattedUrl = formattedUrl.Replace("frequency=1d", "frequency=1wk");
+            }
 
             Ticker = ticker;
 
