@@ -123,7 +123,6 @@ namespace StockApi
                     continue;
 
                 string htmlForDate = html.Substring(index, 600);
-                //htmlForDate = htmlForDate.Substring(htmlForDate.IndexOf("</tbody>"));
 
                 var items = new List<string>();
                 string[] split = htmlForDate.Split(">");
@@ -155,6 +154,9 @@ namespace StockApi
                 historicData.Volume = items[5];
 
                 historicDataList.Add(historicData);
+
+                if (beginDate < DateTime.Today.AddYears(-1) && historicDataList.Count > 3)
+                    break;
             }
 
             return historicDataList;
