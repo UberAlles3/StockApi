@@ -58,9 +58,12 @@ namespace StockApi
             if (HistoricDataYearAgo == null)
                 HistoricDataYearAgo = historicDataList.First();
 
-            /////// Get price history for 3 year2 ago to determine long trend
+            /////// Get price history for 3 years ago to determine long trend
             historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
-            HistoricData3YearsAgo = historicDataList.First();
+            if (historicDataList.Count > 0)
+                HistoricData3YearsAgo = historicDataList.First();
+            else
+                HistoricData3YearsAgo = HistoricDataYearAgo;
 
             List<StockHistory.HistoricData> historicDisplayList = new List<StockHistory.HistoricData>();
             historicDisplayList.Add(HistoricDataToday);
