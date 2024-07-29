@@ -221,9 +221,9 @@ namespace StockApi
             else
                 MonthTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.04F) // week
+            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.03F) // week
                 WeekTrend = TrendEnum.Up;
-            else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .96F) // week
+            else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .97F) // week
                 WeekTrend = TrendEnum.Down;
             else
                 WeekTrend = TrendEnum.Sideways;
