@@ -55,7 +55,7 @@ namespace StockApi
             findDate = GetMondayIfWeekend(DateTime.Now.AddYears(-1).Date);
             HistoricDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
 
-            if (HistoricDataYearAgo == null && historicDataList.Count > 0)
+            if (HistoricDataYearAgo == null || historicDataList.Count == 0)
                 HistoricDataYearAgo = historicDataList.First();
 
             /////// Get price history for 3 years ago to determine long trend
