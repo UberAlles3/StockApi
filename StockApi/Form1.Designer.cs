@@ -698,6 +698,7 @@ namespace StockApi
             // 
             // txtTickerList
             // 
+            this.txtTickerList.AcceptsReturn = true;
             this.txtTickerList.Location = new System.Drawing.Point(33, 163);
             this.txtTickerList.Multiline = true;
             this.txtTickerList.Name = "txtTickerList";
