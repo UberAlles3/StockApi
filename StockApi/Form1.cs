@@ -242,6 +242,13 @@ namespace StockApi
                 }
             }
         }
- 
+
+        private void importTradesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExcelManager excelManager = new ExcelManager();
+            excelManager.Import("C:\\Users\\Uber\\Desktop\\Stocks 2023_w_Trades.xlsx");
+
+
+        }
     }
 }
