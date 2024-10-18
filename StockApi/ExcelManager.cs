@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Data;
-//using System.Data.DataSetExtensions;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 
 namespace StockApi
@@ -56,13 +57,14 @@ namespace StockApi
                         ConfigureDataTable = _ => new ExcelDataTableConfiguration()
                         {
                             FilterRow = rowReader => rowReader.RowCount > 40,
-                            FilterColumn = (rowReader, columnIndex) =>  columnIndex < 8,
+                            FilterColumn = (rowReader, columnIndex) =>  columnIndex < 10,
                         }
                         });  // The result of each spreadsheet is in result.Tables
 
                     //var newTable = result.Tables[0].AsEnumerable().Where(x => x[0].ToString().Contains("2024"));
-                    var newTable = result.Tables[0].AsEnumerable().Where(x => x[4].ToString() == "GFI");
-
+                    var newTable = result.Tables[0].AsEnumerable().Where(x => x[4].ToString() == "GFI").CopyToDataTable();
+                    string json = JsonConvert.SerializeObject(newTable, Formatting.Indented);
+                    Debug.Print(json);
                 }
             }
         }
