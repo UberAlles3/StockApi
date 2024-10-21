@@ -24,6 +24,7 @@ namespace StockApi
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
         private static DataTable _trades = null;
+        private static DataTable _tickerTrades = null;
 
         public Form1()
         {
@@ -87,6 +88,13 @@ namespace StockApi
                 return;
             }
 
+            if (_trades == null)
+            {
+                _trades = (new ExcelManager()).ImportTrades(_settings.Find(x => x.Name == "ExcelTradesPath").Value);
+                _trades = _trades.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
+                _trades.Columns[0].DataType = System.Type.GetType("System.DateTime");
+            }
+
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
             // Extract the individual data values from the html
@@ -95,7 +103,19 @@ namespace StockApi
             if(found)
             {
                 // Get some price history. Todays price will be replaced with summary data's latest price
-                List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary);
+
+
+                //List<StockHistory.HistoricData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary);
+
+
+
+
+                /////////////////////************* test
+
+
+
+                List<StockHistory.HistoricData> historicDisplayList = new List<StockHistory.HistoricData>();
+                // await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary);
 
                 // bind data list to grid control
                 var bindingList = new BindingList<StockHistory.HistoricData>(historicDisplayList);
@@ -112,22 +132,56 @@ namespace StockApi
                 dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
                 dataGridView1.Refresh();
 
+
+                _tickerTrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower()).CopyToDataTable();
+                // bind data list to trades grid control
+                BindingSource tradeSource = new BindingSource();
+                tradeSource.DataSource = _tickerTrades;
+                dataGridView2.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
+                dataGridView2.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
+                dataGridView2.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
+                dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
+                dataGridView2.DataSource = tradeSource.DataSource;
+                dataGridView2.Columns[0].HeaderText = "Date";
+                dataGridView2.Columns[2].Width = 75;
+                //dataGridView2.Columns[1].ValueType = System.Type.GetType("System.DateTime");
+                dataGridView2.Columns[1].Visible = false;
+                dataGridView2.Columns[2].HeaderText = "Buy/Sell";
+                dataGridView2.Columns[2].Width = 65;
+                dataGridView2.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dataGridView2.Columns[3].HeaderText = "Quan.";
+                dataGridView2.Columns[3].Width = 62;
+                dataGridView2.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView2.Columns[3].DefaultCellStyle.Format = "#####";
+                dataGridView2.Columns[4].Visible = false; // Hide ticker
+
+                dataGridView2.Columns[5].HeaderText = "Price";
+                dataGridView2.Columns[5].Width = 80;
+                dataGridView2.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView2.Columns[5].DefaultCellStyle.Format = "N2";
+                dataGridView2.Columns[6].HeaderText = "Tot. Shares";
+                dataGridView2.Columns[6].Width = 70;
+                dataGridView2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView2.Columns[6].DefaultCellStyle.Format = "#####";
+
+                dataGridView2.Columns[7].Visible = false;
+                dataGridView2.Columns[8].Visible = false;
+                dataGridView2.Columns[9].Visible = false;
+
+                //dataGridView2.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+                dataGridView2.Refresh();
+
                 // Trends
-                _stockHistory.SetTrends();
-                pic3YearTrend.Image = _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-                picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-                picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-                picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+
+                ///////////////////// ********************** comment back in
+                //_stockHistory.SetTrends();
+                //pic3YearTrend.Image = _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                //picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                //picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                //picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
             }
 
             PostSummaryWebCall(); // displays the data returned
-
-            if (_trades == null)
-            {
-                _trades = (new ExcelManager()).ImportTrades(_settings.Find(x => x.Name == "ExcelTradesPath").Value);
-                _trades = _trades.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
-            }
-
 
         }
 
