@@ -744,16 +744,16 @@ namespace StockApi
             this.panel2.Controls.Add(this.label15);
             this.panel2.Controls.Add(this.txtSharesOwned);
             this.panel2.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.panel2.Location = new System.Drawing.Point(618, 35);
+            this.panel2.Location = new System.Drawing.Point(619, 35);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(417, 525);
+            this.panel2.Size = new System.Drawing.Size(406, 525);
             this.panel2.TabIndex = 14;
             // 
             // label44
             // 
             this.label44.BackColor = System.Drawing.Color.Transparent;
             this.label44.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label44.Location = new System.Drawing.Point(173, 256);
+            this.label44.Location = new System.Drawing.Point(170, 256);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(63, 22);
             this.label44.TabIndex = 46;
@@ -763,7 +763,7 @@ namespace StockApi
             // 
             this.label12.BackColor = System.Drawing.Color.Transparent;
             this.label12.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label12.Location = new System.Drawing.Point(105, 256);
+            this.label12.Location = new System.Drawing.Point(108, 256);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(57, 22);
             this.label12.TabIndex = 45;
@@ -786,7 +786,7 @@ namespace StockApi
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle3;
-            this.dataGridView2.Location = new System.Drawing.Point(3, 279);
+            this.dataGridView2.Location = new System.Drawing.Point(7, 279);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -800,14 +800,14 @@ namespace StockApi
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 25;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView2.Size = new System.Drawing.Size(409, 235);
+            this.dataGridView2.Size = new System.Drawing.Size(387, 235);
             this.dataGridView2.TabIndex = 43;
             // 
             // label40
             // 
             this.label40.BackColor = System.Drawing.Color.Transparent;
             this.label40.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label40.Location = new System.Drawing.Point(254, 256);
+            this.label40.Location = new System.Drawing.Point(251, 256);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(57, 22);
             this.label40.TabIndex = 41;
@@ -817,7 +817,7 @@ namespace StockApi
             // 
             this.label41.BackColor = System.Drawing.Color.Transparent;
             this.label41.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label41.Location = new System.Drawing.Point(313, 257);
+            this.label41.Location = new System.Drawing.Point(308, 257);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(67, 21);
             this.label41.TabIndex = 39;
@@ -827,7 +827,7 @@ namespace StockApi
             // 
             this.label42.BackColor = System.Drawing.Color.Transparent;
             this.label42.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label42.Location = new System.Drawing.Point(3, 257);
+            this.label42.Location = new System.Drawing.Point(8, 257);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(57, 21);
             this.label42.TabIndex = 38;
@@ -837,9 +837,9 @@ namespace StockApi
             // 
             this.label43.BackColor = System.Drawing.Color.Transparent;
             this.label43.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label43.Location = new System.Drawing.Point(94, 219);
+            this.label43.Location = new System.Drawing.Point(9, 219);
             this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(233, 29);
+            this.label43.Size = new System.Drawing.Size(383, 29);
             this.label43.TabIndex = 40;
             this.label43.Text = "Trades";
             this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -851,9 +851,9 @@ namespace StockApi
             this.label45.ForeColor = System.Drawing.Color.DarkGray;
             this.label45.Location = new System.Drawing.Point(3, 236);
             this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(407, 15);
+            this.label45.Size = new System.Drawing.Size(387, 15);
             this.label45.TabIndex = 44;
-            this.label45.Text = "________________________________________________________________________________";
+            this.label45.Text = "____________________________________________________________________________";
             // 
             // label38
             // 
@@ -1025,7 +1025,7 @@ namespace StockApi
             this.txtAnalysisOutput.Multiline = true;
             this.txtAnalysisOutput.Name = "txtAnalysisOutput";
             this.txtAnalysisOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAnalysisOutput.Size = new System.Drawing.Size(291, 206);
+            this.txtAnalysisOutput.Size = new System.Drawing.Size(291, 238);
             this.txtAnalysisOutput.TabIndex = 33;
             // 
             // lblSellQuantity
@@ -1033,7 +1033,7 @@ namespace StockApi
             this.lblSellQuantity.BackColor = System.Drawing.Color.Transparent;
             this.lblSellQuantity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblSellQuantity.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblSellQuantity.Location = new System.Drawing.Point(74, 497);
+            this.lblSellQuantity.Location = new System.Drawing.Point(68, 353);
             this.lblSellQuantity.Name = "lblSellQuantity";
             this.lblSellQuantity.Size = new System.Drawing.Size(46, 15);
             this.lblSellQuantity.TabIndex = 32;
@@ -1045,7 +1045,7 @@ namespace StockApi
             this.lblBuyQuantity.BackColor = System.Drawing.Color.Transparent;
             this.lblBuyQuantity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblBuyQuantity.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblBuyQuantity.Location = new System.Drawing.Point(74, 480);
+            this.lblBuyQuantity.Location = new System.Drawing.Point(68, 333);
             this.lblBuyQuantity.Name = "lblBuyQuantity";
             this.lblBuyQuantity.Size = new System.Drawing.Size(46, 15);
             this.lblBuyQuantity.TabIndex = 31;
@@ -1056,7 +1056,7 @@ namespace StockApi
             // 
             this.label32.BackColor = System.Drawing.Color.Transparent;
             this.label32.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label32.Location = new System.Drawing.Point(130, 497);
+            this.label32.Location = new System.Drawing.Point(124, 353);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(30, 22);
             this.label32.TabIndex = 30;
@@ -1066,7 +1066,7 @@ namespace StockApi
             // 
             this.label31.BackColor = System.Drawing.Color.Transparent;
             this.label31.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label31.Location = new System.Drawing.Point(130, 481);
+            this.label31.Location = new System.Drawing.Point(124, 334);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(30, 22);
             this.label31.TabIndex = 29;
@@ -1077,7 +1077,7 @@ namespace StockApi
             this.lblSellPrice.BackColor = System.Drawing.Color.Transparent;
             this.lblSellPrice.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblSellPrice.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblSellPrice.Location = new System.Drawing.Point(158, 499);
+            this.lblSellPrice.Location = new System.Drawing.Point(152, 355);
             this.lblSellPrice.Name = "lblSellPrice";
             this.lblSellPrice.Size = new System.Drawing.Size(46, 15);
             this.lblSellPrice.TabIndex = 28;
@@ -1089,7 +1089,7 @@ namespace StockApi
             this.lblBuyPrice.BackColor = System.Drawing.Color.Transparent;
             this.lblBuyPrice.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblBuyPrice.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblBuyPrice.Location = new System.Drawing.Point(158, 481);
+            this.lblBuyPrice.Location = new System.Drawing.Point(152, 334);
             this.lblBuyPrice.Name = "lblBuyPrice";
             this.lblBuyPrice.Size = new System.Drawing.Size(46, 15);
             this.lblBuyPrice.TabIndex = 27;
@@ -1100,7 +1100,7 @@ namespace StockApi
             // 
             this.label30.BackColor = System.Drawing.Color.Transparent;
             this.label30.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label30.Location = new System.Drawing.Point(41, 498);
+            this.label30.Location = new System.Drawing.Point(35, 354);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(48, 22);
             this.label30.TabIndex = 26;
@@ -1110,7 +1110,7 @@ namespace StockApi
             // 
             this.label29.BackColor = System.Drawing.Color.Transparent;
             this.label29.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label29.Location = new System.Drawing.Point(40, 480);
+            this.label29.Location = new System.Drawing.Point(34, 333);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(48, 22);
             this.label29.TabIndex = 25;
@@ -1120,7 +1120,7 @@ namespace StockApi
             // 
             this.label26.BackColor = System.Drawing.Color.Transparent;
             this.label26.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label26.Location = new System.Drawing.Point(63, 452);
+            this.label26.Location = new System.Drawing.Point(57, 305);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(233, 29);
             this.label26.TabIndex = 20;
@@ -1174,7 +1174,7 @@ namespace StockApi
             this.mainToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1384, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1374, 24);
             this.menuStrip1.TabIndex = 22;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -1209,7 +1209,7 @@ namespace StockApi
             this.panel3.Controls.Add(this.lblSellPrice);
             this.panel3.Controls.Add(this.label31);
             this.panel3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.panel3.Location = new System.Drawing.Point(1041, 35);
+            this.panel3.Location = new System.Drawing.Point(1032, 35);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(331, 525);
             this.panel3.TabIndex = 23;
@@ -1221,7 +1221,7 @@ namespace StockApi
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1384, 572);
+            this.ClientSize = new System.Drawing.Size(1374, 572);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.webView21);
             this.Controls.Add(this.picSidewaysTrend);
@@ -1242,8 +1242,8 @@ namespace StockApi
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MaximumSize = new System.Drawing.Size(1400, 611);
-            this.MinimumSize = new System.Drawing.Size(1400, 611);
+            this.MaximumSize = new System.Drawing.Size(1390, 611);
+            this.MinimumSize = new System.Drawing.Size(1390, 611);
             this.Name = "Form1";
             this.Text = "Stock Analyzer";
             this.Load += new System.EventHandler(this.Form1_Load);
