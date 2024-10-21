@@ -10,6 +10,29 @@ namespace StockApi
     {
     }
 
+    public class SettingsSection : IConfigurationSectionHandler
+    {
+        public object Create(object parent, object configContext, XmlNode section)
+        {
+            List<Setting> settings = new List<Setting>();
+
+            foreach (XmlNode childNode in section.ChildNodes) // <token> node
+            {
+                Setting setting = new Setting();
+                foreach (XmlAttribute attrib in childNode.Attributes)
+                {
+                    if (attrib.Name == "name")
+                        setting.Name = attrib.Value;
+
+                    if (attrib.Name == "value")
+                        setting.Value = attrib.Value;
+                }
+                settings.Add(setting);
+            }
+            return settings;
+        }
+    }
+
     public class SearchTokensSection : IConfigurationSectionHandler
     {
         public object Create(object parent, object configContext, XmlNode section)
@@ -33,9 +56,16 @@ namespace StockApi
         }
     }
 
+    public class Setting
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
+
     public class SearchTerm
     {
         public string Name { get; set; }
         public string Term { get; set; }
     }
+
 }

@@ -19,14 +19,18 @@ namespace StockApi
 {
     public partial class Form1 : Form
     {
+        List<Setting> _settings = new List<Setting>();
         private static StockSummary _stockSummary = new StockSummary();
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
+        private static DataTable _trades = null;
 
         public Form1()
         {
             InitializeComponent();
+            _settings = ConfigurationManager.GetSection("Settings") as List<Setting>;
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             ApplyStyles();
@@ -36,8 +40,11 @@ namespace StockApi
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             panel1.Visible = false;
 
-            panel2.BackColor = Color.FromArgb(100, 0, 0, 0);
+            panel2.BackColor = panel1.BackColor;
             panel2.Visible = false;
+
+            panel3.BackColor = panel1.BackColor;
+            panel3.Visible = false;
 
             picSpinner.Visible = false;
             //picSpinner.Left = 220;
@@ -114,6 +121,14 @@ namespace StockApi
             }
 
             PostSummaryWebCall(); // displays the data returned
+
+            if (_trades == null)
+            {
+                _trades = (new ExcelManager()).ImportTrades(_settings.Find(x => x.Name == "ExcelTradesPath").Value);
+                _trades = _trades.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
+            }
+
+
         }
 
         private async void btnGetAll_Click(object sender, EventArgs e)
@@ -149,8 +164,7 @@ namespace StockApi
             picWeekTrend.Image = picSidewaysTrend.Image; 
 
             btnGetOne.Enabled = false;
-            panel1.Visible = false;
-            panel2.Visible = false;
+            panel1.Visible = panel2.Visible = panel3.Visible = false;
             picSpinner.Visible = true;
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -173,8 +187,7 @@ namespace StockApi
                 lblProfitMargin.ForeColor = _stockSummary.ProfitMarginColor;
                 lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString;
                 lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
-                panel1.Visible = true;
-                panel2.Visible = true;
+                panel1.Visible = panel2.Visible = panel3.Visible = true;
                 picSpinner.Visible = false;
                 Cursor.Current = Cursors.Default;
 
@@ -245,8 +258,8 @@ namespace StockApi
 
         private void importTradesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExcelManager excelManager = new ExcelManager();
-            excelManager.Import("C:\\Users\\Uber\\Desktop\\Stocks 2023_w_Trades.xlsx");
+            //ExcelManager excelManager = new ExcelManager();
+            //excelManager.Import("C:\\Users\\Uber\\Desktop\\Stocks 2023_w_Trades.xlsx");
 
 
         }

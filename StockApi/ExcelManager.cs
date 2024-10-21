@@ -18,7 +18,7 @@ namespace StockApi
            
         }
 
-        public void Import(string filePath)
+        public DataTable ImportTrades(string filePath)
         {
             using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
@@ -62,14 +62,12 @@ namespace StockApi
                         });  // The result of each spreadsheet is in result.Tables
 
                     //var newTable = result.Tables[0].AsEnumerable().Where(x => x[0].ToString().Contains("2024"));
-                    var newTable = result.Tables[0].AsEnumerable().Where(x => x[4].ToString() == "GFI").CopyToDataTable();
-                    string json = JsonConvert.SerializeObject(newTable, Formatting.Indented);
-                    Debug.Print(json);
+                    //var newTable = result.Tables[0].AsEnumerable().Where(x => x[4].ToString() == "GFI").CopyToDataTable();
+                    //string json = JsonConvert.SerializeObject(newTable, Formatting.Indented);
+                    //Debug.Print(json);
+                    return result.Tables[0];
                 }
             }
         }
-
-
-
     }
 }
