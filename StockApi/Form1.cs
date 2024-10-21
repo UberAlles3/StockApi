@@ -232,15 +232,28 @@ namespace StockApi
                 Cursor.Current = Cursors.Default;
 
                 // Set some analyze form fields for later use
-                PersonalStock personalStock = new PersonalStock();
-                PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
-                if(personalStockData != null)
+                //PersonalStock personalStock = new PersonalStock();
+                //PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
+                if(_tickerTrades.Rows.Count > 0)
                 {
-                    txtSharesOwned.Text = personalStockData.SharesOwned.ToString();
+                    DataRow lastRow = _tickerTrades.Rows[_tickerTrades.Rows.Count - 1];
+                    txtSharesOwned.Text = lastRow.ItemArray[6].ToString();
+                    txtSharesTraded.Text = lastRow.ItemArray[3].ToString();
+                    if(lastRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
+                    {
+                        radBuy.Checked = true;
+                        radSell.Checked = false;
+                    }
+                    else
+                    {
+                        radBuy.Checked = false;
+                        radSell.Checked = true;
+                    }
                 }
                 else
                 {
                     txtSharesOwned.Text = "1";
+                    txtSharesTraded.Text = "1";
                 }
                 txtSharesTradePrice.Text = _stockSummary.Price.ToString();
             }
@@ -296,12 +309,6 @@ namespace StockApi
             }
         }
 
-        private void importTradesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //ExcelManager excelManager = new ExcelManager();
-            //excelManager.Import("C:\\Users\\Uber\\Desktop\\Stocks 2023_w_Trades.xlsx");
-
-
-        }
+  
     }
 }

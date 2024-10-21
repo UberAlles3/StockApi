@@ -1191,7 +1191,6 @@ namespace StockApi
             this.importTradesToolStripMenuItem.Name = "importTradesToolStripMenuItem";
             this.importTradesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.importTradesToolStripMenuItem.Text = "&Import Trades";
-            this.importTradesToolStripMenuItem.Click += new System.EventHandler(this.importTradesToolStripMenuItem_Click);
             // 
             // panel3
             // 

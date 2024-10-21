@@ -20,7 +20,11 @@ namespace StockApi
 
         public DataTable ImportTrades(string filePath)
         {
-            using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
+
+            File.Copy(filePath, importFilePath, true);
+            
+            using (var stream = File.Open(importFilePath, FileMode.Open, FileAccess.Read))
             {
                 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
