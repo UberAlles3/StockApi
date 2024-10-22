@@ -25,6 +25,8 @@ namespace StockApi
         private static Analyze _analyze = new Analyze();
         private static DataTable _trades = null;
         private static DataTable _tickerTrades = null;
+        private static string _tradesExcelFilePath = "";
+        private static DateTime _tradesImportDateTime = DateTime.Now;
 
         public Form1()
         {
@@ -88,11 +90,15 @@ namespace StockApi
                 return;
             }
 
-            if (_trades == null)
+            // Trades
+            _tradesExcelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
+            DateTime tradesExcelFileDateTime = System.IO.File.GetLastWriteTime(_tradesExcelFilePath);
+            if (_trades == null || tradesExcelFileDateTime > _tradesImportDateTime)
             {
                 _trades = (new ExcelManager()).ImportTrades(_settings.Find(x => x.Name == "ExcelTradesPath").Value);
                 _trades = _trades.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                 _trades.Columns[0].DataType = System.Type.GetType("System.DateTime");
+                _tradesImportDateTime = DateTime.Now;
             }
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
