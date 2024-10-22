@@ -121,43 +121,53 @@ namespace StockApi
                 dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
                 dataGridView1.Refresh();
 
+                _tickerTrades = null;
+                var tickertrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
+                if (_trades.Rows.Count > 0 && tickertrades.Count() > 0)
+                {
+                    _tickerTrades = tickertrades.CopyToDataTable();
 
-                _tickerTrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower()).CopyToDataTable();
-                // bind data list to trades grid control
-                BindingSource tradeSource = new BindingSource();
-                tradeSource.DataSource = _tickerTrades;
-                dataGridView2.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
-                dataGridView2.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
-                dataGridView2.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
-                dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
-                dataGridView2.DataSource = tradeSource.DataSource;
-                dataGridView2.Columns[0].HeaderText = "Date";
-                //dataGridView2.Columns[1].ValueType = System.Type.GetType("System.DateTime");
-                dataGridView2.Columns[1].Visible = false;
-                dataGridView2.Columns[2].HeaderText = "Buy/Sell";
-                dataGridView2.Columns[2].Width = 60;
-                dataGridView2.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                dataGridView2.Columns[3].HeaderText = "Quan.";
-                dataGridView2.Columns[3].Width = 60;
-                dataGridView2.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dataGridView2.Columns[3].DefaultCellStyle.Format = "#####";
-                dataGridView2.Columns[4].Visible = false; // Hide ticker
+                    // bind data list to trades grid control
+                    BindingSource tradeSource = new BindingSource();
+                    tradeSource.DataSource = _tickerTrades;
+                    dataGridView2.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
+                    dataGridView2.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
+                    dataGridView2.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
+                    dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
+                    dataGridView2.DataSource = tradeSource.DataSource;
+                    dataGridView2.Columns[0].HeaderText = "Date";
+                    //dataGridView2.Columns[1].ValueType = System.Type.GetType("System.DateTime");
+                    dataGridView2.Columns[1].Visible = false;
+                    dataGridView2.Columns[2].HeaderText = "Buy/Sell";
+                    dataGridView2.Columns[2].Width = 60;
+                    dataGridView2.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                    dataGridView2.Columns[3].HeaderText = "Quan.";
+                    dataGridView2.Columns[3].Width = 60;
+                    dataGridView2.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    dataGridView2.Columns[3].DefaultCellStyle.Format = "#####";
+                    dataGridView2.Columns[4].Visible = false; // Hide ticker
 
-                dataGridView2.Columns[5].HeaderText = "Price";
-                dataGridView2.Columns[5].Width = 77;
-                dataGridView2.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dataGridView2.Columns[5].DefaultCellStyle.Format = "N2";
-                dataGridView2.Columns[6].HeaderText = "Tot. Shares";
-                dataGridView2.Columns[6].Width = 68;
-                dataGridView2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dataGridView2.Columns[6].DefaultCellStyle.Format = "#####";
+                    dataGridView2.Columns[5].HeaderText = "Price";
+                    dataGridView2.Columns[5].Width = 77;
+                    dataGridView2.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    dataGridView2.Columns[5].DefaultCellStyle.Format = "N2";
+                    dataGridView2.Columns[6].HeaderText = "Tot. Shares";
+                    dataGridView2.Columns[6].Width = 68;
+                    dataGridView2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    dataGridView2.Columns[6].DefaultCellStyle.Format = "#####";
 
-                dataGridView2.Columns[7].Visible = false;
-                dataGridView2.Columns[8].Visible = false;
-                dataGridView2.Columns[9].Visible = false;
+                    dataGridView2.Columns[7].Visible = false;
+                    dataGridView2.Columns[8].Visible = false;
+                    dataGridView2.Columns[9].Visible = false;
 
-                //dataGridView2.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
-                dataGridView2.Refresh();
+                    //dataGridView2.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+                    dataGridView2.Refresh();
+                }
+                else
+                {
+                    dataGridView2.Rows.Clear();
+                    dataGridView2.Refresh();
+                }
 
                 // Trends
                 _stockHistory.SetTrends();
@@ -234,12 +244,13 @@ namespace StockApi
                 // Set some analyze form fields for later use
                 //PersonalStock personalStock = new PersonalStock();
                 //PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
-                if(_tickerTrades.Rows.Count > 0)
+                if(_tickerTrades != null && _tickerTrades.Rows.Count > 0)
                 {
                     DataRow lastRow = _tickerTrades.Rows[_tickerTrades.Rows.Count - 1];
-                    txtSharesOwned.Text = lastRow.ItemArray[6].ToString();
-                    txtSharesTraded.Text = lastRow.ItemArray[3].ToString();
-                    if(lastRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
+                    txtSharesOwned.Text = lastRow.ItemArray[6].ToString();      // Total Shares
+                    txtSharesTraded.Text = lastRow.ItemArray[3].ToString();     // Quan. Traded
+                    txtSharesTradePrice.Text = lastRow.ItemArray[5].ToString(); // Price
+                    if (lastRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
                     {
                         radBuy.Checked = true;
                         radSell.Checked = false;
@@ -249,13 +260,76 @@ namespace StockApi
                         radBuy.Checked = false;
                         radSell.Checked = true;
                     }
+
+                    // Find Min,Max trade price
+                    string min = _tickerTrades.AsEnumerable()
+                        .Min(row => row[5])
+                        .ToString();
+                    string max = _tickerTrades.AsEnumerable()
+                        .Max(row => row[5])
+                        .ToString();
+                    decimal minval = Convert.ToDecimal(min);
+                    decimal maxval = Convert.ToDecimal(max);
+                    decimal startVal = Convert.ToDecimal(_tickerTrades.AsEnumerable().First().ItemArray[5]);
+                    decimal endVal   = Convert.ToDecimal(_tickerTrades.AsEnumerable().Last().ItemArray[5]);
+                    if (_tickerTrades.Rows.Count > 4)
+                    {
+                        startVal = (startVal + Convert.ToDecimal(_tickerTrades.Rows[1].ItemArray[5])) / 2.0M;
+                        endVal = (endVal + Convert.ToDecimal(_tickerTrades.Rows[_tickerTrades.Rows.Count - 2].ItemArray[5])) / 2.0M;
+                    }
+
+                    decimal slideVal = ((endVal - startVal) / _tickerTrades.Rows.Count) *.9M;
+                    decimal currentSlide = startVal;
+                    decimal currentPrice;
+                    int i = 0;
+                    Color lastColor = Color.Black;
+                    foreach (DataRow r in _tickerTrades.Rows)
+                    {
+                        // Color Buy and Sells
+                        if (r.ItemArray[2].ToString().Trim().ToLower() == "buy")
+                            dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Lime;
+                        else
+                            dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Yellow;
+
+                        // Color high price low price
+                        currentSlide += slideVal;
+                        currentPrice = Convert.ToDecimal(r.ItemArray[5]);
+                        if (currentPrice > maxval * .98M || currentPrice > currentSlide * 1.1M)
+                        {
+                            if (lastColor != Color.Lime)
+                            {
+                                dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.Lime;
+                                lastColor = Color.Lime;
+                            }
+                            if (currentPrice > maxval * .98M)
+                            {
+                                dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.Lime;
+                                lastColor = Color.Lime;
+                            }
+                        }
+                        if (currentPrice < minval * 1.02M || currentPrice < currentSlide * .9M)
+                        {
+                            if (lastColor != Color.Red)
+                            {
+                                dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.Red;
+                                lastColor = Color.Red;
+                            }
+                            if (currentPrice < minval * 1.02M)
+                            {
+                                dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.Red;
+                                lastColor = Color.Red;
+                            }
+                        }
+
+                        i++;
+                    }
                 }
                 else
                 {
                     txtSharesOwned.Text = "1";
                     txtSharesTraded.Text = "1";
+                    txtSharesTradePrice.Text = _stockSummary.Price.ToString();
                 }
-                txtSharesTradePrice.Text = _stockSummary.Price.ToString();
             }
             catch (Exception e)
             {
