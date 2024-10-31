@@ -90,6 +90,7 @@ namespace StockApi
                 return;
             }
 
+
             // Trades
             _tradesExcelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
             DateTime tradesExcelFileDateTime = System.IO.File.GetLastWriteTime(_tradesExcelFilePath);
