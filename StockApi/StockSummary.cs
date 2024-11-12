@@ -10,14 +10,16 @@ namespace StockApi
 {
     public class StockSummary : YahooFinance
     {
-//        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
+        //        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
         private static readonly string _url = "https://finance.yahoo.com/quote/???";
+        private static readonly string _shortInterestUrl = "https://finance.yahoo.com/quote/???/key-statistics";
         
         public Color DividendColor = Color.LightSteelBlue;
         public Color EPSColor = Color.LightSteelBlue;
         public Color PriceBookColor = Color.LightSteelBlue;
         public Color ProfitMarginColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
+        public Color ShortInterestColor = Color.LightSteelBlue;
 
         private string  companyName = "";
         private string  dividendString = NotApplicable;
@@ -33,8 +35,11 @@ namespace StockApi
         private float   price = 0;
         private string  volatilityString = NotApplicable;
         private float   volatility = 0;
+        private string shortInterestString = NotApplicable;
+        private float shortInterest = 0;
+        
 
-        private List<string> SearchTerms = new List<string>();
+        private List<SearchTerm> _searchTerms = new List<SearchTerm>();
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
@@ -215,23 +220,50 @@ namespace StockApi
             set { volatility = value; }
         }
 
+        public string ShortInterestString
+        {
+            get => shortInterestString;
+            set
+            {
+                shortInterestString = value;
+                if (ShortInterestString == YahooFinance.NotApplicable || ShortInterestString == "" || ShortInterestString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
+                    ShortInterest = 0;
+                else
+                    ShortInterest = Convert.ToSingle(ShortInterestString);
+            }
+        }
+
+        public float ShortInterest
+        {
+            get => shortInterest;
+            set
+            {
+                shortInterest = value;
+                if (shortInterest > 8)
+                    ShortInterestColor = Color.Red;
+                else if (ShortInterest < 2)
+                    ShortInterestColor = Color.Lime;
+                else
+                    ShortInterestColor = Color.LightSteelBlue;
+            }
+        }
 
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
-        public async Task<string> GetHtmlForTicker(string ticker)
+        public async Task<string> GetHtmlForTicker(string url, string ticker)
         {
             Ticker = ticker;
-            string formattedUrl = _url.Replace("???", Ticker);
+            string formattedUrl = url.Replace("???", Ticker);
             return await GetHtml(formattedUrl);
         }
 
         public async Task<bool> GetSummaryData(string ticker)
         {
             Ticker = ticker;
-            List<SearchTerm> searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
+            _searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
 
-            string html = await GetHtmlForTicker(Ticker);
+            string html = await GetHtmlForTicker(_url, Ticker);
 
             //html = Regex.Replace(html, @"[^\u0020-\u007e]", "");
 
@@ -245,21 +277,21 @@ namespace StockApi
             }
 
             // Price
-            string searchTerm = searchTerms.Find(x => x.Name == "Price").Term;
+            string searchTerm = _searchTerms.Find(x => x.Name == "Price").Term;
             string price = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             Price = Convert.ToSingle(price);
 
             // EPS
-            searchTerm = searchTerms.Find(x => x.Name == "EPS").Term;
+            searchTerm = _searchTerms.Find(x => x.Name == "EPS").Term;
             EarningsPerShareString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
             //EarningsPerShareString = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
 
             // Volatility
-            searchTerm = searchTerms.Find(x => x.Name == "Volatility").Term;
+            searchTerm = _searchTerms.Find(x => x.Name == "Volatility").Term;
             VolatilityString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
 
             // Dividend
-            searchTerm = searchTerms.Find(x => x.Name == "Dividend").Term;
+            searchTerm = _searchTerms.Find(x => x.Name == "Dividend").Term;
             string dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
             if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
             {
@@ -274,15 +306,15 @@ namespace StockApi
             DividendString = dividend;
 
             // One year target
-            searchTerm = searchTerms.Find(x => x.Name == "One Year Target").Term;
+            searchTerm = _searchTerms.Find(x => x.Name == "One Year Target").Term;
             OneYearTargetPriceString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
 
             // Price / Book
-            searchTerm = searchTerms.Find(x => x.Name == "Price/Book").Term;
+            searchTerm = _searchTerms.Find(x => x.Name == "Price/Book").Term;
             PriceBookString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
             //Profit Margin %
-            searchTerm = searchTerms.Find(x => x.Name == "Profit Margin").Term;
+            searchTerm = _searchTerms.Find(x => x.Name == "Profit Margin").Term;
             string profitMarginString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             if (profitMarginString != YahooFinance.NotApplicable && profitMarginString.IndexOf("%") > 0)
                 ProfitMarginString = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
@@ -291,6 +323,24 @@ namespace StockApi
             return true;
         }
 
+
+        public async Task<bool> GetShortInterest(string ticker)
+        {
+            Ticker = ticker;
+            List<SearchTerm> searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
+
+            string html = await GetHtmlForTicker(_shortInterestUrl, Ticker);
+
+            // Short Interest
+            string searchTerm = searchTerms.Find(x => x.Name == "Short Interest").Term;
+            shortInterestString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+            if (shortInterestString != YahooFinance.NotApplicable && shortInterestString.IndexOf("%") > 0)
+                ShortInterestString = shortInterestString.Substring(0, shortInterestString.IndexOf("%"));
+            else
+                ShortInterestString = YahooFinance.NotApplicable;
+
+            return true;
+        }
 
         ////////////////////////////
         ///    Parsing methods

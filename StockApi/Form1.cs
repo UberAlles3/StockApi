@@ -172,7 +172,11 @@ namespace StockApi
                 }
                 else
                 {
-                    dataGridView2.Rows.Clear();
+                    if (_tickerTrades != null)
+                        dataGridView2.Rows.Clear();
+                    else
+                        dataGridView2.DataSource = null;
+                    //dataGridView2.Rows.Clear();
                     dataGridView2.Refresh();
                 }
 
@@ -222,6 +226,7 @@ namespace StockApi
 
             btnGetOne.Enabled = false;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
+            btnGetShortInterest.Visible = true;
             picSpinner.Visible = true;
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -390,6 +395,18 @@ namespace StockApi
             }
         }
 
-  
+        private async void btnGetShortInterest_Click(object sender, EventArgs e)
+        {
+            btnGetShortInterest.Visible = false;
+            lblShortInterest.Text = "...";
+
+            bool found = await _stockSummary.GetShortInterest(txtStockTicker.Text);
+
+            if (found)
+            {
+                lblShortInterest.Text = _stockSummary.ShortInterest.ToString() + "%";
+                lblShortInterest.ForeColor = _stockSummary.ShortInterestColor;
+            }
+        }
     }
 }
