@@ -29,11 +29,11 @@ namespace StockApi
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnGetOne = new System.Windows.Forms.Button();
             this.txtStockTicker = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,6 +41,10 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnGetShortInterest = new System.Windows.Forms.Button();
+            this.label47 = new System.Windows.Forms.Label();
+            this.lblShortInterest = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.pic3YearTrend = new System.Windows.Forms.PictureBox();
             this.lblProfitMargin = new System.Windows.Forms.Label();
@@ -124,10 +128,6 @@ namespace StockApi
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importTradesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
-            this.lblShortInterest = new System.Windows.Forms.Label();
-            this.btnGetShortInterest = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
@@ -263,6 +263,50 @@ namespace StockApi
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(344, 525);
             this.panel1.TabIndex = 6;
+            // 
+            // btnGetShortInterest
+            // 
+            this.btnGetShortInterest.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnGetShortInterest.Location = new System.Drawing.Point(200, 158);
+            this.btnGetShortInterest.Name = "btnGetShortInterest";
+            this.btnGetShortInterest.Size = new System.Drawing.Size(132, 23);
+            this.btnGetShortInterest.TabIndex = 42;
+            this.btnGetShortInterest.Text = "Get Short Interest";
+            this.btnGetShortInterest.UseVisualStyleBackColor = true;
+            this.btnGetShortInterest.Click += new System.EventHandler(this.btnGetShortInterest_Click);
+            // 
+            // label47
+            // 
+            this.label47.BackColor = System.Drawing.Color.Transparent;
+            this.label47.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label47.Location = new System.Drawing.Point(199, 158);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(81, 22);
+            this.label47.TabIndex = 40;
+            this.label47.Text = "Short Interst";
+            // 
+            // lblShortInterest
+            // 
+            this.lblShortInterest.BackColor = System.Drawing.Color.Transparent;
+            this.lblShortInterest.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblShortInterest.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblShortInterest.Location = new System.Drawing.Point(256, 158);
+            this.lblShortInterest.Name = "lblShortInterest";
+            this.lblShortInterest.Size = new System.Drawing.Size(79, 22);
+            this.lblShortInterest.TabIndex = 41;
+            this.lblShortInterest.Text = "0.00";
+            this.lblShortInterest.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.BackColor = System.Drawing.Color.Transparent;
+            this.label46.ForeColor = System.Drawing.Color.DarkGray;
+            this.label46.Location = new System.Drawing.Point(198, 169);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(137, 15);
+            this.label46.TabIndex = 39;
+            this.label46.Text = "__________________________";
             // 
             // label39
             // 
@@ -511,25 +555,25 @@ namespace StockApi
             this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.Location = new System.Drawing.Point(9, 279);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -786,25 +830,25 @@ namespace StockApi
             this.dataGridView2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.ColumnHeadersVisible = false;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView2.Location = new System.Drawing.Point(7, 279);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 25;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -1220,50 +1264,6 @@ namespace StockApi
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(331, 525);
             this.panel3.TabIndex = 23;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.BackColor = System.Drawing.Color.Transparent;
-            this.label46.ForeColor = System.Drawing.Color.DarkGray;
-            this.label46.Location = new System.Drawing.Point(198, 169);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(137, 15);
-            this.label46.TabIndex = 39;
-            this.label46.Text = "__________________________";
-            // 
-            // label47
-            // 
-            this.label47.BackColor = System.Drawing.Color.Transparent;
-            this.label47.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label47.Location = new System.Drawing.Point(199, 158);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(81, 22);
-            this.label47.TabIndex = 40;
-            this.label47.Text = "Short Interst";
-            // 
-            // lblShortInterest
-            // 
-            this.lblShortInterest.BackColor = System.Drawing.Color.Transparent;
-            this.lblShortInterest.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblShortInterest.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblShortInterest.Location = new System.Drawing.Point(256, 158);
-            this.lblShortInterest.Name = "lblShortInterest";
-            this.lblShortInterest.Size = new System.Drawing.Size(79, 22);
-            this.lblShortInterest.TabIndex = 41;
-            this.lblShortInterest.Text = "0.00";
-            this.lblShortInterest.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // btnGetShortInterest
-            // 
-            this.btnGetShortInterest.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnGetShortInterest.Location = new System.Drawing.Point(200, 158);
-            this.btnGetShortInterest.Name = "btnGetShortInterest";
-            this.btnGetShortInterest.Size = new System.Drawing.Size(132, 23);
-            this.btnGetShortInterest.TabIndex = 42;
-            this.btnGetShortInterest.Text = "Get Short Interest";
-            this.btnGetShortInterest.UseVisualStyleBackColor = true;
-            this.btnGetShortInterest.Click += new System.EventHandler(this.btnGetShortInterest_Click);
             // 
             // Form1
             // 
