@@ -210,8 +210,9 @@ namespace StockApi
 
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                await _stockSummary.GetShortInterest(_stockSummary.Ticker);
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}{Environment.NewLine}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}, {_stockSummary.ShortInterest}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }

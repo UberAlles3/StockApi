@@ -307,7 +307,7 @@ namespace StockApi
 
             // One year target
             searchTerm = _searchTerms.Find(x => x.Name == "One Year Target").Term;
-            OneYearTargetPriceString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+            OneYearTargetPriceString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4).Trim();
 
             // Price / Book
             searchTerm = _searchTerms.Find(x => x.Name == "Price/Book").Term;
@@ -434,7 +434,7 @@ namespace StockApi
                 return defaultValue;
             }
 
-            loc2 = parts[tagPosition].IndexOf("<");
+            loc2 = (parts[tagPosition] + "<").IndexOf("<");
 
             string middle = parts[tagPosition].Substring(0, loc2);
             return middle;
