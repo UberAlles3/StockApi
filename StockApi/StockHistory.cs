@@ -88,7 +88,7 @@ namespace StockApi
             return theDate;
         }
 
-        private async Task<List<HistoricData>> GetHistoricalDataForDateRange(string ticker, DateTime beginDate, DateTime endDate)
+        public async Task<List<HistoricData>> GetHistoricalDataForDateRange(string ticker, DateTime beginDate, DateTime endDate)
         {
             string formattedDate = "";
 

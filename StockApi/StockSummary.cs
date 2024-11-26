@@ -258,7 +258,7 @@ namespace StockApi
             return await GetHtml(formattedUrl);
         }
 
-        public async Task<bool> GetSummaryData(string ticker)
+        public async Task<bool> GetSummaryData(string ticker, bool verbose = true)
         {
             Ticker = ticker;
             _searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
@@ -280,6 +280,9 @@ namespace StockApi
             string searchTerm = _searchTerms.Find(x => x.Name == "Price").Term;
             string price = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             Price = Convert.ToSingle(price);
+
+            if (verbose == false)
+                return true;
 
             // EPS
             searchTerm = _searchTerms.Find(x => x.Name == "EPS").Term;
