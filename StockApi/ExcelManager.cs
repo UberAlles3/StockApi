@@ -7,7 +7,6 @@ using System.Data;
 using System.Diagnostics;
 using Newtonsoft.Json;
 
-
 namespace StockApi
 {
     public class ExcelManager
