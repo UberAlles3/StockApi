@@ -21,6 +21,7 @@ namespace StockApi
     {
         List<Setting> _settings = new List<Setting>();
         private static StockSummary _stockSummary = new StockSummary();
+        private static StockFinancials _stockFinancials = new StockFinancials();
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
         private static DataTable _trades = null;
@@ -126,8 +127,10 @@ namespace StockApi
                 dataGridView1.DataSource = source.DataSource;
                 dataGridView1.Columns[0].Visible = false;
                 dataGridView1.Columns[1].HeaderText = "Date";
+                dataGridView1.Columns[2].Width = 120;
                 dataGridView1.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
                 dataGridView1.Columns[2].DefaultCellStyle.Format = "N2";
+                dataGridView1.Columns[3].Width = 120;
                 dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
                 dataGridView1.Refresh();
 
@@ -215,9 +218,9 @@ namespace StockApi
 
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
-                await _stockSummary.GetShortInterest(_stockSummary.Ticker);
+                await _stockFinancials.GetShortInterest(_stockSummary.Ticker);
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}, {_stockSummary.ShortInterest}{Environment.NewLine}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}, {_stockFinancials.ShortInterest}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
@@ -267,7 +270,7 @@ namespace StockApi
 
             btnGetOne.Enabled = false;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
-            btnGetShortInterest.Visible = true;
+            btnGetFinancials.Visible = true;
             picSpinner.Visible = true;
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -436,19 +439,18 @@ namespace StockApi
             }
         }
 
-        private async void btnGetShortInterest_Click(object sender, EventArgs e)
+        private async void btnGetFinancials_Click(object sender, EventArgs e)
         {
-            btnGetShortInterest.Visible = false;
+            btnGetFinancials.Visible = false;
             lblShortInterest.Text = "...";
 
-            bool found = await _stockSummary.GetShortInterest(txtStockTicker.Text);
+            bool found = await _stockFinancials.GetShortInterest(txtStockTicker.Text);
 
             if (found)
             {
-                lblShortInterest.Text = _stockSummary.ShortInterest.ToString() + "%";
-                lblShortInterest.ForeColor = _stockSummary.ShortInterestColor;
+                lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
+                lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
             }
         }
-
     }
 }

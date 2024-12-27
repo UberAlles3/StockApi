@@ -11,15 +11,13 @@ namespace StockApi
     public class StockSummary : YahooFinance
     {
         //        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
-        private static readonly string _url = "https://finance.yahoo.com/quote/???";
-        private static readonly string _shortInterestUrl = "https://finance.yahoo.com/quote/???/key-statistics";
-        
+        private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
+ 
         public Color DividendColor = Color.LightSteelBlue;
         public Color EPSColor = Color.LightSteelBlue;
         public Color PriceBookColor = Color.LightSteelBlue;
         public Color ProfitMarginColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
-        public Color ShortInterestColor = Color.LightSteelBlue;
 
         private string  companyName = "";
         private string  dividendString = NotApplicable;
@@ -35,9 +33,6 @@ namespace StockApi
         private float   price = 0;
         private string  volatilityString = NotApplicable;
         private float   volatility = 0;
-        private string shortInterestString = NotApplicable;
-        private float shortInterest = 0;
-        
 
         private List<SearchTerm> _searchTerms = new List<SearchTerm>();
 
@@ -220,34 +215,6 @@ namespace StockApi
             set { volatility = value; }
         }
 
-        public string ShortInterestString
-        {
-            get => shortInterestString;
-            set
-            {
-                shortInterestString = value;
-                if (ShortInterestString == YahooFinance.NotApplicable || ShortInterestString == "" || ShortInterestString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
-                    ShortInterest = 0;
-                else
-                    ShortInterest = Convert.ToSingle(ShortInterestString);
-            }
-        }
-
-        public float ShortInterest
-        {
-            get => shortInterest;
-            set
-            {
-                shortInterest = value;
-                if (shortInterest > 8)
-                    ShortInterestColor = Color.Red;
-                else if (ShortInterest < 2)
-                    ShortInterestColor = Color.Lime;
-                else
-                    ShortInterestColor = Color.LightSteelBlue;
-            }
-        }
-
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
@@ -263,7 +230,7 @@ namespace StockApi
             Ticker = ticker;
             _searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
 
-            string html = await GetHtmlForTicker(_url, Ticker);
+            string html = await GetHtmlForTicker(_summaryUrl, Ticker);
 
             //html = Regex.Replace(html, @"[^\u0020-\u007e]", "");
 
@@ -327,121 +294,7 @@ namespace StockApi
         }
 
 
-        public async Task<bool> GetShortInterest(string ticker)
-        {
-            Ticker = ticker;
-            List<SearchTerm> searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
 
-            string html = await GetHtmlForTicker(_shortInterestUrl, Ticker);
-
-            // Short Interest
-            string searchTerm = searchTerms.Find(x => x.Name == "Short Interest").Term;
-            shortInterestString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
-            if (shortInterestString != YahooFinance.NotApplicable && shortInterestString.IndexOf("%") > 0)
-                ShortInterestString = shortInterestString.Substring(0, shortInterestString.IndexOf("%"));
-            else
-                ShortInterestString = YahooFinance.NotApplicable;
-
-            return true;
-        }
-
-        ////////////////////////////
-        ///    Parsing methods
-        ////////////////////////////
-        private static string GetFloatValueFromHtml(string html, string data_test_name, string defaultValue)
-        {
-            string temp = GetValueFromHtml(html, data_test_name, defaultValue);
-            if (temp != YahooFinance.NotApplicable)
-                return temp;
-            else
-                return defaultValue;
-        }
-
-        private static string GetDataByTagName(string html, string tagName, string defaultValue)
-        {
-            int loc1 = html.IndexOf("<" + tagName) + 1;
-            int loc2 = html.IndexOf("</" + tagName, loc1 + 5); //</title
-            if (loc1 == -1)
-            {
-                return defaultValue;
-            }
-
-            string middle = html.Substring(loc1 + 1 + tagName.Length, loc2 - loc1 - 1);
-            return middle;
-        }
-
-        private static string GetDataByClassName(string html, string class_name, string defaultValue)
-        {
-            int loc1 = html.IndexOf("class=\"" + class_name + "\"");
-            if (loc1 == -1)
-            {
-                return defaultValue;
-            }
-            loc1 = html.IndexOf(">", loc1 + 1);
-            int loc2 = html.IndexOf("<", loc1 + 1);
-            string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
-            return middle;
-        }
-
-        private static string GetValueFromHtml(string html, string data_test_name, string defaultValue)
-        {
-            int loc1 = 0;
-            int loc2 = 0;
-
-            loc1 = html.IndexOf("data-test=\"" + data_test_name + "\"");
-            if (loc1 == -1)
-            {
-                return defaultValue.ToString();
-            }
-
-            loc1 = html.IndexOf(">", loc1 + 1);
-            loc2 = html.IndexOf("<", loc1 + 1);
-
-            string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
-            return middle;
-        }
-
-        private static string GetValueFromHtmlBySearchText(string html, string searchText, string defaultValue)
-        {
-            int loc1 = 0;
-            int loc2 = 0;
-
-            loc1 = html.IndexOf(searchText);
-            if (loc1 == -1)
-            {
-                return defaultValue;
-            }
-
-            loc1 = html.IndexOf(">", loc1 - 4);
-            loc2 = html.IndexOf("<", loc1 + 1);
-
-            string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
-            return middle;
-        }
-        private static string GetValueFromHtmlBySearchTerm(string html, string searchText, string defaultValue, int tagPosition)
-        {
-            int loc1 = 0;
-            int loc2 = 0;
-
-            loc1 = html.IndexOf(searchText);
-            if (loc1 == -1)
-            {
-                return defaultValue;
-            }
-
-            string htmlSnippet = html.Substring(loc1 + 1, 200);
-            string[] parts = htmlSnippet.Split(">");
-
-            if(parts.Length < 3)
-            {
-                return defaultValue;
-            }
-
-            loc2 = (parts[tagPosition] + "<").IndexOf("<");
-
-            string middle = parts[tagPosition].Substring(0, loc2);
-            return middle;
-        }
 
     }
 }
