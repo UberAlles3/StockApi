@@ -186,7 +186,7 @@ namespace StockApi
             formattedUrl = formattedUrl.Replace("?period1?", Convert.ToInt32(beginEpoch).ToString());
             formattedUrl = formattedUrl.Replace("?period2?", Convert.ToInt32(endEpoch).ToString());
 
-            string html = await YahooFinance.GetHtml(formattedUrl);
+            string html = await GetHtml(formattedUrl);
 
             int historyLocation = html.IndexOf("data-testid=\"history-table");
             historyLocation = html.IndexOf("<table");

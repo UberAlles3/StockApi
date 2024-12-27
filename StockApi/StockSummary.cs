@@ -34,7 +34,6 @@ namespace StockApi
         private string  volatilityString = NotApplicable;
         private float   volatility = 0;
 
-        private List<SearchTerm> _searchTerms = new List<SearchTerm>();
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
@@ -218,17 +217,10 @@ namespace StockApi
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
-        public async Task<string> GetHtmlForTicker(string url, string ticker)
-        {
-            Ticker = ticker;
-            string formattedUrl = url.Replace("???", Ticker);
-            return await GetHtml(formattedUrl);
-        }
-
+ 
         public async Task<bool> GetSummaryData(string ticker, bool verbose = true)
         {
             Ticker = ticker;
-            _searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
 
             string html = await GetHtmlForTicker(_summaryUrl, Ticker);
 
@@ -244,7 +236,7 @@ namespace StockApi
             }
 
             // Price
-            string searchTerm = _searchTerms.Find(x => x.Name == "Price").Term;
+            string searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
             string price = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             Price = Convert.ToSingle(price);
 
@@ -252,16 +244,16 @@ namespace StockApi
                 return true;
 
             // EPS
-            searchTerm = _searchTerms.Find(x => x.Name == "EPS").Term;
+            searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;
             EarningsPerShareString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
             //EarningsPerShareString = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
 
             // Volatility
-            searchTerm = _searchTerms.Find(x => x.Name == "Volatility").Term;
+            searchTerm = SearchTerms.Find(x => x.Name == "Volatility").Term;
             VolatilityString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
 
             // Dividend
-            searchTerm = _searchTerms.Find(x => x.Name == "Dividend").Term;
+            searchTerm = SearchTerms.Find(x => x.Name == "Dividend").Term;
             string dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
             if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
             {
@@ -276,15 +268,15 @@ namespace StockApi
             DividendString = dividend;
 
             // One year target
-            searchTerm = _searchTerms.Find(x => x.Name == "One Year Target").Term;
+            searchTerm = SearchTerms.Find(x => x.Name == "One Year Target").Term;
             OneYearTargetPriceString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4).Trim();
 
             // Price / Book
-            searchTerm = _searchTerms.Find(x => x.Name == "Price/Book").Term;
+            searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
             PriceBookString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
             //Profit Margin %
-            searchTerm = _searchTerms.Find(x => x.Name == "Profit Margin").Term;
+            searchTerm = SearchTerms.Find(x => x.Name == "Profit Margin").Term;
             string profitMarginString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             if (profitMarginString != YahooFinance.NotApplicable && profitMarginString.IndexOf("%") > 0)
                 ProfitMarginString = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));

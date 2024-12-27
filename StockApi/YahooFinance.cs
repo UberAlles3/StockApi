@@ -13,6 +13,7 @@ using System.Linq;
 using System.Web;
 using Newtonsoft.Json;
 using System.Globalization;
+using System.Configuration;
 
 namespace StockApi
 {
@@ -20,12 +21,19 @@ namespace StockApi
     {
         public static string NotApplicable = "N/A";
         private static readonly object syncObj = new object();
-
         private string _ticker;
+        protected static List<SearchTerm> SearchTerms = new List<SearchTerm>(); // singleton instance, load once
+
         public string Ticker
         {
             get { return _ticker; }
             set { _ticker = value.ToUpper(); }
+        }
+
+        public YahooFinance()
+        {
+           if (SearchTerms.Count == 0)
+              SearchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
         }
 
         protected static async Task<string> GetHtml(string url)
@@ -53,6 +61,13 @@ namespace StockApi
             //    wb.Dispose();
             //}
             //return html;
+        }
+
+        protected async Task<string> GetHtmlForTicker(string url, string ticker)
+        {
+            Ticker = ticker;
+            string formattedUrl = url.Replace("???", Ticker);
+            return await GetHtml(formattedUrl);
         }
 
         ////////////////////////////
@@ -110,6 +125,20 @@ namespace StockApi
             string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
             return middle;
         }
+
+        protected static string GetPartialHtmlFromHtmlBySearchTerm(string html, string searchText, int length)
+        {
+            int loc1 = 0;
+            int loc2 = 0;
+
+            loc1 = html.IndexOf(searchText);
+            if (loc1 == -1)
+            {
+                return "";
+            }
+
+            return html.Substring(loc1 + 1, length);
+         }
 
         protected static string GetValueFromHtmlBySearchText(string html, string searchText, string defaultValue)
         {

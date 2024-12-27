@@ -218,7 +218,7 @@ namespace StockApi
 
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
-                await _stockFinancials.GetShortInterest(_stockSummary.Ticker);
+                await _stockFinancials.GetStatisticalData(_stockSummary.Ticker);
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}, {_stockFinancials.ShortInterest}{Environment.NewLine}");
             }
@@ -444,7 +444,10 @@ namespace StockApi
             btnGetFinancials.Visible = false;
             lblShortInterest.Text = "...";
 
-            bool found = await _stockFinancials.GetShortInterest(txtStockTicker.Text);
+            bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
+
+
+            found = await _stockFinancials.GetStatisticalData(txtStockTicker.Text);
 
             if (found)
             {

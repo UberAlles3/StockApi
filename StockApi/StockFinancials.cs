@@ -11,6 +11,7 @@ namespace StockApi
     {
         private static readonly string _statisticsUrl = "https://finance.yahoo.com/quote/???/key-statistics/";
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
+        private List<SearchTerm> _searchTerms = new List<SearchTerm>();
 
         public Color ShortInterestColor = Color.LightSteelBlue;
 
@@ -48,22 +49,44 @@ namespace StockApi
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
-        public async Task<string> GetHtmlForTicker(string url, string ticker)
+
+        public async Task<bool> GetFinancialData(string ticker)
         {
             Ticker = ticker;
-            string formattedUrl = url.Replace("???", Ticker);
-            return await GetHtml(formattedUrl);
+
+            string html = await GetHtmlForTicker(_financialsUrl, Ticker);
+
+            // Revenue History
+            string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
+
+            string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
+
+            var items = new List<string>();
+            string[] split = partial.Split(">");
+            string num;
+            foreach (string s in split)
+            {
+                if ("0123456789.".IndexOf(s.Substring(0, 1)) > -1)
+                {
+                    num = s.Substring(0, s.IndexOf("<"));
+                    items.Add(num);
+                }
+                if (items.Count > 5)
+                    break;
+            }
+
+
+            return true;
         }
 
-        public async Task<bool> GetShortInterest(string ticker)
+        public async Task<bool> GetStatisticalData(string ticker)
         {
             Ticker = ticker;
-            List<SearchTerm> searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
 
             string html = await GetHtmlForTicker(_statisticsUrl, Ticker);
 
             // Short Interest
-            string searchTerm = searchTerms.Find(x => x.Name == "Short Interest").Term;
+            string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Short Interest").Term;
             shortInterestString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
             if (shortInterestString != YahooFinance.NotApplicable && shortInterestString.IndexOf("%") > 0)
                 ShortInterestString = shortInterestString.Substring(0, shortInterestString.IndexOf("%"));
