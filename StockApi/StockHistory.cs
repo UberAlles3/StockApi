@@ -127,34 +127,22 @@ namespace StockApi
 
                 string htmlForDate = html.Substring(index, 600);
 
-                var items = new List<string>();
-                string[] split = htmlForDate.Split(">");
-                string num;
-                foreach(string s in split)
+                var numbers = GetNumbersFromHtml(htmlForDate);
+
+                if (numbers.Count < 6)
                 {
-                    if("0123456789.".IndexOf(s.Substring(0,1)) > -1)
-                    {
-                        num = s.Substring(0, s.IndexOf("<"));
-                        items.Add(num);
-                    }
-                    if (items.Count > 5)
-                        break;
+                    numbers.Add("0");
                 }
 
-                if (items.Count < 6)
-                {
-                    items.Add("0");
-                }
-
-                if (items[5].IndexOf(",") < 0)
-                    items[5] = "0";
+                if (numbers[5].IndexOf(",") < 0)
+                    numbers[5] = "0";
 
                 HistoricData historicData = new HistoricData();
 
                 historicData.Ticker = Ticker;
                 historicData.PriceDate = beginDate.AddDays(i).Date;
-                historicData.Price = Convert.ToSingle(items[3]);
-                historicData.Volume = items[5];
+                historicData.Price = Convert.ToSingle(numbers[3]);
+                historicData.Volume = numbers[5];
 
                 historicDataList.Add(historicData);
 

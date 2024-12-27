@@ -140,6 +140,25 @@ namespace StockApi
             return html.Substring(loc1 + 1, length);
          }
 
+        protected static List<string> GetNumbersFromHtml(string partial)
+        {
+            var numbers = new List<string>();
+            string[] split = partial.Split(">");
+            string num;
+            foreach (string s in split)
+            {
+                if ("0123456789.".IndexOf(s.Substring(0, 1)) > -1)
+                {
+                    num = s.Substring(0, s.IndexOf("<"));
+                    numbers.Add(num);
+                }
+                if (numbers.Count > 5)
+                    break;
+            }
+
+            return numbers;
+        }
+
         protected static string GetValueFromHtmlBySearchText(string html, string searchText, string defaultValue)
         {
             int loc1 = 0;

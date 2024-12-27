@@ -61,20 +61,7 @@ namespace StockApi
 
             string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
 
-            var items = new List<string>();
-            string[] split = partial.Split(">");
-            string num;
-            foreach (string s in split)
-            {
-                if ("0123456789.".IndexOf(s.Substring(0, 1)) > -1)
-                {
-                    num = s.Substring(0, s.IndexOf("<"));
-                    items.Add(num);
-                }
-                if (items.Count > 5)
-                    break;
-            }
-
+            List<string> numbers = GetNumbersFromHtml(partial);
 
             return true;
         }
