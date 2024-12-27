@@ -99,7 +99,10 @@ namespace StockApi
                 _trades = (new ExcelManager()).ImportTrades(_settings.Find(x => x.Name == "ExcelTradesPath").Value);
                 _trades = _trades.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                 _trades.Columns[0].DataType = System.Type.GetType("System.DateTime");
-                _tradesImportDateTime = DateTime.Now;
+                //_trades.Columns[0].ColumnName = "Date";
+                //_trades.DefaultView.Sort = "Date desc";
+                
+                _tradesImportDateTime = DateTime.Now; // Update when the last import took place
             }
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
@@ -129,9 +132,11 @@ namespace StockApi
                 dataGridView1.Refresh();
 
                 _tickerTrades = null;
-                var tickertrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
+                // filter on stock ticker then order by date descending
+                var tickertrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower()).OrderByDescending(x => x[1]);
                 if (_trades.Rows.Count > 0 && tickertrades.Count() > 0)
                 {
+                    //tickertrades = tickertrades.OrderByDescending(x => x[1].ToString());
                     _tickerTrades = tickertrades.CopyToDataTable();
 
                     // bind data list to trades grid control
