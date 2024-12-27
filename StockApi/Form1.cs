@@ -68,6 +68,10 @@ namespace StockApi
             txtStockTicker.Text = "INTC";
             txtSharesTraded.Text = "80";
 
+            // Revenue year labels TTM, 2 years ago, 4 years ago
+            lblFin2YearsAgo.Text = DateTime.Now.AddYears(-2).ToString("yyyy");
+            lblFin4YearsAgo.Text = DateTime.Now.AddYears(-4).ToString("yyyy");
+
             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
@@ -445,7 +449,9 @@ namespace StockApi
             lblShortInterest.Text = "...";
 
             bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
-
+            lblFinRevTTM.Text = _stockFinancials.RevenueTTM;
+            lblFinRev2YearsAgo.Text = _stockFinancials.Revenue2;
+            lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4;
 
             found = await _stockFinancials.GetStatisticalData(txtStockTicker.Text);
 

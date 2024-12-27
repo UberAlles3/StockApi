@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace StockApi 
 {
@@ -17,6 +18,10 @@ namespace StockApi
 
         private string shortInterestString = NotApplicable;
         private float shortInterest = 0;
+
+        public string RevenueTTM = "";
+        public string Revenue2 = "";
+        public string Revenue4 = "";
 
         public string ShortInterestString
         {
@@ -58,10 +63,16 @@ namespace StockApi
 
             // Revenue History
             string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
-
             string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-
             List<string> numbers = GetNumbersFromHtml(partial);
+            numbers = numbers.Select(x => x.Replace(".00", "")).ToList();
+
+            if (numbers.Count > 0)
+                RevenueTTM = numbers[0];
+            if (numbers.Count > 2)
+                Revenue2 = numbers[2];
+            if (numbers.Count > 4)
+                Revenue4 = numbers[4];
 
             return true;
         }

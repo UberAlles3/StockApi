@@ -129,7 +129,6 @@ namespace StockApi
         protected static string GetPartialHtmlFromHtmlBySearchTerm(string html, string searchText, int length)
         {
             int loc1 = 0;
-            int loc2 = 0;
 
             loc1 = html.IndexOf(searchText);
             if (loc1 == -1)
