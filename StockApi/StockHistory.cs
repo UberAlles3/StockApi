@@ -19,61 +19,84 @@ namespace StockApi
         {
             Down,
             Sideways,
-            Up
+            Up,
+            Unknown
         }
 
-        public HistoricData HistoricDataToday;
-        public HistoricData HistoricDataWeekAgo;
-        public HistoricData HistoricDataMonthAgo;
-        public HistoricData HistoricDataYearAgo;
-        public HistoricData HistoricData3YearsAgo;
+        public HistoricPriceData HistoricDataToday;
+        public HistoricPriceData HistoricDataWeekAgo;
+        public HistoricPriceData HistoricDataMonthAgo;
+        public HistoricPriceData HistoricDataYearAgo;
+        public HistoricPriceData HistoricData3YearsAgo;
         public TrendEnum WeekTrend = TrendEnum.Sideways;
         public TrendEnum MonthTrend = TrendEnum.Sideways;
         public TrendEnum YearTrend = TrendEnum.Sideways;
         public TrendEnum ThreeYearTrend = TrendEnum.Sideways;
 
-        public async Task<List<StockHistory.HistoricData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary, bool get3Year, bool get1Year, bool getMonthAndWeek)
+        public async Task<List<StockHistory.HistoricPriceData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary, bool get3Year, bool get1Year, bool getMonthAndWeek)
         {
             /////// Get price history, today, week ago, month ago to determine short trend
-            List<StockHistory.HistoricData> historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), DateTime.Now.AddDays(1));
+            List<StockHistory.HistoricPriceData> historicDataList;
+            DateTime findDate;
 
-            // Today will be the last in the list
-            HistoricDataToday = historicDataList.Last();
-            HistoricDataToday.Price = summary.Price; // Use latest price for todays data.
+            if (getMonthAndWeek)
+            {
+                historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), DateTime.Now.AddDays(1));
 
-            // Last Week
-            DateTime findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
-            HistoricDataWeekAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.AddDays(1));
+                // Today will be the last in the list
+                HistoricDataToday = historicDataList.Last();
+                HistoricDataToday.Price = summary.Price; // Use latest price for todays data.
+                HistoricDataToday.PeriodType = "D";
 
-            // Last Month (really 31 days ago)
-            findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-31).Date);
-            HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1) || x.PriceDate.Date == findDate.Date.AddDays(2) || x.PriceDate.Date == findDate.Date.AddDays(3));
+                // Last Week
+                findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
+                HistoricDataWeekAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.AddDays(1));
+                if (HistoricDataWeekAgo != null)
+                    HistoricDataWeekAgo.PeriodType = "W";
 
-            if (HistoricDataMonthAgo == null || historicDataList.Count == 0)
-                HistoricDataMonthAgo = HistoricDataWeekAgo;
+                // Last Month (really 31 days ago)
+                findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-31).Date);
+                HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1) || x.PriceDate.Date == findDate.Date.AddDays(2) || x.PriceDate.Date == findDate.Date.AddDays(3));
+            }
+            else
+            {
+                HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.Price, PriceDate = DateTime.Now, Ticker = ticker, Volume = ""};
+            }
 
             /////// Get price history for a year ago to determine long trend
-            historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-1).AddDays(-1), DateTime.Now.AddYears(-1).AddDays(4));
-            // Last Year
-            findDate = GetMondayIfWeekend(DateTime.Now.AddYears(-1).Date);
-            HistoricDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
+            if (get1Year)
+            {
+                historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-1).AddDays(-1), DateTime.Now.AddYears(-1).AddDays(4));
+                // Last Year
+                findDate = GetMondayIfWeekend(DateTime.Now.AddYears(-1).Date);
+                HistoricDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
+                if (HistoricDataYearAgo != null)
+                    HistoricDataYearAgo.PeriodType = "Y";
+            }
 
-            if (HistoricDataYearAgo == null || historicDataList.Count == 0)
-                HistoricDataYearAgo = HistoricDataMonthAgo;
 
             /////// Get price history for 3 years ago to determine long trend
-            historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
-            if (historicDataList.Count > 0)
-                HistoricData3YearsAgo = historicDataList.First();
-            else
-                HistoricData3YearsAgo = HistoricDataYearAgo;
+            if (get3Year)
+            {
+                historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
+                if (historicDataList.Count > 0)
+                {
+                    HistoricData3YearsAgo = historicDataList.First();
+                    HistoricData3YearsAgo.PeriodType = "3Y";
+                }
+            }
 
-            List<StockHistory.HistoricData> historicDisplayList = new List<StockHistory.HistoricData>();
-            historicDisplayList.Add(HistoricDataToday);
-            historicDisplayList.Add(HistoricDataWeekAgo);
-            historicDisplayList.Add(HistoricDataMonthAgo);
-            historicDisplayList.Add(HistoricDataYearAgo);
-            historicDisplayList.Add(HistoricData3YearsAgo);
+            List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
+            if(HistoricDataToday != null)
+               historicDisplayList.Add(HistoricDataToday);
+            if (HistoricDataWeekAgo != null)
+                historicDisplayList.Add(HistoricDataWeekAgo);
+            if (HistoricDataMonthAgo != null)
+                historicDisplayList.Add(HistoricDataMonthAgo);
+            if (HistoricDataYearAgo != null)
+                historicDisplayList.Add(HistoricDataYearAgo);
+            if (HistoricData3YearsAgo != null)
+                historicDisplayList.Add(HistoricData3YearsAgo);
 
             return historicDisplayList;
         }
@@ -91,13 +114,13 @@ namespace StockApi
             return theDate;
         }
 
-        public async Task<List<HistoricData>> GetHistoricalDataForDateRange(string ticker, DateTime beginDate, DateTime endDate)
+        public async Task<List<HistoricPriceData>> GetHistoricalDataForDateRange(string ticker, DateTime beginDate, DateTime endDate)
         {
             string formattedDate = "";
 
             Ticker = ticker;
 
-            List<HistoricData> historicDataList = new List<HistoricData>();
+            List<HistoricPriceData> historicDataList = new List<HistoricPriceData>();
 
             if (beginDate.DayOfWeek == DayOfWeek.Saturday)
                 beginDate = beginDate.AddDays(-1);
@@ -140,7 +163,7 @@ namespace StockApi
                 if (numbers[5].IndexOf(",") < 0)
                     numbers[5] = "0";
 
-                HistoricData historicData = new HistoricData();
+                HistoricPriceData historicData = new HistoricPriceData();
 
                 historicData.Ticker = Ticker;
                 historicData.PriceDate = beginDate.AddDays(i).Date;
@@ -191,43 +214,66 @@ namespace StockApi
 
         public void SetTrends()
         {
-            if (HistoricDataToday.Price > HistoricData3YearsAgo.Price * 1.12F) // year
-                ThreeYearTrend = TrendEnum.Up;
-            else if (HistoricDataToday.Price < HistoricData3YearsAgo.Price * .88F) // year
-                ThreeYearTrend = TrendEnum.Down;
-            else
-                ThreeYearTrend = TrendEnum.Sideways;
 
-            if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.08F) // year
+            if (HistoricData3YearsAgo != null)
+            {
+                if (HistoricDataToday.Price > HistoricData3YearsAgo.Price * 1.12F) // year
+                    ThreeYearTrend = TrendEnum.Up;
+                else if (HistoricDataToday.Price < HistoricData3YearsAgo.Price * .88F) // year
+                    ThreeYearTrend = TrendEnum.Down;
+                else
+                    ThreeYearTrend = TrendEnum.Sideways;
+            }
+            else
+                ThreeYearTrend = TrendEnum.Unknown;
+
+            if (HistoricDataYearAgo != null)
+            {
+                if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.08F) // year
                 YearTrend = TrendEnum.Up;
-            else if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92F) // year
-                YearTrend = TrendEnum.Down;
+                else if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92F) // year
+                    YearTrend = TrendEnum.Down;
+                else
+                    YearTrend = TrendEnum.Sideways;
+            }
             else
-                YearTrend = TrendEnum.Sideways;
+                YearTrend = TrendEnum.Unknown;
 
-            if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.06F) // month
-                MonthTrend = TrendEnum.Up;
-            else if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .94F) // month
-                MonthTrend = TrendEnum.Down;
+            if (HistoricDataMonthAgo != null)
+            {
+                if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.06F) // month
+                    MonthTrend = TrendEnum.Up;
+                else if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .94F) // month
+                    MonthTrend = TrendEnum.Down;
+                else
+                    MonthTrend = TrendEnum.Sideways;
+            }
             else
-                MonthTrend = TrendEnum.Sideways;
+                MonthTrend = TrendEnum.Unknown;
 
-            if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.03F) // week
-                WeekTrend = TrendEnum.Up;
-            else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .97F) // week
-                WeekTrend = TrendEnum.Down;
+            if (HistoricDataWeekAgo != null)
+            {
+                if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.03F) // week
+                    WeekTrend = TrendEnum.Up;
+                else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .97F) // week
+                    WeekTrend = TrendEnum.Down;
+                else
+                    WeekTrend = TrendEnum.Sideways;
+            }
             else
-                WeekTrend = TrendEnum.Sideways;
+                WeekTrend = TrendEnum.Unknown;
         }
 
-        public class HistoricData
+        public class HistoricPriceData
         {
             private string ticker = "";
+            private string periodType = "";
             private DateTime priceDate;
             private float price = 0;
             private string volume = YahooFinance.NotApplicable;
 
             public string Ticker { get => ticker; set => ticker = value; }
+            public string PeriodType { get => periodType; set => periodType = value; }
             public DateTime PriceDate { get => priceDate; set => priceDate = value; }
             public float Price { get => price; set => price = value; }
             public string Volume { get => volume; set => volume = value; }
@@ -235,7 +281,7 @@ namespace StockApi
             public override string ToString()
             {
                 return string.Format(
-                    $"{Ticker}, {PriceDate.ToString("MMM dd, yyyy")}, {Price}"
+                    $"{Ticker}, {PeriodType}, {PriceDate.ToString("MMM dd, yyyy")}, {Price}"
                 ); ;
             }
         }
