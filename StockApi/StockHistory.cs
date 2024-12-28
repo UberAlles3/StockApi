@@ -32,7 +32,7 @@ namespace StockApi
         public TrendEnum YearTrend = TrendEnum.Sideways;
         public TrendEnum ThreeYearTrend = TrendEnum.Sideways;
 
-        public async Task<List<StockHistory.HistoricData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary)
+        public async Task<List<StockHistory.HistoricData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary, bool get3Year, bool get1Year, bool getMonth, bool getWeek)
         {
             /////// Get price history, today, week ago, month ago to determine short trend
             List<StockHistory.HistoricData> historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), DateTime.Now.AddDays(1));

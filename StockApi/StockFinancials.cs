@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Drake.Extensions;
 
 namespace StockApi 
 {
@@ -72,14 +73,14 @@ namespace StockApi
             string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
             string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
             List<string> numbers = GetNumbersFromHtml(partial);
-            numbers = numbers.Select(x => (x+".").Replace(".", "||||||||||||||").Substring(0, 14).Replace("|", "")).ToList();
+            numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
             if (numbers.Count > 0)
                 RevenueTTM = numbers[0];
             if (numbers.Count > 2)
                 Revenue2 = numbers[2];
             if (numbers.Count > 4)
-                Revenue4 = numbers[4]; 
+                Revenue4 = numbers[4];
             else if (numbers.Count > 3)
                 Revenue4 = numbers[3];
 
@@ -96,7 +97,7 @@ namespace StockApi
             searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
             partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
             numbers = GetNumbersFromHtml(partial);
-            numbers = numbers.Select(x => (x + ".").Replace(".", "||||||||||||||").Substring(0, 14).Replace("|", "")).ToList();
+            numbers = numbers.Select(x => RemoveAfter(x)).ToList();
 
             if (numbers.Count > 0)
                 CostOfRevenueTTM = numbers[0];
