@@ -119,7 +119,7 @@ namespace StockApi
             if(found)
             {
                 // Get some price history. Todays price will be replaced with summary data's latest price
-                List<StockHistory.HistoricPriceData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, true, true);
+                List<StockHistory.HistoricPriceData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, false, false);
                 // await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary);
 
                 // bind data list to grid control
@@ -315,7 +315,7 @@ namespace StockApi
             {
                 btnGetOne.Enabled = true;
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
-                lblPrice.Text = _stockSummary.Price.ToString("####.##");
+                lblPrice.Text = _stockSummary.Price.ToString("####.00");
                 lblVolatility.Text = _stockSummary.VolatilityString;
                 lblEPS.Text = _stockSummary.EarningsPerShareString;
                 lblEPS.ForeColor = _stockSummary.EPSColor;

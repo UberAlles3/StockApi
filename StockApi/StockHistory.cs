@@ -60,7 +60,7 @@ namespace StockApi
             }
             else
             {
-                HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.Price, PriceDate = DateTime.Now, Ticker = ticker, Volume = ""};
+                HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.Price, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = ""};
             }
 
             /////// Get price history for a year ago to determine long trend
