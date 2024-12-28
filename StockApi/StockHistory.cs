@@ -214,7 +214,6 @@ namespace StockApi
 
         public void SetTrends()
         {
-
             if (HistoricData3YearsAgo != null)
             {
                 if (HistoricDataToday.Price > HistoricData3YearsAgo.Price * 1.12F) // year

@@ -78,24 +78,11 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-            //WebView wb = new WebView();
-            //wb.Show();
-            //wb.Navigate("https://finance.yahoo.com/quote/UEC?p=UEC");
-            //while(wb.NavigationComplete == false)
-            //{
-            //    Application.DoEvents();
-            //}
-
-            //string html = wb.Html;
-
-            //return;
-
             if (string.IsNullOrEmpty(txtStockTicker.Text))
             {
                 MessageBox.Show("Enter a valid stock ticker.");
                 return;
             }
-
 
             // Trades
             _tradesExcelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
@@ -118,31 +105,31 @@ namespace StockApi
 
             if(found)
             {
-                // Get some price history. Todays price will be replaced with summary data's latest price
-                List<StockHistory.HistoricPriceData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, false, false);
-                // await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary);
-
-                // bind data list to grid control
-                var bindingList = new BindingList<StockHistory.HistoricPriceData>(historicDisplayList);
-                var source = new BindingSource(bindingList, null);
-                dataGridView1.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
-                dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
-                dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
-                dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
-                dataGridView1.DataSource = source.DataSource;
-                dataGridView1.Columns[0].Visible = false;
-                dataGridView1.Columns[1].Visible = false;
-                dataGridView1.Columns[2].HeaderText = "Date";
-                dataGridView1.Columns[3].Width = 120;
-                dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
-                dataGridView1.Columns[3].DefaultCellStyle.Format = "N2";
-                dataGridView1.Columns[4].Width = 120;
-                dataGridView1.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
-                dataGridView1.Refresh();
-
                 _tickerTrades = null;
                 // filter on stock ticker then order by date descending
                 var tickertrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower()).OrderByDescending(x => x[1]);
+                List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
+
+                // try to get a price history from 3 years ago so you don't have to hit the yahoo web site.
+                var threeYearAgo = tickertrades.AsEnumerable().Where(x => x[0].ToString().Contains("/" + DateTime.Now.AddMonths(-38).Year.ToString()));
+                DataRow gotOne = null;
+                if (threeYearAgo.Count() > 0)
+                {
+                    gotOne = threeYearAgo.First();
+
+                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { PeriodType = "3Y", PriceDate = DateTime.Parse(gotOne.ItemArray[0].ToString()), Ticker = gotOne.ItemArray[4].ToString(), Price = float.Parse(gotOne.ItemArray[5].ToString()) };
+                    historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, false, false, false);
+                    //historicDisplayList.Add(new StockHistory.HistoricPriceData() { PeriodType = "3Y", PriceDate = DateTime.Parse(gotOne.ItemArray[0].ToString()), Ticker = gotOne.ItemArray[4].ToString(), Price = float.Parse(gotOne.ItemArray[5].ToString()) });
+                }
+                else
+                {
+                    // Get the three year prior price from Yahoo. Todays price will be replaced with summary data's latest price
+                    historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, false, false);
+                }
+
+                // bind data list to grid control
+                BindListToHistoricPriceGrid(historicDisplayList);
+
                 if (_trades.Rows.Count > 0 && tickertrades.Count() > 0)
                 {
                     //tickertrades = tickertrades.OrderByDescending(x => x[1].ToString());
@@ -196,42 +183,67 @@ namespace StockApi
 
                 // Trends
                 _stockHistory.SetTrends();
-                if (_stockHistory.ThreeYearTrend != StockHistory.TrendEnum.Unknown)
-                {
-                    pic3YearTrend.Visible = true;
-                    pic3YearTrend.Image = _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-                }
-                else
-                    pic3YearTrend.Visible = false;
-
-                if (_stockHistory.YearTrend != StockHistory.TrendEnum.Unknown)
-                {
-                    picYearTrend.Visible = true;
-                    picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-                }
-                else
-                    picYearTrend.Visible = false;
-
-
-                if (_stockHistory.MonthTrend != StockHistory.TrendEnum.Unknown)
-                {
-                    picMonthTrend.Visible = true;
-                    picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-                }
-                else
-                    picMonthTrend.Visible = false;
-
-                if (_stockHistory.WeekTrend != StockHistory.TrendEnum.Unknown)
-                {
-                    picWeekTrend.Visible = true;
-                    picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-                }
-                else
-                    picWeekTrend.Visible = false;
+                SetTrendImages();
             }
 
             PostSummaryWebCall(); // displays the data returned
 
+        }
+
+        private void SetTrendImages()
+        {
+            if (_stockHistory.ThreeYearTrend != StockHistory.TrendEnum.Unknown)
+            {
+                pic3YearTrend.Visible = true;
+                pic3YearTrend.Image = _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            }
+            else
+                pic3YearTrend.Visible = false;
+
+            if (_stockHistory.YearTrend != StockHistory.TrendEnum.Unknown)
+            {
+                picYearTrend.Visible = true;
+                picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            }
+            else
+                picYearTrend.Visible = false;
+
+
+            if (_stockHistory.MonthTrend != StockHistory.TrendEnum.Unknown)
+            {
+                picMonthTrend.Visible = true;
+                picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            }
+            else
+                picMonthTrend.Visible = false;
+
+            if (_stockHistory.WeekTrend != StockHistory.TrendEnum.Unknown)
+            {
+                picWeekTrend.Visible = true;
+                picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+            }
+            else
+                picWeekTrend.Visible = false;
+        }
+
+        private void BindListToHistoricPriceGrid(List<StockHistory.HistoricPriceData> historicDisplayList)
+        {
+            var bindingList = new BindingList<StockHistory.HistoricPriceData>(historicDisplayList);
+            var source = new BindingSource(bindingList, null);
+            dataGridView1.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
+            dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
+            dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
+            dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
+            dataGridView1.DataSource = source.DataSource;
+            dataGridView1.Columns[0].Visible = false;
+            dataGridView1.Columns[1].Visible = false;
+            dataGridView1.Columns[2].HeaderText = "Date";
+            dataGridView1.Columns[3].Width = 120;
+            dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[3].DefaultCellStyle.Format = "N2";
+            dataGridView1.Columns[4].Width = 120;
+            dataGridView1.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Refresh();
         }
 
         private async void btnGetAll_Click(object sender, EventArgs e)
@@ -297,6 +309,7 @@ namespace StockApi
         private void PreSummaryWebCall()
         {
             _stockSummary = new StockSummary(); // set values to zero
+            btnGetAllHistory.Visible = true;
             pic3YearTrend.Image = picSidewaysTrend.Image;
             picYearTrend.Image = picSidewaysTrend.Image;
             picMonthTrend.Image = picSidewaysTrend.Image; 
@@ -504,6 +517,19 @@ namespace StockApi
 
             lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
             lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
+        }
+
+        private async void btnGetAllHistory_Click(object sender, EventArgs e)
+        {
+            UseWaitCursor = true;
+            Application.DoEvents();
+            btnGetAllHistory.Visible = false;
+            List<StockHistory.HistoricPriceData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, true, true);
+            BindListToHistoricPriceGrid(historicDisplayList);
+            // Trends
+            _stockHistory.SetTrends();
+            SetTrendImages();
+            UseWaitCursor = false;
         }
     }
 }
