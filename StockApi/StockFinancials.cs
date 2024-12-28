@@ -72,7 +72,7 @@ namespace StockApi
             string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
             string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
             List<string> numbers = GetNumbersFromHtml(partial);
-            numbers = numbers.Select(x => x.Replace(".00", "")).ToList();
+            numbers = numbers.Select(x => (x+".").Replace(".", "||||||||||||||").Substring(0, 14).Replace("|", "")).ToList();
 
             if (numbers.Count > 0)
                 RevenueTTM = numbers[0];
@@ -83,19 +83,20 @@ namespace StockApi
             else if (numbers.Count > 3)
                 Revenue4 = numbers[3];
 
+            RevenueInMillions = false; // reset
             if (RevenueTTM.Length > 7)
             {
                 RevenueInMillions = true;
-                RevenueTTM = RevenueTTM.Substring(0, RevenueTTM.Length - 5);
-                Revenue2 = Revenue2.Substring(0, Revenue2.Length - 5);
-                Revenue4 = Revenue4.Substring(0, Revenue4.Length - 5);
+                RevenueTTM = RevenueTTM.Substring(0, RevenueTTM.Length - 4);
+                Revenue2 = Revenue2.Substring(0, Revenue2.Length - 4);
+                Revenue4 = Revenue4.Substring(0, Revenue4.Length - 4);
             }
 
             // Cost of Revenue History
             searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
             partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
             numbers = GetNumbersFromHtml(partial);
-            numbers = numbers.Select(x => x.Replace(".00", "")).ToList();
+            numbers = numbers.Select(x => (x + ".").Replace(".", "||||||||||||||").Substring(0, 14).Replace("|", "")).ToList();
 
             if (numbers.Count > 0)
                 CostOfRevenueTTM = numbers[0];
@@ -108,10 +109,9 @@ namespace StockApi
 
             if (RevenueInMillions)
             {
-                RevenueInMillions = true;
-                CostOfRevenueTTM = CostOfRevenueTTM.Substring(0, CostOfRevenueTTM.Length - 5);
-                CostOfRevenue2 = CostOfRevenue2.Substring(0, CostOfRevenue2.Length - 5);
-                CostOfRevenue4 = CostOfRevenue4.Substring(0, CostOfRevenue4.Length - 5);
+                CostOfRevenueTTM = CostOfRevenueTTM.Substring(0, CostOfRevenueTTM.Length - 4);
+                CostOfRevenue2 = CostOfRevenue2.Substring(0, CostOfRevenue2.Length - 4);
+                CostOfRevenue4 = CostOfRevenue4.Substring(0, CostOfRevenue4.Length - 4);
             }
 
             html = await GetHtmlForTicker(_statisticsUrl, Ticker);
