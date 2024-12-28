@@ -97,7 +97,7 @@ namespace StockApi
             searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
             partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
             numbers = GetNumbersFromHtml(partial);
-            numbers = numbers.Select(x => RemoveAfter(x)).ToList();
+            numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
             if (numbers.Count > 0)
                 CostOfRevenueTTM = numbers[0];
