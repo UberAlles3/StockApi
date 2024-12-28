@@ -449,9 +449,23 @@ namespace StockApi
             lblShortInterest.Text = "...";
 
             bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
+
+            if (_stockFinancials.RevenueInMillions == true)
+                lblRevenueInMillions.Text = "(all number in millions)";
+            else
+                lblRevenueInMillions.Text = "(all number in thousands)";
+
+            // Revenue
             lblFinRevTTM.Text = _stockFinancials.RevenueTTM;
             lblFinRev2YearsAgo.Text = _stockFinancials.Revenue2;
             lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4;
+
+            // Cost of Revenue
+            lblFinCostRevTTM.Text = _stockFinancials.CostOfRevenueTTM;
+            lblFinCostRev2YearsAgo.Text = _stockFinancials.CostOfRevenue2;
+            lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4;
+
+
 
             found = await _stockFinancials.GetStatisticalData(txtStockTicker.Text);
 

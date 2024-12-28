@@ -19,9 +19,13 @@ namespace StockApi
         private string shortInterestString = NotApplicable;
         private float shortInterest = 0;
 
+        public bool   RevenueInMillions = false;
         public string RevenueTTM = "";
         public string Revenue2 = "";
         public string Revenue4 = "";
+        public string CostOfRevenueTTM = "";
+        public string CostOfRevenue2 = "";
+        public string CostOfRevenue4 = "";
 
         public string ShortInterestString
         {
@@ -72,7 +76,41 @@ namespace StockApi
             if (numbers.Count > 2)
                 Revenue2 = numbers[2];
             if (numbers.Count > 4)
-                Revenue4 = numbers[4];
+                Revenue4 = numbers[4]; 
+            else if (numbers.Count > 3)
+                Revenue4 = numbers[3];
+
+            if (RevenueTTM.Length > 7)
+            {
+                RevenueInMillions = true;
+                RevenueTTM = RevenueTTM.Substring(0, RevenueTTM.Length - 5);
+                Revenue2 = Revenue2.Substring(0, Revenue2.Length - 5);
+                Revenue4 = Revenue4.Substring(0, Revenue4.Length - 5);
+            }
+
+            // Cost of Revenue History
+            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
+            partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
+            numbers = GetNumbersFromHtml(partial);
+            numbers = numbers.Select(x => x.Replace(".00", "")).ToList();
+
+            if (numbers.Count > 0)
+                CostOfRevenueTTM = numbers[0];
+            if (numbers.Count > 2)
+                CostOfRevenue2 = numbers[2];
+            if (numbers.Count > 4)
+                CostOfRevenue4 = numbers[4];
+            else if (numbers.Count > 3)
+                CostOfRevenue4 = numbers[3];
+
+            if (RevenueInMillions)
+            {
+                RevenueInMillions = true;
+                CostOfRevenueTTM = CostOfRevenueTTM.Substring(0, CostOfRevenueTTM.Length - 5);
+                CostOfRevenue2 = CostOfRevenue2.Substring(0, CostOfRevenue2.Length - 5);
+                CostOfRevenue4 = CostOfRevenue4.Substring(0, CostOfRevenue4.Length - 5);
+            }
+
 
             return true;
         }
