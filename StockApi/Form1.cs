@@ -222,7 +222,7 @@ namespace StockApi
 
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
-                await _stockFinancials.GetStatisticalData(_stockSummary.Ticker);
+                await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}, {_stockFinancials.ShortInterest}{Environment.NewLine}");
             }
@@ -465,15 +465,15 @@ namespace StockApi
             lblFinCostRev2YearsAgo.Text = _stockFinancials.CostOfRevenue2;
             lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4;
 
+            // Total Cash
+            lblFinTotalCash.Text = _stockFinancials.TotalCash;
+            // Total Debt
+            lblFinTotalDebt.Text = _stockFinancials.TotalDebt;
+            // Cash Debt Ratio
+            lblFinCashDebtRatio.Text = _stockFinancials.CashDebtRatio;
 
-
-            found = await _stockFinancials.GetStatisticalData(txtStockTicker.Text);
-
-            if (found)
-            {
-                lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
-                lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
-            }
+            lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
+            lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
         }
     }
 }

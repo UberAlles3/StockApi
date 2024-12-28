@@ -29,11 +29,11 @@ namespace StockApi
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnGetOne = new System.Windows.Forms.Button();
             this.txtStockTicker = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,7 +41,11 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label52 = new System.Windows.Forms.Label();
+            this.btnGetFinancials = new System.Windows.Forms.Button();
+            this.label51 = new System.Windows.Forms.Label();
             this.panelFinancials = new System.Windows.Forms.Panel();
+            this.label54 = new System.Windows.Forms.Label();
             this.lblFinCostRev4YearsAgo = new System.Windows.Forms.Label();
             this.lblFinCostRev2YearsAgo = new System.Windows.Forms.Label();
             this.lblFinCostRevTTM = new System.Windows.Forms.Label();
@@ -56,9 +60,8 @@ namespace StockApi
             this.lblFin2YearsAgo = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
             this.lblShortInterest = new System.Windows.Forms.Label();
-            this.label46 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
-            this.btnGetFinancials = new System.Windows.Forms.Button();
+            this.label46 = new System.Windows.Forms.Label();
             this.lblProfitMargin = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.lblDividend = new System.Windows.Forms.Label();
@@ -143,6 +146,14 @@ namespace StockApi
             this.importTradesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnGet3YearTrend = new System.Windows.Forms.Button();
+            this.lblFinTotalCash = new System.Windows.Forms.Label();
+            this.label56 = new System.Windows.Forms.Label();
+            this.label58 = new System.Windows.Forms.Label();
+            this.lblFinTotalDebt = new System.Windows.Forms.Label();
+            this.label60 = new System.Windows.Forms.Label();
+            this.label59 = new System.Windows.Forms.Label();
+            this.lblFinCashDebtRatio = new System.Windows.Forms.Label();
+            this.label62 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -232,8 +243,10 @@ namespace StockApi
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.panelFinancials);
+            this.panel1.Controls.Add(this.label52);
             this.panel1.Controls.Add(this.btnGetFinancials);
+            this.panel1.Controls.Add(this.label51);
+            this.panel1.Controls.Add(this.panelFinancials);
             this.panel1.Controls.Add(this.lblProfitMargin);
             this.panel1.Controls.Add(this.label33);
             this.panel1.Controls.Add(this.lblDividend);
@@ -263,9 +276,48 @@ namespace StockApi
             this.panel1.Size = new System.Drawing.Size(364, 625);
             this.panel1.TabIndex = 6;
             // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.BackColor = System.Drawing.Color.Transparent;
+            this.label52.ForeColor = System.Drawing.Color.DarkGray;
+            this.label52.Location = new System.Drawing.Point(10, 252);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(342, 15);
+            this.label52.TabIndex = 45;
+            this.label52.Text = "___________________________________________________________________";
+            // 
+            // btnGetFinancials
+            // 
+            this.btnGetFinancials.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnGetFinancials.Location = new System.Drawing.Point(79, 221);
+            this.btnGetFinancials.Name = "btnGetFinancials";
+            this.btnGetFinancials.Size = new System.Drawing.Size(208, 36);
+            this.btnGetFinancials.TabIndex = 42;
+            this.btnGetFinancials.Text = "Get Financials and Statistics";
+            this.btnGetFinancials.UseVisualStyleBackColor = true;
+            this.btnGetFinancials.Click += new System.EventHandler(this.btnGetFinancials_Click);
+            // 
+            // label51
+            // 
+            this.label51.BackColor = System.Drawing.Color.Transparent;
+            this.label51.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label51.Location = new System.Drawing.Point(64, 242);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(233, 29);
+            this.label51.TabIndex = 44;
+            this.label51.Text = "Financials";
+            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // panelFinancials
             // 
             this.panelFinancials.BackColor = System.Drawing.Color.Transparent;
+            this.panelFinancials.Controls.Add(this.lblFinCashDebtRatio);
+            this.panelFinancials.Controls.Add(this.label62);
+            this.panelFinancials.Controls.Add(this.lblFinTotalDebt);
+            this.panelFinancials.Controls.Add(this.label60);
+            this.panelFinancials.Controls.Add(this.lblFinTotalCash);
+            this.panelFinancials.Controls.Add(this.label54);
             this.panelFinancials.Controls.Add(this.lblFinCostRev4YearsAgo);
             this.panelFinancials.Controls.Add(this.lblFinCostRev2YearsAgo);
             this.panelFinancials.Controls.Add(this.lblFinCostRevTTM);
@@ -280,12 +332,25 @@ namespace StockApi
             this.panelFinancials.Controls.Add(this.lblFin2YearsAgo);
             this.panelFinancials.Controls.Add(this.label47);
             this.panelFinancials.Controls.Add(this.lblShortInterest);
-            this.panelFinancials.Controls.Add(this.label46);
             this.panelFinancials.Controls.Add(this.label49);
+            this.panelFinancials.Controls.Add(this.label46);
+            this.panelFinancials.Controls.Add(this.label59);
+            this.panelFinancials.Controls.Add(this.label58);
+            this.panelFinancials.Controls.Add(this.label56);
             this.panelFinancials.Location = new System.Drawing.Point(7, 275);
             this.panelFinancials.Name = "panelFinancials";
             this.panelFinancials.Size = new System.Drawing.Size(354, 276);
             this.panelFinancials.TabIndex = 43;
+            // 
+            // label54
+            // 
+            this.label54.BackColor = System.Drawing.Color.Transparent;
+            this.label54.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label54.Location = new System.Drawing.Point(8, 123);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(79, 22);
+            this.label54.TabIndex = 55;
+            this.label54.Text = "Total Cash";
             // 
             // lblFinCostRev4YearsAgo
             // 
@@ -338,7 +403,7 @@ namespace StockApi
             this.lblRevenueInMillions.BackColor = System.Drawing.Color.Transparent;
             this.lblRevenueInMillions.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
             this.lblRevenueInMillions.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblRevenueInMillions.Location = new System.Drawing.Point(99, 113);
+            this.lblRevenueInMillions.Location = new System.Drawing.Point(100, 82);
             this.lblRevenueInMillions.Name = "lblRevenueInMillions";
             this.lblRevenueInMillions.Size = new System.Drawing.Size(157, 22);
             this.lblRevenueInMillions.TabIndex = 50;
@@ -349,7 +414,7 @@ namespace StockApi
             // 
             this.label50.BackColor = System.Drawing.Color.Transparent;
             this.label50.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label50.Location = new System.Drawing.Point(6, 192);
+            this.label50.Location = new System.Drawing.Point(206, 120);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(79, 22);
             this.label50.TabIndex = 49;
@@ -436,23 +501,12 @@ namespace StockApi
             this.lblShortInterest.BackColor = System.Drawing.Color.Transparent;
             this.lblShortInterest.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblShortInterest.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblShortInterest.Location = new System.Drawing.Point(82, 192);
+            this.lblShortInterest.Location = new System.Drawing.Point(281, 120);
             this.lblShortInterest.Name = "lblShortInterest";
             this.lblShortInterest.Size = new System.Drawing.Size(58, 22);
             this.lblShortInterest.TabIndex = 41;
             this.lblShortInterest.Text = "0.00";
             this.lblShortInterest.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.BackColor = System.Drawing.Color.Transparent;
-            this.label46.ForeColor = System.Drawing.Color.DarkGray;
-            this.label46.Location = new System.Drawing.Point(6, 214);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(142, 15);
-            this.label46.TabIndex = 39;
-            this.label46.Text = "___________________________";
             // 
             // label49
             // 
@@ -465,16 +519,16 @@ namespace StockApi
             this.label49.TabIndex = 48;
             this.label49.Text = "________________________________________________";
             // 
-            // btnGetFinancials
+            // label46
             // 
-            this.btnGetFinancials.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnGetFinancials.Location = new System.Drawing.Point(80, 213);
-            this.btnGetFinancials.Name = "btnGetFinancials";
-            this.btnGetFinancials.Size = new System.Drawing.Size(208, 36);
-            this.btnGetFinancials.TabIndex = 42;
-            this.btnGetFinancials.Text = "Get Financials and Statistics";
-            this.btnGetFinancials.UseVisualStyleBackColor = true;
-            this.btnGetFinancials.Click += new System.EventHandler(this.btnGetFinancials_Click);
+            this.label46.AutoSize = true;
+            this.label46.BackColor = System.Drawing.Color.Transparent;
+            this.label46.ForeColor = System.Drawing.Color.DarkGray;
+            this.label46.Location = new System.Drawing.Point(203, 131);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(142, 15);
+            this.label46.TabIndex = 39;
+            this.label46.Text = "___________________________";
             // 
             // lblProfitMargin
             // 
@@ -800,25 +854,25 @@ namespace StockApi
             this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridView1.Location = new System.Drawing.Point(10, 69);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -1004,25 +1058,25 @@ namespace StockApi
             this.dataGridView2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.ColumnHeadersVisible = false;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridView2.Location = new System.Drawing.Point(8, 376);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 25;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -1459,6 +1513,95 @@ namespace StockApi
             this.btnGet3YearTrend.UseVisualStyleBackColor = true;
             this.btnGet3YearTrend.Click += new System.EventHandler(this.btnGet3YearTrend_Click);
             // 
+            // lblFinTotalCash
+            // 
+            this.lblFinTotalCash.BackColor = System.Drawing.Color.Transparent;
+            this.lblFinTotalCash.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblFinTotalCash.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblFinTotalCash.Location = new System.Drawing.Point(101, 123);
+            this.lblFinTotalCash.Name = "lblFinTotalCash";
+            this.lblFinTotalCash.Size = new System.Drawing.Size(58, 22);
+            this.lblFinTotalCash.TabIndex = 56;
+            this.lblFinTotalCash.Text = "0.00";
+            this.lblFinTotalCash.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.BackColor = System.Drawing.Color.Transparent;
+            this.label56.ForeColor = System.Drawing.Color.DarkGray;
+            this.label56.Location = new System.Drawing.Point(6, 132);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(157, 15);
+            this.label56.TabIndex = 57;
+            this.label56.Text = "______________________________";
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.BackColor = System.Drawing.Color.Transparent;
+            this.label58.ForeColor = System.Drawing.Color.DarkGray;
+            this.label58.Location = new System.Drawing.Point(7, 167);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(157, 15);
+            this.label58.TabIndex = 60;
+            this.label58.Text = "______________________________";
+            // 
+            // lblFinTotalDebt
+            // 
+            this.lblFinTotalDebt.BackColor = System.Drawing.Color.Transparent;
+            this.lblFinTotalDebt.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblFinTotalDebt.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblFinTotalDebt.Location = new System.Drawing.Point(102, 158);
+            this.lblFinTotalDebt.Name = "lblFinTotalDebt";
+            this.lblFinTotalDebt.Size = new System.Drawing.Size(58, 22);
+            this.lblFinTotalDebt.TabIndex = 59;
+            this.lblFinTotalDebt.Text = "0.00";
+            this.lblFinTotalDebt.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label60
+            // 
+            this.label60.BackColor = System.Drawing.Color.Transparent;
+            this.label60.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label60.Location = new System.Drawing.Point(9, 158);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(79, 22);
+            this.label60.TabIndex = 58;
+            this.label60.Text = "Total Debt";
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.BackColor = System.Drawing.Color.Transparent;
+            this.label59.ForeColor = System.Drawing.Color.DarkGray;
+            this.label59.Location = new System.Drawing.Point(7, 201);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(157, 15);
+            this.label59.TabIndex = 63;
+            this.label59.Text = "______________________________";
+            // 
+            // lblFinCashDebtRatio
+            // 
+            this.lblFinCashDebtRatio.BackColor = System.Drawing.Color.Transparent;
+            this.lblFinCashDebtRatio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblFinCashDebtRatio.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblFinCashDebtRatio.Location = new System.Drawing.Point(102, 192);
+            this.lblFinCashDebtRatio.Name = "lblFinCashDebtRatio";
+            this.lblFinCashDebtRatio.Size = new System.Drawing.Size(58, 22);
+            this.lblFinCashDebtRatio.TabIndex = 62;
+            this.lblFinCashDebtRatio.Text = "0.00";
+            this.lblFinCashDebtRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label62
+            // 
+            this.label62.BackColor = System.Drawing.Color.Transparent;
+            this.label62.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label62.Location = new System.Drawing.Point(9, 192);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(99, 22);
+            this.label62.TabIndex = 61;
+            this.label62.Text = "Cash Debt Ratio";
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -1634,6 +1777,17 @@ namespace StockApi
         private System.Windows.Forms.Label lblFinCostRevTTM;
         private System.Windows.Forms.Label label57;
         private System.Windows.Forms.Label lblRevenueInMillions;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.Label lblFinTotalCash;
+        private System.Windows.Forms.Label lblFinCashDebtRatio;
+        private System.Windows.Forms.Label label62;
+        private System.Windows.Forms.Label lblFinTotalDebt;
+        private System.Windows.Forms.Label label60;
+        private System.Windows.Forms.Label label59;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.Label label56;
     }
 }
 

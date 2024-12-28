@@ -26,6 +26,9 @@ namespace StockApi
         public string CostOfRevenueTTM = "";
         public string CostOfRevenue2 = "";
         public string CostOfRevenue4 = "";
+        public string TotalCash = "";
+        public string TotalDebt = "";
+        public string CashDebtRatio = "";
 
         public string ShortInterestString
         {
@@ -111,29 +114,29 @@ namespace StockApi
                 CostOfRevenue4 = CostOfRevenue4.Substring(0, CostOfRevenue4.Length - 5);
             }
 
+            html = await GetHtmlForTicker(_statisticsUrl, Ticker);
 
-            return true;
-        }
+            // Total Cash
+            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Cash").Term;
+            TotalCash = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            // Total Debt
+            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Debt").Term;
+            TotalDebt = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            // Cash Debt Ratio
+            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cash Debt Ratio").Term;
+            CashDebtRatio = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
-        public async Task<bool> GetStatisticalData(string ticker)
-        {
-            Ticker = ticker;
-
-            string html = await GetHtmlForTicker(_statisticsUrl, Ticker);
 
             // Short Interest
-            string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Short Interest").Term;
+            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Short Interest").Term;
             shortInterestString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
             if (shortInterestString != YahooFinance.NotApplicable && shortInterestString.IndexOf("%") > 0)
                 ShortInterestString = shortInterestString.Substring(0, shortInterestString.IndexOf("%"));
             else
                 ShortInterestString = YahooFinance.NotApplicable;
 
+
             return true;
         }
-
-
-
-
     }
 }
