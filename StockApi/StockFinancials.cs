@@ -243,7 +243,7 @@ namespace StockApi
         }
         private bool NotNumber(string value)
         {
-            return ShortInterestString == YahooFinance.NotApplicable || ShortInterestString == "" || ShortInterestString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0;
+            return value == YahooFinance.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;
         }
     }
 }
