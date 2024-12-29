@@ -15,12 +15,9 @@ namespace StockApi
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
 
         public bool   _revenueInMillions = false;
-        public string CostOfRevenueTTM = "";
-        public string CostOfRevenue2 = "";
-        public string CostOfRevenue4 = "";
-        public string TotalCash = "";
-        public string TotalDebt = "";
-        public string DebtEquity = "";
+        public string TotalCashString = "";
+        public string TotalDebtString = "";
+        public string DebtEquityString = "";
 
         ////////////////////////////////////////////
         ///                Properties
@@ -72,12 +69,6 @@ namespace StockApi
             set
             {
                 revenue2 = value;
-                //if (revenue2 > 8)
-                //    Revenue2Color = Color.Red;
-                //else if (Revenue2 < 2)
-                //    Revenue2Color = Color.Lime;
-                //else
-                //    Revenue2Color = Color.LightSteelBlue;
             }
         }
 
@@ -103,17 +94,86 @@ namespace StockApi
             set
             {
                 revenue4 = value;
-                //if (revenue4 > 8)
-                //    Revenue4Color = Color.Red;
-                //else if (Revenue4 < 2)
-                //    Revenue4Color = Color.Lime;
-                //else
-                //    Revenue4Color = Color.LightSteelBlue;
+            }
+        }
+
+        /////////////////// Cost of RevenueTTM
+        public Color CostOfRevenueTtmColor = Color.LightSteelBlue;
+        private string costOfRevenueTtmString = NotApplicable;
+        private float costOfRevenueTtm = 0;
+        public string CostOfRevenueTtmString
+        {
+            get => costOfRevenueTtmString;
+            set
+            {
+                costOfRevenueTtmString = value;
+                if (NotNumber(value))
+                    CostOfRevenueTtm = 0;
+                else
+                    CostOfRevenueTtm = Convert.ToSingle(CostOfRevenueTtmString);
+            }
+        }
+        public float CostOfRevenueTtm
+        {
+            get => costOfRevenueTtm;
+            set
+            {
+                costOfRevenueTtm = value;
+            }
+        }
+
+        /////////////////// Cost of Revenue2
+        public Color CostOfRevenue2Color = Color.LightSteelBlue;
+        private string costOfRevenue2String = NotApplicable;
+        private float costOfRevenue2 = 0;
+        public string CostOfRevenue2String
+        {
+            get => costOfRevenue2String;
+            set
+            {
+                costOfRevenue2String = value;
+                if (NotNumber(value))
+                    CostOfRevenue2 = 0;
+                else
+                    CostOfRevenue2 = Convert.ToSingle(CostOfRevenue2String);
+            }
+        }
+        public float CostOfRevenue2
+        {
+            get => costOfRevenue2;
+            set
+            {
+                costOfRevenue2 = value;
+            }
+        }
+
+        /////////////////// Cost of Revenue4
+        public Color CostOfRevenue4Color = Color.LightSteelBlue;
+        private string costOfRevenue4String = NotApplicable;
+        private float costOfRevenue4 = 0;
+        public string CostOfRevenue4String
+        {
+            get => costOfRevenue4String;
+            set
+            {
+                costOfRevenue4String = value;
+                if (NotNumber(value))
+                    CostOfRevenue4 = 0;
+                else
+                    CostOfRevenue4 = Convert.ToSingle(CostOfRevenue4String);
+            }
+        }
+        public float CostOfRevenue4
+        {
+            get => costOfRevenue4;
+            set
+            {
+                costOfRevenue4 = value;
             }
         }
 
 
-
+        /////////////////// Short Interest
         public Color ShortInterestColor = Color.LightSteelBlue;
         private string shortInterestString = NotApplicable;
         private float shortInterest = 0;
@@ -187,32 +247,32 @@ namespace StockApi
             numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
             if (numbers.Count > 0)
-                CostOfRevenueTTM = numbers[0];
+                CostOfRevenueTtmString = numbers[0];
             if (numbers.Count > 2)
-                CostOfRevenue2 = numbers[2];
+                CostOfRevenue2String = numbers[2];
             if (numbers.Count > 4)
-                CostOfRevenue4 = numbers[4];
+                CostOfRevenue4String = numbers[4];
             else if (numbers.Count > 3)
-                CostOfRevenue4 = numbers[3];
+                CostOfRevenue4String = numbers[3];
 
             if (_revenueInMillions)
             {
-                CostOfRevenueTTM = CostOfRevenueTTM.Substring(0, CostOfRevenueTTM.Length - 4);
-                CostOfRevenue2 = CostOfRevenue2.Substring(0, CostOfRevenue2.Length - 4);
-                CostOfRevenue4 = CostOfRevenue4.Substring(0, CostOfRevenue4.Length - 4);
+                CostOfRevenueTtmString = CostOfRevenueTtmString.Substring(0, CostOfRevenueTtmString.Length - 4);
+                CostOfRevenue2String = CostOfRevenue2String.Substring(0, CostOfRevenue2String.Length - 4);
+                CostOfRevenue4String = CostOfRevenue4String.Substring(0, CostOfRevenue4String.Length - 4);
             }
 
             html = await GetHtmlForTicker(_statisticsUrl, Ticker);
 
             // Total Cash
             searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Cash").Term;
-            TotalCash = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             // Total Debt
             searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Debt").Term;
-            TotalDebt = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            TotalDebtString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             // Debt/Equity Ratio
             searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
-            DebtEquity = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            DebtEquityString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
 
             // Short Interest
@@ -238,6 +298,20 @@ namespace StockApi
             else
                 Revenue2Color = Color.LightSteelBlue;
 
+            // Set Colors of Cost of Revenue (if profit decreasing by 5% every 2 years, a problem
+            if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .95))
+                CostOfRevenueTtmColor = Color.Red;
+            else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.05))
+                CostOfRevenueTtmColor = Color.Lime;
+            else
+                CostOfRevenueTtmColor = Color.LightSteelBlue;
+
+            if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .95))
+                CostOfRevenue2Color = Color.Red;
+            else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.05))
+                CostOfRevenue2Color = Color.Lime;
+            else
+                CostOfRevenue2Color = Color.LightSteelBlue;
 
             return true;
         }

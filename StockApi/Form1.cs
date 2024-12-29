@@ -505,16 +505,18 @@ namespace StockApi
             lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4String;
 
             // Cost of Revenue
-            lblFinCostRevTTM.Text = _stockFinancials.CostOfRevenueTTM;
-            lblFinCostRev2YearsAgo.Text = _stockFinancials.CostOfRevenue2;
-            lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4;
+            lblFinCostRevTTM.Text = _stockFinancials.CostOfRevenueTtmString;
+            lblFinCostRevTTM.ForeColor = _stockFinancials.CostOfRevenueTtmColor;
+            lblFinCostRev2YearsAgo.Text = _stockFinancials.CostOfRevenue2String;
+            lblFinCostRev2YearsAgo.ForeColor = _stockFinancials.CostOfRevenue2Color;
+            lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4String;
 
             // Total Cash
-            lblFinTotalCash.Text = _stockFinancials.TotalCash;
+            lblFinTotalCash.Text = _stockFinancials.TotalCashString;
             // Total Debt
-            lblFinTotalDebt.Text = _stockFinancials.TotalDebt;
+            lblFinTotalDebt.Text = _stockFinancials.TotalDebtString;
             // Cash Debt Ratio
-            lblFinCashDebtRatio.Text = _stockFinancials.DebtEquity;
+            lblFinCashDebtRatio.Text = _stockFinancials.DebtEquityString;
 
             lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
             lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
