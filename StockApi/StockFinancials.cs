@@ -35,7 +35,7 @@ namespace StockApi
             set
             {
                 revenueTtmString = value;
-                if (IsNumber(value))
+                if (NotNumber(value))
                     RevenueTtm = 0;
                 else
                     RevenueTtm = Convert.ToSingle(RevenueTtmString);
@@ -47,12 +47,6 @@ namespace StockApi
             set
             {
                 revenueTtm = value;
-                //if (revenueTtm > 8)
-                //    RevenueTtmColor = Color.Red;
-                //else if (RevenueTtm < 2)
-                //    RevenueTtmColor = Color.Lime;
-                //else
-                //    RevenueTtmColor = Color.LightSteelBlue;
             }
         }
 
@@ -66,7 +60,7 @@ namespace StockApi
             set
             {
                 revenue2String = value;
-                if (IsNumber(value))
+                if (NotNumber(value))
                     Revenue2 = 0;
                 else
                     Revenue2 = Convert.ToSingle(Revenue2String);
@@ -97,7 +91,7 @@ namespace StockApi
             set
             {
                 revenue4String = value;
-                if (IsNumber(value))
+                if (NotNumber(value))
                     Revenue4 = 0;
                 else
                     Revenue4 = Convert.ToSingle(Revenue4String);
@@ -129,7 +123,7 @@ namespace StockApi
             set
             {
                 shortInterestString = value;
-                if (IsNumber(value))
+                if (NotNumber(value))
                     ShortInterest = 0;
                 else
                     ShortInterest = Convert.ToSingle(ShortInterestString);
@@ -229,10 +223,25 @@ namespace StockApi
             else
                 ShortInterestString = YahooFinance.NotApplicable;
 
+            // Set Colors of Revenue (if revenue decreasing by 5% every 2 years, a problem
+            if (RevenueTtm < (Revenue2 * .95))
+                RevenueTtmColor = Color.Red;
+            else if (RevenueTtm > (Revenue2 * 1.05))
+                RevenueTtmColor = Color.Lime;
+            else
+                RevenueTtmColor = Color.LightSteelBlue;
+            
+            if (Revenue2 < (Revenue4 * .95))
+                Revenue2Color = Color.Red;
+            else if (Revenue2 > (Revenue4 * 1.05))
+                Revenue2Color = Color.Lime;
+            else
+                Revenue2Color = Color.LightSteelBlue;
+
 
             return true;
         }
-        private bool IsNumber(string value)
+        private bool NotNumber(string value)
         {
             return ShortInterestString == YahooFinance.NotApplicable || ShortInterestString == "" || ShortInterestString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0;
         }

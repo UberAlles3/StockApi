@@ -499,7 +499,9 @@ namespace StockApi
 
             // Revenue
             lblFinRevTTM.Text = _stockFinancials.RevenueTtmString;
+            lblFinRevTTM.ForeColor = _stockFinancials.RevenueTtmColor;
             lblFinRev2YearsAgo.Text = _stockFinancials.Revenue2String;
+            lblFinRev2YearsAgo.ForeColor = _stockFinancials.Revenue2Color;
             lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4String;
 
             // Cost of Revenue
