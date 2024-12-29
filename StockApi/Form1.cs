@@ -492,15 +492,15 @@ namespace StockApi
             panelFinancials.Visible = false;
             bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
 
-            if (_stockFinancials.RevenueInMillions == true)
+            if (_stockFinancials._revenueInMillions == true)
                 lblRevenueInMillions.Text = "(all number in millions)";
             else
                 lblRevenueInMillions.Text = "(all number in thousands)";
 
             // Revenue
-            lblFinRevTTM.Text = _stockFinancials.RevenueTTM;
-            lblFinRev2YearsAgo.Text = _stockFinancials.Revenue2;
-            lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4;
+            lblFinRevTTM.Text = _stockFinancials.RevenueTtmString;
+            lblFinRev2YearsAgo.Text = _stockFinancials.Revenue2String;
+            lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4String;
 
             // Cost of Revenue
             lblFinCostRevTTM.Text = _stockFinancials.CostOfRevenueTTM;
