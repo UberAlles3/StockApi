@@ -26,7 +26,7 @@ namespace StockApi
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
         private static DataTable _trades = null;
-        private static DataTable _tickerTrades = null;
+        private static DataTable _tickerTradesDataTable = null;
         private static string _tradesExcelFilePath = "";
         private static DateTime _tradesImportDateTime = DateTime.Now;
 
@@ -106,13 +106,13 @@ namespace StockApi
 
             if (found)
             {
-                _tickerTrades = null;
+                _tickerTradesDataTable = null;
                 // filter on stock ticker then order by date descending
-                var tickertrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower()).OrderByDescending(x => x[1]);
+                var tickerTrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower()).OrderByDescending(x => x[1]);
                 List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
 
                 // try to get a price history from 3 years ago so you don't have to hit the yahoo web site.
-                var threeYearAgo = tickertrades.AsEnumerable().Where(x => x[0].ToString().Contains("/" + DateTime.Now.AddMonths(-38).Year.ToString()));
+                var threeYearAgo = tickerTrades.AsEnumerable().Where(x => x[0].ToString().Contains("/" + DateTime.Now.AddMonths(-38).Year.ToString()));
                 DataRow gotOne = null;
                 if (threeYearAgo.Count() > 0)
                 {
@@ -131,14 +131,13 @@ namespace StockApi
                 // bind data list to grid control
                 BindListToHistoricPriceGrid(historicDisplayList);
 
-                if (_trades.Rows.Count > 0 && tickertrades.Count() > 0)
+                if (_trades.Rows.Count > 0 && tickerTrades.Count() > 0)
                 {
-                    //tickertrades = tickertrades.OrderByDescending(x => x[1].ToString());
-                    _tickerTrades = tickertrades.CopyToDataTable();
+                    _tickerTradesDataTable = tickerTrades.Where(r => r[3].ToString() != "0").CopyToDataTable();
 
                     // bind data list to trades grid control
                     BindingSource tradeSource = new BindingSource();
-                    tradeSource.DataSource = _tickerTrades;
+                    tradeSource.DataSource = _tickerTradesDataTable;
                     dataGridView2.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
                     dataGridView2.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
                     dataGridView2.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
@@ -174,7 +173,7 @@ namespace StockApi
                 }
                 else
                 {
-                    if (_tickerTrades != null)
+                    if (_tickerTradesDataTable != null)
                         dataGridView2.Rows.Clear();
                     else
                         dataGridView2.DataSource = null;
@@ -347,9 +346,9 @@ namespace StockApi
                 // Set some analyze form fields for later use
                 //PersonalStock personalStock = new PersonalStock();
                 //PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
-                if(_tickerTrades != null && _tickerTrades.Rows.Count > 0)
+                if(_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
                 {
-                    DataRow lastRow = _tickerTrades.Rows[_tickerTrades.Rows.Count - 1];
+                    DataRow lastRow = _tickerTradesDataTable.Rows[_tickerTradesDataTable.Rows.Count - 1];
                     txtSharesOwned.Text = lastRow.ItemArray[6].ToString();      // Total Shares
                     txtSharesTraded.Text = lastRow.ItemArray[3].ToString();     // Quan. Traded
                     txtSharesTradePrice.Text = lastRow.ItemArray[5].ToString(); // Price
@@ -365,28 +364,28 @@ namespace StockApi
                     }
 
                     // Find Min,Max trade price
-                    string min = _tickerTrades.AsEnumerable()
+                    string min = _tickerTradesDataTable.AsEnumerable()
                         .Min(row => row[5])
                         .ToString();
-                    string max = _tickerTrades.AsEnumerable()
+                    string max = _tickerTradesDataTable.AsEnumerable()
                         .Max(row => row[5])
                         .ToString();
                     decimal minval = Convert.ToDecimal(min);
                     decimal maxval = Convert.ToDecimal(max);
-                    decimal startVal = Convert.ToDecimal(_tickerTrades.AsEnumerable().First().ItemArray[5]);
-                    decimal endVal   = Convert.ToDecimal(_tickerTrades.AsEnumerable().Last().ItemArray[5]);
-                    if (_tickerTrades.Rows.Count > 4)
+                    decimal startVal = Convert.ToDecimal(_tickerTradesDataTable.AsEnumerable().First().ItemArray[5]);
+                    decimal endVal   = Convert.ToDecimal(_tickerTradesDataTable.AsEnumerable().Last().ItemArray[5]);
+                    if (_tickerTradesDataTable.Rows.Count > 4)
                     {
-                        startVal = (startVal + Convert.ToDecimal(_tickerTrades.Rows[1].ItemArray[5])) / 2.0M;
-                        endVal = (endVal + Convert.ToDecimal(_tickerTrades.Rows[_tickerTrades.Rows.Count - 2].ItemArray[5])) / 2.0M;
+                        startVal = (startVal + Convert.ToDecimal(_tickerTradesDataTable.Rows[1].ItemArray[5])) / 2.0M;
+                        endVal = (endVal + Convert.ToDecimal(_tickerTradesDataTable.Rows[_tickerTradesDataTable.Rows.Count - 2].ItemArray[5])) / 2.0M;
                     }
 
-                    decimal slideVal = ((endVal - startVal) / _tickerTrades.Rows.Count) *.9M;
+                    decimal slideVal = ((endVal - startVal) / _tickerTradesDataTable.Rows.Count) *.9M;
                     decimal currentSlide = startVal;
                     decimal currentPrice;
                     int i = 0;
                     Color lastColor = Color.Black;
-                    foreach (DataRow r in _tickerTrades.Rows)
+                    foreach (DataRow r in _tickerTradesDataTable.Rows)
                     {
                         // Color Buy and Sells
                         if (r.ItemArray[2].ToString().Trim().ToLower() == "buy")
