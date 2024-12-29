@@ -42,7 +42,7 @@ namespace StockApi
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panelFinancials = new System.Windows.Forms.Panel();
-            this.lblFinCashDebtRatio = new System.Windows.Forms.Label();
+            this.lblFinDebtEquity = new System.Windows.Forms.Label();
             this.label62 = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
             this.lblFinTotalDebt = new System.Windows.Forms.Label();
@@ -276,7 +276,7 @@ namespace StockApi
             // panelFinancials
             // 
             this.panelFinancials.BackColor = System.Drawing.Color.Transparent;
-            this.panelFinancials.Controls.Add(this.lblFinCashDebtRatio);
+            this.panelFinancials.Controls.Add(this.lblFinDebtEquity);
             this.panelFinancials.Controls.Add(this.label62);
             this.panelFinancials.Controls.Add(this.label51);
             this.panelFinancials.Controls.Add(this.lblFinTotalDebt);
@@ -310,15 +310,15 @@ namespace StockApi
             // 
             // lblFinCashDebtRatio
             // 
-            this.lblFinCashDebtRatio.BackColor = System.Drawing.Color.Transparent;
-            this.lblFinCashDebtRatio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblFinCashDebtRatio.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinCashDebtRatio.Location = new System.Drawing.Point(102, 241);
-            this.lblFinCashDebtRatio.Name = "lblFinCashDebtRatio";
-            this.lblFinCashDebtRatio.Size = new System.Drawing.Size(58, 22);
-            this.lblFinCashDebtRatio.TabIndex = 62;
-            this.lblFinCashDebtRatio.Text = "0.00";
-            this.lblFinCashDebtRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblFinDebtEquity.BackColor = System.Drawing.Color.Transparent;
+            this.lblFinDebtEquity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblFinDebtEquity.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblFinDebtEquity.Location = new System.Drawing.Point(102, 241);
+            this.lblFinDebtEquity.Name = "lblFinCashDebtRatio";
+            this.lblFinDebtEquity.Size = new System.Drawing.Size(58, 22);
+            this.lblFinDebtEquity.TabIndex = 62;
+            this.lblFinDebtEquity.Text = "0.00";
+            this.lblFinDebtEquity.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label62
             // 
@@ -1780,7 +1780,7 @@ namespace StockApi
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.Label label54;
         private System.Windows.Forms.Label lblFinTotalCash;
-        private System.Windows.Forms.Label lblFinCashDebtRatio;
+        private System.Windows.Forms.Label lblFinDebtEquity;
         private System.Windows.Forms.Label label62;
         private System.Windows.Forms.Label lblFinTotalDebt;
         private System.Windows.Forms.Label label60;

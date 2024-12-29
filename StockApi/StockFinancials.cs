@@ -15,9 +15,6 @@ namespace StockApi
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
 
         public bool   _revenueInMillions = false;
-        public string TotalCashString = "";
-        public string TotalDebtString = "";
-        public string DebtEquityString = "";
 
         ////////////////////////////////////////////
         ///                Properties
@@ -172,6 +169,125 @@ namespace StockApi
             }
         }
 
+        /////////////////// TotalCash
+        public Color TotalCashColor = Color.LightSteelBlue;
+        private string totalCashString = NotApplicable;
+        private float totalCash = 0;
+        public string TotalCashString
+        {
+            get => totalCashString;
+            set
+            {
+                string temp;
+                
+                totalCashString = value;
+                if (NotNumber(value))
+                    TotalCash = 0;
+                else
+                {
+                    if (TotalCashString.IndexOf("B") > 0)
+                    {
+                        temp = TotalCashString.Replace("B", "");
+                        TotalCash = Convert.ToSingle(temp) * 1000000000;
+                    }
+                    else if (TotalCashString.IndexOf("M") > 0)
+                    {
+                        temp = TotalCashString.Replace("M", "");
+                        TotalCash = Convert.ToSingle(temp) * 1000000;
+                    }
+                    else if (TotalCashString.IndexOf("k") > 0)
+                    {
+                        temp = TotalCashString.Replace("k", "");
+                        TotalCash = Convert.ToSingle(temp) * 1000;
+                    }
+                    else
+                        TotalCash = Convert.ToSingle(value);
+                }
+            }
+        }
+        public float TotalCash
+        {
+            get => totalCash;
+            set
+            {
+                totalCash = value;
+            }
+        }
+
+        /////////////////// TotalDebt
+        public Color TotalDebtColor = Color.LightSteelBlue;
+        private string totalDebtString = NotApplicable;
+        private float totalDebt = 0;
+        public string TotalDebtString
+        {
+            get => totalDebtString;
+            set
+            {
+                string temp;
+
+                totalDebtString = value;
+                if (NotNumber(value))
+                    TotalDebt = 0;
+                else
+                {
+                    if (TotalDebtString.IndexOf("B") > 0)
+                    {
+                        temp = TotalDebtString.Replace("B", "");
+                        TotalDebt = Convert.ToSingle(temp) * 1000000000;
+                    }
+                    else if (TotalDebtString.IndexOf("M") > 0)
+                    {
+                        temp = TotalDebtString.Replace("M", "");
+                        TotalDebt = Convert.ToSingle(temp) * 1000000;
+                    }
+                    else if (TotalDebtString.IndexOf("k") > 0)
+                    {
+                        temp = TotalDebtString.Replace("k", "");
+                        TotalDebt = Convert.ToSingle(temp) * 1000;
+                    }
+                    else
+                        TotalDebt = Convert.ToSingle(value);
+                }
+            }
+        }
+        public float TotalDebt
+        {
+            get => totalDebt;
+            set
+            {
+                totalDebt = value;
+            }
+        }
+
+        /////////////////// DebtEquity
+        public Color DebtEquityColor = Color.LightSteelBlue;
+        private string debtEquityString = NotApplicable;
+        private float debtEquity = 0;
+        public string DebtEquityString
+        {
+            get => debtEquityString;
+            set
+            {
+                string temp = value.Replace("%", "");
+
+                debtEquityString = value;
+                if (NotNumber(temp))
+                    DebtEquity = 0;
+                else
+                {
+                    DebtEquity = Convert.ToSingle(temp);
+                }
+            }
+        }
+        public float DebtEquity
+        {
+            get => debtEquity;
+            set
+            {
+                debtEquity = value;
+            }
+        }
+
 
         /////////////////// Short Interest
         public Color ShortInterestColor = Color.LightSteelBlue;
@@ -298,20 +414,36 @@ namespace StockApi
             else
                 Revenue2Color = Color.LightSteelBlue;
 
-            // Set Colors of Cost of Revenue (if profit decreasing by 5% every 2 years, a problem
-            if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .95))
+            // Set Colors of Cost of Revenue (if profit decreasing by 10% every 2 years, a problem
+            if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9))
                 CostOfRevenueTtmColor = Color.Red;
-            else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.05))
+            else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.11))
                 CostOfRevenueTtmColor = Color.Lime;
             else
                 CostOfRevenueTtmColor = Color.LightSteelBlue;
 
-            if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .95))
+            if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .9))
                 CostOfRevenue2Color = Color.Red;
-            else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.05))
+            else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.11))
                 CostOfRevenue2Color = Color.Lime;
             else
                 CostOfRevenue2Color = Color.LightSteelBlue;
+
+            // Set Colors of Total Debt
+            if (TotalDebt > TotalCash * 1.6)
+                TotalDebtColor = Color.Red;
+            else if (TotalDebt < TotalCash * .6)
+                TotalDebtColor = Color.Lime;
+            else
+                TotalDebtColor = Color.LightSteelBlue;
+
+            // Set Colors of Debt Equity
+            if (DebtEquity > 60)
+                DebtEquityColor = Color.Red;
+            else if (DebtEquity < 35)
+                DebtEquityColor = Color.Lime;
+            else
+                DebtEquityColor = Color.LightSteelBlue;
 
             return true;
         }
