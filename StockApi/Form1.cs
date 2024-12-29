@@ -102,8 +102,9 @@ namespace StockApi
 
             // Extract the individual data values from the html
             bool found = await _stockSummary.GetSummaryData(txtStockTicker.Text);
+            GetFinancials();
 
-            if(found)
+            if (found)
             {
                 _tickerTrades = null;
                 // filter on stock ticker then order by date descending
@@ -317,7 +318,6 @@ namespace StockApi
 
             btnGetOne.Enabled = false;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
-            btnGetFinancials.Visible = true;
             picSpinner.Visible = true;
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -486,11 +486,11 @@ namespace StockApi
             }
         }
 
-        private async void btnGetFinancials_Click(object sender, EventArgs e)
+        private async void GetFinancials()
         {
-            btnGetFinancials.Visible = false;
             lblShortInterest.Text = "...";
 
+            panelFinancials.Visible = false;
             bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
 
             if (_stockFinancials.RevenueInMillions == true)
@@ -517,6 +517,7 @@ namespace StockApi
 
             lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
             lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
+            panelFinancials.Visible = true;
         }
 
         private async void btnGetAllHistory_Click(object sender, EventArgs e)
