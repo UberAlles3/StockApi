@@ -29,7 +29,7 @@ namespace StockApi
         public string CostOfRevenue4 = "";
         public string TotalCash = "";
         public string TotalDebt = "";
-        public string CashDebtRatio = "";
+        public string DebtEquity = "";
 
         public string ShortInterestString
         {
@@ -123,9 +123,9 @@ namespace StockApi
             // Total Debt
             searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Debt").Term;
             TotalDebt = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
-            // Cash Debt Ratio
-            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cash Debt Ratio").Term;
-            CashDebtRatio = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            // Debt/Equity Ratio
+            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
+            DebtEquity = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
 
             // Short Interest

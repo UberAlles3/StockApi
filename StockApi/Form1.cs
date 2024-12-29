@@ -512,7 +512,7 @@ namespace StockApi
             // Total Debt
             lblFinTotalDebt.Text = _stockFinancials.TotalDebt;
             // Cash Debt Ratio
-            lblFinCashDebtRatio.Text = _stockFinancials.CashDebtRatio;
+            lblFinCashDebtRatio.Text = _stockFinancials.DebtEquity;
 
             lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
             lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;

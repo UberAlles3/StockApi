@@ -328,7 +328,7 @@ namespace StockApi
             this.label62.Name = "label62";
             this.label62.Size = new System.Drawing.Size(99, 22);
             this.label62.TabIndex = 61;
-            this.label62.Text = "Cash Debt Ratio";
+            this.label62.Text = "Debt/Equity";
             // 
             // label51
             // 
