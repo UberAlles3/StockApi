@@ -107,18 +107,17 @@ namespace StockApi
             if (found)
             {
                 _tickerTradesDataTable = null;
+                int DateColumn = 0;
 
                 DateTime outDate = DateTime.Now;
                 // filter on stock ticker then order by date descending
-                //var tickerTrades = _tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower() && DateTime.TryParse(x[0].ToString(), out outDate) == true);
                 var tickerTrades = _tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
-                //tickerTrades = tickerTrades.OrderByDescending(x => ((DateTime)x[0]).ToString("yyyy-MM-dd"));
-                tickerTrades = tickerTrades.OrderByDescending(x => x[0]);
+                tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
 
                 List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
 
                 // try to get a price history from 3 years ago so you don't have to hit the yahoo web site.
-                var threeYearAgo = tickerTrades.AsEnumerable().Where(x => x[0].ToString().Contains("/" + DateTime.Now.AddMonths(-38).Year.ToString()));
+                var threeYearAgo = tickerTrades.AsEnumerable().Where(x => x[DateColumn].ToString().Contains("/" + DateTime.Now.AddMonths(-38).Year.ToString()));
                 DataRow gotOne = null;
                 if (threeYearAgo.Count() > 0)
                 {
@@ -150,9 +149,7 @@ namespace StockApi
                     dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
                     dataGridView2.DataSource = tradeSource.DataSource;
                     dataGridView2.Columns[0].HeaderText = "Date";
-                    
                     //dataGridView2.Columns[0].DefaultCellStyle.Format = "MM/dd/yyyy";
-
                     dataGridView2.Columns[1].Visible = false;
                     dataGridView2.Columns[2].HeaderText = "Buy/Sell";
                     dataGridView2.Columns[2].Width = 60;
