@@ -25,7 +25,7 @@ namespace StockApi
         private static StockFinancials _stockFinancials = new StockFinancials();
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
-        private static DataTable _trades = null;
+        private static DataTable _tradesDataTable = null;
         private static DataTable _tickerTradesDataTable = null;
         private static string _tradesExcelFilePath = "";
         private static DateTime _tradesImportDateTime = DateTime.Now;
@@ -87,11 +87,11 @@ namespace StockApi
             // Trades
             _tradesExcelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
             DateTime tradesExcelFileDateTime = System.IO.File.GetLastWriteTime(_tradesExcelFilePath);
-            if (_trades == null || tradesExcelFileDateTime > _tradesImportDateTime)
+            if (_tradesDataTable == null || tradesExcelFileDateTime > _tradesImportDateTime)
             {
-                _trades = (new ExcelManager()).ImportTrades(_settings.Find(x => x.Name == "ExcelTradesPath").Value);
-                _trades = _trades.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
-                _trades.Columns[0].DataType = System.Type.GetType("System.DateTime");
+                _tradesDataTable = (new ExcelManager()).ImportTrades(_settings.Find(x => x.Name == "ExcelTradesPath").Value);
+                _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
+                _tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
                 //_trades.Columns[0].ColumnName = "Date";
                 //_trades.DefaultView.Sort = "Date desc";
                 
@@ -107,8 +107,14 @@ namespace StockApi
             if (found)
             {
                 _tickerTradesDataTable = null;
+
+                DateTime outDate = DateTime.Now;
                 // filter on stock ticker then order by date descending
-                var tickerTrades = _trades.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower()).OrderByDescending(x => x[1]);
+                //var tickerTrades = _tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower() && DateTime.TryParse(x[0].ToString(), out outDate) == true);
+                var tickerTrades = _tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
+                //tickerTrades = tickerTrades.OrderByDescending(x => ((DateTime)x[0]).ToString("yyyy-MM-dd"));
+                tickerTrades = tickerTrades.OrderByDescending(x => x[0]);
+
                 List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
 
                 // try to get a price history from 3 years ago so you don't have to hit the yahoo web site.
@@ -131,7 +137,7 @@ namespace StockApi
                 // bind data list to grid control
                 BindListToHistoricPriceGrid(historicDisplayList);
 
-                if (_trades.Rows.Count > 0 && tickerTrades.Count() > 0)
+                if (_tradesDataTable.Rows.Count > 0 && tickerTrades.Count() > 0)
                 {
                     _tickerTradesDataTable = tickerTrades.Where(r => r[3].ToString() != "0").CopyToDataTable();
 
@@ -144,7 +150,9 @@ namespace StockApi
                     dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
                     dataGridView2.DataSource = tradeSource.DataSource;
                     dataGridView2.Columns[0].HeaderText = "Date";
-                    //dataGridView2.Columns[1].ValueType = System.Type.GetType("System.DateTime");
+                    
+                    //dataGridView2.Columns[0].DefaultCellStyle.Format = "MM/dd/yyyy";
+
                     dataGridView2.Columns[1].Visible = false;
                     dataGridView2.Columns[2].HeaderText = "Buy/Sell";
                     dataGridView2.Columns[2].Width = 60;
