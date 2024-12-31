@@ -359,17 +359,22 @@ namespace StockApi
             // Cost of Revenue History
             searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
             partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-            numbers = GetNumbersFromHtml(partial);
-            numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
+            if (partial != "")
+            {
+                numbers = GetNumbersFromHtml(partial);
+                numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
-            if (numbers.Count > 0)
-                CostOfRevenueTtmString = numbers[0];
-            if (numbers.Count > 2)
-                CostOfRevenue2String = numbers[2];
-            if (numbers.Count > 4)
-                CostOfRevenue4String = numbers[4];
-            else if (numbers.Count > 3)
-                CostOfRevenue4String = numbers[3];
+                if (numbers.Count > 0)
+                    CostOfRevenueTtmString = numbers[0];
+                if (numbers.Count > 2)
+                    CostOfRevenue2String = numbers[2];
+                if (numbers.Count > 4)
+                    CostOfRevenue4String = numbers[4];
+                else if (numbers.Count > 3)
+                    CostOfRevenue4String = numbers[3];
+            }
+            else
+                CostOfRevenueTtmString = CostOfRevenue2String = CostOfRevenue4String = "--";
 
             if (_revenueInMillions)
             {

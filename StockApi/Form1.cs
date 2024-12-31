@@ -353,11 +353,11 @@ namespace StockApi
                 //PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
                 if(_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
                 {
-                    DataRow lastRow = _tickerTradesDataTable.Rows[_tickerTradesDataTable.Rows.Count - 1];
-                    txtSharesOwned.Text = lastRow.ItemArray[6].ToString();      // Total Shares
-                    txtSharesTraded.Text = lastRow.ItemArray[3].ToString();     // Quan. Traded
-                    txtSharesTradePrice.Text = lastRow.ItemArray[5].ToString(); // Price
-                    if (lastRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
+                    DataRow latestRow = _tickerTradesDataTable.Rows[0];
+                    txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
+                    txtSharesTraded.Text = latestRow.ItemArray[3].ToString();     // Quan. Traded
+                    txtSharesTradePrice.Text = latestRow.ItemArray[5].ToString(); // Price
+                    if (latestRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
                     {
                         radBuy.Checked = true;
                         radSell.Checked = false;
