@@ -1071,9 +1071,9 @@ namespace StockApi
             // btnAnalyze
             // 
             this.btnAnalyze.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAnalyze.Location = new System.Drawing.Point(99, 248);
+            this.btnAnalyze.Location = new System.Drawing.Point(105, 246);
             this.btnAnalyze.Name = "btnAnalyze";
-            this.btnAnalyze.Size = new System.Drawing.Size(187, 33);
+            this.btnAnalyze.Size = new System.Drawing.Size(179, 35);
             this.btnAnalyze.TabIndex = 12;
             this.btnAnalyze.Text = "Analyze for Next Trades";
             this.btnAnalyze.UseVisualStyleBackColor = true;
@@ -1116,9 +1116,9 @@ namespace StockApi
             // btnGetAllHistory
             // 
             this.btnGetAllHistory.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnGetAllHistory.Location = new System.Drawing.Point(99, 218);
+            this.btnGetAllHistory.Location = new System.Drawing.Point(113, 218);
             this.btnGetAllHistory.Name = "btnGetAllHistory";
-            this.btnGetAllHistory.Size = new System.Drawing.Size(195, 28);
+            this.btnGetAllHistory.Size = new System.Drawing.Size(174, 28);
             this.btnGetAllHistory.TabIndex = 48;
             this.btnGetAllHistory.Text = "Get Year Month Week Trends";
             this.btnGetAllHistory.UseVisualStyleBackColor = true;
