@@ -368,28 +368,12 @@ namespace StockApi
                         radSell.Checked = true;
                     }
 
-                    // Find Min,Max trade price
-                    string min = _tickerTradesDataTable.AsEnumerable()
-                        .Min(row => row[5])
-                        .ToString();
-                    string max = _tickerTradesDataTable.AsEnumerable()
-                        .Max(row => row[5])
-                        .ToString();
-                    decimal minval = Convert.ToDecimal(min);
-                    decimal maxval = Convert.ToDecimal(max);
-                    decimal startVal = Convert.ToDecimal(_tickerTradesDataTable.AsEnumerable().First().ItemArray[5]);
-                    decimal endVal   = Convert.ToDecimal(_tickerTradesDataTable.AsEnumerable().Last().ItemArray[5]);
-                    if (_tickerTradesDataTable.Rows.Count > 4)
-                    {
-                        startVal = (startVal + Convert.ToDecimal(_tickerTradesDataTable.Rows[1].ItemArray[5])) / 2.0M;
-                        endVal = (endVal + Convert.ToDecimal(_tickerTradesDataTable.Rows[_tickerTradesDataTable.Rows.Count - 2].ItemArray[5])) / 2.0M;
-                    }
-
-                    decimal slideVal = ((endVal - startVal) / _tickerTradesDataTable.Rows.Count) *.9M;
-                    decimal currentSlide = startVal;
-                    decimal currentPrice;
+                    string min;
+                    string max;
+                    decimal minval;
+                    decimal maxval;
                     int i = 0;
-                    Color lastColor = Color.Black;
+                    // Color based on groups of 5 rows, the high and low for the 5 rows
                     foreach (DataRow r in _tickerTradesDataTable.Rows)
                     {
                         // Color Buy and Sells
@@ -398,36 +382,38 @@ namespace StockApi
                         else
                             dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Yellow;
 
-                        // Color high price low price
-                        currentSlide += slideVal;
-                        currentPrice = Convert.ToDecimal(r.ItemArray[5]);
-                        if (currentPrice > maxval * .98M || currentPrice > currentSlide * 1.1M)
+                        int i2 = i;
+                        if (i % 2 == 0) // every 2md pass, evaluate
                         {
-                            if (lastColor != Color.Lime)
-                            {
-                                dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.Lime;
-                                lastColor = Color.Lime;
-                            }
-                            if (currentPrice > maxval * .98M)
-                            {
-                                dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.Lime;
-                                lastColor = Color.Lime;
-                            }
-                        }
-                        if (currentPrice < minval * 1.02M || currentPrice < currentSlide * .9M)
-                        {
-                            if (lastColor != Color.Red)
-                            {
-                                dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.Red;
-                                lastColor = Color.Red;
-                            }
-                            if (currentPrice < minval * 1.02M)
-                            {
-                                dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.Red;
-                                lastColor = Color.Red;
-                            }
-                        }
+                            // Find Min, Max trade price
+                            min = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
+                                .Min(row => row[5])
+                                .ToString();
+                            max = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
+                                .Max(row => row[5])
+                                .ToString();
 
+                            for (i2 = i; i2 < i + 5 && i < _tickerTradesDataTable.Rows.Count - 4; i2++)
+                            {
+                                if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max)
+                                {
+                                    dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Lime;
+                                    if (i > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Green)
+                                        dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
+                                    if (i < _tickerTradesDataTable.Rows.Count - 5 && dataGridView2.Rows[i2 + 1].Cells[5].Style.ForeColor == Color.Green)
+                                        dataGridView2.Rows[i2 + 1].Cells[5].Style.ForeColor = Color.Silver;
+                                }
+                                if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min)
+                                {
+                                    dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Red;
+                                    if (i > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Red)
+                                        dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
+                                    if (i < _tickerTradesDataTable.Rows.Count - 5 && dataGridView2.Rows[i2 + 1].Cells[5].Style.ForeColor == Color.Red)
+                                        dataGridView2.Rows[i2 + 1].Cells[5].Style.ForeColor = Color.Silver;
+                                }
+                            }
+                        }
+                        
                         i++;
                     }
                 }
@@ -443,6 +429,7 @@ namespace StockApi
                 MessageBox.Show($"Error: {e.Message} {e.InnerException} {e.StackTrace}");
             }
         }
+
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
