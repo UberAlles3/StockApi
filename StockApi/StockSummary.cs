@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Linq;
+using Drake.Extensions;
 
 namespace StockApi
 {
@@ -33,7 +35,7 @@ namespace StockApi
         private float   price = 0;
         private string  volatilityString = NotApplicable;
         private float   volatility = 0;
-
+        public string  CompanyOverview= "";
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
@@ -282,6 +284,14 @@ namespace StockApi
                 ProfitMarginString = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
             else
                 ProfitMarginString = YahooFinance.NotApplicable;
+
+            // Company Overview
+            searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
+            string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4000);
+            string[] parts = htmlSnippet.Split(">");
+            string longest = parts.OrderByDescending(s => s.Length).First();
+            CompanyOverview = longest._TrimSuffix("</");
+
             return true;
         }
 

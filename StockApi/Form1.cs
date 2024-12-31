@@ -543,5 +543,10 @@ namespace StockApi
             SetTrendImages();
             UseWaitCursor = false;
         }
+
+        private void lnkCompanyOverview_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show(_stockSummary.CompanyOverview, "Company Overview", MessageBoxButtons.OK);
+        }
     }
 }
