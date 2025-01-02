@@ -70,29 +70,31 @@ namespace StockApi
             else if (stockSummary.EarningsPerShare < -1)
                 epsMetric = .98F;
             else if (stockSummary.EarningsPerShare > 6)
-                epsMetric = 1.08F;
-            else if (stockSummary.EarningsPerShare > 3)
                 epsMetric = 1.05F;
+            else if (stockSummary.EarningsPerShare > 3)
+                epsMetric = 1.03F;
             else if (stockSummary.EarningsPerShare > 1)
                 epsMetric = 1.02F;
+            else if (stockSummary.EarningsPerShare > 0)
+                epsMetric = 1.01F;
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
             // Price / Book
             float priceBookMetric = 1F;
             if (stockSummary.PriceBookColor == Color.Red)
-                priceBookMetric = .97F;
+                priceBookMetric = .982F;
             if (stockSummary.PriceBookColor == Color.Lime)
-                priceBookMetric = 1.03F;
+                priceBookMetric = 1.02F;
 
             output.AppendLine($"Price Book Metric = {priceBookMetric}");
 
             // Profit Margin Metric
             float ProfitMarginMetric = 1F;
             if (stockSummary.ProfitMargin < -6)
-                ProfitMarginMetric = .96F;
+                ProfitMarginMetric = .962F;
             else if (stockSummary.ProfitMargin < -2)
-                ProfitMarginMetric = .98F;
+                ProfitMarginMetric = .981F;
             else if (stockSummary.ProfitMargin > 6)
                 ProfitMarginMetric = 1.04F;
             else if (stockSummary.ProfitMargin > 2)
@@ -113,36 +115,44 @@ namespace StockApi
             else
                 dividendMetric = .99F;
 
-            output.AppendLine($"Dividend Metric = {dividendMetric}");
+            if (priceTrendMetric < .92F && dividendMetric > 1.04)
+                dividendMetric = 1.01F; // if the price is going steeply down, who care about a high dividend
+
+output.AppendLine($"Dividend Metric = {dividendMetric}");
 
             ///////////////////////////////////// Finacial Metrics
             // Revenue - Should be increasing YOY
             float revenueMetric = 1F;
-            if (stockFinancials.Revenue2 > stockFinancials.Revenue4 * 1.05) // Revenue 2 years ago is 5% above revenue 4 years ago 
-                revenueMetric = 1.05F;
-            if (stockFinancials.Revenue2 < stockFinancials.Revenue4 * .99) // Revenue 2 years ago is 1% below revenue 4 years ago 
-                revenueMetric = .95F;
-            if (stockFinancials.RevenueTtm > stockFinancials.Revenue2 * 1.05) // Revenue TTM is 5% above revenue 2 years ago 
-                revenueMetric = revenueMetric * 1.05F;
-            if (stockFinancials.RevenueTtm < stockFinancials.Revenue2 * .99) // Revenue TTM is 1% below revenue 2 years ago 
-                revenueMetric = revenueMetric * .95F;
-            if (stockFinancials.RevenueTtm > stockFinancials.Revenue4 * 1.05) // Revenue TTM is 5% above revenue 4 years ago 
-                revenueMetric = revenueMetric * 1.02F;
-            if (stockFinancials.RevenueTtm < stockFinancials.Revenue4 * .99) // Revenue TTM is 1% below revenue 4 years ago 
-                revenueMetric = revenueMetric * .98F;
+            if (stockFinancials.RevenueTtm > 0)
+            {
+                if (stockFinancials.Revenue2 > stockFinancials.Revenue4 * 1.05) // Revenue 2 years ago is 5% above revenue 4 years ago 
+                    revenueMetric = 1.03F;
+                if (stockFinancials.Revenue2 < stockFinancials.Revenue4 * .98) // Revenue 2 years ago is 1% below revenue 4 years ago 
+                    revenueMetric = .95F;
+                if (stockFinancials.RevenueTtm > stockFinancials.Revenue2 * 1.05) // Revenue TTM is 5% above revenue 2 years ago 
+                    revenueMetric = revenueMetric * 1.03F;
+                if (stockFinancials.RevenueTtm < stockFinancials.Revenue2 * .98) // Revenue TTM is 1% below revenue 2 years ago 
+                    revenueMetric = revenueMetric * .972F;
+                if (stockFinancials.RevenueTtm > stockFinancials.Revenue4 * 1.03) // Revenue TTM is 5% above revenue 4 years ago 
+                    revenueMetric = revenueMetric * 1.01F;
+                if (stockFinancials.RevenueTtm < stockFinancials.Revenue4 * .98) // Revenue TTM is 1% below revenue 4 years ago 
+                    revenueMetric = revenueMetric * .99F;
+            }
             output.AppendLine($"Revenue Metric = {revenueMetric}");
             // Profit - Revenue - Cost of Revenue
             float profitMetric = 1F;
             if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.01)
-                profitMetric = 1.04F;
+                profitMetric = 1.03F;
             if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99)
                 profitMetric = .96F;
             if (stockFinancials.ProfitTTM > stockFinancials.Profit2YearsAgo * 1.01)
-                profitMetric *= 1.04F;
+                profitMetric *= 1.03F;
             if (stockFinancials.ProfitTTM < stockFinancials.Profit2YearsAgo * .99)
                 profitMetric *= .96F;
-            if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.01)
+            if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.2)
                 profitMetric *= 1.02F;
+            else if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.01)
+                profitMetric *= 1.01F;
             if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .99)
                 profitMetric *= .98F;
             if (revenueMetric * profitMetric < .86)
@@ -150,11 +160,20 @@ namespace StockApi
             else
                 output.AppendLine($"Profit Metric = {profitMetric}");
 
+            float cashDebtMetric = 1F;
+            if (stockFinancials.TotalDebt > stockFinancials.TotalCash * 5) // lots of debt compared to cash
+                cashDebtMetric = .96F;
+            else if (stockFinancials.TotalCash > stockFinancials.TotalDebt * 2) // lots of cash compared to debt
+                cashDebtMetric = 1.03F;
+            if (stockFinancials.DebtEquity > 120) // Over 120% D/E is bad
+                cashDebtMetric = cashDebtMetric * .96F;
+            output.AppendLine($"Cash, Debt Metric = {cashDebtMetric}");
+
             // Economy
             float ecoMetric =  1 + ((analyzeInputs.EconomyHealth - 5) / 100);
             output.AppendLine($"Economy Metric = {ecoMetric}");
 
-            float totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * ProfitMarginMetric * ecoMetric * revenueMetric * profitMetric;
+            float totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * ProfitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric;
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric}";
             if (totalMetric < .85F)
@@ -254,7 +273,7 @@ namespace StockApi
             }
 
             // Dividend 
-            if (stockSummary.Dividend > 8)
+            if (stockSummary.Dividend > 8 && priceTrendMetric > .92F)
             {
                 buyQuantity = buyQuantity * 1.2F;
                 sellQuantity = sellQuantity / 1.2F;
@@ -299,7 +318,7 @@ namespace StockApi
 
             // Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
             float profit = (SellPrice - stockSummary.Price) * (float)SellQuantity;
-            if (profit < 20F)
+            if (profit < 20F && totalMetric > .91F) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
             {
                 SellPrice = (20F / SellQuantity) + stockSummary.Price;
                 output.AppendLine($"Minimum profit set to $20. Sell Price: {SellPrice.ToString("##.##")}");

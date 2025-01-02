@@ -356,6 +356,8 @@ namespace StockApi
                 {
                     DataRow latestRow = _tickerTradesDataTable.Rows[0];
                     txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
+                    if (txtSharesOwned.Text.Trim() == "")
+                        txtSharesOwned.Text = "1";
                     txtSharesTraded.Text = latestRow.ItemArray[3].ToString();     // Quan. Traded
                     txtSharesTradePrice.Text = latestRow.ItemArray[5].ToString(); // Price
                     if (latestRow.ItemArray[2].ToString().Trim().ToLower() == "buy")

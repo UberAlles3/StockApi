@@ -404,7 +404,7 @@ namespace StockApi
             else
                 CostOfRevenueTtmString = CostOfRevenue2String = CostOfRevenue4String = "--";
 
-            if (_revenueInMillions)
+            if (_revenueInMillions && CostOfRevenueTtm != 0 && CostOfRevenueTtmString != "--")
             {
                 CostOfRevenueTtmString = CostOfRevenueTtmString.Substring(0, CostOfRevenueTtmString.Length - 4);
                 CostOfRevenue2String = CostOfRevenue2String.Substring(0, CostOfRevenue2String.Length - 4);
@@ -448,19 +448,22 @@ namespace StockApi
                 Revenue2Color = Color.LightSteelBlue;
 
             // Set Colors of Cost of Revenue (if profit decreasing by 10% every 2 years, a problem
-            if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9))
-                CostOfRevenueTtmColor = Color.Red;
-            else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.11))
-                CostOfRevenueTtmColor = Color.Lime;
-            else
-                CostOfRevenueTtmColor = Color.LightSteelBlue;
+            if(CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
+            {
+                if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9))
+                    CostOfRevenueTtmColor = Color.Red;
+                else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.11))
+                    CostOfRevenueTtmColor = Color.Lime;
+                else
+                    CostOfRevenueTtmColor = Color.LightSteelBlue;
 
-            if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .9))
-                CostOfRevenue2Color = Color.Red;
-            else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.11))
-                CostOfRevenue2Color = Color.Lime;
-            else
-                CostOfRevenue2Color = Color.LightSteelBlue;
+                if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .9))
+                    CostOfRevenue2Color = Color.Red;
+                else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.11))
+                    CostOfRevenue2Color = Color.Lime;
+                else
+                    CostOfRevenue2Color = Color.LightSteelBlue;
+            }
 
             // Set Colors of Total Debt
             if (TotalDebt > TotalCash * 1.6)
