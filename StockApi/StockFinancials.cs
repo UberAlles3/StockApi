@@ -363,6 +363,10 @@ namespace StockApi
             // Revenue History
             string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
             string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
+            
+            if (partial.Length < 100) // Some stocks like Vangaurd don't have financials, exit
+                return false; //=====>>>>>>>
+
             List<string> numbers = GetNumbersFromHtml(partial);
             numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
