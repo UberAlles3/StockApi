@@ -155,7 +155,7 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
                 profitMetric *= 1.01F;
             if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .98)
                 profitMetric *= .985F;
-            if (revenueMetric * profitMetric < .86)
+            if (revenueMetric * profitMetric < .87)
                 output.AppendLine($"Profit Metric = {profitMetric}         * Financials are Bad *");
             else
                 output.AppendLine($"Profit Metric = {profitMetric}");
