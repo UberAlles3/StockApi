@@ -126,13 +126,13 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
             if (stockFinancials.RevenueTtm > 0)
             {
                 if (stockFinancials.Revenue2 > stockFinancials.Revenue4 * 1.05) // Revenue 2 years ago is 5% above revenue 4 years ago 
-                    revenueMetric = 1.03F;
+                    revenueMetric = 1.025F;
                 if (stockFinancials.Revenue2 < stockFinancials.Revenue4 * .98) // Revenue 2 years ago is 1% below revenue 4 years ago 
-                    revenueMetric = .95F;
+                    revenueMetric = .98F;
                 if (stockFinancials.RevenueTtm > stockFinancials.Revenue2 * 1.05) // Revenue TTM is 5% above revenue 2 years ago 
-                    revenueMetric = revenueMetric * 1.03F;
+                    revenueMetric = revenueMetric * 1.025F;
                 if (stockFinancials.RevenueTtm < stockFinancials.Revenue2 * .98) // Revenue TTM is 1% below revenue 2 years ago 
-                    revenueMetric = revenueMetric * .972F;
+                    revenueMetric = revenueMetric * .98F;
                 if (stockFinancials.RevenueTtm > stockFinancials.Revenue4 * 1.03) // Revenue TTM is 5% above revenue 4 years ago 
                     revenueMetric = revenueMetric * 1.01F;
                 if (stockFinancials.RevenueTtm < stockFinancials.Revenue4 * .98) // Revenue TTM is 1% below revenue 4 years ago 
@@ -142,19 +142,19 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
             // Profit - Revenue - Cost of Revenue
             float profitMetric = 1F;
             if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.01)
-                profitMetric = 1.03F;
+                profitMetric = 1.025F;
             if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99)
-                profitMetric = .96F;
+                profitMetric = .98F;
             if (stockFinancials.ProfitTTM > stockFinancials.Profit2YearsAgo * 1.01)
-                profitMetric *= 1.03F;
+                profitMetric *= 1.025F;
             if (stockFinancials.ProfitTTM < stockFinancials.Profit2YearsAgo * .99)
-                profitMetric *= .96F;
-            if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.2)
-                profitMetric *= 1.02F;
-            else if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.01)
-                profitMetric *= 1.01F;
-            if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .99)
                 profitMetric *= .98F;
+            if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.2)
+                profitMetric *= 1.015F;
+            else if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.02)
+                profitMetric *= 1.01F;
+            if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .98)
+                profitMetric *= .985F;
             if (revenueMetric * profitMetric < .86)
                 output.AppendLine($"Profit Metric = {profitMetric}         * Financials are Bad *");
             else

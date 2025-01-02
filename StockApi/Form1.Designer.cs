@@ -859,7 +859,7 @@ namespace StockApi
             // 
             this.label39.BackColor = System.Drawing.Color.Transparent;
             this.label39.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label39.Location = new System.Drawing.Point(96, 255);
+            this.label39.Location = new System.Drawing.Point(104, 255);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(38, 17);
             this.label39.TabIndex = 38;
@@ -869,7 +869,7 @@ namespace StockApi
             // 
             this.pic3YearTrend.BackColor = System.Drawing.Color.Transparent;
             this.pic3YearTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
-            this.pic3YearTrend.Location = new System.Drawing.Point(99, 275);
+            this.pic3YearTrend.Location = new System.Drawing.Point(107, 275);
             this.pic3YearTrend.Name = "pic3YearTrend";
             this.pic3YearTrend.Size = new System.Drawing.Size(32, 29);
             this.pic3YearTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -880,7 +880,7 @@ namespace StockApi
             // 
             this.picYearTrend.BackColor = System.Drawing.Color.Transparent;
             this.picYearTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
-            this.picYearTrend.Location = new System.Drawing.Point(167, 275);
+            this.picYearTrend.Location = new System.Drawing.Point(171, 275);
             this.picYearTrend.Name = "picYearTrend";
             this.picYearTrend.Size = new System.Drawing.Size(32, 29);
             this.picYearTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -912,7 +912,7 @@ namespace StockApi
             // 
             this.label21.BackColor = System.Drawing.Color.Transparent;
             this.label21.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label21.Location = new System.Drawing.Point(225, 255);
+            this.label21.Location = new System.Drawing.Point(227, 255);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(50, 17);
             this.label21.TabIndex = 20;
@@ -922,7 +922,7 @@ namespace StockApi
             // 
             this.label20.BackColor = System.Drawing.Color.Transparent;
             this.label20.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label20.Location = new System.Drawing.Point(167, 255);
+            this.label20.Location = new System.Drawing.Point(171, 255);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(38, 17);
             this.label20.TabIndex = 17;
@@ -931,10 +931,10 @@ namespace StockApi
             // label19
             // 
             this.label19.BackColor = System.Drawing.Color.Transparent;
-            this.label19.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label19.Location = new System.Drawing.Point(16, 246);
+            this.label19.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label19.Location = new System.Drawing.Point(-1, 263);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(63, 69);
+            this.label19.Size = new System.Drawing.Size(100, 48);
             this.label19.TabIndex = 16;
             this.label19.Text = "Price Trend";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1018,7 +1018,7 @@ namespace StockApi
             // 
             this.picMonthTrend.BackColor = System.Drawing.Color.Transparent;
             this.picMonthTrend.Image = global::StockApi.Properties.Resources.RightArrow;
-            this.picMonthTrend.Location = new System.Drawing.Point(231, 275);
+            this.picMonthTrend.Location = new System.Drawing.Point(233, 275);
             this.picMonthTrend.Name = "picMonthTrend";
             this.picMonthTrend.Size = new System.Drawing.Size(29, 29);
             this.picMonthTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
