@@ -315,6 +315,7 @@ namespace StockApi
         {
             _stockSummary = new StockSummary(); // set values to zero
             btnGetAllHistory.Visible = true;
+            txtAnalysisOutput.Text = "";
             pic3YearTrend.Image = picSidewaysTrend.Image;
             picYearTrend.Image = picSidewaysTrend.Image;
             picMonthTrend.Image = picSidewaysTrend.Image; 
@@ -370,8 +371,6 @@ namespace StockApi
 
                     string min;
                     string max;
-                    decimal minval;
-                    decimal maxval;
                     int i = 0;
                     // Color based on groups of 5 rows, the high and low for the 5 rows
                     foreach (DataRow r in _tickerTradesDataTable.Rows)
@@ -441,7 +440,7 @@ namespace StockApi
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
             analyzeInputs.EconomyHealth = trackBar1.Value;
 
-            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, analyzeInputs);
+            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs);
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
 
             lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();

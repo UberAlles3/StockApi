@@ -216,9 +216,9 @@ namespace StockApi
         {
             if (HistoricData3YearsAgo != null)
             {
-                if (HistoricDataToday.Price > HistoricData3YearsAgo.Price * 1.12F) // year
+                if (HistoricDataToday.Price > HistoricData3YearsAgo.Price * 1.12F) // 3 year
                     ThreeYearTrend = TrendEnum.Up;
-                else if (HistoricDataToday.Price < HistoricData3YearsAgo.Price * .88F) // year
+                else if (HistoricDataToday.Price < HistoricData3YearsAgo.Price * .88F) // 3 year
                     ThreeYearTrend = TrendEnum.Down;
                 else
                     ThreeYearTrend = TrendEnum.Sideways;

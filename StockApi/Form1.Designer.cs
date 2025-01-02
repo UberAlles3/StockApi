@@ -1071,9 +1071,9 @@ namespace StockApi
             // btnAnalyze
             // 
             this.btnAnalyze.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAnalyze.Location = new System.Drawing.Point(105, 246);
+            this.btnAnalyze.Location = new System.Drawing.Point(105, 218);
             this.btnAnalyze.Name = "btnAnalyze";
-            this.btnAnalyze.Size = new System.Drawing.Size(179, 35);
+            this.btnAnalyze.Size = new System.Drawing.Size(179, 28);
             this.btnAnalyze.TabIndex = 12;
             this.btnAnalyze.Text = "Analyze for Next Trades";
             this.btnAnalyze.UseVisualStyleBackColor = true;
@@ -1407,11 +1407,11 @@ namespace StockApi
             this.txtAnalysisOutput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAnalysisOutput.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtAnalysisOutput.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.txtAnalysisOutput.Location = new System.Drawing.Point(16, 291);
+            this.txtAnalysisOutput.Location = new System.Drawing.Point(16, 255);
             this.txtAnalysisOutput.Multiline = true;
             this.txtAnalysisOutput.Name = "txtAnalysisOutput";
             this.txtAnalysisOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAnalysisOutput.Size = new System.Drawing.Size(344, 238);
+            this.txtAnalysisOutput.Size = new System.Drawing.Size(344, 274);
             this.txtAnalysisOutput.TabIndex = 33;
             // 
             // lblSellQuantity

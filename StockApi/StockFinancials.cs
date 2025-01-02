@@ -15,6 +15,9 @@ namespace StockApi
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
 
         public bool   _revenueInMillions = false;
+        public float ProfitTTM = 0;
+        public float Profit2YearsAgo = 0;
+        public float Profit4YearsAgo = 0;
 
         ////////////////////////////////////////////
         ///                Properties
@@ -32,7 +35,11 @@ namespace StockApi
                 if (NotNumber(value))
                     RevenueTtm = 0;
                 else
+                {
                     RevenueTtm = Convert.ToSingle(RevenueTtmString);
+                    if (costOfRevenueTtm > 0)
+                        ProfitTTM = RevenueTtm - CostOfRevenueTtm;
+                }
             }
         }
         public float RevenueTtm
@@ -41,6 +48,8 @@ namespace StockApi
             set
             {
                 revenueTtm = value;
+                if (costOfRevenueTtm > 0)
+                    ProfitTTM = revenueTtm - costOfRevenueTtm;
             }
         }
 
@@ -57,7 +66,11 @@ namespace StockApi
                 if (NotNumber(value))
                     Revenue2 = 0;
                 else
+                {
                     Revenue2 = Convert.ToSingle(Revenue2String);
+                    if (costOfRevenue2 > 0)
+                        Profit2YearsAgo = Revenue2 - CostOfRevenue2;
+                }
             }
         }
         public float Revenue2
@@ -82,7 +95,11 @@ namespace StockApi
                 if (NotNumber(value))
                     Revenue4 = 0;
                 else
+                {
                     Revenue4 = Convert.ToSingle(Revenue4String);
+                    if (costOfRevenue4 > 0)
+                        Profit4YearsAgo = Revenue4 - CostOfRevenue4;
+                }
             }
         }
         public float Revenue4
@@ -107,7 +124,11 @@ namespace StockApi
                 if (NotNumber(value))
                     CostOfRevenueTtm = 0;
                 else
+                {
                     CostOfRevenueTtm = Convert.ToSingle(CostOfRevenueTtmString);
+                    if (revenueTtm > 0)
+                        ProfitTTM = RevenueTtm - CostOfRevenueTtm;
+                }
             }
         }
         public float CostOfRevenueTtm
@@ -132,7 +153,11 @@ namespace StockApi
                 if (NotNumber(value))
                     CostOfRevenue2 = 0;
                 else
+                {
                     CostOfRevenue2 = Convert.ToSingle(CostOfRevenue2String);
+                    if (revenue2 > 0)
+                        Profit2YearsAgo = Revenue2 - CostOfRevenue2;
+                }
             }
         }
         public float CostOfRevenue2
@@ -157,7 +182,11 @@ namespace StockApi
                 if (NotNumber(value))
                     CostOfRevenue4 = 0;
                 else
+                {
                     CostOfRevenue4 = Convert.ToSingle(CostOfRevenue4String);
+                    if (revenue4 > 0)
+                        Profit4YearsAgo = Revenue4 - CostOfRevenue4;
+                }
             }
         }
         public float CostOfRevenue4
@@ -287,7 +316,6 @@ namespace StockApi
                 debtEquity = value;
             }
         }
-
 
         /////////////////// Short Interest
         public Color ShortInterestColor = Color.LightSteelBlue;
