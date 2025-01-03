@@ -386,7 +386,7 @@ namespace StockApi
                             dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Yellow;
 
                         int i2 = i;
-                        if (i % 1 == 0) // every 2md pass, evaluate
+                        if (i % 1 == 0) // every 2nd pass, evaluate
                         {
                             // Find Min, Max trade price
                             min = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
@@ -398,41 +398,37 @@ namespace StockApi
 
                             for (i2 = i; i2 < i + 5 && i < _tickerTradesDataTable.Rows.Count - 4; i2++)
                             {
-                                if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max)
+                                if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max) // High - Green coloring
                                 {
                                     current = previous = 0;
                                     try
                                     {
-                                        current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                         previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                        current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                     }
                                     catch { } // eat the error
                                     if (current > previous)
                                     {
                                         dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Lime;
-                                        if (i > 1)
+                                        if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Lime)
                                             dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
-                                        if (i < _tickerTradesDataTable.Rows.Count - 5 && dataGridView2.Rows[i2 + 1].Cells[5].Style.ForeColor == Color.Green)
-                                            dataGridView2.Rows[i2 + 1].Cells[5].Style.ForeColor = Color.Silver;
                                     }
                                 }
-                                if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min)
+                                if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min) // Low - Red coloring
                                 {
                                     // get previous, if previous < than this low, don't color and leave previous alone
                                     current = previous = 0;
                                     try
                                     {
-                                        current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                         previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                        current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                     }
                                     catch { } // eat the error
                                     if(current < previous)
                                     {
                                         dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Red;
-                                        if (i > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Red)
+                                        if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Red)
                                             dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
-                                        if (i < _tickerTradesDataTable.Rows.Count - 5 && dataGridView2.Rows[i2 + 1].Cells[5].Style.ForeColor == Color.Red)
-                                            dataGridView2.Rows[i2 + 1].Cells[5].Style.ForeColor = Color.Silver;
                                     }
                                 }
                             }
