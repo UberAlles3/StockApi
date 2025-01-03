@@ -384,8 +384,10 @@ namespace StockApi
             {
                 _revenueInMillions = true;
                 RevenueTtmString = RevenueTtmString.Substring(0, RevenueTtmString.Length - 4);
-                Revenue2String = Revenue2String.Substring(0, Revenue2String.Length - 4);
-                Revenue4String = Revenue4String.Substring(0, Revenue4String.Length - 4);
+                if (Revenue2String.Length > 7)
+                    Revenue2String = Revenue2String.Substring(0, Revenue2String.Length - 4);
+                if (Revenue4String.Length > 7)
+                    Revenue4String = Revenue4String.Substring(0, Revenue4String.Length - 4);
             }
 
             // Cost of Revenue History

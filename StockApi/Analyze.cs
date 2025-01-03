@@ -125,18 +125,21 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
             float revenueMetric = 1F;
             if (stockFinancials.RevenueTtm > 0)
             {
-                if (stockFinancials.Revenue2 > stockFinancials.Revenue4 * 1.05) // Revenue 2 years ago is 5% above revenue 4 years ago 
-                    revenueMetric = 1.025F;
-                if (stockFinancials.Revenue2 < stockFinancials.Revenue4 * .98) // Revenue 2 years ago is 1% below revenue 4 years ago 
-                    revenueMetric = .98F;
-                if (stockFinancials.RevenueTtm > stockFinancials.Revenue2 * 1.05) // Revenue TTM is 5% above revenue 2 years ago 
-                    revenueMetric = revenueMetric * 1.025F;
-                if (stockFinancials.RevenueTtm < stockFinancials.Revenue2 * .98) // Revenue TTM is 1% below revenue 2 years ago 
-                    revenueMetric = revenueMetric * .98F;
-                if (stockFinancials.RevenueTtm > stockFinancials.Revenue4 * 1.03) // Revenue TTM is 5% above revenue 4 years ago 
-                    revenueMetric = revenueMetric * 1.01F;
-                if (stockFinancials.RevenueTtm < stockFinancials.Revenue4 * .98) // Revenue TTM is 1% below revenue 4 years ago 
-                    revenueMetric = revenueMetric * .99F;
+                if(stockFinancials.Revenue4 > 0)
+                {
+                    if (stockFinancials.Revenue2 > stockFinancials.Revenue4 * 1.05) // Revenue 2 years ago is 5% above revenue 4 years ago 
+                        revenueMetric = 1.025F;
+                    if (stockFinancials.Revenue2 < stockFinancials.Revenue4 * .98) // Revenue 2 years ago is 1% below revenue 4 years ago 
+                        revenueMetric = .98F;
+                    if (stockFinancials.RevenueTtm > stockFinancials.Revenue2 * 1.05) // Revenue TTM is 5% above revenue 2 years ago 
+                        revenueMetric = revenueMetric * 1.025F;
+                    if (stockFinancials.RevenueTtm < stockFinancials.Revenue2 * .98) // Revenue TTM is 1% below revenue 2 years ago 
+                        revenueMetric = revenueMetric * .98F;
+                    if (stockFinancials.RevenueTtm > stockFinancials.Revenue4 * 1.03) // Revenue TTM is 5% above revenue 4 years ago 
+                        revenueMetric = revenueMetric * 1.01F;
+                    if (stockFinancials.RevenueTtm < stockFinancials.Revenue4 * .98) // Revenue TTM is 1% below revenue 4 years ago 
+                        revenueMetric = revenueMetric * .99F;
+                }
             }
             output.AppendLine($"Revenue Metric = {revenueMetric}");
             // Profit - Revenue - Cost of Revenue
@@ -220,8 +223,8 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
             float upperMovementMultiplier = ((100F + analyzeInputs.MovementTargetPercent) / 100F); // if movement is 20% will assign 1.2
 
             // Calculate future buy or sells based on how much it moves and what our target movement is. 
-            float buyPrice = stockHistory.HistoricDataToday.Price * lowerMovementMultiplier;
-            float sellPrice = stockHistory.HistoricDataToday.Price * upperMovementMultiplier;
+            float buyPrice = analyzeInputs.SharesTradedPrice * lowerMovementMultiplier;
+            float sellPrice = analyzeInputs.SharesTradedPrice * upperMovementMultiplier;
 
             output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
@@ -229,10 +232,10 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
             buyPrice = buyPrice * totalMetric;
             sellPrice = sellPrice * totalMetric;
 
-            if (sellPrice < stockHistory.HistoricDataToday.Price)
-                sellPrice = stockHistory.HistoricDataToday.Price * 1.05F; // Sell a bad stock at a 5% profit if it ever gets there.
-            if (buyPrice > stockHistory.HistoricDataToday.Price * .96F)
-                buyPrice = stockHistory.HistoricDataToday.Price * .95F; // Next buy can't be more than current price, but buy less
+            if (sellPrice < analyzeInputs.SharesTradedPrice)
+                sellPrice = analyzeInputs.SharesTradedPrice * 1.05F; // Sell a bad stock at a 5% profit if it ever gets there.
+            if (buyPrice > analyzeInputs.SharesTradedPrice * .96F)
+                buyPrice = analyzeInputs.SharesTradedPrice * .95F; // Next buy can't be more than current price, but buy less
 
             output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
