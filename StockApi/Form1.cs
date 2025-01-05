@@ -555,5 +555,46 @@ namespace StockApi
         {
             MessageBox.Show(_stockSummary.CompanyOverview, "Company Overview", MessageBoxButtons.OK);
         }
+
+
+        //////////////////////////////
+        //      Menu Items
+        //////////////////////////////
+
+        private void goldAndSilverToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink("https://www.apmex.com/gold-price");
+        }
+
+        private void yahooMarketsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink("https://finance.yahoo.com/markets/");
+        }
+
+        private void yahooStockQuoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink($"https://finance.yahoo.com/quote/{txtStockTicker.Text}/");
+        }
+
+        private void finvizToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink($"https://finviz.com/");
+        }
+        private void apeWisdomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink($"https://apewisdom.io/");
+        }
+
+        private static void OpenHyperlink(string url)
+        {
+            try
+            {
+                Process.Start("cmd", "/c start " + url);
+            }
+            catch (Win32Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }

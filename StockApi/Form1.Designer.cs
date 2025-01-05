@@ -152,9 +152,14 @@ namespace StockApi
             this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.importTradesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lINKSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kitcoGoldAndSilverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yahooMarketsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yahooStockQuoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.finvizToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnGet3YearTrend = new System.Windows.Forms.Button();
+            this.apeWisdomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -1557,7 +1562,8 @@ namespace StockApi
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mainToolStripMenuItem});
+            this.mainToolStripMenuItem,
+            this.lINKSToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1444, 24);
@@ -1566,17 +1572,51 @@ namespace StockApi
             // 
             // mainToolStripMenuItem
             // 
-            this.mainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.importTradesToolStripMenuItem});
+            this.mainToolStripMenuItem.ForeColor = System.Drawing.Color.MidnightBlue;
             this.mainToolStripMenuItem.Name = "mainToolStripMenuItem";
             this.mainToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.mainToolStripMenuItem.Text = "&Main";
             // 
-            // importTradesToolStripMenuItem
+            // lINKSToolStripMenuItem
             // 
-            this.importTradesToolStripMenuItem.Name = "importTradesToolStripMenuItem";
-            this.importTradesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.importTradesToolStripMenuItem.Text = "&Import Trades";
+            this.lINKSToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.kitcoGoldAndSilverToolStripMenuItem,
+            this.yahooMarketsToolStripMenuItem,
+            this.yahooStockQuoteToolStripMenuItem,
+            this.finvizToolStripMenuItem,
+            this.apeWisdomToolStripMenuItem});
+            this.lINKSToolStripMenuItem.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.lINKSToolStripMenuItem.Name = "lINKSToolStripMenuItem";
+            this.lINKSToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.lINKSToolStripMenuItem.Text = "Links";
+            // 
+            // kitcoGoldAndSilverToolStripMenuItem
+            // 
+            this.kitcoGoldAndSilverToolStripMenuItem.Name = "kitcoGoldAndSilverToolStripMenuItem";
+            this.kitcoGoldAndSilverToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.kitcoGoldAndSilverToolStripMenuItem.Text = "AMPEX Gold and Silver";
+            this.kitcoGoldAndSilverToolStripMenuItem.Click += new System.EventHandler(this.goldAndSilverToolStripMenuItem_Click);
+            // 
+            // yahooMarketsToolStripMenuItem
+            // 
+            this.yahooMarketsToolStripMenuItem.Name = "yahooMarketsToolStripMenuItem";
+            this.yahooMarketsToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.yahooMarketsToolStripMenuItem.Text = "Yahoo Markets";
+            this.yahooMarketsToolStripMenuItem.Click += new System.EventHandler(this.yahooMarketsToolStripMenuItem_Click);
+            // 
+            // yahooStockQuoteToolStripMenuItem
+            // 
+            this.yahooStockQuoteToolStripMenuItem.Name = "yahooStockQuoteToolStripMenuItem";
+            this.yahooStockQuoteToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.yahooStockQuoteToolStripMenuItem.Text = "Yahoo Stock Quote";
+            this.yahooStockQuoteToolStripMenuItem.Click += new System.EventHandler(this.yahooStockQuoteToolStripMenuItem_Click);
+            // 
+            // finvizToolStripMenuItem
+            // 
+            this.finvizToolStripMenuItem.Name = "finvizToolStripMenuItem";
+            this.finvizToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.finvizToolStripMenuItem.Text = "finviz";
+            this.finvizToolStripMenuItem.Click += new System.EventHandler(this.finvizToolStripMenuItem_Click);
             // 
             // panel3
             // 
@@ -1618,6 +1658,13 @@ namespace StockApi
             this.btnGet3YearTrend.Text = "Get 3 year Trend";
             this.btnGet3YearTrend.UseVisualStyleBackColor = true;
             this.btnGet3YearTrend.Click += new System.EventHandler(this.btnGet3YearTrend_Click);
+            // 
+            // apeWisdomToolStripMenuItem
+            // 
+            this.apeWisdomToolStripMenuItem.Name = "apeWisdomToolStripMenuItem";
+            this.apeWisdomToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.apeWisdomToolStripMenuItem.Text = "Ape Wisdom";
+            this.apeWisdomToolStripMenuItem.Click += new System.EventHandler(this.apeWisdomToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -1764,7 +1811,6 @@ namespace StockApi
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem mainToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem importTradesToolStripMenuItem;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.DataGridView dataGridView2;
@@ -1806,6 +1852,12 @@ namespace StockApi
         private System.Windows.Forms.Label label56;
         private System.Windows.Forms.Button btnGetAllHistory;
         private System.Windows.Forms.LinkLabel lnkCompanyOverview;
+        private System.Windows.Forms.ToolStripMenuItem lINKSToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kitcoGoldAndSilverToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem yahooMarketsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem yahooStockQuoteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem finvizToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem apeWisdomToolStripMenuItem;
     }
 }
 
