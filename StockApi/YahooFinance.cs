@@ -146,7 +146,7 @@ namespace StockApi
             string num;
             foreach (string s in split)
             {
-                if ("-0123456789.".IndexOf(s.Substring(0, 1)) > -1 && (s.Length > 1 && "0123456789.".IndexOf(s.Substring(1, 1)) > -1))
+                if ("-0123456789.".IndexOf(s.Substring(0, 1)) > -1 && (s.Length > 1 && "0123456789.,".IndexOf(s.Substring(1, 1)) > -1))
                 {
                     num = s.Substring(0, s.IndexOf("<"));
                     numbers.Add(num);

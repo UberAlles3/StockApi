@@ -254,13 +254,14 @@ namespace StockApi
         private async void btnGetAll_Click(object sender, EventArgs e)
         {
             StringBuilder builder = new StringBuilder();
-            
             List<string> stockList = new List<string>();
+            List<StockHistory.HistoricPriceData> historicDataList = new List<StockHistory.HistoricPriceData>();
+
             stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
             stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
 
             txtTickerList.Text = ".";
-            builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend{Environment.NewLine}");
+            builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend, 3YearPrice, 3YearPriceChange{Environment.NewLine}");
             foreach (string ticker in stockList)
             {
                 _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
@@ -270,46 +271,53 @@ namespace StockApi
                 // Extract the individual data values from the html
                 await _stockSummary.GetSummaryData(_stockSummary.Ticker);
                 await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
-
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}, {_stockFinancials.ShortInterest}{Environment.NewLine}");
-            }
-            txtTickerList.Text = builder.ToString();
-        }
-
-        private async void btnGet3YearTrend_Click(object sender, EventArgs e)
-        {
-            StringBuilder builder = new StringBuilder();
-            List<StockHistory.HistoricPriceData> historicDataList = new List<StockHistory.HistoricPriceData>();
-
-            List<string> stockList = new List<string>();
-            stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
-            stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
-
-            txtTickerList.Text = ".";
-            foreach (string ticker in stockList)
-            {
-                _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
-
-                txtTickerList.Text += "."; // show progress 
-
-                // Get today's price 
-                await _stockSummary.GetSummaryData(_stockSummary.Ticker, verbose: false); // only get price
-
-                // Extract the individual data values from the html
-                /////// Get price history for 3 years ago to determine long trend
                 historicDataList = await _stockHistory.GetHistoricalDataForDateRange(_stockSummary.Ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
                 if (historicDataList.Count > 0)
                     _stockHistory.HistoricData3YearsAgo = historicDataList.First();
                 else
                     _stockHistory.HistoricData3YearsAgo = _stockHistory.HistoricDataYearAgo;
-
                 float percent_diff = _stockSummary.Price / _stockHistory.HistoricData3YearsAgo.Price - 1;
 
-                //builder.Append($"{_stockSummary.Ticker}, {_stockHistory.HistoricData3YearsAgo.Price}, {_stockSummary.Price}, {percent_diff}{Environment.NewLine}");
-                builder.Append($"{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")}{Environment.NewLine}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}, {_stockFinancials.ShortInterest}");
+                builder.Append($",{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
+
+        //private async void btnGet3YearTrend_Click(object sender, EventArgs e)
+        //{
+        //    StringBuilder builder = new StringBuilder();
+        //    List<StockHistory.HistoricPriceData> historicDataList = new List<StockHistory.HistoricPriceData>();
+
+        //    List<string> stockList = new List<string>();
+        //    stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
+        //    stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
+
+        //    txtTickerList.Text = ".";
+        //    foreach (string ticker in stockList)
+        //    {
+        //        _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper().Trim();
+
+        //        txtTickerList.Text += "."; // show progress 
+
+        //        // Get today's price 
+        //        await _stockSummary.GetSummaryData(_stockSummary.Ticker, verbose: false); // only get price
+
+        //        // Extract the individual data values from the html
+        //        /////// Get price history for 3 years ago to determine long trend
+        //        historicDataList = await _stockHistory.GetHistoricalDataForDateRange(_stockSummary.Ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
+        //        if (historicDataList.Count > 0)
+        //            _stockHistory.HistoricData3YearsAgo = historicDataList.First();
+        //        else
+        //            _stockHistory.HistoricData3YearsAgo = _stockHistory.HistoricDataYearAgo;
+
+        //        float percent_diff = _stockSummary.Price / _stockHistory.HistoricData3YearsAgo.Price - 1;
+
+        //        //builder.Append($"{_stockSummary.Ticker}, {_stockHistory.HistoricData3YearsAgo.Price}, {_stockSummary.Price}, {percent_diff}{Environment.NewLine}");
+        //        builder.Append($"{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")}{Environment.NewLine}");
+        //    }
+        //    txtTickerList.Text = builder.ToString();
+        //}
 
         private void PreSummaryWebCall()
         {
@@ -359,7 +367,7 @@ namespace StockApi
                     if (txtSharesOwned.Text.Trim() == "")
                         txtSharesOwned.Text = "1";
                     txtSharesTraded.Text = latestRow.ItemArray[3].ToString();     // Quan. Traded
-                    txtSharesTradePrice.Text = latestRow.ItemArray[5].ToString(); // Price
+                    txtSharesTradePrice.Text = ((double)latestRow.ItemArray[5]).ToString("0.00"); // Price
                     if (latestRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
                     {
                         radBuy.Checked = true;
@@ -441,7 +449,7 @@ namespace StockApi
                 {
                     txtSharesOwned.Text = "1";
                     txtSharesTraded.Text = "1";
-                    txtSharesTradePrice.Text = _stockSummary.Price.ToString();
+                    txtSharesTradePrice.Text = _stockSummary.Price.ToString("0.00");
                 }
             }
             catch (Exception e)

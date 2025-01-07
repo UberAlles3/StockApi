@@ -157,9 +157,8 @@ namespace StockApi
             this.yahooMarketsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.yahooStockQuoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.finvizToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.btnGet3YearTrend = new System.Windows.Forms.Button();
             this.apeWisdomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -217,7 +216,7 @@ namespace StockApi
             this.btnGetAll.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnGetAll.Location = new System.Drawing.Point(24, 492);
             this.btnGetAll.Name = "btnGetAll";
-            this.btnGetAll.Size = new System.Drawing.Size(92, 33);
+            this.btnGetAll.Size = new System.Drawing.Size(213, 28);
             this.btnGetAll.TabIndex = 3;
             this.btnGetAll.Text = "Get Stock Info";
             this.btnGetAll.UseVisualStyleBackColor = true;
@@ -1618,6 +1617,13 @@ namespace StockApi
             this.finvizToolStripMenuItem.Text = "finviz";
             this.finvizToolStripMenuItem.Click += new System.EventHandler(this.finvizToolStripMenuItem_Click);
             // 
+            // apeWisdomToolStripMenuItem
+            // 
+            this.apeWisdomToolStripMenuItem.Name = "apeWisdomToolStripMenuItem";
+            this.apeWisdomToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.apeWisdomToolStripMenuItem.Text = "Ape Wisdom";
+            this.apeWisdomToolStripMenuItem.Click += new System.EventHandler(this.apeWisdomToolStripMenuItem_Click);
+            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.Transparent;
@@ -1648,24 +1654,6 @@ namespace StockApi
             this.panel3.Size = new System.Drawing.Size(380, 625);
             this.panel3.TabIndex = 23;
             // 
-            // btnGet3YearTrend
-            // 
-            this.btnGet3YearTrend.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnGet3YearTrend.Location = new System.Drawing.Point(122, 492);
-            this.btnGet3YearTrend.Name = "btnGet3YearTrend";
-            this.btnGet3YearTrend.Size = new System.Drawing.Size(115, 33);
-            this.btnGet3YearTrend.TabIndex = 24;
-            this.btnGet3YearTrend.Text = "Get 3 year Trend";
-            this.btnGet3YearTrend.UseVisualStyleBackColor = true;
-            this.btnGet3YearTrend.Click += new System.EventHandler(this.btnGet3YearTrend_Click);
-            // 
-            // apeWisdomToolStripMenuItem
-            // 
-            this.apeWisdomToolStripMenuItem.Name = "apeWisdomToolStripMenuItem";
-            this.apeWisdomToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.apeWisdomToolStripMenuItem.Text = "Ape Wisdom";
-            this.apeWisdomToolStripMenuItem.Click += new System.EventHandler(this.apeWisdomToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -1675,7 +1663,6 @@ namespace StockApi
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1444, 672);
-            this.Controls.Add(this.btnGet3YearTrend);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.webView21);
             this.Controls.Add(this.picSidewaysTrend);
@@ -1823,7 +1810,6 @@ namespace StockApi
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label lblShortInterest;
         private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.Button btnGet3YearTrend;
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.Panel panelFinancials;
         private System.Windows.Forms.Label label48;
