@@ -324,6 +324,7 @@ namespace StockApi
             _stockSummary = new StockSummary(); // set values to zero
             btnGetAllHistory.Visible = true;
             txtAnalysisOutput.Text = "";
+            txtTickerList.Text = txtStockTicker.Text;
             pic3YearTrend.Image = picSidewaysTrend.Image;
             picYearTrend.Image = picSidewaysTrend.Image;
             picMonthTrend.Image = picSidewaysTrend.Image; 
