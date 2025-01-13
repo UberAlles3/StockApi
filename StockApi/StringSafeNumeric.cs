@@ -21,6 +21,9 @@ namespace StockApi
             get => _stringValue;
             set
             {
+                _stringValue = value;
+                
+                // set the generic numeric type, converting the string to the numeric type
                 switch (Type.GetTypeCode(typeof(T)))
                 {
                     // Built-in Byte type.
@@ -63,6 +66,11 @@ namespace StockApi
         {
             get { return _numericValue; }
             set { _numericValue = value; }
+        }
+
+        public override string ToString()
+        {
+            return StringValue;
         }
     }
 }

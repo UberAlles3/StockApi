@@ -63,19 +63,19 @@ namespace StockApi
 
             // Earnings Per Share
             float epsMetric = 1F;
-            if (stockSummary.EarningsPerShare < -6)
+            if (stockSummary.EarningsPerShareString.NumericValue < -6)
                 epsMetric = .94F;
-            else if (stockSummary.EarningsPerShare < -3)
+            else if (stockSummary.EarningsPerShareString.NumericValue < -3)
                 epsMetric = .96F;
-            else if (stockSummary.EarningsPerShare < -1)
+            else if (stockSummary.EarningsPerShareString.NumericValue < -1)
                 epsMetric = .98F;
-            else if (stockSummary.EarningsPerShare > 6)
+            else if (stockSummary.EarningsPerShareString.NumericValue > 6)
                 epsMetric = 1.05F;
-            else if (stockSummary.EarningsPerShare > 3)
+            else if (stockSummary.EarningsPerShareString.NumericValue > 3)
                 epsMetric = 1.03F;
-            else if (stockSummary.EarningsPerShare > 1)
+            else if (stockSummary.EarningsPerShareString.NumericValue > 1)
                 epsMetric = 1.02F;
-            else if (stockSummary.EarningsPerShare > 0)
+            else if (stockSummary.EarningsPerShareString.NumericValue > 0)
                 epsMetric = 1.01F;
 
             output.AppendLine($"Earnings Metric = {epsMetric}");

@@ -39,64 +39,7 @@ namespace StockApi
         public string CompanyName { get => companyName; set => companyName = value; }
 
         public StringSafeNumeric<Decimal> DividendString = new StringSafeNumeric<decimal>("--");
- 
-        //{
-        //    get => dividendString;
-        //    set
-        //    {
-        //        dividendString = value.Replace("%", "");
-        //        if (!dividendString.IsFloat())
-        //            Dividend = 0;
-        //        else
-        //            Dividend = Convert.ToSingle(dividendString);
-        //    }
-        //}
-
-        //public float Dividend
-        //{
-        //    get => dividend;
-        //    set
-        //    {
-        //        dividend = value;
-        //        DividendColor = Color.LightSteelBlue;
-        //        if (dividend > 1)
-        //            DividendColor = Color.Lime;
-        //    }
-        //}
-
-        public string EarningsPerShareString
-        {
-            get => earningsPerShareString;
-            set
-            {
-                earningsPerShareString = value;
-                if (earningsPerShareString == YahooFinance.NotApplicable || earningsPerShareString == "" || earningsPerShareString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
-                    EarningsPerShare = 0;
-                else
-                    try
-                    {
-                        EarningsPerShare = Convert.ToSingle(earningsPerShareString);
-                    }
-                    catch (Exception)
-                    {
-                        EarningsPerShare = 0;
-                    }
-            }
-        }
-
-        public float EarningsPerShare
-        {
-            get => earningsPerShare;
-            set
-            {
-                earningsPerShare = value;
-                EPSColor = Color.LightSteelBlue;
-                if (earningsPerShare < -1)
-                    EPSColor = Color.Red;
-                else if (earningsPerShare > 1)
-                    EPSColor = Color.Lime;
-            }
-        }
+        public StringSafeNumeric<Decimal> EarningsPerShareString = new StringSafeNumeric<decimal>("--");
 
         public string ProfitMarginString
         {
@@ -247,7 +190,7 @@ namespace StockApi
 
             // EPS
             searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;
-            EarningsPerShareString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+            EarningsPerShareString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
             //EarningsPerShareString = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
 
             // Volatility
@@ -298,7 +241,11 @@ namespace StockApi
             DividendColor = Color.LightSteelBlue;
             if (DividendString.NumericValue > 1)
                 DividendColor = Color.Lime;
-
+            EPSColor = Color.LightSteelBlue;
+            if (EarningsPerShareString.NumericValue < -1)
+                EPSColor = Color.Red;
+            else if (EarningsPerShareString.NumericValue > 1)
+                EPSColor = Color.Lime;
             return true;
         }
 
