@@ -22,13 +22,6 @@ namespace StockApi
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
         private string  companyName = "";
-        private string  priceBookString = NotApplicable;
-        private float   priceBook = 0;
-        private string  oneYearTargetPriceString = NotApplicable;
-        private float   oneYearTargetPrice = 0;
-        private float   price = 0;
-        private string  volatilityString = NotApplicable;
-        private float   volatility = 0;
         public string  CompanyOverview= "";
 
         public string CompanyName { get => companyName; set => companyName = value; }
@@ -36,96 +29,10 @@ namespace StockApi
         public StringSafeNumeric<Decimal> DividendString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> EarningsPerShareString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> ProfitMarginString = new StringSafeNumeric<decimal>("--");
-
-        public string PriceBookString
-        {
-            get => priceBookString;
-            set
-            {
-                priceBookString = value;
-                if (priceBookString == YahooFinance.NotApplicable || priceBookString == "" || priceBookString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
-                    PriceBook = 0;
-                else
-                    try
-                    {
-                        PriceBook = Convert.ToSingle(priceBookString);
-                    }
-                    catch (Exception)
-                    {
-                        PriceBook = 0;
-                    }
-            }
-        }
-
-        public float PriceBook
-        {
-            get => priceBook;
-            set
-            {
-                priceBook = value;
-                if (priceBook > 5)
-                    PriceBookColor = Color.Red;
-                else if (priceBook < 1)
-                    PriceBookColor = Color.Lime;
-                else
-                    PriceBookColor = Color.LightSteelBlue;
-            }
-        }
-
-        public string OneYearTargetPriceString
-        {
-            get => oneYearTargetPriceString;
-            set
-            {
-                oneYearTargetPriceString = value;
-                if (oneYearTargetPriceString == YahooFinance.NotApplicable || oneYearTargetPriceString == "" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
-                    OneYearTargetPrice = Price;
-                else
-                    try
-                    {
-                        OneYearTargetPrice = Convert.ToSingle(oneYearTargetPriceString);
-                    }
-                    catch (Exception)
-                    {
-                        OneYearTargetPrice = Price;
-                    }
-            }
-        }
-
-        public float OneYearTargetPrice
-        {
-            get => oneYearTargetPrice;
-            set
-            {
-                oneYearTargetPrice = value;
-                OneYearTargetColor = Color.LightSteelBlue;
-                if (oneYearTargetPrice < price * .9)
-                    OneYearTargetColor = Color.Red;
-                else if (oneYearTargetPrice > price * 1.1)
-                    OneYearTargetColor = Color.Lime;
-            }
-        }
-
-        public float Price { get => price; set => price = value; }
-
-        public string VolatilityString
-        {
-            get => volatilityString;
-            set
-            {
-                volatilityString = value;
-                if (volatilityString == YahooFinance.NotApplicable || volatilityString == "" || volatilityString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
-                    Volatility = 1;
-                else
-                    Volatility = Convert.ToSingle(volatilityString);
-            }
-        }
-
-        public float Volatility
-        {
-            get => volatility;
-            set { volatility = value; }
-        }
+        public StringSafeNumeric<Decimal> PriceBookString = new StringSafeNumeric<decimal>("--");
+        public StringSafeNumeric<Decimal> OneYearTargetPriceString = new StringSafeNumeric<decimal>("--");
+        public StringSafeNumeric<Decimal> PriceString = new StringSafeNumeric<decimal>("--");
+        public StringSafeNumeric<Decimal> VolatilityString = new StringSafeNumeric<decimal>("--");
 
         ////////////////////////////////////////////
         ///                Methods
@@ -150,8 +57,7 @@ namespace StockApi
 
             // Price
             string searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
-            string price = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 1);
-            Price = Convert.ToSingle(price);
+            PriceString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 1);
 
             if (verbose == false)
                 return true;
@@ -159,11 +65,10 @@ namespace StockApi
             // EPS
             searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;
             EarningsPerShareString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
-            //EarningsPerShareString = GetFloatValueFromHtml(html, "EPS_RATIO-value", YahooFinance.NotApplicable);
 
             // Volatility
             searchTerm = SearchTerms.Find(x => x.Name == "Volatility").Term;
-            VolatilityString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
+            VolatilityString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
 
             // Dividend
             searchTerm = SearchTerms.Find(x => x.Name == "Dividend").Term;
@@ -182,11 +87,11 @@ namespace StockApi
 
             // One year target
             searchTerm = SearchTerms.Find(x => x.Name == "One Year Target").Term;
-            OneYearTargetPriceString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4).Trim();
+            OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4).Trim();
 
             // Price / Book
             searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
-            PriceBookString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
             //Profit Margin %
             searchTerm = SearchTerms.Find(x => x.Name == "Profit Margin").Term;
@@ -204,7 +109,7 @@ namespace StockApi
             CompanyOverview = longest._TrimSuffix("</");
 
             ////////////////////
-            /// Set Colors
+            ///   Set Colors
             ////////////////////
             DividendColor = Color.LightSteelBlue;
             if (DividendString.NumericValue > 1)
@@ -220,6 +125,17 @@ namespace StockApi
                 ProfitMarginColor = Color.Lime;
             else
                 ProfitMarginColor = Color.LightSteelBlue;
+            if (PriceBookString.NumericValue > 5)
+                PriceBookColor = Color.Red;
+            else if (PriceBookString.NumericValue < 1)
+                PriceBookColor = Color.Lime;
+            else
+                PriceBookColor = Color.LightSteelBlue;
+            OneYearTargetColor = Color.LightSteelBlue;
+            if (OneYearTargetPriceString.NumericValue < PriceString.NumericValue * (decimal).9)
+                OneYearTargetColor = Color.Red;
+            else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * (decimal)1.1)
+                OneYearTargetColor = Color.Lime;
 
             return true;
         }

@@ -73,7 +73,7 @@ namespace StockApi
         ////////////////////////////
         ///    Parsing methods
         ////////////////////////////
-        protected static string GetFloatValueFromHtml(string html, string data_test_name, string defaultValue)
+        protected static string GetDecimalValueFromHtml(string html, string data_test_name, string defaultValue)
         {
             string temp = GetValueFromHtml(html, data_test_name, defaultValue);
             if (temp != YahooFinance.NotApplicable)

@@ -45,7 +45,7 @@ namespace StockApi
 
                 // Today will be the last in the list
                 HistoricDataToday = historicDataList.Last();
-                HistoricDataToday.Price = summary.Price; // Use latest price for todays data.
+                HistoricDataToday.Price = summary.PriceString.NumericValue; // Use latest price for todays data.
                 HistoricDataToday.PeriodType = "D";
 
                 // Last Week
@@ -60,7 +60,7 @@ namespace StockApi
             }
             else
             {
-                HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.Price, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = "N/A"};
+                HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.PriceString.NumericValue, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = "N/A"};
             }
 
             /////// Get price history for a year ago to determine long trend
@@ -167,7 +167,7 @@ namespace StockApi
 
                 historicData.Ticker = Ticker;
                 historicData.PriceDate = beginDate.AddDays(i).Date;
-                historicData.Price = Convert.ToSingle(numbers[3]);
+                historicData.Price = Convert.ToDecimal(numbers[3]);
                 historicData.Volume = numbers[5];
 
                 historicDataList.Add(historicData);
@@ -216,9 +216,9 @@ namespace StockApi
         {
             if (HistoricData3YearsAgo != null)
             {
-                if (HistoricDataToday.Price > HistoricData3YearsAgo.Price * 1.12F) // 3 year
+                if (HistoricDataToday.Price > HistoricData3YearsAgo.Price * 1.12M) // 3 year
                     ThreeYearTrend = TrendEnum.Up;
-                else if (HistoricDataToday.Price < HistoricData3YearsAgo.Price * .88F) // 3 year
+                else if (HistoricDataToday.Price < HistoricData3YearsAgo.Price * .88M) // 3 year
                     ThreeYearTrend = TrendEnum.Down;
                 else
                     ThreeYearTrend = TrendEnum.Sideways;
@@ -228,9 +228,9 @@ namespace StockApi
 
             if (HistoricDataYearAgo != null)
             {
-                if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.08F) // year
+                if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.08M) // year
                 YearTrend = TrendEnum.Up;
-                else if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92F) // year
+                else if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92M) // year
                     YearTrend = TrendEnum.Down;
                 else
                     YearTrend = TrendEnum.Sideways;
@@ -240,9 +240,9 @@ namespace StockApi
 
             if (HistoricDataMonthAgo != null)
             {
-                if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.06F) // month
+                if (HistoricDataToday.Price > HistoricDataMonthAgo.Price * 1.06M) // month
                     MonthTrend = TrendEnum.Up;
-                else if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .94F) // month
+                else if (HistoricDataToday.Price < HistoricDataMonthAgo.Price * .94M) // month
                     MonthTrend = TrendEnum.Down;
                 else
                     MonthTrend = TrendEnum.Sideways;
@@ -252,9 +252,9 @@ namespace StockApi
 
             if (HistoricDataWeekAgo != null)
             {
-                if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.03F) // week
+                if (HistoricDataToday.Price > HistoricDataWeekAgo.Price * 1.03M) // week
                     WeekTrend = TrendEnum.Up;
-                else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .97F) // week
+                else if (HistoricDataToday.Price < HistoricDataWeekAgo.Price * .97M) // week
                     WeekTrend = TrendEnum.Down;
                 else
                     WeekTrend = TrendEnum.Sideways;
@@ -268,13 +268,13 @@ namespace StockApi
             private string ticker = "";
             private string periodType = "";
             private DateTime priceDate;
-            private float price = 0;
+            private decimal price = 0;
             private string volume = YahooFinance.NotApplicable;
 
             public string Ticker { get => ticker; set => ticker = value; }
             public string PeriodType { get => periodType; set => periodType = value; }
             public DateTime PriceDate { get => priceDate; set => priceDate = value; }
-            public float Price { get => price; set => price = value; }
+            public decimal Price { get => price; set => price = value; }
             public string Volume { get => volume; set => volume = value; }
 
             public override string ToString()

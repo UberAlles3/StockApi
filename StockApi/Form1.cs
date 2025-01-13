@@ -123,7 +123,7 @@ namespace StockApi
                 {
                     gotOne = threeYearAgo.First();
 
-                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { PeriodType = "3Y", PriceDate = DateTime.Parse(gotOne.ItemArray[0].ToString()), Ticker = gotOne.ItemArray[4].ToString(), Price = float.Parse(gotOne.ItemArray[5].ToString()) };
+                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { PeriodType = "3Y", PriceDate = DateTime.Parse(gotOne.ItemArray[0].ToString()), Ticker = gotOne.ItemArray[4].ToString(), Price = decimal.Parse(gotOne.ItemArray[5].ToString()) };
                     historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, false, false, false);
                     //historicDisplayList.Add(new StockHistory.HistoricPriceData() { PeriodType = "3Y", PriceDate = DateTime.Parse(gotOne.ItemArray[0].ToString()), Ticker = gotOne.ItemArray[4].ToString(), Price = float.Parse(gotOne.ItemArray[5].ToString()) });
                 }
@@ -276,9 +276,9 @@ namespace StockApi
                     _stockHistory.HistoricData3YearsAgo = historicDataList.First();
                 else
                     _stockHistory.HistoricData3YearsAgo = _stockHistory.HistoricDataYearAgo;
-                float percent_diff = _stockSummary.Price / _stockHistory.HistoricData3YearsAgo.Price - 1;
+                decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterest}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterest}");
                 builder.Append($",{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
@@ -307,17 +307,17 @@ namespace StockApi
             {
                 btnGetOne.Enabled = true;
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
-                lblPrice.Text = _stockSummary.Price.ToString("####.00");
-                lblVolatility.Text = _stockSummary.VolatilityString;
+                lblPrice.Text = _stockSummary.PriceString.NumericValue.ToString("####.00");
+                lblVolatility.Text = _stockSummary.VolatilityString.StringValue;
                 lblEPS.Text = _stockSummary.EarningsPerShareString.StringValue;
                 lblEPS.ForeColor = _stockSummary.EPSColor;
-                lblPriceBook.Text = _stockSummary.PriceBook.ToString();
+                lblPriceBook.Text = _stockSummary.PriceBookString.NumericValue.ToString();
                 lblPriceBook.ForeColor = _stockSummary.PriceBookColor;
                 lblDividend.Text = _stockSummary.DividendString.NumericValue.ToString() + "%";
                 lblDividend.ForeColor = _stockSummary.DividendColor;
                 lblProfitMargin.Text = _stockSummary.ProfitMarginString.StringValue.ToString() + "%";
                 lblProfitMargin.ForeColor = _stockSummary.ProfitMarginColor;
-                lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString;
+                lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString.StringValue;
                 lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
                 panel1.Visible = panel2.Visible = panel3.Visible = true;
                 picSpinner.Visible = false;
@@ -415,7 +415,7 @@ namespace StockApi
                 {
                     txtSharesOwned.Text = "1";
                     txtSharesTraded.Text = "1";
-                    txtSharesTradePrice.Text = _stockSummary.Price.ToString("0.00");
+                    txtSharesTradePrice.Text = _stockSummary.PriceString.NumericValue.ToString("0.00");
                 }
             }
             catch (Exception e)
@@ -431,7 +431,7 @@ namespace StockApi
             analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
             analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
             analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
-            analyzeInputs.SharesTradedPrice = Convert.ToSingle(txtSharesTradePrice.Text);
+            analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
             analyzeInputs.EconomyHealth = trackBar1.Value;
 
