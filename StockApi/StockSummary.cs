@@ -22,8 +22,6 @@ namespace StockApi
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
         private string  companyName = "";
-        private string  profitMarginString = NotApplicable;
-        private float   profitMargin = 0;
         private string  priceBookString = NotApplicable;
         private float   priceBook = 0;
         private string  oneYearTargetPriceString = NotApplicable;
@@ -37,34 +35,7 @@ namespace StockApi
 
         public StringSafeNumeric<Decimal> DividendString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> EarningsPerShareString = new StringSafeNumeric<decimal>("--");
-
-        public string ProfitMarginString
-        {
-            get => profitMarginString;
-            set
-            {
-                profitMarginString = value;
-                if (ProfitMarginString == YahooFinance.NotApplicable || ProfitMarginString == "" || ProfitMarginString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
-                    ProfitMargin = 0;
-                else
-                    ProfitMargin = Convert.ToSingle(ProfitMarginString);
-            }
-        }
-
-        public float ProfitMargin
-        {
-            get => profitMargin;
-            set
-            {
-                profitMargin = value;
-                if (profitMargin < -2)
-                    ProfitMarginColor = Color.Red;
-                else if (ProfitMargin > 2)
-                    ProfitMarginColor = Color.Lime;
-                else
-                    ProfitMarginColor = Color.LightSteelBlue;
-            }
-        }
+        public StringSafeNumeric<Decimal> ProfitMarginString = new StringSafeNumeric<decimal>("--");
 
         public string PriceBookString
         {
@@ -221,9 +192,9 @@ namespace StockApi
             searchTerm = SearchTerms.Find(x => x.Name == "Profit Margin").Term;
             string profitMarginString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             if (profitMarginString != YahooFinance.NotApplicable && profitMarginString.IndexOf("%") > 0)
-                ProfitMarginString = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
+                ProfitMarginString.StringValue = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
             else
-                ProfitMarginString = YahooFinance.NotApplicable;
+                ProfitMarginString.StringValue = YahooFinance.NotApplicable;
 
             // Company Overview
             searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
@@ -243,6 +214,13 @@ namespace StockApi
                 EPSColor = Color.Red;
             else if (EarningsPerShareString.NumericValue > 1)
                 EPSColor = Color.Lime;
+            if (ProfitMarginString.NumericValue < -2)
+                ProfitMarginColor = Color.Red;
+            else if (ProfitMarginString.NumericValue > 2)
+                ProfitMarginColor = Color.Lime;
+            else
+                ProfitMarginColor = Color.LightSteelBlue;
+
             return true;
         }
 

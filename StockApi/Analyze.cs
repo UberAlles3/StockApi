@@ -50,7 +50,7 @@ namespace StockApi
                 priceTrendMetric = .98F;
 
 
-            output.AppendLine($"Price Trend Metric = {priceTrendMetric}");
+            output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".00")}");
 
             // One Year Target - Not a very valuable metric. 
             float targetPriceMetric = 1F;
@@ -59,7 +59,7 @@ namespace StockApi
             else if (stockSummary.OneYearTargetPrice > stockSummary.Price * 1.05)
                 targetPriceMetric = 1.01F;
 
-            output.AppendLine($"One Year Target Metric = {targetPriceMetric}");
+            output.AppendLine($"One Year Target Metric = {targetPriceMetric.ToString(".00")}");
 
             // Earnings Per Share
             float epsMetric = 1F;
@@ -87,20 +87,20 @@ namespace StockApi
             if (stockSummary.PriceBookColor == Color.Lime)
                 priceBookMetric = 1.02F;
 
-            output.AppendLine($"Price Book Metric = {priceBookMetric}");
+            output.AppendLine($"Price Book Metric = {priceBookMetric.ToString(".00")}");
 
             // Profit Margin Metric
-            float ProfitMarginMetric = 1F;
-            if (stockSummary.ProfitMargin < -6)
+            float ProfitMarginMetric = 1.00F;
+            if (stockSummary.ProfitMarginString.NumericValue < -6)
                 ProfitMarginMetric = .962F;
-            else if (stockSummary.ProfitMargin < -2)
+            else if (stockSummary.ProfitMarginString.NumericValue < -2)
                 ProfitMarginMetric = .981F;
-            else if (stockSummary.ProfitMargin > 6)
+            else if (stockSummary.ProfitMarginString.NumericValue > 6)
                 ProfitMarginMetric = 1.04F;
-            else if (stockSummary.ProfitMargin > 2)
+            else if (stockSummary.ProfitMarginString.NumericValue > 2)
                 ProfitMarginMetric = 1.02F;
 
-            output.AppendLine($"Profit Margin Metric = {ProfitMarginMetric}");
+            output.AppendLine($"Profit Margin Metric = {ProfitMarginMetric.ToString(".00")}");
 
             // Dividend Metric
             float dividendMetric = 1F;
@@ -118,7 +118,7 @@ namespace StockApi
             if (priceTrendMetric < .92F && dividendMetric > 1.04)
                 dividendMetric = 1.01F; // if the price is going steeply down, who care about a high dividend
 
-output.AppendLine($"Dividend Metric = {dividendMetric}");
+            output.AppendLine($"Dividend Metric = {dividendMetric.ToString(".00")}");
 
             ///////////////////////////////////// Finacial Metrics
             // Revenue - Should be increasing YOY
@@ -141,7 +141,7 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
                         revenueMetric = revenueMetric * .99F;
                 }
             }
-            output.AppendLine($"Revenue Metric = {revenueMetric}");
+            output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".00")}");
             // Profit - Revenue - Cost of Revenue
             float profitMetric = 1F;
             if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.01)
@@ -159,9 +159,9 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
             if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .98)
                 profitMetric *= .985F;
             if (revenueMetric * profitMetric < .87)
-                output.AppendLine($"Profit Metric = {profitMetric}         * Financials are Bad *");
+                output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}         * Financials are Bad *");
             else
-                output.AppendLine($"Profit Metric = {profitMetric}");
+                output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}");
 
             float cashDebtMetric = 1F;
             if (stockFinancials.TotalDebt > stockFinancials.TotalCash * 5) // lots of debt compared to cash
@@ -170,24 +170,24 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
                 cashDebtMetric = 1.03F;
             if (stockFinancials.DebtEquity > 120) // Over 120% D/E is bad
                 cashDebtMetric = cashDebtMetric * .96F;
-            output.AppendLine($"Cash, Debt Metric = {cashDebtMetric}");
+            output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".00")}");
 
             // Economy
             float ecoMetric =  1 + ((analyzeInputs.EconomyHealth - 5) / 100);
-            output.AppendLine($"Economy Metric = {ecoMetric}");
+            output.AppendLine($"Economy Metric = {ecoMetric.ToString(".00")}");
 
             float totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * ProfitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric;
             output.AppendLine($"----------------------------------------------------");
-            string totalMetricString = $"Total Metric = {totalMetric}";
+            string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
             if (totalMetric < .85F)
             {
                 totalMetric = .85F;
-                totalMetricString += $"  low end limited to {totalMetric}";
+                totalMetricString += $"  low end limited to {totalMetric.ToString(".00")}";
             }
             if (totalMetric > 1.2)
             {
                 totalMetric = 1.2F;
-                totalMetricString += $"  high end limited to {totalMetric}";
+                totalMetricString += $"  high end limited to {totalMetric.ToString(".00")}";
             }
 
             output.AppendLine(totalMetricString);
