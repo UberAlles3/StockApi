@@ -278,7 +278,7 @@ namespace StockApi
                     _stockHistory.HistoricData3YearsAgo = _stockHistory.HistoricDataYearAgo;
                 float percent_diff = _stockSummary.Price / _stockHistory.HistoricData3YearsAgo.Price - 1;
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.Dividend}, {_stockFinancials.ShortInterest}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.Volatility}, {_stockSummary.EarningsPerShare}, {_stockSummary.OneYearTargetPrice}, {_stockSummary.PriceBook}, {_stockSummary.ProfitMargin}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterest}");
                 builder.Append($",{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
@@ -348,7 +348,7 @@ namespace StockApi
                 lblEPS.ForeColor = _stockSummary.EPSColor;
                 lblPriceBook.Text = _stockSummary.PriceBook.ToString();
                 lblPriceBook.ForeColor = _stockSummary.PriceBookColor;
-                lblDividend.Text = _stockSummary.Dividend.ToString() + "%";
+                lblDividend.Text = _stockSummary.DividendString.NumericValue.ToString() + "%";
                 lblDividend.ForeColor = _stockSummary.DividendColor;
                 lblProfitMargin.Text = _stockSummary.ProfitMargin.ToString() + "%";
                 lblProfitMargin.ForeColor = _stockSummary.ProfitMarginColor;

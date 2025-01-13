@@ -130,6 +130,48 @@ namespace Drake.Extensions
             return new String(value.ToCharArray().Where(x => x != stripChar).ToArray());
         }
 
+        /// <summary>
+        /// Returns true if a string is an int.
+        /// </summary>
+        /// <param name="str">The string to check</param>
+        /// <returns>A bool value indicating whether or not this string is an int.</returns>
+        public static bool IsInt(this string str)
+        {
+            int dummyInt;
+            return int.TryParse(str, out dummyInt);
+        }
+        /// <summary>
+        /// Returns true if a string is a long.
+        /// </summary>
+        /// <param name="str">The string to check</param>
+        /// <returns>A bool value indicating whether or not this string is a long.</returns>
+        public static bool IsLong(this string str)
+        {
+            long dummyLong;
+            return long.TryParse(str, out dummyLong);
+        }
+        /// <summary>
+        /// Returns true if a string is a long.
+        /// </summary>
+        /// <param name="str">The string to check</param>
+        /// <returns>A bool value indicating whether or not this string is a long.</returns>
+        public static bool IsFloat(this string str)
+        {
+            long dummyFloat;
+            return long.TryParse(str, out dummyFloat);
+        }
+        /// <summary>
+        /// Returns true if a string is a decimal.
+        /// </summary>
+        /// <param name="str">The string to check</param>
+        /// <returns>A bool value indicating whether or not this string is a decimal.</returns>
+        public static bool IsDecimal(this string str)
+        {
+            decimal dummyDecimal;
+            return decimal.TryParse(str, out dummyDecimal);
+        }
+
+
         public static Dictionary<string, string> ToDictionary(this string s, char valueDelim, char pairDelim)
         {
             var segments = s.Split(new char[] { pairDelim }, StringSplitOptions.RemoveEmptyEntries);

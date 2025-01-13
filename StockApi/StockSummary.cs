@@ -22,8 +22,7 @@ namespace StockApi
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
         private string  companyName = "";
-        private string  dividendString = NotApplicable;
-        private float   dividend = 0;
+        //private float   dividend = 0;
         private string  earningsPerShareString = NotApplicable;
         private float   earningsPerShare = 0;
         private string  profitMarginString = NotApplicable;
@@ -39,30 +38,31 @@ namespace StockApi
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
-        public string DividendString
-        {
-            get => dividendString;
-            set
-            {
-                dividendString = value.Replace("%", "");
-                if (dividendString == YahooFinance.NotApplicable || dividendString == "" || dividendString == "--" || "-0123456789.".IndexOf(value.Substring(0, 1)) < 0)
-                    Dividend = 0;
-                else
-                    Dividend = Convert.ToSingle(dividendString);
-            }
-        }
+        public StringSafeNumeric<Decimal> DividendString = new StringSafeNumeric<decimal>("--");
+ 
+        //{
+        //    get => dividendString;
+        //    set
+        //    {
+        //        dividendString = value.Replace("%", "");
+        //        if (!dividendString.IsFloat())
+        //            Dividend = 0;
+        //        else
+        //            Dividend = Convert.ToSingle(dividendString);
+        //    }
+        //}
 
-        public float Dividend
-        {
-            get => dividend;
-            set
-            {
-                dividend = value;
-                DividendColor = Color.LightSteelBlue;
-                if (dividend > 1)
-                    DividendColor = Color.Lime;
-            }
-        }
+        //public float Dividend
+        //{
+        //    get => dividend;
+        //    set
+        //    {
+        //        dividend = value;
+        //        DividendColor = Color.LightSteelBlue;
+        //        if (dividend > 1)
+        //            DividendColor = Color.Lime;
+        //    }
+        //}
 
         public string EarningsPerShareString
         {
@@ -239,7 +239,7 @@ namespace StockApi
 
             // Price
             string searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
-            string price = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+            string price = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 1);
             Price = Convert.ToSingle(price);
 
             if (verbose == false)
@@ -267,7 +267,7 @@ namespace StockApi
                 searchTerm = "Yield";
                 dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
             }
-            DividendString = dividend;
+            DividendString.StringValue = dividend;
 
             // One year target
             searchTerm = SearchTerms.Find(x => x.Name == "One Year Target").Term;
@@ -291,6 +291,13 @@ namespace StockApi
             string[] parts = htmlSnippet.Split(">");
             string longest = parts.OrderByDescending(s => s.Length).First();
             CompanyOverview = longest._TrimSuffix("</");
+
+            ////////////////////
+            /// Set Colors
+            ////////////////////
+            DividendColor = Color.LightSteelBlue;
+            if (DividendString.NumericValue > 1)
+                DividendColor = Color.Lime;
 
             return true;
         }

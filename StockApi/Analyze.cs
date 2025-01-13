@@ -104,13 +104,13 @@ namespace StockApi
 
             // Dividend Metric
             float dividendMetric = 1F;
-            if (stockSummary.Dividend > 8)
+            if (stockSummary.DividendString.NumericValue > 8)
                 dividendMetric = 1.08F;
-            else if (stockSummary.Dividend > 5)
+            else if (stockSummary.DividendString.NumericValue > 5)
                 dividendMetric = 1.05F;
-            else if (stockSummary.Dividend > 2)
+            else if (stockSummary.DividendString.NumericValue > 2)
                 dividendMetric = 1.02F;
-            else if (stockSummary.Dividend > .5)
+            else if (stockSummary.DividendString.NumericValue > (decimal).5)
                 dividendMetric = 1.01F;
             else
                 dividendMetric = .99F;
@@ -276,18 +276,18 @@ output.AppendLine($"Dividend Metric = {dividendMetric}");
             }
 
             // Dividend 
-            if (stockSummary.Dividend > 8 && priceTrendMetric > .92F)
+            if (stockSummary.DividendString.NumericValue > 8 && priceTrendMetric > .92F)
             {
                 buyQuantity = buyQuantity * 1.2F;
                 sellQuantity = sellQuantity / 1.2F;
                 output.AppendLine($"Great dividend. Buy more or sell less. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
             }
-            else if (stockSummary.Dividend > 4)
+            else if (stockSummary.DividendString.NumericValue > 4)
             {
                 buyQuantity = buyQuantity * 1.1F;
                 sellQuantity = sellQuantity / 1.1F;
             }
-            else if (stockSummary.Dividend > 2)
+            else if (stockSummary.DividendString.NumericValue > 2)
             {
                 buyQuantity = buyQuantity * 1.05F;
                 sellQuantity = sellQuantity / 1.05F;
