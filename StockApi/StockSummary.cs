@@ -22,9 +22,6 @@ namespace StockApi
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
         private string  companyName = "";
-        //private float   dividend = 0;
-        private string  earningsPerShareString = NotApplicable;
-        private float   earningsPerShare = 0;
         private string  profitMarginString = NotApplicable;
         private float   profitMargin = 0;
         private string  priceBookString = NotApplicable;
