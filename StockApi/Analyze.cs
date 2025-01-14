@@ -18,6 +18,8 @@ namespace StockApi
             Sell
         }
 
+        private bool _buyless = false;
+
         public int BuyQuantity;
         public decimal BuyPrice;
         public int SellQuantity;
@@ -26,6 +28,7 @@ namespace StockApi
 
         public void AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, StockFinancials stockFinancials, AnalyzeInputs analyzeInputs)
         {
+            _buyless = false;
             StringBuilder output = new StringBuilder();
             // combine trends with
             // one year target
@@ -54,9 +57,9 @@ namespace StockApi
 
             // One Year Target - Not a very valuable metric. 
             decimal targetPriceMetric = 1M;
-            if (stockSummary.OneYearTargetPriceString.NumericValue < stockSummary.PriceString.NumericValue * (decimal).95)
+            if (stockSummary.OneYearTargetPriceString.NumericValue < stockSummary.PriceString.NumericValue * .95M)
                 targetPriceMetric = .99M;
-            else if (stockSummary.OneYearTargetPriceString.NumericValue > stockSummary.PriceString.NumericValue * (decimal)1.05)
+            else if (stockSummary.OneYearTargetPriceString.NumericValue > stockSummary.PriceString.NumericValue * 1.05M)
                 targetPriceMetric = 1.01M;
 
             output.AppendLine($"One Year Target Metric = {targetPriceMetric.ToString(".00")}");
@@ -110,13 +113,13 @@ namespace StockApi
                 dividendMetric = 1.05M;
             else if (stockSummary.DividendString.NumericValue > 2)
                 dividendMetric = 1.02M;
-            else if (stockSummary.DividendString.NumericValue > (decimal).5)
+            else if (stockSummary.DividendString.NumericValue > .5M)
                 dividendMetric = 1.01M;
             else
                 dividendMetric = .99M;
 
             if (priceTrendMetric < .92M && dividendMetric > 1.04M)
-                dividendMetric = 1.01M; // if the price is going steeply down, who care about a high dividend
+                dividendMetric = 1.01M; // if the price is going steeply down, who cares about a high dividend
 
             output.AppendLine($"Dividend Metric = {dividendMetric.ToString(".00")}");
 
@@ -197,18 +200,18 @@ namespace StockApi
 
             ///////////// Setting Price Movement Multipliers
             // Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
-            double volitilityFactor = 1; // Math.Log((Math.Log10(stockSummary.Volatility) + 1)) + 1; 
+            decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockSummary.Volatility) + 1)) + 1; 
             if (stockSummary.VolatilityString.NumericValue < .5M)
-                volitilityFactor = .86;
+                volitilityFactor = .86M;
             else if (stockSummary.VolatilityString.NumericValue < .8M)
-                volitilityFactor = .93;
+                volitilityFactor = .93M;
             else if (stockSummary.VolatilityString.NumericValue > 2M)
-                volitilityFactor = 1.14;
+                volitilityFactor = 1.14M;
             else if (stockSummary.VolatilityString.NumericValue > 1.2M)
-                volitilityFactor = 1.07;
+                volitilityFactor = 1.07M;
             output.AppendLine($"Volitility Factor = { volitilityFactor.ToString("##.##")}");
 
-            analyzeInputs.MovementTargetPercent *= (decimal)volitilityFactor; // Applying volatility
+            analyzeInputs.MovementTargetPercent *= volitilityFactor; // Applying volatility
             output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}%");
             
             // if stock is like XOM where your not sell a large percentage of shares owned
@@ -234,8 +237,11 @@ namespace StockApi
 
             if (sellPrice < analyzeInputs.SharesTradedPrice)
                 sellPrice = analyzeInputs.SharesTradedPrice * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.
-            if (buyPrice > analyzeInputs.SharesTradedPrice * .96M)
-                buyPrice = analyzeInputs.SharesTradedPrice * .95M; // Next buy can't be more than current price, but buy less
+            if (buyPrice > analyzeInputs.SharesTradedPrice * .88M)
+            {
+                _buyless = true;
+                buyPrice = analyzeInputs.SharesTradedPrice * .88M; // Next buy can't so near the current price, but buy less
+            }
 
             output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
@@ -293,9 +299,9 @@ namespace StockApi
                 sellQuantity = sellQuantity / 1.05M;
             }
 
-            if (buyPrice > stockHistory.HistoricDataToday.Price * .94M)
+            if (_buyless)
             {
-                buyQuantity = buyQuantity * .8M; // Next buy can't be more than current price, but buy less
+                buyQuantity = buyQuantity * .8M; 
                 output.AppendLine($"Accumulate this stock slowly.");
             }
 
@@ -320,7 +326,7 @@ namespace StockApi
                 SellQuantity = Convert.ToInt16((analyzeInputs.SharesOwned / 2.4F) + .5F);
 
             // Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
-            decimal profit = (SellPrice - stockSummary.PriceString.NumericValue) * (decimal)SellQuantity;
+            decimal profit = (SellPrice - stockSummary.PriceString.NumericValue) * SellQuantity;
             if (profit < 20M && totalMetric > .91M) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
             {
                 SellPrice = (20M / SellQuantity) + stockSummary.PriceString.NumericValue;

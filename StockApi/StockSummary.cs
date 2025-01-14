@@ -132,9 +132,9 @@ namespace StockApi
             else
                 PriceBookColor = Color.LightSteelBlue;
             OneYearTargetColor = Color.LightSteelBlue;
-            if (OneYearTargetPriceString.NumericValue < PriceString.NumericValue * (decimal).9)
+            if (OneYearTargetPriceString.NumericValue < PriceString.NumericValue * .9M)
                 OneYearTargetColor = Color.Red;
-            else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * (decimal)1.1)
+            else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
                 OneYearTargetColor = Color.Lime;
 
             return true;

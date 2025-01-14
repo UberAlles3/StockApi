@@ -38,7 +38,7 @@ namespace StockApi
                         else
                         {
                             IsNumeric = true;  
-                            _numericValue = (T)(object)(int)Convert.ToInt32(value);
+                            _numericValue = (T)(object)Convert.ToInt32(value);
                         }
                         break;
                     case TypeCode.Decimal:
@@ -52,7 +52,7 @@ namespace StockApi
                         else
                         {
                             IsNumeric = true;
-                            _numericValue = (T)(object)(decimal)Convert.ToDecimal(value);
+                            _numericValue = (T)(object)Convert.ToDecimal(value);
                         }
                         break;
                 }
