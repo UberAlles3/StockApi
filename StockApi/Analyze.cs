@@ -319,10 +319,10 @@ namespace StockApi
                 output.AppendLine($"Year down trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
             }
 
-            BuyQuantity = Convert.ToInt32(buyQuantity);
-            SellQuantity = Convert.ToInt32(sellQuantity);
+            BuyQuantity = Math.Max(1, Convert.ToInt32(buyQuantity));
+            SellQuantity = Math.Max(1, Convert.ToInt32(sellQuantity));
 
-            if (SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.4F)) // Don't sell close to more than half your shares
+            if (SellQuantity > 1 && SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.4F)) // Don't sell close to more than half your shares
                 SellQuantity = Convert.ToInt16((analyzeInputs.SharesOwned / 2.4F) + .5F);
 
             // Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
