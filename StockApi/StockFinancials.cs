@@ -15,9 +15,9 @@ namespace StockApi
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
 
         public bool   _revenueInMillions = false;
-        public float ProfitTTM = 0;
-        public float Profit2YearsAgo = 0;
-        public float Profit4YearsAgo = 0;
+        public decimal ProfitTTM = 0;
+        public decimal Profit2YearsAgo = 0;
+        public decimal Profit4YearsAgo = 0;
 
         ////////////////////////////////////////////
         ///                Properties
@@ -25,7 +25,7 @@ namespace StockApi
         /////////////////// RevenueTTM
         public Color RevenueTtmColor = Color.LightSteelBlue;
         private string revenueTtmString = NotApplicable;
-        private float revenueTtm = 0;
+        private decimal revenueTtm = 0;
         public string RevenueTtmString
         {
             get => revenueTtmString;
@@ -36,13 +36,13 @@ namespace StockApi
                     RevenueTtm = 0;
                 else
                 {
-                    RevenueTtm = Convert.ToSingle(RevenueTtmString);
+                    RevenueTtm = Convert.ToDecimal(RevenueTtmString);
                     if (costOfRevenueTtm > 0)
                         ProfitTTM = RevenueTtm - CostOfRevenueTtm;
                 }
             }
         }
-        public float RevenueTtm
+        public decimal RevenueTtm
         {
             get => revenueTtm;
             set
@@ -56,7 +56,7 @@ namespace StockApi
         /////////////////// Revenue2
         public Color Revenue2Color = Color.LightSteelBlue;
         private string revenue2String = NotApplicable;
-        private float revenue2 = 0;
+        private decimal revenue2 = 0;
         public string Revenue2String
         {
             get => revenue2String;
@@ -67,13 +67,13 @@ namespace StockApi
                     Revenue2 = 0;
                 else
                 {
-                    Revenue2 = Convert.ToSingle(Revenue2String);
+                    Revenue2 = Convert.ToDecimal(Revenue2String);
                     if (costOfRevenue2 > 0)
                         Profit2YearsAgo = Revenue2 - CostOfRevenue2;
                 }
             }
         }
-        public float Revenue2
+        public decimal Revenue2
         {
             get => revenue2;
             set
@@ -85,7 +85,7 @@ namespace StockApi
         /////////////////// Revenue4
         public Color Revenue4Color = Color.LightSteelBlue;
         private string revenue4String = NotApplicable;
-        private float revenue4 = 0;
+        private decimal revenue4 = 0;
         public string Revenue4String
         {
             get => revenue4String;
@@ -96,13 +96,13 @@ namespace StockApi
                     Revenue4 = 0;
                 else
                 {
-                    Revenue4 = Convert.ToSingle(Revenue4String);
+                    Revenue4 = Convert.ToDecimal(Revenue4String);
                     if (costOfRevenue4 > 0)
                         Profit4YearsAgo = Revenue4 - CostOfRevenue4;
                 }
             }
         }
-        public float Revenue4
+        public decimal Revenue4
         {
             get => revenue4;
             set
@@ -114,7 +114,7 @@ namespace StockApi
         /////////////////// Cost of RevenueTTM
         public Color CostOfRevenueTtmColor = Color.LightSteelBlue;
         private string costOfRevenueTtmString = NotApplicable;
-        private float costOfRevenueTtm = 0;
+        private decimal costOfRevenueTtm = 0;
         public string CostOfRevenueTtmString
         {
             get => costOfRevenueTtmString;
@@ -125,13 +125,13 @@ namespace StockApi
                     CostOfRevenueTtm = 0;
                 else
                 {
-                    CostOfRevenueTtm = Convert.ToSingle(CostOfRevenueTtmString);
+                    CostOfRevenueTtm = Convert.ToDecimal(CostOfRevenueTtmString);
                     if (revenueTtm > 0)
                         ProfitTTM = RevenueTtm - CostOfRevenueTtm;
                 }
             }
         }
-        public float CostOfRevenueTtm
+        public decimal CostOfRevenueTtm
         {
             get => costOfRevenueTtm;
             set
@@ -143,7 +143,7 @@ namespace StockApi
         /////////////////// Cost of Revenue2
         public Color CostOfRevenue2Color = Color.LightSteelBlue;
         private string costOfRevenue2String = NotApplicable;
-        private float costOfRevenue2 = 0;
+        private decimal costOfRevenue2 = 0;
         public string CostOfRevenue2String
         {
             get => costOfRevenue2String;
@@ -154,13 +154,13 @@ namespace StockApi
                     CostOfRevenue2 = 0;
                 else
                 {
-                    CostOfRevenue2 = Convert.ToSingle(CostOfRevenue2String);
+                    CostOfRevenue2 = Convert.ToDecimal(CostOfRevenue2String);
                     if (revenue2 > 0)
                         Profit2YearsAgo = Revenue2 - CostOfRevenue2;
                 }
             }
         }
-        public float CostOfRevenue2
+        public decimal CostOfRevenue2
         {
             get => costOfRevenue2;
             set
@@ -172,7 +172,7 @@ namespace StockApi
         /////////////////// Cost of Revenue4
         public Color CostOfRevenue4Color = Color.LightSteelBlue;
         private string costOfRevenue4String = NotApplicable;
-        private float costOfRevenue4 = 0;
+        private decimal costOfRevenue4 = 0;
         public string CostOfRevenue4String
         {
             get => costOfRevenue4String;
@@ -183,13 +183,13 @@ namespace StockApi
                     CostOfRevenue4 = 0;
                 else
                 {
-                    CostOfRevenue4 = Convert.ToSingle(CostOfRevenue4String);
+                    CostOfRevenue4 = Convert.ToDecimal(CostOfRevenue4String);
                     if (revenue4 > 0)
                         Profit4YearsAgo = Revenue4 - CostOfRevenue4;
                 }
             }
         }
-        public float CostOfRevenue4
+        public decimal CostOfRevenue4
         {
             get => costOfRevenue4;
             set
@@ -201,7 +201,7 @@ namespace StockApi
         /////////////////// TotalCash
         public Color TotalCashColor = Color.LightSteelBlue;
         private string totalCashString = NotApplicable;
-        private float totalCash = 0;
+        private decimal totalCash = 0;
         public string TotalCashString
         {
             get => totalCashString;
@@ -217,24 +217,24 @@ namespace StockApi
                     if (TotalCashString.IndexOf("B") > 0)
                     {
                         temp = TotalCashString.Replace("B", "");
-                        TotalCash = Convert.ToSingle(temp) * 1000000000;
+                        TotalCash = Convert.ToDecimal(temp) * 1000000000;
                     }
                     else if (TotalCashString.IndexOf("M") > 0)
                     {
                         temp = TotalCashString.Replace("M", "");
-                        TotalCash = Convert.ToSingle(temp) * 1000000;
+                        TotalCash = Convert.ToDecimal(temp) * 1000000;
                     }
                     else if (TotalCashString.IndexOf("k") > 0)
                     {
                         temp = TotalCashString.Replace("k", "");
-                        TotalCash = Convert.ToSingle(temp) * 1000;
+                        TotalCash = Convert.ToDecimal(temp) * 1000;
                     }
                     else
-                        TotalCash = Convert.ToSingle(value);
+                        TotalCash = Convert.ToDecimal(value);
                 }
             }
         }
-        public float TotalCash
+        public decimal TotalCash
         {
             get => totalCash;
             set
@@ -246,7 +246,7 @@ namespace StockApi
         /////////////////// TotalDebt
         public Color TotalDebtColor = Color.LightSteelBlue;
         private string totalDebtString = NotApplicable;
-        private float totalDebt = 0;
+        private decimal totalDebt = 0;
         public string TotalDebtString
         {
             get => totalDebtString;
@@ -262,24 +262,24 @@ namespace StockApi
                     if (TotalDebtString.IndexOf("B") > 0)
                     {
                         temp = TotalDebtString.Replace("B", "");
-                        TotalDebt = Convert.ToSingle(temp) * 1000000000;
+                        TotalDebt = Convert.ToDecimal(temp) * 1000000000;
                     }
                     else if (TotalDebtString.IndexOf("M") > 0)
                     {
                         temp = TotalDebtString.Replace("M", "");
-                        TotalDebt = Convert.ToSingle(temp) * 1000000;
+                        TotalDebt = Convert.ToDecimal(temp) * 1000000;
                     }
                     else if (TotalDebtString.IndexOf("k") > 0)
                     {
                         temp = TotalDebtString.Replace("k", "");
-                        TotalDebt = Convert.ToSingle(temp) * 1000;
+                        TotalDebt = Convert.ToDecimal(temp) * 1000;
                     }
                     else
-                        TotalDebt = Convert.ToSingle(value);
+                        TotalDebt = Convert.ToDecimal(value);
                 }
             }
         }
-        public float TotalDebt
+        public decimal TotalDebt
         {
             get => totalDebt;
             set
@@ -291,7 +291,7 @@ namespace StockApi
         /////////////////// DebtEquity
         public Color DebtEquityColor = Color.LightSteelBlue;
         private string debtEquityString = NotApplicable;
-        private float debtEquity = 0;
+        private decimal debtEquity = 0;
         public string DebtEquityString
         {
             get => debtEquityString;
@@ -304,11 +304,11 @@ namespace StockApi
                     DebtEquity = 0;
                 else
                 {
-                    DebtEquity = Convert.ToSingle(temp);
+                    DebtEquity = Convert.ToDecimal(temp);
                 }
             }
         }
-        public float DebtEquity
+        public decimal DebtEquity
         {
             get => debtEquity;
             set
@@ -320,7 +320,7 @@ namespace StockApi
         /////////////////// Short Interest
         public Color ShortInterestColor = Color.LightSteelBlue;
         private string shortInterestString = NotApplicable;
-        private float shortInterest = 0;
+        private decimal shortInterest = 0;
         public string ShortInterestString
         {
             get => shortInterestString;
@@ -330,10 +330,10 @@ namespace StockApi
                 if (NotNumber(value))
                     ShortInterest = 0;
                 else
-                    ShortInterest = Convert.ToSingle(ShortInterestString);
+                    ShortInterest = Convert.ToDecimal(ShortInterestString);
             }
         }
-        public float ShortInterest
+        public decimal ShortInterest
         {
             get => shortInterest;
             set
@@ -439,16 +439,16 @@ namespace StockApi
                 ShortInterestString = YahooFinance.NotApplicable;
 
             // Set Colors of Revenue (if revenue decreasing by 5% every 2 years, a problem
-            if (RevenueTtm < (Revenue2 * .95))
+            if (RevenueTtm < (Revenue2 * .95M))
                 RevenueTtmColor = Color.Red;
-            else if (RevenueTtm > (Revenue2 * 1.05))
+            else if (RevenueTtm > (Revenue2 * 1.05M))
                 RevenueTtmColor = Color.Lime;
             else
                 RevenueTtmColor = Color.LightSteelBlue;
             
-            if (Revenue2 < (Revenue4 * .95))
+            if (Revenue2 < (Revenue4 * .95M))
                 Revenue2Color = Color.Red;
-            else if (Revenue2 > (Revenue4 * 1.05))
+            else if (Revenue2 > (Revenue4 * 1.05M))
                 Revenue2Color = Color.Lime;
             else
                 Revenue2Color = Color.LightSteelBlue;
@@ -456,25 +456,25 @@ namespace StockApi
             // Set Colors of Cost of Revenue (if profit decreasing by 10% every 2 years, a problem
             if(CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
             {
-                if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9))
+                if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9M))
                     CostOfRevenueTtmColor = Color.Red;
-                else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.11))
+                else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.11M))
                     CostOfRevenueTtmColor = Color.Lime;
                 else
                     CostOfRevenueTtmColor = Color.LightSteelBlue;
 
-                if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .9))
+                if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .9M))
                     CostOfRevenue2Color = Color.Red;
-                else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.11))
+                else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.11M))
                     CostOfRevenue2Color = Color.Lime;
                 else
                     CostOfRevenue2Color = Color.LightSteelBlue;
             }
 
             // Set Colors of Total Debt
-            if (TotalDebt > TotalCash * 1.6)
+            if (TotalDebt > TotalCash * 1.6M)
                 TotalDebtColor = Color.Red;
-            else if (TotalDebt < TotalCash * .6)
+            else if (TotalDebt < TotalCash * .6M)
                 TotalDebtColor = Color.Lime;
             else
                 TotalDebtColor = Color.LightSteelBlue;

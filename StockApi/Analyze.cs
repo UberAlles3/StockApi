@@ -127,36 +127,36 @@ namespace StockApi
             {
                 if(stockFinancials.Revenue4 > 0)
                 {
-                    if (stockFinancials.Revenue2 > stockFinancials.Revenue4 * 1.05) // Revenue 2 years ago is 5% above revenue 4 years ago 
+                    if (stockFinancials.Revenue2 > stockFinancials.Revenue4 * 1.05M) // Revenue 2 years ago is 5% above revenue 4 years ago 
                         revenueMetric = 1.025M;
-                    if (stockFinancials.Revenue2 < stockFinancials.Revenue4 * .98) // Revenue 2 years ago is 1% below revenue 4 years ago 
+                    if (stockFinancials.Revenue2 < stockFinancials.Revenue4 * .98M) // Revenue 2 years ago is 1% below revenue 4 years ago 
                         revenueMetric = .98M;
-                    if (stockFinancials.RevenueTtm > stockFinancials.Revenue2 * 1.05) // Revenue TTM is 5% above revenue 2 years ago 
+                    if (stockFinancials.RevenueTtm > stockFinancials.Revenue2 * 1.05M) // Revenue TTM is 5% above revenue 2 years ago 
                         revenueMetric = revenueMetric * 1.025M;
-                    if (stockFinancials.RevenueTtm < stockFinancials.Revenue2 * .98) // Revenue TTM is 1% below revenue 2 years ago 
+                    if (stockFinancials.RevenueTtm < stockFinancials.Revenue2 * .98M) // Revenue TTM is 1% below revenue 2 years ago 
                         revenueMetric = revenueMetric * .98M;
-                    if (stockFinancials.RevenueTtm > stockFinancials.Revenue4 * 1.03) // Revenue TTM is 5% above revenue 4 years ago 
+                    if (stockFinancials.RevenueTtm > stockFinancials.Revenue4 * 1.03M) // Revenue TTM is 5% above revenue 4 years ago 
                         revenueMetric = revenueMetric * 1.01M;
-                    if (stockFinancials.RevenueTtm < stockFinancials.Revenue4 * .98) // Revenue TTM is 1% below revenue 4 years ago 
+                    if (stockFinancials.RevenueTtm < stockFinancials.Revenue4 * .98M) // Revenue TTM is 1% below revenue 4 years ago 
                         revenueMetric = revenueMetric * .99M;
                 }
             }
             output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".00")}");
             // Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
-            if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.01)
+            if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.01M)
                 profitMetric = 1.025M;
-            if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99)
+            if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99M)
                 profitMetric = .98M;
-            if (stockFinancials.ProfitTTM > stockFinancials.Profit2YearsAgo * 1.01)
+            if (stockFinancials.ProfitTTM > stockFinancials.Profit2YearsAgo * 1.01M)
                 profitMetric *= 1.025M;
-            if (stockFinancials.ProfitTTM < stockFinancials.Profit2YearsAgo * .99)
+            if (stockFinancials.ProfitTTM < stockFinancials.Profit2YearsAgo * .99M)
                 profitMetric *= .98M;
-            if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.2)
+            if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.2M)
                 profitMetric *= 1.015M;
-            else if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.02)
+            else if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.02M)
                 profitMetric *= 1.01M;
-            if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .98)
+            if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .98M)
                 profitMetric *= .985M;
             if (revenueMetric * profitMetric < .87M)
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}         * Financials are Bad *");

@@ -108,9 +108,9 @@ namespace StockApi
             string longest = parts.OrderByDescending(s => s.Length).First();
             CompanyOverview = longest._TrimSuffix("</");
 
-            ////////////////////
-            ///   Set Colors
-            ////////////////////
+            //*******************
+            //    Set Colors
+            //*******************
             DividendColor = Color.LightSteelBlue;
             if (DividendString.NumericValue > 1)
                 DividendColor = Color.Lime;
@@ -139,9 +139,5 @@ namespace StockApi
 
             return true;
         }
-
-
-
-
     }
 }
