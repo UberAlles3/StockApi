@@ -112,7 +112,7 @@ namespace StockApi
             //    Set Colors
             //*******************
             DividendColor = Color.LightSteelBlue;
-            if (DividendString.NumericValue > 1)
+            if (DividendString.NumericValue > 1.5M)
                 DividendColor = Color.Lime;
             EPSColor = Color.LightSteelBlue;
             if (EarningsPerShareString.NumericValue < -1)
