@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using Drake.Extensions;
+using System;
 using System.Drawing;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Linq;
-using Drake.Extensions;
+using System.Threading.Tasks;
 
 namespace StockApi
 {
@@ -14,15 +10,15 @@ namespace StockApi
     {
         //        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
         private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
- 
+
         public Color DividendColor = Color.LightSteelBlue;
         public Color EPSColor = Color.LightSteelBlue;
         public Color PriceBookColor = Color.LightSteelBlue;
         public Color ProfitMarginColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
 
-        private string  companyName = "";
-        public string  CompanyOverview= "";
+        private string companyName = "";
+        public string CompanyOverview = "";
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
@@ -37,7 +33,7 @@ namespace StockApi
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
- 
+
         public async Task<bool> GetSummaryData(string ticker, bool verbose = true)
         {
             Ticker = ticker;

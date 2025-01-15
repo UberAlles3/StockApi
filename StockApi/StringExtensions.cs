@@ -42,7 +42,7 @@ namespace Drake.Extensions
             {
                 return value;
             }
- 
+
             return value.Substring(0, posA);
         }
 

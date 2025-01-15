@@ -9,14 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CommonClasses.cs" />
     <Compile Remove="ExcelInterop.cs" />
-    <Compile Remove="PersonalStock.cs" />
     <Compile Remove="WebView.cs" />
     <Compile Remove="WebView.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="PersonalStock.cs" />
+    <None Include="CommonClasses.cs" />
     <None Include="WebView.cs" />
     <None Include="WebView.Designer.cs" />
   </ItemGroup>

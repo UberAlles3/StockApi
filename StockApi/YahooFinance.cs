@@ -1,26 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Net;
-using System.IO;
-using System.Collections;
-using System.Windows.Forms;
-using System.Text.RegularExpressions;
-using System.Drawing;
-using System.Linq;
-using System.Web;
-using Newtonsoft.Json;
-using System.Globalization;
-using System.Configuration;
 
 namespace StockApi
 {
     public class YahooFinance
     {
         public static string NotApplicable = "N/A";
-        private static readonly object syncObj = new object();
+        //private static readonly object syncObj = new object();
         private string _ticker;
         protected static List<SearchTerm> SearchTerms = new List<SearchTerm>(); // singleton instance, load once
 
@@ -32,8 +20,8 @@ namespace StockApi
 
         public YahooFinance()
         {
-           if (SearchTerms.Count == 0)
-              SearchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
+            if (SearchTerms.Count == 0)
+                SearchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
         }
 
         protected static async Task<string> GetHtml(string url)
@@ -43,7 +31,7 @@ namespace StockApi
             HttpClient cl = new HttpClient();
             cl.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
             cl.DefaultRequestHeaders.Accept.ParseAdd("text/html");
-            HttpResponseMessage hrm = await cl.GetAsync(url); 
+            HttpResponseMessage hrm = await cl.GetAsync(url);
             html = await hrm.Content.ReadAsStringAsync();
             return html;
 
@@ -73,15 +61,6 @@ namespace StockApi
         ////////////////////////////
         ///    Parsing methods
         ////////////////////////////
-        protected static string GetDecimalValueFromHtml(string html, string data_test_name, string defaultValue)
-        {
-            string temp = GetValueFromHtml(html, data_test_name, defaultValue);
-            if (temp != YahooFinance.NotApplicable)
-                return temp;
-            else
-                return defaultValue;
-        }
-
         protected static string GetDataByTagName(string html, string tagName, string defaultValue)
         {
             int loc1 = html.IndexOf("<" + tagName) + 1;
@@ -92,37 +71,6 @@ namespace StockApi
             }
 
             string middle = html.Substring(loc1 + 1 + tagName.Length, loc2 - loc1 - 1);
-            return middle;
-        }
-
-        protected static string GetDataByClassName(string html, string class_name, string defaultValue)
-        {
-            int loc1 = html.IndexOf("class=\"" + class_name + "\"");
-            if (loc1 == -1)
-            {
-                return defaultValue;
-            }
-            loc1 = html.IndexOf(">", loc1 + 1);
-            int loc2 = html.IndexOf("<", loc1 + 1);
-            string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
-            return middle;
-        }
-
-        protected static string GetValueFromHtml(string html, string data_test_name, string defaultValue)
-        {
-            int loc1 = 0;
-            int loc2 = 0;
-
-            loc1 = html.IndexOf("data-test=\"" + data_test_name + "\"");
-            if (loc1 == -1)
-            {
-                return defaultValue.ToString();
-            }
-
-            loc1 = html.IndexOf(">", loc1 + 1);
-            loc2 = html.IndexOf("<", loc1 + 1);
-
-            string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
             return middle;
         }
 
@@ -137,7 +85,7 @@ namespace StockApi
             }
 
             return html.Substring(loc1 + 1, length);
-         }
+        }
 
         protected static List<string> GetNumbersFromHtml(string partial)
         {
@@ -158,23 +106,6 @@ namespace StockApi
             return numbers;
         }
 
-        protected static string GetValueFromHtmlBySearchText(string html, string searchText, string defaultValue)
-        {
-            int loc1 = 0;
-            int loc2 = 0;
-
-            loc1 = html.IndexOf(searchText);
-            if (loc1 == -1)
-            {
-                return defaultValue;
-            }
-
-            loc1 = html.IndexOf(">", loc1 - 4);
-            loc2 = html.IndexOf("<", loc1 + 1);
-
-            string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
-            return middle;
-        }
         protected static string GetValueFromHtmlBySearchTerm(string html, string searchText, string defaultValue, int tagPosition)
         {
             int loc1 = 0;
@@ -199,6 +130,64 @@ namespace StockApi
             string middle = parts[tagPosition].Substring(0, loc2);
             return middle;
         }
+
+        //protected static string GetValueFromHtml(string html, string data_test_name, string defaultValue)
+        //{
+        //    int loc1 = 0;
+        //    int loc2 = 0;
+
+        //    loc1 = html.IndexOf("data-test=\"" + data_test_name + "\"");
+        //    if (loc1 == -1)
+        //    {
+        //        return defaultValue.ToString();
+        //    }
+
+        //    loc1 = html.IndexOf(">", loc1 + 1);
+        //    loc2 = html.IndexOf("<", loc1 + 1);
+
+        //    string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
+        //    return middle;
+        //}
+
+        //protected static string GetDecimalValueFromHtml(string html, string data_test_name, string defaultValue)
+        //{
+        //    string temp = GetValueFromHtml(html, data_test_name, defaultValue);
+        //    if (temp != YahooFinance.NotApplicable)
+        //        return temp;
+        //    else
+        //        return defaultValue;
+        //}
+
+        //protected static string GetDataByClassName(string html, string class_name, string defaultValue)
+        //{
+        //    int loc1 = html.IndexOf("class=\"" + class_name + "\"");
+        //    if (loc1 == -1)
+        //    {
+        //        return defaultValue;
+        //    }
+        //    loc1 = html.IndexOf(">", loc1 + 1);
+        //    int loc2 = html.IndexOf("<", loc1 + 1);
+        //    string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
+        //    return middle;
+        //}
+
+        //protected static string GetValueFromHtmlBySearchText(string html, string searchText, string defaultValue)
+        //{
+        //    int loc1 = 0;
+        //    int loc2 = 0;
+
+        //    loc1 = html.IndexOf(searchText);
+        //    if (loc1 == -1)
+        //    {
+        //        return defaultValue;
+        //    }
+
+        //    loc1 = html.IndexOf(">", loc1 - 4);
+        //    loc2 = html.IndexOf("<", loc1 + 1);
+
+        //    string middle = html.Substring(loc1 + 1, loc2 - loc1 - 1);
+        //    return middle;
+        //}
     }
 }
 

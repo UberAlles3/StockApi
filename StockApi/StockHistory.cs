@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace StockApi
@@ -60,7 +58,7 @@ namespace StockApi
             }
             else
             {
-                HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.PriceString.NumericValue, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = "N/A"};
+                HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.PriceString.NumericValue, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = "N/A" };
             }
 
             /////// Get price history for a year ago to determine long trend
@@ -87,8 +85,8 @@ namespace StockApi
             }
 
             List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
-            if(HistoricDataToday != null)
-               historicDisplayList.Add(HistoricDataToday);
+            if (HistoricDataToday != null)
+                historicDisplayList.Add(HistoricDataToday);
             if (HistoricDataWeekAgo != null)
                 historicDisplayList.Add(HistoricDataWeekAgo);
             if (HistoricDataMonthAgo != null)
@@ -186,7 +184,7 @@ namespace StockApi
 
             string formattedUrl = _url.Replace("?ticker?", ticker);
 
-            if(beginDate < DateTime.Today.AddYears(-2))
+            if (beginDate < DateTime.Today.AddYears(-2))
             {
                 formattedUrl = formattedUrl.Replace("frequency=1d", "frequency=1wk");
             }
@@ -229,7 +227,7 @@ namespace StockApi
             if (HistoricDataYearAgo != null)
             {
                 if (HistoricDataToday.Price > HistoricDataYearAgo.Price * 1.08M) // year
-                YearTrend = TrendEnum.Up;
+                    YearTrend = TrendEnum.Up;
                 else if (HistoricDataToday.Price < HistoricDataYearAgo.Price * .92M) // year
                     YearTrend = TrendEnum.Down;
                 else

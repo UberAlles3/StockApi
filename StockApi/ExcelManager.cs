@@ -1,20 +1,15 @@
 ﻿using ExcelDataReader;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Data;
-using System.Diagnostics;
-using Newtonsoft.Json;
+using System.IO;
 
 namespace StockApi
 {
     public class ExcelManager
     {
-       
+
         public ExcelManager()
         {
-           
+
         }
 
         public DataTable ImportTrades(string filePath)
@@ -22,7 +17,7 @@ namespace StockApi
             string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
 
             File.Copy(filePath, importFilePath, true);
-            
+
             using (var stream = File.Open(importFilePath, FileMode.Open, FileAccess.Read))
             {
                 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -55,14 +50,14 @@ namespace StockApi
 
                         // Gets or sets a callback to determine whether to include the current sheet
                         // in the DataSet. Called once per sheet before ConfigureDataTable.
-                        
+
                         FilterSheet = (tableReader, sheetIndex) => (sheetIndex == 1),
                         ConfigureDataTable = _ => new ExcelDataTableConfiguration()
                         {
                             FilterRow = rowReader => rowReader.RowCount > 40,
-                            FilterColumn = (rowReader, columnIndex) =>  columnIndex < 10,
+                            FilterColumn = (rowReader, columnIndex) => columnIndex < 10,
                         }
-                        });  // The result of each spreadsheet is in result.Tables
+                    });  // The result of each spreadsheet is in result.Tables
 
                     //var newTable = result.Tables[0].AsEnumerable().Where(x => x[0].ToString().Contains("2024"));
                     //var newTable = result.Tables[0].AsEnumerable().Where(x => x[4].ToString() == "GFI").CopyToDataTable();

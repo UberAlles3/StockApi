@@ -1,20 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Windows.Forms;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using CommonClasses;
-using System.Configuration;
-using Drake.Extensions;
 
 namespace StockApi
 {
@@ -55,13 +48,11 @@ namespace StockApi
             //picSpinner.Left = 220;
             //picSpinner.Top = 8; 
             picSpinner.Left = (this.Width / 2) + 56;
-            picSpinner.Top = this.Height / 2 - 56; 
+            picSpinner.Top = this.Height / 2 - 56;
 
             picUpTrend.Visible = false;
             picSidewaysTrend.Visible = false;
             picDownTrend.Visible = false;
-
-            //picYearTrend.BackColor = Color.FromArgb(10, 0, 0, 0);
 
             lblCompanyNameAndTicker.Text = txtSharesTraded.Text = "";
 
@@ -94,7 +85,7 @@ namespace StockApi
                 _tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
                 //_trades.Columns[0].ColumnName = "Date";
                 //_trades.DefaultView.Sort = "Date desc";
-                
+
                 _tradesImportDateTime = DateTime.Now; // Update when the last import took place
             }
 
@@ -284,7 +275,7 @@ namespace StockApi
             txtTickerList.Text = builder.ToString();
         }
 
-         private void PreSummaryWebCall()
+        private void PreSummaryWebCall()
         {
             _stockSummary = new StockSummary(); // set values to zero
             btnGetAllHistory.Visible = true;
@@ -292,8 +283,8 @@ namespace StockApi
             txtTickerList.Text = txtStockTicker.Text;
             pic3YearTrend.Image = picSidewaysTrend.Image;
             picYearTrend.Image = picSidewaysTrend.Image;
-            picMonthTrend.Image = picSidewaysTrend.Image; 
-            picWeekTrend.Image = picSidewaysTrend.Image; 
+            picMonthTrend.Image = picSidewaysTrend.Image;
+            picWeekTrend.Image = picSidewaysTrend.Image;
 
             btnGetOne.Enabled = false;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
@@ -323,10 +314,7 @@ namespace StockApi
                 picSpinner.Visible = false;
                 Cursor.Current = Cursors.Default;
 
-                // Set some analyze form fields for later use
-                //PersonalStock personalStock = new PersonalStock();
-                //PersonalStock.PersonalStockData personalStockData = personalStock.GetPersonalDataForTicker(_stockSummary.Ticker);
-                if(_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
+                if (_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
                 {
                     DataRow latestRow = _tickerTradesDataTable.Rows[0];
                     txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
@@ -370,14 +358,15 @@ namespace StockApi
                                 .Max(row => row[5])
                                 .ToString();
 
-                            for (i2 = i; i2 < i + Math.Min(5, (_tickerTradesDataTable.Rows.Count)) && i < _tickerTradesDataTable.Rows.Count - Math.Min(4, (_tickerTradesDataTable.Rows.Count-1)); i2++)
+                            for (i2 = i; i2 < i + Math.Min(5, (_tickerTradesDataTable.Rows.Count)) && i < _tickerTradesDataTable.Rows.Count - Math.Min(4, (_tickerTradesDataTable.Rows.Count - 1)); i2++)
                             {
                                 if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max) // High - Green coloring
                                 {
                                     current = previous = 0;
                                     try
                                     {
-                                        previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                        if(i2 > 0)
+                                            previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
                                         current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                     }
                                     catch { } // eat the error
@@ -398,7 +387,7 @@ namespace StockApi
                                         current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                     }
                                     catch { } // eat the error
-                                    if(current < previous)
+                                    if (current < previous)
                                     {
                                         dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Red;
                                         if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Red)
@@ -407,7 +396,7 @@ namespace StockApi
                                 }
                             }
                         }
-                        
+
                         i++;
                     }
                 }
@@ -443,7 +432,7 @@ namespace StockApi
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
             lblSellPrice.Text = _analyze.SellPrice.ToString();
         }
-        
+
         private void ApplyStyles()
         {
             Color forecolor = Color.FromArgb(220, 235, 245);

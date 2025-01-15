@@ -1,7 +1,4 @@
-﻿using CommonClasses;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
 using System.Drawing;
 using System.Text;
 
@@ -128,7 +125,7 @@ namespace StockApi
             decimal revenueMetric = 1M;
             if (stockFinancials.RevenueTtm > 0)
             {
-                if(stockFinancials.Revenue4 > 0)
+                if (stockFinancials.Revenue4 > 0)
                 {
                     if (stockFinancials.Revenue2 > stockFinancials.Revenue4 * 1.05M) // Revenue 2 years ago is 5% above revenue 4 years ago 
                         revenueMetric = 1.025M;
@@ -176,7 +173,7 @@ namespace StockApi
             output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".00")}");
 
             // Economy
-            decimal ecoMetric =  1 + ((analyzeInputs.EconomyHealth - 5) / 100);
+            decimal ecoMetric = 1 + ((analyzeInputs.EconomyHealth - 5) / 100);
             output.AppendLine($"Economy Metric = {ecoMetric.ToString(".00")}");
 
             decimal totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * ProfitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric;
@@ -213,10 +210,10 @@ namespace StockApi
 
             analyzeInputs.MovementTargetPercent *= volitilityFactor; // Applying volatility
             output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}%");
-            
+
             // if stock is like XOM where your not sell a large percentage of shares owned
             // Make the lower and upper movement less
-            if(analyzeInputs.QuantityTraded < analyzeInputs.SharesOwned / 4)
+            if (analyzeInputs.QuantityTraded < analyzeInputs.SharesOwned / 4)
             {
                 analyzeInputs.MovementTargetPercent = analyzeInputs.MovementTargetPercent * .9M;
                 output.AppendLine($"Movement reduced, low share quantity = {analyzeInputs.MovementTargetPercent.ToString("##.##")}");
@@ -246,7 +243,7 @@ namespace StockApi
             output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
 
-             ///////// Limit price so it's with a range
+            ///////// Limit price so it's with a range
             decimal limitPrice = (stockSummary.PriceString.NumericValue * lowerMovementMultiplier) * .5M; // lower buy limit price too low
             if (buyPrice < limitPrice)
                 buyPrice = limitPrice;
@@ -301,7 +298,7 @@ namespace StockApi
 
             if (_buyless)
             {
-                buyQuantity = buyQuantity * .8M; 
+                buyQuantity = buyQuantity * .8M;
                 output.AppendLine($"Accumulate this stock slowly.");
             }
 

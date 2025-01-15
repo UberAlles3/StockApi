@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Drake.Extensions;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq;
-using Drake.Extensions;
+using System.Threading.Tasks;
 
-namespace StockApi 
+namespace StockApi
 {
     public class StockFinancials : YahooFinance
     {
         private static readonly string _statisticsUrl = "https://finance.yahoo.com/quote/???/key-statistics/";
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
 
-        public bool   _revenueInMillions = false;
+        public bool _revenueInMillions = false;
         public decimal ProfitTTM = 0;
         public decimal Profit2YearsAgo = 0;
         public decimal Profit4YearsAgo = 0;
@@ -208,7 +206,7 @@ namespace StockApi
             set
             {
                 string temp;
-                
+
                 totalCashString = value;
                 if (NotNumber(value))
                     TotalCash = 0;
@@ -363,7 +361,7 @@ namespace StockApi
             // Revenue History
             string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
             string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-            
+
             if (partial.Length < 100) // Some stocks like Vangaurd don't have financials, exit
                 return false; //=====>>>>>>>
 
@@ -445,7 +443,7 @@ namespace StockApi
                 RevenueTtmColor = Color.Lime;
             else
                 RevenueTtmColor = Color.LightSteelBlue;
-            
+
             if (Revenue2 < (Revenue4 * .95M))
                 Revenue2Color = Color.Red;
             else if (Revenue2 > (Revenue4 * 1.05M))
@@ -454,7 +452,7 @@ namespace StockApi
                 Revenue2Color = Color.LightSteelBlue;
 
             // Set Colors of Cost of Revenue (if profit decreasing by 10% every 2 years, a problem
-            if(CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
+            if (CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
             {
                 if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9M))
                     CostOfRevenueTtmColor = Color.Red;

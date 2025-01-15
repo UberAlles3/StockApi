@@ -1,7 +1,5 @@
 ﻿using Drake.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StockApi
 {
@@ -22,7 +20,7 @@ namespace StockApi
             set
             {
                 _stringValue = value;
-                
+
                 // set the generic numeric type, converting the string to the numeric type
                 switch (Type.GetTypeCode(typeof(T)))
                 {
@@ -37,7 +35,7 @@ namespace StockApi
                         }
                         else
                         {
-                            IsNumeric = true;  
+                            IsNumeric = true;
                             _numericValue = (T)(object)Convert.ToInt32(value);
                         }
                         break;
@@ -56,7 +54,7 @@ namespace StockApi
                         }
                         break;
                 }
-                if(!IsNumeric)
+                if (!IsNumeric)
                     _stringValue = StringIfNotNumeric;
             }
         }
