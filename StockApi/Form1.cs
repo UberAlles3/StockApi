@@ -383,7 +383,8 @@ namespace StockApi
                                     current = previous = 0;
                                     try
                                     {
-                                        previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                        if (i2 > 0) 
+                                            previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
                                         current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                     }
                                     catch { } // eat the error
