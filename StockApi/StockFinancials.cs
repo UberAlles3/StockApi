@@ -212,7 +212,12 @@ namespace StockApi
                     TotalCash = 0;
                 else
                 {
-                    if (TotalCashString.IndexOf("B") > 0)
+                    if (TotalCashString.IndexOf("T") > 0)
+                    {
+                        temp = TotalCashString.Replace("T", "");
+                        TotalCash = Convert.ToDecimal(temp) * 1000000000000;
+                    }
+                    else if (TotalCashString.IndexOf("B") > 0)
                     {
                         temp = TotalCashString.Replace("B", "");
                         TotalCash = Convert.ToDecimal(temp) * 1000000000;
