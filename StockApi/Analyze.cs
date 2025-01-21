@@ -145,15 +145,15 @@ namespace StockApi
             // Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
             if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.01M)
-                profitMetric = 1.025M;
+                profitMetric = 1.02M;
             if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99M)
                 profitMetric = .98M;
             if (stockFinancials.ProfitTTM > stockFinancials.Profit2YearsAgo * 1.01M)
-                profitMetric *= 1.025M;
+                profitMetric *= 1.02M;
             if (stockFinancials.ProfitTTM < stockFinancials.Profit2YearsAgo * .99M)
                 profitMetric *= .98M;
             if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.2M)
-                profitMetric *= 1.015M;
+                profitMetric *= 1.01M;
             else if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.02M)
                 profitMetric *= 1.01M;
             if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .98M)
