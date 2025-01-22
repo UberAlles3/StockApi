@@ -37,6 +37,9 @@ namespace StockApi
             List<StockHistory.HistoricPriceData> historicDataList;
             DateTime findDate;
 
+            HistoricDataWeekAgo = null;
+            HistoricDataMonthAgo = null;
+            HistoricDataYearAgo = null;
             if (getMonthAndWeek)
             {
                 historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), DateTime.Now.AddDays(1));

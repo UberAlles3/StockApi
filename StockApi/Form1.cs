@@ -288,6 +288,9 @@ namespace StockApi
 
             btnGetOne.Enabled = false;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
+            picYearTrend.Visible = false;
+            picMonthTrend.Visible = false;
+            picWeekTrend.Visible = false;
             picSpinner.Visible = true;
             Cursor.Current = Cursors.WaitCursor;
         }
