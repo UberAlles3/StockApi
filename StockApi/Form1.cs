@@ -341,7 +341,7 @@ namespace StockApi
                     float previous;
                     float current;
                     int i = 0;
-                    // Color based on groups of 5 rows, the high and low for the 5 rows
+                    // Color trades based on groups of 5 rows, the high and low for the 5 rows
                     foreach (DataRow r in _tickerTradesDataTable.Rows)
                     {
                         // Color Buy and Sells
@@ -386,8 +386,10 @@ namespace StockApi
                                     current = previous = 0;
                                     try
                                     {
-                                        if (i2 > 0) 
+                                        if (i2 > 0)
                                             previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                        else
+                                            previous = 10000;
                                         current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                     }
                                     catch { } // eat the error
