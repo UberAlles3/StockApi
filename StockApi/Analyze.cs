@@ -83,9 +83,9 @@ namespace StockApi
             // Price / Book
             decimal priceBookMetric = 1M;
             if (stockSummary.PriceBookColor == Color.Red)
-                priceBookMetric = .982M;
+                priceBookMetric = .99M;
             if (stockSummary.PriceBookColor == Color.Lime)
-                priceBookMetric = 1.02M;
+                priceBookMetric = 1.01M;
 
             output.AppendLine($"Price Book Metric = {priceBookMetric.ToString(".00")}");
 
