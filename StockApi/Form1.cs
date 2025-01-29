@@ -414,8 +414,8 @@ namespace StockApi
                         txtSharesTradePrice.Text = _stockSummary.PriceString.NumericValue.ToString("0.00");
                     }
                     panel1.Visible = panel2.Visible = panel3.Visible = true;
-                } // Ticker Found
-                else
+                } // Ticker found.
+                else // Ticker not found.
                 {
                     MessageBox.Show("Stock ticker was not found.");
                     panel1.Visible = panel2.Visible = panel3.Visible = false;
