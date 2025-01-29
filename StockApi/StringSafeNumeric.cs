@@ -10,6 +10,7 @@ namespace StockApi
 
         public StringSafeNumeric(string stringIfNotNumeric)
         {
+            _stringValue = stringIfNotNumeric;
             StringIfNotNumeric = stringIfNotNumeric;
         }
 

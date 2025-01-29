@@ -14,6 +14,7 @@ namespace StockApi
     public partial class Form1 : Form
     {
         List<Setting> _settings = new List<Setting>();
+        private static bool tickerFound = false; 
         private static StockSummary _stockSummary = new StockSummary();
         private static StockFinancials _stockFinancials = new StockFinancials();
         private static StockHistory _stockHistory = new StockHistory();
@@ -92,13 +93,14 @@ namespace StockApi
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
             // Extract the individual data values from the html
-            bool found = await _stockSummary.GetSummaryData(txtStockTicker.Text);
-            GetFinancials();
+            tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
 
-            if (found)
+            if (tickerFound)
             {
                 _tickerTradesDataTable = null;
                 int DateColumn = 0;
+
+                GetFinancials();
 
                 DateTime outDate = DateTime.Now;
                 // filter on stock ticker then order by date descending
@@ -260,7 +262,7 @@ namespace StockApi
                 txtTickerList.Text += ".";
 
                 // Extract the individual data values from the html
-                await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
                 await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
                 historicDataList = await _stockHistory.GetHistoricalDataForDateRange(_stockSummary.Ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
                 if (historicDataList.Count > 0)
@@ -301,122 +303,130 @@ namespace StockApi
             {
                 btnGetOne.Enabled = true;
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
-                lblPrice.Text = _stockSummary.PriceString.NumericValue.ToString("####.00");
-                lblVolatility.Text = _stockSummary.VolatilityString.StringValue;
-                lblEPS.Text = _stockSummary.EarningsPerShareString.StringValue;
-                lblEPS.ForeColor = _stockSummary.EPSColor;
-                lblPriceBook.Text = _stockSummary.PriceBookString.NumericValue.ToString();
-                lblPriceBook.ForeColor = _stockSummary.PriceBookColor;
-                lblDividend.Text = _stockSummary.DividendString.NumericValue.ToString() + "%";
-                lblDividend.ForeColor = _stockSummary.DividendColor;
-                lblProfitMargin.Text = _stockSummary.ProfitMarginString.StringValue.ToString() + "%";
-                lblProfitMargin.ForeColor = _stockSummary.ProfitMarginColor;
-                lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString.StringValue;
-                lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
-                panel1.Visible = panel2.Visible = panel3.Visible = true;
-                picSpinner.Visible = false;
-                Cursor.Current = Cursors.Default;
-
-                if (_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
+                if(tickerFound)
                 {
-                    DataRow latestRow = _tickerTradesDataTable.Rows[0];
-                    txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
-                    if (txtSharesOwned.Text.Trim() == "")
-                        txtSharesOwned.Text = "1";
-                    txtSharesTraded.Text = latestRow.ItemArray[3].ToString();     // Quan. Traded
-                    txtSharesTradePrice.Text = ((double)latestRow.ItemArray[5]).ToString("0.00"); // Price
-                    if (latestRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
-                    {
-                        radBuy.Checked = true;
-                        radSell.Checked = false;
-                    }
-                    else
-                    {
-                        radBuy.Checked = false;
-                        radSell.Checked = true;
-                    }
+                    lblPrice.Text = _stockSummary.PriceString.NumericValue.ToString("####.00");
+                    lblVolatility.Text = _stockSummary.VolatilityString.StringValue;
+                    lblEPS.Text = _stockSummary.EarningsPerShareString.StringValue;
+                    lblEPS.ForeColor = _stockSummary.EPSColor;
+                    lblPriceBook.Text = _stockSummary.PriceBookString.NumericValue.ToString();
+                    lblPriceBook.ForeColor = _stockSummary.PriceBookColor;
+                    lblDividend.Text = _stockSummary.DividendString.NumericValue.ToString() + "%";
+                    lblDividend.ForeColor = _stockSummary.DividendColor;
+                    lblProfitMargin.Text = _stockSummary.ProfitMarginString.StringValue.ToString() + "%";
+                    lblProfitMargin.ForeColor = _stockSummary.ProfitMarginColor;
+                    lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString.StringValue;
+                    lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
 
-                    string min;
-                    string max;
-                    float previous;
-                    float current;
-                    int i = 0;
-                    // Color trades based on groups of 5 rows, the high and low for the 5 rows
-                    foreach (DataRow r in _tickerTradesDataTable.Rows)
+                    if (_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
                     {
-                        // Color Buy and Sells
-                        if (r.ItemArray[2].ToString().Trim().ToLower() == "buy")
-                            dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Lime;
-                        else
-                            dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Yellow;
-
-                        int i2 = i;
-                        if (i % 1 == 0) // every 2nd pass, evaluate
+                        DataRow latestRow = _tickerTradesDataTable.Rows[0];
+                        txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
+                        if (txtSharesOwned.Text.Trim() == "")
+                            txtSharesOwned.Text = "1";
+                        txtSharesTraded.Text = latestRow.ItemArray[3].ToString();     // Quan. Traded
+                        txtSharesTradePrice.Text = ((double)latestRow.ItemArray[5]).ToString("0.00"); // Price
+                        if (latestRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
                         {
-                            // Find Min, Max trade price
-                            min = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
-                                .Min(row => row[5])
-                                .ToString();
-                            max = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
-                                .Max(row => row[5])
-                                .ToString();
+                            radBuy.Checked = true;
+                            radSell.Checked = false;
+                        }
+                        else
+                        {
+                            radBuy.Checked = false;
+                            radSell.Checked = true;
+                        }
 
-                            for (i2 = i; i2 < i + Math.Min(5, (_tickerTradesDataTable.Rows.Count)) && i < _tickerTradesDataTable.Rows.Count - Math.Min(4, (_tickerTradesDataTable.Rows.Count - 1)); i2++)
+                        string min;
+                        string max;
+                        float previous;
+                        float current;
+                        int i = 0;
+                        // Color trades based on groups of 5 rows, the high and low for the 5 rows
+                        foreach (DataRow r in _tickerTradesDataTable.Rows)
+                        {
+                            // Color Buy and Sells
+                            if (r.ItemArray[2].ToString().Trim().ToLower() == "buy")
+                                dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Lime;
+                            else
+                                dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Yellow;
+
+                            int i2 = i;
+                            if (i % 1 == 0) // every 2nd pass, evaluate
                             {
-                                if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max) // High - Green coloring
+                                // Find Min, Max trade price
+                                min = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
+                                    .Min(row => row[5])
+                                    .ToString();
+                                max = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
+                                    .Max(row => row[5])
+                                    .ToString();
+
+                                for (i2 = i; i2 < i + Math.Min(5, (_tickerTradesDataTable.Rows.Count)) && i < _tickerTradesDataTable.Rows.Count - Math.Min(4, (_tickerTradesDataTable.Rows.Count - 1)); i2++)
                                 {
-                                    current = previous = 0;
-                                    try
+                                    if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max) // High - Green coloring
                                     {
-                                        if(i2 > 0)
-                                            previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
-                                        current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
+                                        current = previous = 0;
+                                        try
+                                        {
+                                            if(i2 > 0)
+                                                previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                            current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
+                                        }
+                                        catch { } // eat the error
+                                        if (current > previous)
+                                        {
+                                            dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Lime;
+                                            if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Lime)
+                                                dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
+                                        }
                                     }
-                                    catch { } // eat the error
-                                    if (current > previous)
+                                    if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min) // Low - Red coloring
                                     {
-                                        dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Lime;
-                                        if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Lime)
-                                            dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
-                                    }
-                                }
-                                if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min) // Low - Red coloring
-                                {
-                                    // get previous, if previous < than this low, don't color and leave previous alone
-                                    current = previous = 0;
-                                    try
-                                    {
-                                        if (i2 > 0)
-                                            previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
-                                        else
-                                            previous = 10000;
-                                        current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
-                                    }
-                                    catch { } // eat the error
-                                    if (current < previous)
-                                    {
-                                        dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Red;
-                                        if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Red)
-                                            dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
+                                        // get previous, if previous < than this low, don't color and leave previous alone
+                                        current = previous = 0;
+                                        try
+                                        {
+                                            if (i2 > 0)
+                                                previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                            else
+                                                previous = 10000;
+                                            current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
+                                        }
+                                        catch { } // eat the error
+                                        if (current < previous)
+                                        {
+                                            dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Red;
+                                            if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Red)
+                                                dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        i++;
+                            i++;
+                        }
                     }
-                }
+                    else
+                    {
+                        txtSharesOwned.Text = "1";
+                        txtSharesTraded.Text = "1";
+                        txtSharesTradePrice.Text = _stockSummary.PriceString.NumericValue.ToString("0.00");
+                    }
+                    panel1.Visible = panel2.Visible = panel3.Visible = true;
+                } // Ticker Found
                 else
                 {
-                    txtSharesOwned.Text = "1";
-                    txtSharesTraded.Text = "1";
-                    txtSharesTradePrice.Text = _stockSummary.PriceString.NumericValue.ToString("0.00");
+                    MessageBox.Show("Stock ticker was not found.");
+                    panel1.Visible = panel2.Visible = panel3.Visible = false;
                 }
             }
             catch (Exception e)
             {
                 MessageBox.Show($"Error: {e.Message} {e.InnerException} {e.StackTrace}");
             }
+            picSpinner.Visible = false;
+            Cursor.Current = Cursors.Default;
         }
 
         private void btnAnalyze_Click(object sender, EventArgs e)
