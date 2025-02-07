@@ -265,10 +265,13 @@ namespace StockApi
                 tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
                 await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
                 historicDataList = await _stockHistory.GetHistoricalDataForDateRange(_stockSummary.Ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
-                if (historicDataList.Count > 0)
+                if (historicDataList.Count > 1)
                     _stockHistory.HistoricData3YearsAgo = historicDataList.First();
-                else
+                else if (historicDataList.Count > 0)
                     _stockHistory.HistoricData3YearsAgo = _stockHistory.HistoricDataYearAgo;
+                else
+                    _stockHistory.HistoricData3YearsAgo = historicDataList.Last();
+
                 decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterest}");
