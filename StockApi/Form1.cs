@@ -272,7 +272,7 @@ namespace StockApi
                 decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterest}");
-                builder.Append($",{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")}{Environment.NewLine}");
+                builder.Append($",{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue}{Environment.NewLine}");
             }
             txtTickerList.Text = builder.ToString();
         }
@@ -317,6 +317,8 @@ namespace StockApi
                     lblProfitMargin.ForeColor = _stockSummary.ProfitMarginColor;
                     lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString.StringValue;
                     lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
+                    lbl52WeekLow.Text = _stockSummary.YearsRangeLow.StringValue;
+                    lbl52WeekHigh.Text = _stockSummary.YearsRangeHigh.StringValue;
 
                     if (_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
                     {

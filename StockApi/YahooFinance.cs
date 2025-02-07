@@ -117,7 +117,7 @@ namespace StockApi
                 return defaultValue;
             }
 
-            string htmlSnippet = html.Substring(loc1 + 1, 200);
+            string htmlSnippet = html.Substring(loc1 + 1, 250);
             string[] parts = htmlSnippet.Split(">");
 
             if (parts.Length < 3)

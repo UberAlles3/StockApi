@@ -29,6 +29,8 @@ namespace StockApi
         public StringSafeNumeric<Decimal> OneYearTargetPriceString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> PriceString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> VolatilityString = new StringSafeNumeric<decimal>("--");
+        public StringSafeNumeric<Decimal> YearsRangeLow = new StringSafeNumeric<decimal>("--");
+        public StringSafeNumeric<Decimal> YearsRangeHigh = new StringSafeNumeric<decimal>("--");
 
         ////////////////////////////////////////////
         ///                Methods
@@ -96,6 +98,16 @@ namespace StockApi
                 ProfitMarginString.StringValue = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
             else
                 ProfitMarginString.StringValue = YahooFinance.NotApplicable;
+
+            // 52 Week Range
+            searchTerm = SearchTerms.Find(x => x.Name == "52 Week Range").Term;
+            string range  = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+            int idx = range.IndexOf("-");
+            if(idx > 0)
+            {
+                YearsRangeLow.StringValue = range.Substring(0, idx).Trim();
+                YearsRangeHigh.StringValue = range.Substring(idx+1).Trim();
+            }
 
             // Company Overview
             searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
