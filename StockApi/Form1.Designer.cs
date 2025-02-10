@@ -41,7 +41,6 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label65 = new System.Windows.Forms.Label();
             this.lbl52WeekHigh = new System.Windows.Forms.Label();
             this.lbl52WeekLow = new System.Windows.Forms.Label();
             this.label63 = new System.Windows.Forms.Label();
@@ -96,6 +95,9 @@ namespace StockApi
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label64 = new System.Windows.Forms.Label();
+            this.lbl52WeekHighArrow = new System.Windows.Forms.Label();
+            this.lbl52WeekArrow = new System.Windows.Forms.Label();
+            this.lbl52WeekLowArrow = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.pic3YearTrend = new System.Windows.Forms.PictureBox();
             this.picYearTrend = new System.Windows.Forms.PictureBox();
@@ -253,7 +255,6 @@ namespace StockApi
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.label65);
             this.panel1.Controls.Add(this.lbl52WeekHigh);
             this.panel1.Controls.Add(this.lbl52WeekLow);
             this.panel1.Controls.Add(this.label63);
@@ -283,28 +284,21 @@ namespace StockApi
             this.panel1.Controls.Add(this.lblVolatility);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label64);
+            this.panel1.Controls.Add(this.lbl52WeekArrow);
+            this.panel1.Controls.Add(this.lbl52WeekLowArrow);
+            this.panel1.Controls.Add(this.lbl52WeekHighArrow);
             this.panel1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel1.Location = new System.Drawing.Point(258, 35);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(364, 625);
             this.panel1.TabIndex = 6;
             // 
-            // label65
-            // 
-            this.label65.BackColor = System.Drawing.Color.Transparent;
-            this.label65.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label65.Location = new System.Drawing.Point(186, 211);
-            this.label65.Name = "label65";
-            this.label65.Size = new System.Drawing.Size(20, 22);
-            this.label65.TabIndex = 49;
-            this.label65.Text = "-";
-            // 
             // lbl52WeekHigh
             // 
             this.lbl52WeekHigh.BackColor = System.Drawing.Color.Transparent;
             this.lbl52WeekHigh.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lbl52WeekHigh.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lbl52WeekHigh.Location = new System.Drawing.Point(196, 211);
+            this.lbl52WeekHigh.Location = new System.Drawing.Point(289, 211);
             this.lbl52WeekHigh.Name = "lbl52WeekHigh";
             this.lbl52WeekHigh.Size = new System.Drawing.Size(58, 22);
             this.lbl52WeekHigh.TabIndex = 48;
@@ -923,6 +917,39 @@ namespace StockApi
             this.label64.Size = new System.Drawing.Size(342, 15);
             this.label64.TabIndex = 64;
             this.label64.Text = "___________________________________________________________________";
+            // 
+            // lbl52WeekHighArrow
+            // 
+            this.lbl52WeekHighArrow.AutoSize = true;
+            this.lbl52WeekHighArrow.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lbl52WeekHighArrow.Location = new System.Drawing.Point(336, 232);
+            this.lbl52WeekHighArrow.Name = "lbl52WeekHighArrow";
+            this.lbl52WeekHighArrow.Size = new System.Drawing.Size(13, 20);
+            this.lbl52WeekHighArrow.TabIndex = 66;
+            this.lbl52WeekHighArrow.Text = "|";
+            this.lbl52WeekHighArrow.UseWaitCursor = true;
+            // 
+            // lbl52WeekArrow
+            // 
+            this.lbl52WeekArrow.AutoSize = true;
+            this.lbl52WeekArrow.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lbl52WeekArrow.ForeColor = System.Drawing.Color.White;
+            this.lbl52WeekArrow.Location = new System.Drawing.Point(329, 228);
+            this.lbl52WeekArrow.Name = "lbl52WeekArrow";
+            this.lbl52WeekArrow.Size = new System.Drawing.Size(20, 17);
+            this.lbl52WeekArrow.TabIndex = 67;
+            this.lbl52WeekArrow.Text = "◆";
+            // 
+            // lbl52WeekLowArrow
+            // 
+            this.lbl52WeekLowArrow.AutoSize = true;
+            this.lbl52WeekLowArrow.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lbl52WeekLowArrow.Location = new System.Drawing.Point(131, 232);
+            this.lbl52WeekLowArrow.Name = "lbl52WeekLowArrow";
+            this.lbl52WeekLowArrow.Size = new System.Drawing.Size(9, 25);
+            this.lbl52WeekLowArrow.TabIndex = 65;
+            this.lbl52WeekLowArrow.Text = "|";
+            this.lbl52WeekLowArrow.UseCompatibleTextRendering = true;
             // 
             // label39
             // 
@@ -1909,11 +1936,13 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem yahooStockQuoteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem finvizToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem apeWisdomToolStripMenuItem;
-        private System.Windows.Forms.Label label65;
         private System.Windows.Forms.Label lbl52WeekHigh;
         private System.Windows.Forms.Label lbl52WeekLow;
         private System.Windows.Forms.Label label63;
         private System.Windows.Forms.Label label64;
+        private System.Windows.Forms.Label lbl52WeekArrow;
+        private System.Windows.Forms.Label lbl52WeekHighArrow;
+        private System.Windows.Forms.Label lbl52WeekLowArrow;
     }
 }
 

@@ -65,7 +65,7 @@ namespace StockApi
             lblFin2YearsAgo.Text = DateTime.Now.AddYears(-2).ToString("yyyy");
             lblFin4YearsAgo.Text = DateTime.Now.AddYears(-4).ToString("yyyy");
 
-            //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
+             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -322,6 +322,11 @@ namespace StockApi
                     lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
                     lbl52WeekLow.Text = _stockSummary.YearsRangeLow.StringValue;
                     lbl52WeekHigh.Text = _stockSummary.YearsRangeHigh.StringValue;
+
+                    int w52 = lbl52WeekHighArrow.Left - lbl52WeekLowArrow.Left; // distance between controls 
+                    decimal range52 = _stockSummary.YearsRangeHigh.NumericValue - _stockSummary.YearsRangeLow.NumericValue; // total price range
+                    decimal perc52 = (_stockSummary.PriceString.NumericValue - _stockSummary.YearsRangeLow.NumericValue) / range52; // percent above low
+                    lbl52WeekArrow.Left = lbl52WeekLowArrow.Left + (int)(perc52 * w52) - 4; // set left of arrow current price
 
                     if (_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
                     {
