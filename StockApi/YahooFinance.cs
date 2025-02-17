@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StockApi
 {
@@ -65,12 +66,23 @@ namespace StockApi
         {
             int loc1 = html.IndexOf("<" + tagName) + 1;
             int loc2 = html.IndexOf("</" + tagName, loc1 + 5); //</title
+            string middle;
+
             if (loc1 == -1)
             {
                 return defaultValue;
             }
 
-            string middle = html.Substring(loc1 + 1 + tagName.Length, loc2 - loc1 - 1);
+            try
+            {
+                middle = html.Substring(loc1 + 1 + tagName.Length, loc2 - loc1 - 1);
+            }
+            catch (System.Exception x)
+            {
+                MessageBox.Show(x.Message + "\n" + html + "\n" + tagName);
+                throw;
+            }
+         
             return middle;
         }
 

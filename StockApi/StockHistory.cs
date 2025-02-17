@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StockApi
 {
@@ -123,58 +124,65 @@ namespace StockApi
 
             List<HistoricPriceData> historicDataList = new List<HistoricPriceData>();
 
-            if (beginDate.DayOfWeek == DayOfWeek.Saturday)
+            try
+            {
+                if (beginDate.DayOfWeek == DayOfWeek.Saturday)
                 beginDate = beginDate.AddDays(-1);
-            if (beginDate.DayOfWeek == DayOfWeek.Sunday)
-                beginDate = beginDate.AddDays(-2);
+                if (beginDate.DayOfWeek == DayOfWeek.Sunday)
+                    beginDate = beginDate.AddDays(-2);
 
-            double totalDays = endDate.Subtract(beginDate).TotalDays;
+                double totalDays = endDate.Subtract(beginDate).TotalDays;
 
-            if (beginDate < DateTime.Today.AddYears(-2))
-            {
-                totalDays = 200;
-                endDate = beginDate.AddDays(200);
+                if (beginDate < DateTime.Today.AddYears(-2))
+                {
+                    totalDays = 200;
+                    endDate = beginDate.AddDays(200);
+                }
+
+                string html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
+
+                for (int i = 0; i < totalDays; i++)
+                {
+                    formattedDate = beginDate.AddDays(i).ToString("MMM dd, yyyy");
+                    int index = html.IndexOf(formattedDate);
+
+                    if (index < 0)
+                    {
+                        formattedDate = beginDate.AddDays(i).ToString("MMM d, yyyy");
+                        index = html.IndexOf(formattedDate);
+                    }
+
+                    if (index < 0)
+                        continue;
+
+                    string htmlForDate = html.Substring(index, 600);
+
+                    var numbers = GetNumbersFromHtml(htmlForDate);
+
+                    if (numbers.Count < 6)
+                    {
+                        numbers.Add("0");
+                    }
+
+                    if (numbers[5].IndexOf(",") < 0)
+                        numbers[5] = "0";
+
+                    HistoricPriceData historicData = new HistoricPriceData();
+
+                    historicData.Ticker = Ticker;
+                    historicData.PriceDate = beginDate.AddDays(i).Date;
+                    historicData.Price = Convert.ToDecimal(numbers[3]);
+                    historicData.Volume = numbers[5];
+
+                    historicDataList.Add(historicData);
+
+                    if (beginDate < DateTime.Today.AddYears(-1) && historicDataList.Count > 3)
+                        break;
+                }
             }
-
-            string html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
-
-            for (int i = 0; i < totalDays; i++)
+            catch (Exception x)
             {
-                formattedDate = beginDate.AddDays(i).ToString("MMM dd, yyyy");
-                int index = html.IndexOf(formattedDate);
-
-                if (index < 0)
-                {
-                    formattedDate = beginDate.AddDays(i).ToString("MMM d, yyyy");
-                    index = html.IndexOf(formattedDate);
-                }
-
-                if (index < 0)
-                    continue;
-
-                string htmlForDate = html.Substring(index, 600);
-
-                var numbers = GetNumbersFromHtml(htmlForDate);
-
-                if (numbers.Count < 6)
-                {
-                    numbers.Add("0");
-                }
-
-                if (numbers[5].IndexOf(",") < 0)
-                    numbers[5] = "0";
-
-                HistoricPriceData historicData = new HistoricPriceData();
-
-                historicData.Ticker = Ticker;
-                historicData.PriceDate = beginDate.AddDays(i).Date;
-                historicData.Price = Convert.ToDecimal(numbers[3]);
-                historicData.Volume = numbers[5];
-
-                historicDataList.Add(historicData);
-
-                if (beginDate < DateTime.Today.AddYears(-1) && historicDataList.Count > 3)
-                    break;
+                MessageBox.Show(x.Source + "\n" + x.Message + " " + ticker + " " + beginDate + " " + endDate);
             }
 
             return historicDataList;

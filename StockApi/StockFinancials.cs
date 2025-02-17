@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StockApi
 {
@@ -262,23 +263,30 @@ namespace StockApi
                     TotalDebt = 0;
                 else
                 {
-                    if (TotalDebtString.IndexOf("B") > 0)
+                    try
                     {
-                        temp = TotalDebtString.Replace("B", "");
-                        TotalDebt = Convert.ToDecimal(temp) * 1000000000;
+                        if (TotalDebtString.IndexOf("B") > 0 || TotalDebtString.IndexOf("T") > 0)
+                        {
+                            temp = TotalDebtString.Replace("B", "").Replace("T", "");
+                            TotalDebt = Convert.ToDecimal(temp) * 1000000000;
+                        }
+                        else if (TotalDebtString.IndexOf("M") > 0)
+                        {
+                            temp = TotalDebtString.Replace("M", "");
+                            TotalDebt = Convert.ToDecimal(temp) * 1000000;
+                        }
+                        else if (TotalDebtString.IndexOf("k") > 0)
+                        {
+                            temp = TotalDebtString.Replace("k", "");
+                            TotalDebt = Convert.ToDecimal(temp) * 1000;
+                        }
+                        else
+                            TotalDebt = Convert.ToDecimal(value);
                     }
-                    else if (TotalDebtString.IndexOf("M") > 0)
+                    catch (Exception x)
                     {
-                        temp = TotalDebtString.Replace("M", "");
-                        TotalDebt = Convert.ToDecimal(temp) * 1000000;
+                        MessageBox.Show(x.Message + "\n" + Ticker + "\n" + value);
                     }
-                    else if (TotalDebtString.IndexOf("k") > 0)
-                    {
-                        temp = TotalDebtString.Replace("k", "");
-                        TotalDebt = Convert.ToDecimal(temp) * 1000;
-                    }
-                    else
-                        TotalDebt = Convert.ToDecimal(value);
                 }
             }
         }
