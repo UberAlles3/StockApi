@@ -119,6 +119,7 @@ namespace StockApi
         public async Task<List<HistoricPriceData>> GetHistoricalDataForDateRange(string ticker, DateTime beginDate, DateTime endDate)
         {
             string formattedDate = "";
+            string html = "";
 
             Ticker = ticker;
 
@@ -139,7 +140,9 @@ namespace StockApi
                     endDate = beginDate.AddDays(200);
                 }
 
-                string html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
+                html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
+                if(html.Length < 4000) // try again
+                    html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
 
                 for (int i = 0; i < totalDays; i++)
                 {
@@ -182,7 +185,7 @@ namespace StockApi
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Source + "\n" + x.Message + " " + ticker + " " + beginDate + " " + endDate);
+                MessageBox.Show(x.Source + x.Message + "\n" + "GetHistoricalDataForDateRange() " + " " + ticker + " " + beginDate + " " + endDate + "\n" + html.Substring(0, 1000));
             }
 
             return historicDataList;

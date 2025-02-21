@@ -264,13 +264,16 @@ namespace StockApi
                 // Extract the individual data values from the html
                 tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
                 await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
+                
                 historicDataList = await _stockHistory.GetHistoricalDataForDateRange(_stockSummary.Ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
                 if (historicDataList.Count > 1)
                     _stockHistory.HistoricData3YearsAgo = historicDataList.First();
                 else if (historicDataList.Count > 0)
                     _stockHistory.HistoricData3YearsAgo = _stockHistory.HistoricDataYearAgo;
-                else
+                else if (historicDataList.Count > 0)
                     _stockHistory.HistoricData3YearsAgo = historicDataList.Last();
+                else
+                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue};
 
                 decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
