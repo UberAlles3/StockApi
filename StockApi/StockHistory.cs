@@ -189,7 +189,7 @@ namespace StockApi
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Source + x.Message + "\n" + "GetHistoricalDataForDateRange() " + " " + ticker + " " + beginDate + " " + endDate + "\n" + html.Substring(0, 1000));
+                MessageBox.Show(x.Source + x.Message + "\n" + "GetHistoricalDataForDateRange() " + " " + ticker + " " + beginDate + " " + endDate + "\n" + html.Substring(0, html.Length/10));
             }
 
             return historicDataList;
