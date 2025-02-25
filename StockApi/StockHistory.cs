@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -142,7 +143,10 @@ namespace StockApi
 
                 html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
                 if(html.Length < 4000) // try again
+                {
+                    Thread.Sleep(2000); 
                     html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
+                }
 
                 for (int i = 0; i < totalDays; i++)
                 {
