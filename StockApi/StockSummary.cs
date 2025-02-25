@@ -2,7 +2,9 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StockApi
 {
@@ -42,6 +44,12 @@ namespace StockApi
 
             string html = await GetHtmlForTicker(_summaryUrl, Ticker);
 
+            if (html.Length < 4000) // try again
+            {
+                Thread.Sleep(2000);
+                html = await GetHtmlForTicker(_summaryUrl, Ticker);
+            }
+
             //html = Regex.Replace(html, @"[^\u0020-\u007e]", "");
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
@@ -53,68 +61,76 @@ namespace StockApi
                 return false;
             }
 
-            // Price
-            string searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
-            PriceString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 1);
-
-            if (verbose == false)
-                return true;
-
-            // EPS
-            searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;
-            EarningsPerShareString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
-
-            // Volatility
-            searchTerm = SearchTerms.Find(x => x.Name == "Volatility").Term;
-            VolatilityString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
-
-            // Dividend
-            searchTerm = SearchTerms.Find(x => x.Name == "Dividend").Term;
-            string dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
-            if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
+            try
             {
-                dividend = dividend.Substring(dividend.IndexOf("(") + 1);
-                dividend = dividend.Substring(0, dividend.IndexOf(")") - 1);
+                // Price
+                string searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
+                PriceString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 1);
+
+                if (verbose == false)
+                    return true;
+
+                // EPS
+                searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;
+                EarningsPerShareString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+
+                // Volatility
+                searchTerm = SearchTerms.Find(x => x.Name == "Volatility").Term;
+                VolatilityString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
+
+                // Dividend
+                searchTerm = SearchTerms.Find(x => x.Name == "Dividend").Term;
+                string dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
+                if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
+                {
+                    dividend = dividend.Substring(dividend.IndexOf("(") + 1);
+                    dividend = dividend.Substring(0, dividend.IndexOf(")") - 1);
+                }
+                else
+                {
+                    searchTerm = "Yield";
+                    dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                }
+                DividendString.StringValue = dividend;
+
+                // One year target
+                searchTerm = SearchTerms.Find(x => x.Name == "One Year Target").Term;
+                OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4).Trim();
+
+                // Price / Book
+                searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
+                PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+
+                //Profit Margin %
+                searchTerm = SearchTerms.Find(x => x.Name == "Profit Margin").Term;
+                string profitMarginString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                if (profitMarginString != YahooFinance.NotApplicable && profitMarginString.IndexOf("%") > 0)
+                    ProfitMarginString.StringValue = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
+                else
+                    ProfitMarginString.StringValue = YahooFinance.NotApplicable;
+
+                // 52 Week Range
+                searchTerm = SearchTerms.Find(x => x.Name == "52 Week Range").Term;
+                string range  = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+                int idx = range.IndexOf("-");
+                if(idx > 0)
+                {
+                    YearsRangeLow.StringValue = range.Substring(0, idx).Trim();
+                    YearsRangeHigh.StringValue = range.Substring(idx+1).Trim();
+                }
+
+                // Company Overview
+                searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
+                string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4000);
+                string[] parts = htmlSnippet.Split(">");
+                string longest = parts.OrderByDescending(s => s.Length).First();
+                CompanyOverview = longest._TrimSuffix("</");
+
             }
-            else
+            catch (Exception x)
             {
-                searchTerm = "Yield";
-                dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                MessageBox.Show(x.Source + x.Message + "\n" + "GetSummaryData() " + " " + ticker + "\n" + html.Substring(0, 1000));
             }
-            DividendString.StringValue = dividend;
-
-            // One year target
-            searchTerm = SearchTerms.Find(x => x.Name == "One Year Target").Term;
-            OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4).Trim();
-
-            // Price / Book
-            searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
-            PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
-
-            //Profit Margin %
-            searchTerm = SearchTerms.Find(x => x.Name == "Profit Margin").Term;
-            string profitMarginString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
-            if (profitMarginString != YahooFinance.NotApplicable && profitMarginString.IndexOf("%") > 0)
-                ProfitMarginString.StringValue = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
-            else
-                ProfitMarginString.StringValue = YahooFinance.NotApplicable;
-
-            // 52 Week Range
-            searchTerm = SearchTerms.Find(x => x.Name == "52 Week Range").Term;
-            string range  = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
-            int idx = range.IndexOf("-");
-            if(idx > 0)
-            {
-                YearsRangeLow.StringValue = range.Substring(0, idx).Trim();
-                YearsRangeHigh.StringValue = range.Substring(idx+1).Trim();
-            }
-
-            // Company Overview
-            searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
-            string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4000);
-            string[] parts = htmlSnippet.Split(">");
-            string longest = parts.OrderByDescending(s => s.Length).First();
-            CompanyOverview = longest._TrimSuffix("</");
 
             //*******************
             //    Set Colors

@@ -373,7 +373,7 @@ namespace StockApi
             string html = await GetHtmlForTicker(_financialsUrl, Ticker);
             if (html.Length < 4000) // try again
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
                 html = await GetHtmlForTicker(_financialsUrl, Ticker);
             }
 
