@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -370,133 +371,145 @@ namespace StockApi
             Ticker = ticker;
 
             string html = await GetHtmlForTicker(_financialsUrl, Ticker);
-
-            // Revenue History
-            string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
-            string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-
-            if (partial.Length < 100) // Some stocks like Vangaurd don't have financials, exit
-                return false; //=====>>>>>>>
-
-            List<string> numbers = GetNumbersFromHtml(partial);
-            numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
-
-            if (numbers.Count > 0)
-                RevenueTtmString = numbers[0];
-            if (numbers.Count > 2)
-                Revenue2String = numbers[2];
-            if (numbers.Count > 4)
-                Revenue4String = numbers[4];
-            else if (numbers.Count > 3)
-                Revenue4String = numbers[3];
-
-            _revenueInMillions = false; // reset
-            if (RevenueTtmString.Length > 7)
+            if (html.Length < 4000) // try again
             {
-                _revenueInMillions = true;
-                RevenueTtmString = RevenueTtmString.Substring(0, RevenueTtmString.Length - 4);
-                if (Revenue2String.Length > 7)
-                    Revenue2String = Revenue2String.Substring(0, Revenue2String.Length - 4);
-                if (Revenue4String.Length > 7)
-                    Revenue4String = Revenue4String.Substring(0, Revenue4String.Length - 4);
+                Thread.Sleep(1000);
+                html = await GetHtmlForTicker(_financialsUrl, Ticker);
             }
 
-            // Cost of Revenue History
-            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
-            partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-            if (partial != "")
+            try
             {
-                numbers = GetNumbersFromHtml(partial);
+                // Revenue History
+                string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
+                string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
+
+                if (partial.Length < 100) // Some stocks like Vangaurd don't have financials, exit
+                    return false; //=====>>>>>>>
+
+                List<string> numbers = GetNumbersFromHtml(partial);
                 numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                 if (numbers.Count > 0)
-                    CostOfRevenueTtmString = numbers[0];
+                    RevenueTtmString = numbers[0];
                 if (numbers.Count > 2)
-                    CostOfRevenue2String = numbers[2];
+                    Revenue2String = numbers[2];
                 if (numbers.Count > 4)
-                    CostOfRevenue4String = numbers[4];
+                    Revenue4String = numbers[4];
                 else if (numbers.Count > 3)
-                    CostOfRevenue4String = numbers[3];
-            }
-            else
-                CostOfRevenueTtmString = CostOfRevenue2String = CostOfRevenue4String = "--";
+                    Revenue4String = numbers[3];
 
-            if (_revenueInMillions && CostOfRevenueTtm != 0 && CostOfRevenueTtmString != "--")
-            {
-                CostOfRevenueTtmString = CostOfRevenueTtmString.Substring(0, CostOfRevenueTtmString.Length - 4);
-                CostOfRevenue2String = CostOfRevenue2String.Substring(0, CostOfRevenue2String.Length - 4);
-                CostOfRevenue4String = CostOfRevenue4String.Substring(0, CostOfRevenue4String.Length - 4);
-            }
+                _revenueInMillions = false; // reset
+                if (RevenueTtmString.Length > 7)
+                {
+                    _revenueInMillions = true;
+                    RevenueTtmString = RevenueTtmString.Substring(0, RevenueTtmString.Length - 4);
+                    if (Revenue2String.Length > 7)
+                        Revenue2String = Revenue2String.Substring(0, Revenue2String.Length - 4);
+                    if (Revenue4String.Length > 7)
+                        Revenue4String = Revenue4String.Substring(0, Revenue4String.Length - 4);
+                }
 
-            html = await GetHtmlForTicker(_statisticsUrl, Ticker);
+                // Cost of Revenue History
+                searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
+                partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
+                if (partial != "")
+                {
+                    numbers = GetNumbersFromHtml(partial);
+                    numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
-            // Total Cash
-            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Cash").Term;
-            TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
-            // Total Debt
-            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Debt").Term;
-            TotalDebtString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
-            // Debt/Equity Ratio
-            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
-            DebtEquityString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
-
-
-            // Short Interest
-            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Short Interest").Term;
-            shortInterestString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
-            if (shortInterestString != YahooFinance.NotApplicable && shortInterestString.IndexOf("%") > 0)
-                ShortInterestString = shortInterestString.Substring(0, shortInterestString.IndexOf("%"));
-            else
-                ShortInterestString = YahooFinance.NotApplicable;
-
-            // Set Colors of Revenue (if revenue decreasing by 5% every 2 years, a problem
-            if (RevenueTtm < (Revenue2 * .95M))
-                RevenueTtmColor = Color.Red;
-            else if (RevenueTtm > (Revenue2 * 1.05M))
-                RevenueTtmColor = Color.Lime;
-            else
-                RevenueTtmColor = Color.LightSteelBlue;
-
-            if (Revenue2 < (Revenue4 * .95M))
-                Revenue2Color = Color.Red;
-            else if (Revenue2 > (Revenue4 * 1.05M))
-                Revenue2Color = Color.Lime;
-            else
-                Revenue2Color = Color.LightSteelBlue;
-
-            // Set Colors of Cost of Revenue (if profit decreasing by 10% every 2 years, a problem
-            if (CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
-            {
-                if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9M))
-                    CostOfRevenueTtmColor = Color.Red;
-                else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.11M))
-                    CostOfRevenueTtmColor = Color.Lime;
+                    if (numbers.Count > 0)
+                        CostOfRevenueTtmString = numbers[0];
+                    if (numbers.Count > 2)
+                        CostOfRevenue2String = numbers[2];
+                    if (numbers.Count > 4)
+                        CostOfRevenue4String = numbers[4];
+                    else if (numbers.Count > 3)
+                        CostOfRevenue4String = numbers[3];
+                }
                 else
-                    CostOfRevenueTtmColor = Color.LightSteelBlue;
+                    CostOfRevenueTtmString = CostOfRevenue2String = CostOfRevenue4String = "--";
 
-                if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .9M))
-                    CostOfRevenue2Color = Color.Red;
-                else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.11M))
-                    CostOfRevenue2Color = Color.Lime;
+                if (_revenueInMillions && CostOfRevenueTtm != 0 && CostOfRevenueTtmString != "--")
+                {
+                    CostOfRevenueTtmString = CostOfRevenueTtmString.Substring(0, CostOfRevenueTtmString.Length - 4);
+                    CostOfRevenue2String = CostOfRevenue2String.Substring(0, CostOfRevenue2String.Length - 4);
+                    CostOfRevenue4String = CostOfRevenue4String.Substring(0, CostOfRevenue4String.Length - 4);
+                }
+
+                html = await GetHtmlForTicker(_statisticsUrl, Ticker);
+
+                // Total Cash
+                searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Cash").Term;
+                TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                // Total Debt
+                searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Debt").Term;
+                TotalDebtString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                // Debt/Equity Ratio
+                searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
+                DebtEquityString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+
+
+                // Short Interest
+                searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Short Interest").Term;
+                shortInterestString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+                if (shortInterestString != YahooFinance.NotApplicable && shortInterestString.IndexOf("%") > 0)
+                    ShortInterestString = shortInterestString.Substring(0, shortInterestString.IndexOf("%"));
                 else
-                    CostOfRevenue2Color = Color.LightSteelBlue;
+                    ShortInterestString = YahooFinance.NotApplicable;
+
+                // Set Colors of Revenue (if revenue decreasing by 5% every 2 years, a problem
+                if (RevenueTtm < (Revenue2 * .95M))
+                    RevenueTtmColor = Color.Red;
+                else if (RevenueTtm > (Revenue2 * 1.05M))
+                    RevenueTtmColor = Color.Lime;
+                else
+                    RevenueTtmColor = Color.LightSteelBlue;
+
+                if (Revenue2 < (Revenue4 * .95M))
+                    Revenue2Color = Color.Red;
+                else if (Revenue2 > (Revenue4 * 1.05M))
+                    Revenue2Color = Color.Lime;
+                else
+                    Revenue2Color = Color.LightSteelBlue;
+
+                // Set Colors of Cost of Revenue (if profit decreasing by 10% every 2 years, a problem
+                if (CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
+                {
+                    if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9M))
+                        CostOfRevenueTtmColor = Color.Red;
+                    else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.11M))
+                        CostOfRevenueTtmColor = Color.Lime;
+                    else
+                        CostOfRevenueTtmColor = Color.LightSteelBlue;
+
+                    if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .9M))
+                        CostOfRevenue2Color = Color.Red;
+                    else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.11M))
+                        CostOfRevenue2Color = Color.Lime;
+                    else
+                        CostOfRevenue2Color = Color.LightSteelBlue;
+                }
+
+                // Set Colors of Total Debt
+                if (TotalDebt > TotalCash * 1.6M)
+                    TotalDebtColor = Color.Red;
+                else if (TotalDebt < TotalCash * .6M)
+                    TotalDebtColor = Color.Lime;
+                else
+                    TotalDebtColor = Color.LightSteelBlue;
+
+                // Set Colors of Debt Equity
+                if (DebtEquity > 60)
+                    DebtEquityColor = Color.Red;
+                else if (DebtEquity < 35)
+                    DebtEquityColor = Color.Lime;
+                else
+                    DebtEquityColor = Color.LightSteelBlue;
             }
-
-            // Set Colors of Total Debt
-            if (TotalDebt > TotalCash * 1.6M)
-                TotalDebtColor = Color.Red;
-            else if (TotalDebt < TotalCash * .6M)
-                TotalDebtColor = Color.Lime;
-            else
-                TotalDebtColor = Color.LightSteelBlue;
-
-            // Set Colors of Debt Equity
-            if (DebtEquity > 60)
-                DebtEquityColor = Color.Red;
-            else if (DebtEquity < 35)
-                DebtEquityColor = Color.Lime;
-            else
-                DebtEquityColor = Color.LightSteelBlue;
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Source + x.Message + "\n" + "GetFinancialData() " + " " + ticker  + "\n" + html.Substring(0, 1000));
+            }
 
             return true;
         }
