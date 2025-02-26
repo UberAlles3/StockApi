@@ -95,9 +95,9 @@ namespace StockApi
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label64 = new System.Windows.Forms.Label();
-            this.lbl52WeekHighArrow = new System.Windows.Forms.Label();
             this.lbl52WeekArrow = new System.Windows.Forms.Label();
             this.lbl52WeekLowArrow = new System.Windows.Forms.Label();
+            this.lbl52WeekHighArrow = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.pic3YearTrend = new System.Windows.Forms.PictureBox();
             this.picYearTrend = new System.Windows.Forms.PictureBox();
@@ -918,17 +918,6 @@ namespace StockApi
             this.label64.TabIndex = 64;
             this.label64.Text = "___________________________________________________________________";
             // 
-            // lbl52WeekHighArrow
-            // 
-            this.lbl52WeekHighArrow.AutoSize = true;
-            this.lbl52WeekHighArrow.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lbl52WeekHighArrow.Location = new System.Drawing.Point(336, 232);
-            this.lbl52WeekHighArrow.Name = "lbl52WeekHighArrow";
-            this.lbl52WeekHighArrow.Size = new System.Drawing.Size(13, 20);
-            this.lbl52WeekHighArrow.TabIndex = 66;
-            this.lbl52WeekHighArrow.Text = "|";
-            this.lbl52WeekHighArrow.UseWaitCursor = true;
-            // 
             // lbl52WeekArrow
             // 
             this.lbl52WeekArrow.AutoSize = true;
@@ -950,6 +939,17 @@ namespace StockApi
             this.lbl52WeekLowArrow.TabIndex = 65;
             this.lbl52WeekLowArrow.Text = "|";
             this.lbl52WeekLowArrow.UseCompatibleTextRendering = true;
+            // 
+            // lbl52WeekHighArrow
+            // 
+            this.lbl52WeekHighArrow.AutoSize = true;
+            this.lbl52WeekHighArrow.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lbl52WeekHighArrow.Location = new System.Drawing.Point(336, 232);
+            this.lbl52WeekHighArrow.Name = "lbl52WeekHighArrow";
+            this.lbl52WeekHighArrow.Size = new System.Drawing.Size(13, 20);
+            this.lbl52WeekHighArrow.TabIndex = 66;
+            this.lbl52WeekHighArrow.Text = "|";
+            this.lbl52WeekHighArrow.UseWaitCursor = true;
             // 
             // label39
             // 
@@ -1344,9 +1344,9 @@ namespace StockApi
             this.label38.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.label38.Location = new System.Drawing.Point(318, 186);
             this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(36, 15);
+            this.label38.Size = new System.Drawing.Size(42, 15);
             this.label38.TabIndex = 37;
-            this.label38.Text = "Good";
+            this.label38.Text = "Bullish";
             // 
             // label37
             // 
@@ -1355,9 +1355,9 @@ namespace StockApi
             this.label37.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.label37.Location = new System.Drawing.Point(86, 186);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(27, 15);
+            this.label37.Size = new System.Drawing.Size(45, 15);
             this.label37.TabIndex = 36;
-            this.label37.Text = "Bad";
+            this.label37.Text = "Bearish";
             // 
             // trackBar1
             // 
@@ -1371,14 +1371,13 @@ namespace StockApi
             // 
             // label36
             // 
-            this.label36.AutoSize = true;
             this.label36.BackColor = System.Drawing.Color.Transparent;
             this.label36.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.label36.Location = new System.Drawing.Point(12, 171);
+            this.label36.Location = new System.Drawing.Point(12, 164);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(60, 15);
+            this.label36.Size = new System.Drawing.Size(68, 41);
             this.label36.TabIndex = 34;
-            this.label36.Text = "Economy:";
+            this.label36.Text = "Market Sentiment:";
             // 
             // label28
             // 
