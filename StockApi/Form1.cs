@@ -16,15 +16,16 @@ namespace StockApi
     public partial class Form1 : Form
     {
         List<Setting> _settings = new List<Setting>();
-        private static bool tickerFound = false; 
+        private static bool _tickerFound = false; 
         private static StockSummary _stockSummary = new StockSummary();
         private static StockFinancials _stockFinancials = new StockFinancials();
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
         private static DataTable _tradesDataTable = null;
-        private static DataTable _tickerTradesDataTable = null;
         private static string _tradesExcelFilePath = "";
         private static DateTime _tradesImportDateTime = DateTime.Now;
+
+        public static DataTable TickerTradesDataTable = null;
 
         public Form1()
         {
@@ -104,11 +105,11 @@ namespace StockApi
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
             // Extract the individual data values from the html
-            tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
+            _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
 
-            if (tickerFound)
+            if (_tickerFound)
             {
-                _tickerTradesDataTable = null;
+                TickerTradesDataTable = null;
                 int DateColumn = 0;
 
                 GetFinancials();
@@ -142,11 +143,11 @@ namespace StockApi
 
                 if (_tradesDataTable.Rows.Count > 0 && tickerTrades.Count() > 0)
                 {
-                    _tickerTradesDataTable = tickerTrades.Where(r => r[3].ToString() != "0").CopyToDataTable();
+                    TickerTradesDataTable = tickerTrades.Where(r => r[3].ToString() != "0").CopyToDataTable();
 
                     // bind data list to trades grid control
                     BindingSource tradeSource = new BindingSource();
-                    tradeSource.DataSource = _tickerTradesDataTable;
+                    tradeSource.DataSource = TickerTradesDataTable;
                     dataGridView2.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
                     dataGridView2.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
                     dataGridView2.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
@@ -182,7 +183,7 @@ namespace StockApi
                 }
                 else
                 {
-                    if (_tickerTradesDataTable != null)
+                    if (TickerTradesDataTable != null)
                         dataGridView2.Rows.Clear();
                     else
                         dataGridView2.DataSource = null;
@@ -273,7 +274,7 @@ namespace StockApi
                 txtTickerList.Text += ".";
 
                 // Extract the individual data values from the html
-                tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
                 await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
                 
                 historicDataList = await _stockHistory.GetHistoricalDataForDateRange(_stockSummary.Ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
@@ -321,7 +322,7 @@ namespace StockApi
             {
                 btnGetOne.Enabled = true;
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
-                if(tickerFound)
+                if(_tickerFound)
                 {
                     lblPrice.Text = _stockSummary.PriceString.NumericValue.ToString("####.00");
                     lblVolatility.Text = _stockSummary.VolatilityString.StringValue;
@@ -351,9 +352,9 @@ namespace StockApi
                         lbl52WeekArrow.Visible = false;
                     }
 
-                    if (_tickerTradesDataTable != null && _tickerTradesDataTable.Rows.Count > 0)
+                    if (TickerTradesDataTable != null && TickerTradesDataTable.Rows.Count > 0)
                     {
-                        DataRow latestRow = _tickerTradesDataTable.Rows[0];
+                        DataRow latestRow = TickerTradesDataTable.Rows[0];
                         txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
                         if (txtSharesOwned.Text.Trim() == "")
                             txtSharesOwned.Text = "1";
@@ -376,7 +377,7 @@ namespace StockApi
                         float current;
                         int i = 0;
                         // Color trades based on groups of 5 rows, the high and low for the 5 rows
-                        foreach (DataRow r in _tickerTradesDataTable.Rows)
+                        foreach (DataRow r in TickerTradesDataTable.Rows)
                         {
                             // Color Buy and Sells
                             if (r.ItemArray[2].ToString().Trim().ToLower() == "buy")
@@ -388,23 +389,23 @@ namespace StockApi
                             if (i % 1 == 0) // every 2nd pass, evaluate
                             {
                                 // Find Min, Max trade price
-                                min = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
+                                min = TickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
                                     .Min(row => row[5])
                                     .ToString();
-                                max = _tickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
+                                max = TickerTradesDataTable.Select().Skip(i).Take(5).AsEnumerable()
                                     .Max(row => row[5])
                                     .ToString();
 
-                                for (i2 = i; i2 < i + Math.Min(5, (_tickerTradesDataTable.Rows.Count)) && i < _tickerTradesDataTable.Rows.Count - Math.Min(4, (_tickerTradesDataTable.Rows.Count - 1)); i2++)
+                                for (i2 = i; i2 < i + Math.Min(5, (TickerTradesDataTable.Rows.Count)) && i < TickerTradesDataTable.Rows.Count - Math.Min(4, (TickerTradesDataTable.Rows.Count - 1)); i2++)
                                 {
-                                    if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max) // High - Green coloring
+                                    if (TickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max) // High - Green coloring
                                     {
                                         current = previous = 0;
                                         try
                                         {
                                             if(i2 > 0)
-                                                previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
-                                            current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
+                                                previous = float.Parse(TickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                            current = float.Parse(TickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                         }
                                         catch { } // eat the error
                                         if (current > previous)
@@ -414,17 +415,17 @@ namespace StockApi
                                                 dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
                                         }
                                     }
-                                    if (_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min) // Low - Red coloring
+                                    if (TickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min) // Low - Red coloring
                                     {
                                         // get previous, if previous < than this low, don't color and leave previous alone
                                         current = previous = 0;
                                         try
                                         {
                                             if (i2 > 0)
-                                                previous = float.Parse(_tickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                                                previous = float.Parse(TickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
                                             else
                                                 previous = 10000;
-                                            current = float.Parse(_tickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
+                                            current = float.Parse(TickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                         }
                                         catch { } // eat the error
                                         if (current < previous)

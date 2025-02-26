@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 
 namespace StockApi
@@ -48,6 +51,36 @@ namespace StockApi
                 priceTrendMetric = .96M;
             else if (stockHistory.HistoricDataToday.Price < stockHistory.HistoricData3YearsAgo.Price * 0.93M)
                 priceTrendMetric = .98M;
+
+            // Consecutive buys or sells
+            List<DataRow> drList =  Form1.TickerTradesDataTable.Select().Take(3).ToList();
+            int buys = 0;
+            int sells = 0;
+            foreach (DataRow dr in drList)
+            {
+                if (dr.ItemArray[2].ToString() == "Buy")
+                {
+                    if (sells > 0)
+                        break;
+                    buys++;
+                }
+                if (dr.ItemArray[2].ToString() == "Sell")
+                {
+                    if (buys > 0)
+                        break;
+                    sells++;
+                }
+            }
+
+            if (buys == 2)
+                priceTrendMetric = (priceTrendMetric + 1) / 2 - .02M;
+            if (buys == 3)
+                priceTrendMetric = (priceTrendMetric + 1) / 2 - .03M;
+            if (sells == 2)
+                priceTrendMetric = (priceTrendMetric + 1) / 2 + .02M;
+            if (sells == 3)
+                priceTrendMetric = (priceTrendMetric + 1) / 2 + .03M;
+
 
 
             output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".00")}");
