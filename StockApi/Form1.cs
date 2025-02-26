@@ -471,7 +471,7 @@ namespace StockApi
             analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
-            analyzeInputs.EconomyHealth = trackBar1.Value;
+            analyzeInputs.MarketHealth = trackBar1.Value;
 
             _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs);
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;

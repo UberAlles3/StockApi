@@ -37,7 +37,7 @@ namespace StockApi
             // Long Term Price Trend
             decimal priceTrendMetric = 1M;
             if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 1.6M)
-                priceTrendMetric = 1.1M;
+                priceTrendMetric = 1.08M;
             else if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 1.2M)
                 priceTrendMetric = 1.05M;
             else if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 1.1M)
@@ -172,9 +172,9 @@ namespace StockApi
                 cashDebtMetric = cashDebtMetric * .96M;
             output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".00")}");
 
-            // Economy
-            decimal ecoMetric = 1 + ((analyzeInputs.EconomyHealth - 5) / 100);
-            output.AppendLine($"Economy Metric = {ecoMetric.ToString(".00")}");
+            // Market
+            decimal ecoMetric = 1 + ((analyzeInputs.MarketHealth - 5) / 50);
+            output.AppendLine($"Market Metric = {ecoMetric.ToString(".00")}");
 
             decimal totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * ProfitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric;
             output.AppendLine($"----------------------------------------------------");
@@ -340,7 +340,7 @@ namespace StockApi
             public int QuantityTraded;
             public decimal SharesTradedPrice;
             public decimal MovementTargetPercent;
-            public decimal EconomyHealth;
+            public decimal MarketHealth;
         }
     }
 }
