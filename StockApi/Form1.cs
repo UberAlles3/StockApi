@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -89,6 +90,15 @@ namespace StockApi
                 //_trades.DefaultView.Sort = "Date desc";
 
                 _tradesImportDateTime = DateTime.Now; // Update when the last import took place
+
+                /////////// Set Bullish / Bearish scale
+                // Get DOW level from a month ago
+                var tickerTrades = _tradesDataTable.AsEnumerable().Where(x => DateTime.ParseExact(x[0].ToString(), "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-30) && x[1].ToString().Trim() != "").ToList();
+                // get first and last row's DOW
+                float oneMonthAgoDOW = Convert.ToInt32(tickerTrades.First().ItemArray[1].ToString());
+                float currentDOW = Convert.ToInt32(tickerTrades.Last().ItemArray[1].ToString());
+                float perc = (currentDOW - oneMonthAgoDOW) / (currentDOW + oneMonthAgoDOW) * 120;
+                trackBar1.Value = 5 + Convert.ToInt32(perc); 
             }
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
