@@ -25,7 +25,7 @@ namespace StockApi
         public string CompanyOverview = "";
         public string Sector = "";
         public int AverageSectorPE = 20;
-        public Dictionary<string, int> _sectors = new Dictionary<string, int>() { { "Technology", 35 }, { "Energy", 15 }, { "Materials", 25 }, { "Industrials", 26 }, { "Utilities", 21 }, { "Healthcare", 20 }, { "Real Estate", 36 }, { "Financials Services", 16 }, { "Communication Services", 21 }, { "Consumer Defensive", 24 } };
+        public Dictionary<string, int> _sectors = new Dictionary<string, int>() { { "Technology", 35 }, { "Energy", 15 }, { "Materials", 25 }, { "Industrials", 26 }, { "Utilities", 21 }, { "Healthcare", 20 }, { "Real Estate", 36 }, { "Financial Services", 16 }, { "Communication Services", 21 }, { "Consumer Defensive", 24 } };
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
@@ -132,13 +132,19 @@ namespace StockApi
 
                 // Company Overview
                 searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
-                string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4000);
+                string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4200);
                 string[] parts = htmlSnippet.Split(">");
                 string longest = parts.OrderByDescending(s => s.Length).First();
 
                 int sectorIndex = parts.Select((s, i) => new { i, s }).Where(x => x.s.Contains("Sector<")).Select(t => t.i).First();
                 sectorIndex -= 3;
-                this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
+
+                string[] words = (parts[sectorIndex] + " |").Split(" ");
+                if (words.Length > 2)
+                    this.Sector = words[0] + " " + words[1];
+                else
+                    this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
+                
                 // find average PE for Sector
                 if (_sectors.ContainsKey(Sector))
                     AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;

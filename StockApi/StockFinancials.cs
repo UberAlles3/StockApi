@@ -399,7 +399,7 @@ namespace StockApi
                     Revenue4String = numbers[3].Trim();
 
                 _revenueInMillions = false; // reset
-                if (RevenueTtmString.Length > 7)
+                if (RevenueTtmString.Length > 7 && Revenue4String.Length > 7)
                 {
                     _revenueInMillions = true;
                     RevenueTtmString = RevenueTtmString.Substring(0, RevenueTtmString.Length - 4);

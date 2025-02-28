@@ -41,6 +41,9 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblAvgSectorPE = new System.Windows.Forms.Label();
+            this.label67 = new System.Windows.Forms.Label();
+            this.lblValuation = new System.Windows.Forms.Label();
             this.lblCalculatedPE = new System.Windows.Forms.Label();
             this.label68 = new System.Windows.Forms.Label();
             this.label69 = new System.Windows.Forms.Label();
@@ -174,7 +177,6 @@ namespace StockApi
             this.finvizToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.apeWisdomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.lblValuation = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -264,6 +266,8 @@ namespace StockApi
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.lblAvgSectorPE);
+            this.panel1.Controls.Add(this.label67);
             this.panel1.Controls.Add(this.lblValuation);
             this.panel1.Controls.Add(this.lblCalculatedPE);
             this.panel1.Controls.Add(this.label68);
@@ -310,6 +314,38 @@ namespace StockApi
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(364, 625);
             this.panel1.TabIndex = 6;
+            // 
+            // lblAvgSectorPE
+            // 
+            this.lblAvgSectorPE.BackColor = System.Drawing.Color.Transparent;
+            this.lblAvgSectorPE.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblAvgSectorPE.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblAvgSectorPE.Location = new System.Drawing.Point(193, 53);
+            this.lblAvgSectorPE.Name = "lblAvgSectorPE";
+            this.lblAvgSectorPE.Size = new System.Drawing.Size(28, 22);
+            this.lblAvgSectorPE.TabIndex = 78;
+            this.lblAvgSectorPE.Text = "label70";
+            // 
+            // label67
+            // 
+            this.label67.BackColor = System.Drawing.Color.Transparent;
+            this.label67.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label67.Location = new System.Drawing.Point(159, 53);
+            this.label67.Name = "label67";
+            this.label67.Size = new System.Drawing.Size(33, 24);
+            this.label67.TabIndex = 77;
+            this.label67.Text = "APE: ";
+            // 
+            // lblValuation
+            // 
+            this.lblValuation.BackColor = System.Drawing.Color.Transparent;
+            this.lblValuation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblValuation.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblValuation.Location = new System.Drawing.Point(198, 218);
+            this.lblValuation.Name = "lblValuation";
+            this.lblValuation.Size = new System.Drawing.Size(79, 22);
+            this.lblValuation.TabIndex = 76;
+            this.lblValuation.Text = "Valuation";
             // 
             // lblCalculatedPE
             // 
@@ -363,7 +399,7 @@ namespace StockApi
             this.lblSector.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.lblSector.Location = new System.Drawing.Point(58, 53);
             this.lblSector.Name = "lblSector";
-            this.lblSector.Size = new System.Drawing.Size(109, 22);
+            this.lblSector.Size = new System.Drawing.Size(106, 22);
             this.lblSector.TabIndex = 72;
             this.lblSector.Text = "lblSector";
             // 
@@ -1850,17 +1886,6 @@ namespace StockApi
             this.panel3.Size = new System.Drawing.Size(380, 625);
             this.panel3.TabIndex = 23;
             // 
-            // lblValuation
-            // 
-            this.lblValuation.BackColor = System.Drawing.Color.Transparent;
-            this.lblValuation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblValuation.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblValuation.Location = new System.Drawing.Point(198, 218);
-            this.lblValuation.Name = "lblValuation";
-            this.lblValuation.Size = new System.Drawing.Size(79, 22);
-            this.lblValuation.TabIndex = 76;
-            this.lblValuation.Text = "Valuation";
-            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -2067,6 +2092,8 @@ namespace StockApi
         private System.Windows.Forms.Label label68;
         private System.Windows.Forms.Label label69;
         private System.Windows.Forms.Label lblValuation;
+        private System.Windows.Forms.Label lblAvgSectorPE;
+        private System.Windows.Forms.Label label67;
     }
 }
 

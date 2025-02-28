@@ -301,6 +301,7 @@ namespace StockApi
             _stockSummary = new StockSummary(); // set values to zero
             btnGetAllHistory.Visible = true;
             txtAnalysisOutput.Text = "";
+            lblValuation.Text = "";
             txtTickerList.Text = txtStockTicker.Text;
             pic3YearTrend.Image = picSidewaysTrend.Image;
             picYearTrend.Image = picSidewaysTrend.Image;
@@ -341,6 +342,7 @@ namespace StockApi
                     lblForwardPE.Text = _stockSummary.ForwardPEString.NumericValue.ToString();
                     lblForwardPE.ForeColor = _stockSummary.ForwardPEColor;
                     lblSector.Text = _stockSummary.Sector;
+                    lblAvgSectorPE.Text = _stockSummary.AverageSectorPE.ToString();
 
                     if (_stockSummary.YearsRangeHigh.NumericValue > 0)
                     {
@@ -557,11 +559,50 @@ namespace StockApi
             // 1. Average PE for the sector
             // 2. How large the profits are. We can use current profit margin. >15% is a high profit margin. -15% is a bad profit margin.
             // 3. How fast profits are growing/decreasing. (Current profit / Prior Profit)
-            decimal profitGrowth = _stockFinancials.ProfitTTM / _stockFinancials.Profit4YearsAgo; // Profit growth .5 - 2.0
-                                                                                                  // Combine profit growth and margin into a number
+            decimal profitTTM = _stockFinancials.ProfitTTM + (_stockFinancials.ProfitTTM + _stockFinancials.Profit4YearsAgo) / 3;
+            decimal profit4Year = _stockFinancials.Profit4YearsAgo + (_stockFinancials.ProfitTTM + _stockFinancials.Profit4YearsAgo) / 3;
+
+            if (profit4Year < 0)
+            {
+                if (profitTTM > 0)
+                {
+                    profit4Year = profit4Year + profitTTM;
+                    profitTTM = profitTTM * 3;
+                }
+                else
+                {
+                    profitTTM = profit4Year; // just make it no growth
+                }
+            }
+
+            decimal profitGrowth = 1;
+            if(profit4Year + profitTTM == 0)
+            {
+                profitGrowth = 1;
+            }
+            else
+            {
+                profitGrowth = profitTTM / profit4Year; // Profit growth .5 - 2.0
+            }
+
+            if (profitGrowth > 2) // set max
+                profitGrowth = 2;
+
+            // Combine profit growth and margin into a number
             decimal marginFactor = 1 + (_stockSummary.ProfitMarginString.NumericValue / 100M);
-            _stockSummary.CalculatedPEString.NumericValue = _stockSummary.ForwardPEString.NumericValue / (marginFactor * profitGrowth);
+            _stockSummary.CalculatedPEString.StringValue = (_stockSummary.ForwardPEString.NumericValue / (marginFactor * profitGrowth)).ToString("0.00");
             lblCalculatedPE.Text = _stockSummary.CalculatedPEString.StringValue;
+
+            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Way over valued
+            {
+                lblValuation.ForeColor = Color.Red;
+                lblValuation.Text = "Overvalued";
+            }
+            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Way over valued
+            {
+                lblValuation.ForeColor = Color.Lime;
+                lblValuation.Text = "Undervalued";
+            }
         }
 
         private async void btnGetAllHistory_Click(object sender, EventArgs e)
