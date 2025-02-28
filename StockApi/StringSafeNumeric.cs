@@ -64,7 +64,11 @@ namespace StockApi
         public T NumericValue
         {
             get { return _numericValue; }
-            set { _numericValue = value; }
+            set 
+            { 
+                _numericValue = value;
+                _stringValue = value.ToString();
+            }
         }
 
         public override string ToString()

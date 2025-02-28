@@ -39,6 +39,7 @@ namespace StockApi
         public StringSafeNumeric<Decimal> YearsRangeLow = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> YearsRangeHigh = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> ForwardPEString = new StringSafeNumeric<decimal>("--");
+        public StringSafeNumeric<Decimal> CalculatedPEString = new StringSafeNumeric<decimal>("--");
 
         ////////////////////////////////////////////
         ///                Methods
@@ -180,6 +181,7 @@ namespace StockApi
                 OneYearTargetColor = Color.Red;
             else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
                 OneYearTargetColor = Color.Lime;
+            
             if (ForwardPEString.NumericValue > 50)
                 ForwardPEColor = Color.Red;
             else if (ForwardPEString.NumericValue < 15)

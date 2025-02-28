@@ -552,6 +552,16 @@ namespace StockApi
             lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
             lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
             panelFinancials.Visible = true;
+
+            // Forward PE coloring is complex. It takes into account
+            // 1. Average PE for the sector
+            // 2. How large the profits are. We can use current profit margin. >15% is a high profit margin. -15% is a bad profit margin.
+            // 3. How fast profits are growing/decreasing. (Current profit / Prior Profit)
+            decimal profitGrowth = _stockFinancials.ProfitTTM / _stockFinancials.Profit4YearsAgo; // Profit growth .5 - 2.0
+                                                                                                  // Combine profit growth and margin into a number
+            decimal marginFactor = 1 + (_stockSummary.ProfitMarginString.NumericValue / 100M);
+            _stockSummary.CalculatedPEString.NumericValue = _stockSummary.ForwardPEString.NumericValue / (marginFactor * profitGrowth);
+            lblCalculatedPE.Text = _stockSummary.CalculatedPEString.StringValue;
         }
 
         private async void btnGetAllHistory_Click(object sender, EventArgs e)
