@@ -330,9 +330,9 @@ namespace StockApi
             // 
             this.label67.BackColor = System.Drawing.Color.Transparent;
             this.label67.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label67.Location = new System.Drawing.Point(159, 53);
+            this.label67.Location = new System.Drawing.Point(164, 53);
             this.label67.Name = "label67";
-            this.label67.Size = new System.Drawing.Size(33, 24);
+            this.label67.Size = new System.Drawing.Size(32, 24);
             this.label67.TabIndex = 77;
             this.label67.Text = "APE: ";
             // 
@@ -397,7 +397,7 @@ namespace StockApi
             this.lblSector.BackColor = System.Drawing.Color.Transparent;
             this.lblSector.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblSector.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblSector.Location = new System.Drawing.Point(58, 53);
+            this.lblSector.Location = new System.Drawing.Point(57, 53);
             this.lblSector.Name = "lblSector";
             this.lblSector.Size = new System.Drawing.Size(106, 22);
             this.lblSector.TabIndex = 72;
