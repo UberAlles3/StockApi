@@ -390,13 +390,13 @@ namespace StockApi
                 numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                 if (numbers.Count > 0)
-                    RevenueTtmString = numbers[0];
+                    RevenueTtmString = numbers[0].Trim();
                 if (numbers.Count > 2)
-                    Revenue2String = numbers[2];
+                    Revenue2String = numbers[2].Trim();
                 if (numbers.Count > 4)
-                    Revenue4String = numbers[4];
+                    Revenue4String = numbers[4].Trim();
                 else if (numbers.Count > 3)
-                    Revenue4String = numbers[3];
+                    Revenue4String = numbers[3].Trim();
 
                 _revenueInMillions = false; // reset
                 if (RevenueTtmString.Length > 7)
@@ -418,13 +418,13 @@ namespace StockApi
                     numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                     if (numbers.Count > 0)
-                        CostOfRevenueTtmString = numbers[0];
+                        CostOfRevenueTtmString = numbers[0].Trim();
                     if (numbers.Count > 2)
-                        CostOfRevenue2String = numbers[2];
+                        CostOfRevenue2String = numbers[2].Trim();
                     if (numbers.Count > 4)
-                        CostOfRevenue4String = numbers[4];
+                        CostOfRevenue4String = numbers[4].Trim();
                     else if (numbers.Count > 3)
-                        CostOfRevenue4String = numbers[3];
+                        CostOfRevenue4String = numbers[3].Trim();
                 }
                 else
                     CostOfRevenueTtmString = CostOfRevenue2String = CostOfRevenue4String = "--";

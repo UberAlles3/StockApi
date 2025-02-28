@@ -1,5 +1,6 @@
 ﻿using Drake.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -18,9 +19,13 @@ namespace StockApi
         public Color PriceBookColor = Color.LightSteelBlue;
         public Color ProfitMarginColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
+        public Color ForwardPEColor = Color.LightSteelBlue;
 
         private string companyName = "";
         public string CompanyOverview = "";
+        public string Sector = "";
+        public int AverageSectorPE = 20;
+        public Dictionary<string, int> _sectors = new Dictionary<string, int>() { { "Technology", 35 }, { "Energy", 15 }, { "Materials", 25 }, { "Industrials", 26 }, { "Utilities", 21 }, { "Healthcare", 20 }, { "Real Estate", 36 }, { "Financials Services", 16 }, { "Communication Services", 21 }, { "Consumer Defensive", 24 } };
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
@@ -33,6 +38,7 @@ namespace StockApi
         public StringSafeNumeric<Decimal> VolatilityString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> YearsRangeLow = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> YearsRangeHigh = new StringSafeNumeric<decimal>("--");
+        public StringSafeNumeric<Decimal> ForwardPEString = new StringSafeNumeric<decimal>("--");
 
         ////////////////////////////////////////////
         ///                Methods
@@ -111,19 +117,33 @@ namespace StockApi
 
                 // 52 Week Range
                 searchTerm = SearchTerms.Find(x => x.Name == "52 Week Range").Term;
-                string range  = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+                string range = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
                 int idx = range.IndexOf("-");
-                if(idx > 0)
+                if (idx > 0)
                 {
                     YearsRangeLow.StringValue = range.Substring(0, idx).Trim();
-                    YearsRangeHigh.StringValue = range.Substring(idx+1).Trim();
+                    YearsRangeHigh.StringValue = range.Substring(idx + 1).Trim();
                 }
+
+                // Forward P/E
+                searchTerm = SearchTerms.Find(x => x.Name == "Forward P/E").Term;
+                ForwardPEString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
                 // Company Overview
                 searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
                 string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4000);
                 string[] parts = htmlSnippet.Split(">");
                 string longest = parts.OrderByDescending(s => s.Length).First();
+
+                int sectorIndex = parts.Select((s, i) => new { i, s }).Where(x => x.s.Contains("Sector<")).Select(t => t.i).First();
+                sectorIndex -= 3;
+                this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
+                // find average PE for Sector
+                if (_sectors.ContainsKey(Sector))
+                    AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;
+                else
+                    AverageSectorPE = 20;
+
                 CompanyOverview = longest._TrimSuffix("</");
 
             }
@@ -160,6 +180,12 @@ namespace StockApi
                 OneYearTargetColor = Color.Red;
             else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
                 OneYearTargetColor = Color.Lime;
+            if (ForwardPEString.NumericValue > 50)
+                ForwardPEColor = Color.Red;
+            else if (ForwardPEString.NumericValue < 15)
+                ForwardPEColor = Color.Lime;
+            else
+                ForwardPEColor = Color.LightSteelBlue;
 
             return true;
         }

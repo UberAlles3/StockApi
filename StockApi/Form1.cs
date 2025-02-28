@@ -338,8 +338,11 @@ namespace StockApi
                     lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
                     lbl52WeekLow.Text = _stockSummary.YearsRangeLow.StringValue;
                     lbl52WeekHigh.Text = _stockSummary.YearsRangeHigh.StringValue;
+                    lblForwardPE.Text = _stockSummary.ForwardPEString.NumericValue.ToString();
+                    lblForwardPE.ForeColor = _stockSummary.ForwardPEColor;
+                    lblSector.Text = _stockSummary.Sector;
 
-                    if(_stockSummary.YearsRangeHigh.NumericValue > 0)
+                    if (_stockSummary.YearsRangeHigh.NumericValue > 0)
                     {
                         lbl52WeekArrow.Visible = true;
                         int w52 = lbl52WeekHighArrow.Left - lbl52WeekLowArrow.Left; // distance between controls 
