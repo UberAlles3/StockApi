@@ -97,6 +97,14 @@ namespace StockApi
                 }
             }
         }
+        public decimal TotalDebt
+        {
+            get => totalDebt;
+            set
+            {
+                totalDebt = value;
+            }
+        }
 
         private decimal ConvertNumericSuffix(string value)
         {
@@ -122,16 +130,6 @@ namespace StockApi
                 number = Convert.ToDecimal(value);
             return number;
         }
-
-        public decimal TotalDebt
-        {
-            get => totalDebt;
-            set
-            {
-                totalDebt = value;
-            }
-        }
-
 
         /////////////////// Short Interest
         public Color ShortInterestColor = Color.LightSteelBlue;
@@ -163,7 +161,10 @@ namespace StockApi
                     ShortInterestColor = Color.LightSteelBlue;
             }
         }
-
+        private bool NotNumber(string value)
+        {
+            return value == YahooFinance.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;
+        }
 
 
         ////////////////////////////////////////////
@@ -351,10 +352,6 @@ namespace StockApi
             }
 
             return true;
-        }
-        private bool NotNumber(string value)
-        {
-            return value == YahooFinance.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;
         }
     }
 }
