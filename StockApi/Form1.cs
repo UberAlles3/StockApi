@@ -536,17 +536,21 @@ namespace StockApi
 
             // Cost of Revenue
             lblFinCostRevTTM.Text = _stockFinancials.CostOfRevenueTtmString;
-            lblFinCostRevTTM.ForeColor = _stockFinancials.CostOfRevenueTtmColor;
             lblFinCostRev2YearsAgo.Text = _stockFinancials.CostOfRevenue2String;
-            lblFinCostRev2YearsAgo.ForeColor = _stockFinancials.CostOfRevenue2Color;
             lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4String;
 
             // Operating Expense
             lblOperExpTTM.Text = _stockFinancials.OperatingExpenseTtmString;
-            lblOperExpTTM.ForeColor = _stockFinancials.OperatingExpenseTtmColor;
             lblOperExp2YearsAgo.Text = _stockFinancials.OperatingExpense2String;
-            lblOperExp2YearsAgo.ForeColor = _stockFinancials.OperatingExpense2Color;
             lblOperExp4YearsAgo.Text = _stockFinancials.OperatingExpense4String;
+
+            // Operating Profit / Loss
+            lblOperProfitTTM.Text = $"{_stockFinancials.ProfitTTM:n0}";
+            lblOperProfitTTM.ForeColor = _stockFinancials.ProfitTtmColor;
+            lblOperProfit2YearsAgo.Text = $"{_stockFinancials.Profit2YearsAgo:n0}";
+            lblOperProfit2YearsAgo.ForeColor = _stockFinancials.Profit2YearsAgoColor;
+            lblOperProfit4YearsAgo.Text = $"{_stockFinancials.Profit4YearsAgo:n0}";
+            lblOperProfit4YearsAgo.ForeColor = _stockFinancials.Profit4YearsAgoColor;
 
             // Total Cash
             lblFinTotalCash.Text = _stockFinancials.TotalCashString;

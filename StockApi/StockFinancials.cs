@@ -16,12 +16,17 @@ namespace StockApi
 
         public bool _revenueInMillions = false;
         public decimal ProfitTTM = 0;
+        public Color ProfitTtmColor = Color.LightSteelBlue;
         public decimal Profit2YearsAgo = 0;
+        public Color Profit2YearsAgoColor = Color.LightSteelBlue;
         public decimal Profit4YearsAgo = 0;
+        public Color Profit4YearsAgoColor = Color.LightSteelBlue;
+
 
         ////////////////////////////////////////////
         ///                Properties
         ////////////////////////////////////////////
+        ///
         /////////////////// RevenueTTM
         public Color RevenueTtmColor = Color.LightSteelBlue;
         private string revenueTtmString = NotApplicable;
@@ -104,7 +109,6 @@ namespace StockApi
         }
 
         /////////////////// Cost of RevenueTTM
-        public Color CostOfRevenueTtmColor = Color.LightSteelBlue;
         private string costOfRevenueTtmString = NotApplicable;
         private decimal costOfRevenueTtm = 0;
         public string CostOfRevenueTtmString
@@ -131,7 +135,6 @@ namespace StockApi
         }
 
         /////////////////// Cost of Revenue2
-        public Color CostOfRevenue2Color = Color.LightSteelBlue;
         private string costOfRevenue2String = NotApplicable;
         private decimal costOfRevenue2 = 0;
         public string CostOfRevenue2String
@@ -158,7 +161,6 @@ namespace StockApi
         }
 
         /////////////////// Cost of Revenue4
-        public Color CostOfRevenue4Color = Color.LightSteelBlue;
         private string costOfRevenue4String = NotApplicable;
         private decimal costOfRevenue4 = 0;
         public string CostOfRevenue4String
@@ -185,7 +187,6 @@ namespace StockApi
         }
 
         /////////////////// Operating Expense TTM
-        public Color OperatingExpenseTtmColor = Color.LightSteelBlue;
         private string operatingExpenseTtmString = NotApplicable;
         private decimal operatingExpenseTtm = 0;
         public string OperatingExpenseTtmString
@@ -212,7 +213,6 @@ namespace StockApi
         }
 
         ///////////////////  Operation Expense 2 Year
-        public Color OperatingExpense2Color = Color.LightSteelBlue;
         private string operatingExpense2String = NotApplicable;
         private decimal operatingExpense2 = 0;
         public string OperatingExpense2String
@@ -239,7 +239,6 @@ namespace StockApi
         }
 
         ///////////////////  Operation Expense 4 Year
-        public Color OperatingExpense4Color = Color.LightSteelBlue;
         private string operatingExpense4String = NotApplicable;
         private decimal operatingExpense4 = 0;
         public string OperatingExpense4String
@@ -574,22 +573,22 @@ namespace StockApi
                 else
                     Revenue2Color = Color.LightSteelBlue;
 
-                // Set Colors of Cost of Revenue (if profit decreasing by 10% every 2 years, a problem
-                if (CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
+                // Set Colors for Profits labels (if profit decreasing by 10% every 2 years, a problem
+                if (RevenueTtm > 0 && CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
                 {
                     if (ProfitTTM < Profit2YearsAgo * .9M)
-                        CostOfRevenueTtmColor = Color.Red;
+                        ProfitTtmColor = Color.Red;
                     else if (ProfitTTM > (Profit2YearsAgo * 1.11M))
-                        CostOfRevenueTtmColor = Color.Lime;
+                        ProfitTtmColor = Color.Lime;
                     else
-                        CostOfRevenueTtmColor = Color.LightSteelBlue;
+                        ProfitTtmColor = Color.LightSteelBlue;
 
                     if (Profit2YearsAgo < (Profit4YearsAgo * .9M))
-                        CostOfRevenue2Color = Color.Red;
+                        Profit2YearsAgoColor = Color.Red;
                     else if (Profit2YearsAgo > (Profit4YearsAgo * 1.11M))
-                        CostOfRevenue2Color = Color.Lime;
+                        Profit2YearsAgoColor = Color.Lime;
                     else
-                        CostOfRevenue2Color = Color.LightSteelBlue;
+                        Profit2YearsAgoColor = Color.LightSteelBlue;
                 }
 
                 // Set Colors of Total Debt
