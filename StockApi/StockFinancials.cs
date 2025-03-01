@@ -27,66 +27,15 @@ namespace StockApi
         ///                Properties
         ////////////////////////////////////////////
         ///
-        /////////////////// RevenueTTM
+        /// RevenueTTM
         public StringSafeNumeric<Decimal> RevenueTtmString = new StringSafeNumeric<decimal>("--");
         public Color RevenueTtmColor = Color.LightSteelBlue;
-
-
-
-        /////////////////// Revenue2
+        /// Revenue2
         public StringSafeNumeric<Decimal> Revenue2String = new StringSafeNumeric<decimal>("--");
         public Color Revenue2Color = Color.LightSteelBlue;
-        //private string revenue2String = NotApplicable;
-        //private decimal revenue2 = 0;
-        //public string Revenue2String
-        //{
-        //    get => revenue2String;
-        //    set
-        //    {
-        //        revenue2String = value;
-        //        if (NotNumber(value))
-        //            Revenue2 = 0;
-        //        else
-        //        {
-        //            Revenue2 = Convert.ToDecimal(Revenue2String);
-        //        }
-        //    }
-        //}
-        //public decimal Revenue2
-        //{
-        //    get => revenue2;
-        //    set
-        //    {
-        //        revenue2 = value;
-        //    }
-        //}
-
-        /////////////////// Revenue4
+        /// Revenue4
+        public StringSafeNumeric<Decimal> Revenue4String = new StringSafeNumeric<decimal>("--");
         public Color Revenue4Color = Color.LightSteelBlue;
-        private string revenue4String = NotApplicable;
-        private decimal revenue4 = 0;
-        public string Revenue4String
-        {
-            get => revenue4String;
-            set
-            {
-                revenue4String = value;
-                if (NotNumber(value))
-                    Revenue4 = 0;
-                else
-                {
-                    Revenue4 = Convert.ToDecimal(Revenue4String);
-                }
-            }
-        }
-        public decimal Revenue4
-        {
-            get => revenue4;
-            set
-            {
-                revenue4 = value;
-            }
-        }
 
         /////////////////// Cost of RevenueTTM
         private string costOfRevenueTtmString = NotApplicable;
@@ -440,19 +389,19 @@ namespace StockApi
                 if (numbers.Count > 2)
                     Revenue2String.StringValue = numbers[2].Trim();
                 if (numbers.Count > 4)
-                    Revenue4String = numbers[4].Trim();
+                    Revenue4String.StringValue = numbers[4].Trim();
                 else if (numbers.Count > 3)
-                    Revenue4String = numbers[3].Trim();
+                    Revenue4String.StringValue = numbers[3].Trim();
 
                 _revenueInMillions = false; // reset
-                if (RevenueTtmString.StringValue.Length > 7 && Revenue4String.Length > 7)
+                if (RevenueTtmString.StringValue.Length > 7 && Revenue4String.StringValue.Length > 7)
                 {
                     _revenueInMillions = true;
                     RevenueTtmString.StringValue = RevenueTtmString.StringValue.Substring(0, RevenueTtmString.StringValue.Length - 4);
                     if (Revenue2String.StringValue.Length > 7)
                         Revenue2String.StringValue = Revenue2String.StringValue.Substring(0, Revenue2String.StringValue.Length - 4);
-                    if (Revenue4String.Length > 7)
-                        Revenue4String = Revenue4String.Substring(0, Revenue4String.Length - 4);
+                    if (Revenue4String.StringValue.Length > 7)
+                        Revenue4String.StringValue = Revenue4String.StringValue.Substring(0, Revenue4String.StringValue.Length - 4);
                 }
 
                 // Cost of Revenue History
@@ -513,8 +462,8 @@ namespace StockApi
                     ProfitTTM = RevenueTtmString.NumericValue - CostOfRevenueTtm - OperatingExpenseTtm;
                 if (Revenue2String.NumericValue > 0)
                     Profit2YearsAgo = Revenue2String.NumericValue - CostOfRevenue2 - OperatingExpense2;
-                if (Revenue4 > 0)
-                    Profit4YearsAgo = Revenue4 - CostOfRevenue4 - OperatingExpense4;
+                if (Revenue4String.NumericValue > 0)
+                    Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4 - OperatingExpense4;
 
 
                 html = await GetHtmlForTicker(_statisticsUrl, Ticker);
@@ -546,9 +495,9 @@ namespace StockApi
                 else
                     RevenueTtmColor = Color.LightSteelBlue;
 
-                if (Revenue2String.NumericValue < (Revenue4 * .95M))
+                if (Revenue2String.NumericValue < (Revenue4String.NumericValue * .95M))
                     Revenue2Color = Color.Red;
-                else if (Revenue2String.NumericValue > (Revenue4 * 1.05M))
+                else if (Revenue2String.NumericValue > (Revenue4String.NumericValue * 1.05M))
                     Revenue2Color = Color.Lime;
                 else
                     Revenue2Color = Color.LightSteelBlue;

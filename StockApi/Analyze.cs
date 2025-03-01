@@ -158,19 +158,19 @@ namespace StockApi
             decimal revenueMetric = 1M;
             if (stockFinancials.RevenueTtmString.NumericValue > 0)
             {
-                if (stockFinancials.Revenue4 > 0)
+                if (stockFinancials.Revenue4String.NumericValue > 0)
                 {
-                    if (stockFinancials.Revenue2String.NumericValue > stockFinancials.Revenue4 * 1.05M) // Revenue 2 years ago is 5% above revenue 4 years ago 
+                    if (stockFinancials.Revenue2String.NumericValue > stockFinancials.Revenue4String.NumericValue * 1.05M) // Revenue 2 years ago is 5% above revenue 4 years ago 
                         revenueMetric = 1.025M;
-                    if (stockFinancials.Revenue2String.NumericValue < stockFinancials.Revenue4 * .98M) // Revenue 2 years ago is 1% below revenue 4 years ago 
+                    if (stockFinancials.Revenue2String.NumericValue < stockFinancials.Revenue4String.NumericValue * .98M) // Revenue 2 years ago is 1% below revenue 4 years ago 
                         revenueMetric = .98M;
                     if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue2String.NumericValue * 1.05M) // Revenue TTM is 5% above revenue 2 years ago 
                         revenueMetric = revenueMetric * 1.025M;
                     if (stockFinancials.RevenueTtmString.NumericValue < stockFinancials.Revenue2String.NumericValue * .98M) // Revenue TTM is 1% below revenue 2 years ago 
                         revenueMetric = revenueMetric * .98M;
-                    if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue4 * 1.03M) // Revenue TTM is 5% above revenue 4 years ago 
+                    if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue4String.NumericValue * 1.03M) // Revenue TTM is 5% above revenue 4 years ago 
                         revenueMetric = revenueMetric * 1.01M;
-                    if (stockFinancials.RevenueTtmString.NumericValue < stockFinancials.Revenue4 * .98M) // Revenue TTM is 1% below revenue 4 years ago 
+                    if (stockFinancials.RevenueTtmString.NumericValue < stockFinancials.Revenue4String.NumericValue * .98M) // Revenue TTM is 1% below revenue 4 years ago 
                         revenueMetric = revenueMetric * .99M;
                 }
             }
