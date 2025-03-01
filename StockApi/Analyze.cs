@@ -220,9 +220,9 @@ namespace StockApi
             decimal totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * profitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric;
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
-            if (totalMetric < .85M)
+            if (totalMetric < .8M)
             {
-                totalMetric = .85M;
+                totalMetric = .8M;
                 totalMetricString += $"  low end limited to {totalMetric.ToString(".00")}";
             }
             if (totalMetric > 1.2M)
