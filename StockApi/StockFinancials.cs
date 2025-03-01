@@ -37,8 +37,6 @@ namespace StockApi
                 else
                 {
                     RevenueTtm = Convert.ToDecimal(RevenueTtmString);
-                    if (costOfRevenueTtm > 0)
-                        ProfitTTM = RevenueTtm - CostOfRevenueTtm;
                 }
             }
         }
@@ -48,8 +46,6 @@ namespace StockApi
             set
             {
                 revenueTtm = value;
-                if (costOfRevenueTtm > 0)
-                    ProfitTTM = revenueTtm - costOfRevenueTtm;
             }
         }
 
@@ -68,8 +64,6 @@ namespace StockApi
                 else
                 {
                     Revenue2 = Convert.ToDecimal(Revenue2String);
-                    if (costOfRevenue2 > 0)
-                        Profit2YearsAgo = Revenue2 - CostOfRevenue2;
                 }
             }
         }
@@ -97,8 +91,6 @@ namespace StockApi
                 else
                 {
                     Revenue4 = Convert.ToDecimal(Revenue4String);
-                    if (costOfRevenue4 > 0)
-                        Profit4YearsAgo = Revenue4 - CostOfRevenue4;
                 }
             }
         }
@@ -126,8 +118,6 @@ namespace StockApi
                 else
                 {
                     CostOfRevenueTtm = Convert.ToDecimal(CostOfRevenueTtmString);
-                    if (revenueTtm > 0)
-                        ProfitTTM = RevenueTtm - CostOfRevenueTtm;
                 }
             }
         }
@@ -155,8 +145,6 @@ namespace StockApi
                 else
                 {
                     CostOfRevenue2 = Convert.ToDecimal(CostOfRevenue2String);
-                    if (revenue2 > 0)
-                        Profit2YearsAgo = Revenue2 - CostOfRevenue2;
                 }
             }
         }
@@ -184,8 +172,6 @@ namespace StockApi
                 else
                 {
                     CostOfRevenue4 = Convert.ToDecimal(CostOfRevenue4String);
-                    if (revenue4 > 0)
-                        Profit4YearsAgo = Revenue4 - CostOfRevenue4;
                 }
             }
         }
@@ -195,6 +181,87 @@ namespace StockApi
             set
             {
                 costOfRevenue4 = value;
+            }
+        }
+
+        /////////////////// Operating Expense TTM
+        public Color OperatingExpenseTtmColor = Color.LightSteelBlue;
+        private string operatingExpenseTtmString = NotApplicable;
+        private decimal operatingExpenseTtm = 0;
+        public string OperatingExpenseTtmString
+        {
+            get => operatingExpenseTtmString;
+            set
+            {
+                operatingExpenseTtmString = value;
+                if (NotNumber(value))
+                    OperatingExpenseTtm = 0;
+                else
+                {
+                    OperatingExpenseTtm = Convert.ToDecimal(OperatingExpenseTtmString);
+                }
+            }
+        }
+        public decimal OperatingExpenseTtm
+        {
+            get => operatingExpenseTtm;
+            set
+            {
+                operatingExpenseTtm = value;
+            }
+        }
+
+        ///////////////////  Operation Expense 2 Year
+        public Color OperatingExpense2Color = Color.LightSteelBlue;
+        private string operatingExpense2String = NotApplicable;
+        private decimal operatingExpense2 = 0;
+        public string OperatingExpense2String
+        {
+            get => operatingExpense2String;
+            set
+            {
+                operatingExpense2String = value;
+                if (NotNumber(value))
+                    OperatingExpense2 = 0;
+                else
+                {
+                    OperatingExpense2 = Convert.ToDecimal(OperatingExpense2String);
+                }
+            }
+        }
+        public decimal OperatingExpense2
+        {
+            get => operatingExpense2;
+            set
+            {
+                operatingExpense2 = value;
+            }
+        }
+
+        ///////////////////  Operation Expense 4 Year
+        public Color OperatingExpense4Color = Color.LightSteelBlue;
+        private string operatingExpense4String = NotApplicable;
+        private decimal operatingExpense4 = 0;
+        public string OperatingExpense4String
+        {
+            get => operatingExpense4String;
+            set
+            {
+                operatingExpense4String = value;
+                if (NotNumber(value))
+                    OperatingExpense4 = 0;
+                else
+                {
+                    OperatingExpense4 = Convert.ToDecimal(OperatingExpense4String);
+                }
+            }
+        }
+        public decimal OperatingExpense4
+        {
+            get => operatingExpense4;
+            set
+            {
+                operatingExpense4 = value;
             }
         }
 
@@ -436,6 +503,41 @@ namespace StockApi
                     CostOfRevenue4String = CostOfRevenue4String.Substring(0, CostOfRevenue4String.Length - 4);
                 }
 
+                // Operating Expenses
+                searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Operating Expense").Term;
+                partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
+                if (partial != "")
+                {
+                    numbers = GetNumbersFromHtml(partial);
+                    numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
+
+                    if (numbers.Count > 0)
+                        OperatingExpenseTtmString = numbers[0].Trim();
+                    if (numbers.Count > 2)
+                        OperatingExpense2String = numbers[2].Trim();
+                    if (numbers.Count > 4)
+                        OperatingExpense4String = numbers[4].Trim();
+                    else if (numbers.Count > 3)
+                        OperatingExpense4String = numbers[3].Trim();
+                }
+                else
+                    OperatingExpenseTtmString = OperatingExpense2String = OperatingExpense4String = "--";
+
+                if (_revenueInMillions && OperatingExpenseTtm != 0 && OperatingExpenseTtmString != "--")
+                {
+                    OperatingExpenseTtmString = OperatingExpenseTtmString.Substring(0, OperatingExpenseTtmString.Length - 4);
+                    OperatingExpense2String = OperatingExpense2String.Substring(0, OperatingExpense2String.Length - 4);
+                    OperatingExpense4String = OperatingExpense4String.Substring(0, OperatingExpense4String.Length - 4);
+                }
+
+                if (RevenueTtm > 0)
+                    ProfitTTM = RevenueTtm - CostOfRevenueTtm - OperatingExpenseTtm;
+                if (Revenue2 > 0)
+                    Profit2YearsAgo = Revenue2 - CostOfRevenue2 - OperatingExpense2;
+                if (Revenue4 > 0)
+                    Profit4YearsAgo = Revenue4 - CostOfRevenue4 - OperatingExpense4;
+
+
                 html = await GetHtmlForTicker(_statisticsUrl, Ticker);
 
                 // Total Cash
@@ -475,16 +577,16 @@ namespace StockApi
                 // Set Colors of Cost of Revenue (if profit decreasing by 10% every 2 years, a problem
                 if (CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
                 {
-                    if ((RevenueTtm - CostOfRevenueTtm) < ((Revenue2 - CostOfRevenue2) * .9M))
+                    if (ProfitTTM < Profit2YearsAgo * .9M)
                         CostOfRevenueTtmColor = Color.Red;
-                    else if ((RevenueTtm - CostOfRevenueTtm) > ((Revenue2 - CostOfRevenue2) * 1.11M))
+                    else if (ProfitTTM > (Profit2YearsAgo * 1.11M))
                         CostOfRevenueTtmColor = Color.Lime;
                     else
                         CostOfRevenueTtmColor = Color.LightSteelBlue;
 
-                    if ((Revenue2 - CostOfRevenue2) < ((Revenue4 - CostOfRevenue4) * .9M))
+                    if (Profit2YearsAgo < (Profit4YearsAgo * .9M))
                         CostOfRevenue2Color = Color.Red;
-                    else if ((Revenue2 - CostOfRevenue2) > ((Revenue4 - CostOfRevenue4) * 1.11M))
+                    else if (Profit2YearsAgo > (Profit4YearsAgo * 1.11M))
                         CostOfRevenue2Color = Color.Lime;
                     else
                         CostOfRevenue2Color = Color.LightSteelBlue;

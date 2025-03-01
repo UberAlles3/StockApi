@@ -541,6 +541,13 @@ namespace StockApi
             lblFinCostRev2YearsAgo.ForeColor = _stockFinancials.CostOfRevenue2Color;
             lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4String;
 
+            // Operating Expense
+            lblOperExpTTM.Text = _stockFinancials.OperatingExpenseTtmString;
+            lblOperExpTTM.ForeColor = _stockFinancials.OperatingExpenseTtmColor;
+            lblOperExp2YearsAgo.Text = _stockFinancials.OperatingExpense2String;
+            lblOperExp2YearsAgo.ForeColor = _stockFinancials.OperatingExpense2Color;
+            lblOperExp4YearsAgo.Text = _stockFinancials.OperatingExpense4String;
+
             // Total Cash
             lblFinTotalCash.Text = _stockFinancials.TotalCashString;
             // Total Debt
@@ -564,15 +571,16 @@ namespace StockApi
 
             if (profit4Year < 0)
             {
-                if (profitTTM > 0)
-                {
-                    profit4Year = profit4Year + profitTTM;
-                    profitTTM = profitTTM * 3;
-                }
-                else
-                {
-                    profitTTM = profit4Year; // just make it no growth
-                }
+                //if (profitTTM > 0)
+                //{
+                //    profit4Year = profit4Year + profitTTM;
+                //    profitTTM = profitTTM * 3;
+                //}
+                //else
+                //{
+                //    profitTTM = profit4Year; // just make it no growth
+                //}
+                profit4Year = 1;
             }
 
             decimal profitGrowth = 1;
@@ -582,7 +590,7 @@ namespace StockApi
             }
             else
             {
-                profitGrowth = profitTTM / profit4Year; // Profit growth .5 - 2.0
+                profitGrowth = profitTTM / ((profitTTM + profit4Year) / 3); // Profit growth .5 - 2.0
             }
 
             if (profitGrowth > 2) // set max
