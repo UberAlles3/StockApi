@@ -528,9 +528,9 @@ namespace StockApi
                 lblRevenueInMillions.Text = "(all number in thousands)";
 
             // Revenue
-            lblFinRevTTM.Text = _stockFinancials.RevenueTtmString;
+            lblFinRevTTM.Text = _stockFinancials.RevenueTtmString.StringValue;
             lblFinRevTTM.ForeColor = _stockFinancials.RevenueTtmColor;
-            lblFinRev2YearsAgo.Text = _stockFinancials.Revenue2String;
+            lblFinRev2YearsAgo.Text = _stockFinancials.Revenue2String.StringValue;
             lblFinRev2YearsAgo.ForeColor = _stockFinancials.Revenue2Color;
             lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4String;
 

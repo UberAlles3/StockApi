@@ -28,58 +28,38 @@ namespace StockApi
         ////////////////////////////////////////////
         ///
         /////////////////// RevenueTTM
+        public StringSafeNumeric<Decimal> RevenueTtmString = new StringSafeNumeric<decimal>("--");
         public Color RevenueTtmColor = Color.LightSteelBlue;
-        private string revenueTtmString = NotApplicable;
-        private decimal revenueTtm = 0;
-        public string RevenueTtmString
-        {
-            get => revenueTtmString;
-            set
-            {
-                revenueTtmString = value;
-                if (NotNumber(value))
-                    RevenueTtm = 0;
-                else
-                {
-                    RevenueTtm = Convert.ToDecimal(RevenueTtmString);
-                }
-            }
-        }
-        public decimal RevenueTtm
-        {
-            get => revenueTtm;
-            set
-            {
-                revenueTtm = value;
-            }
-        }
+
+
 
         /////////////////// Revenue2
+        public StringSafeNumeric<Decimal> Revenue2String = new StringSafeNumeric<decimal>("--");
         public Color Revenue2Color = Color.LightSteelBlue;
-        private string revenue2String = NotApplicable;
-        private decimal revenue2 = 0;
-        public string Revenue2String
-        {
-            get => revenue2String;
-            set
-            {
-                revenue2String = value;
-                if (NotNumber(value))
-                    Revenue2 = 0;
-                else
-                {
-                    Revenue2 = Convert.ToDecimal(Revenue2String);
-                }
-            }
-        }
-        public decimal Revenue2
-        {
-            get => revenue2;
-            set
-            {
-                revenue2 = value;
-            }
-        }
+        //private string revenue2String = NotApplicable;
+        //private decimal revenue2 = 0;
+        //public string Revenue2String
+        //{
+        //    get => revenue2String;
+        //    set
+        //    {
+        //        revenue2String = value;
+        //        if (NotNumber(value))
+        //            Revenue2 = 0;
+        //        else
+        //        {
+        //            Revenue2 = Convert.ToDecimal(Revenue2String);
+        //        }
+        //    }
+        //}
+        //public decimal Revenue2
+        //{
+        //    get => revenue2;
+        //    set
+        //    {
+        //        revenue2 = value;
+        //    }
+        //}
 
         /////////////////// Revenue4
         public Color Revenue4Color = Color.LightSteelBlue;
@@ -456,21 +436,21 @@ namespace StockApi
                 numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                 if (numbers.Count > 0)
-                    RevenueTtmString = numbers[0].Trim();
+                    RevenueTtmString.StringValue = numbers[0].Trim();
                 if (numbers.Count > 2)
-                    Revenue2String = numbers[2].Trim();
+                    Revenue2String.StringValue = numbers[2].Trim();
                 if (numbers.Count > 4)
                     Revenue4String = numbers[4].Trim();
                 else if (numbers.Count > 3)
                     Revenue4String = numbers[3].Trim();
 
                 _revenueInMillions = false; // reset
-                if (RevenueTtmString.Length > 7 && Revenue4String.Length > 7)
+                if (RevenueTtmString.StringValue.Length > 7 && Revenue4String.Length > 7)
                 {
                     _revenueInMillions = true;
-                    RevenueTtmString = RevenueTtmString.Substring(0, RevenueTtmString.Length - 4);
-                    if (Revenue2String.Length > 7)
-                        Revenue2String = Revenue2String.Substring(0, Revenue2String.Length - 4);
+                    RevenueTtmString.StringValue = RevenueTtmString.StringValue.Substring(0, RevenueTtmString.StringValue.Length - 4);
+                    if (Revenue2String.StringValue.Length > 7)
+                        Revenue2String.StringValue = Revenue2String.StringValue.Substring(0, Revenue2String.StringValue.Length - 4);
                     if (Revenue4String.Length > 7)
                         Revenue4String = Revenue4String.Substring(0, Revenue4String.Length - 4);
                 }
@@ -529,10 +509,10 @@ namespace StockApi
                     OperatingExpense4String = OperatingExpense4String.Substring(0, OperatingExpense4String.Length - 4);
                 }
 
-                if (RevenueTtm > 0)
-                    ProfitTTM = RevenueTtm - CostOfRevenueTtm - OperatingExpenseTtm;
-                if (Revenue2 > 0)
-                    Profit2YearsAgo = Revenue2 - CostOfRevenue2 - OperatingExpense2;
+                if (RevenueTtmString.NumericValue > 0)
+                    ProfitTTM = RevenueTtmString.NumericValue - CostOfRevenueTtm - OperatingExpenseTtm;
+                if (Revenue2String.NumericValue > 0)
+                    Profit2YearsAgo = Revenue2String.NumericValue - CostOfRevenue2 - OperatingExpense2;
                 if (Revenue4 > 0)
                     Profit4YearsAgo = Revenue4 - CostOfRevenue4 - OperatingExpense4;
 
@@ -559,22 +539,22 @@ namespace StockApi
                     ShortInterestString = YahooFinance.NotApplicable;
 
                 // Set Colors of Revenue (if revenue decreasing by 5% every 2 years, a problem
-                if (RevenueTtm < (Revenue2 * .95M))
+                if (RevenueTtmString.NumericValue < (Revenue2String.NumericValue * .95M))
                     RevenueTtmColor = Color.Red;
-                else if (RevenueTtm > (Revenue2 * 1.05M))
+                else if (RevenueTtmString.NumericValue > (Revenue2String.NumericValue * 1.05M))
                     RevenueTtmColor = Color.Lime;
                 else
                     RevenueTtmColor = Color.LightSteelBlue;
 
-                if (Revenue2 < (Revenue4 * .95M))
+                if (Revenue2String.NumericValue < (Revenue4 * .95M))
                     Revenue2Color = Color.Red;
-                else if (Revenue2 > (Revenue4 * 1.05M))
+                else if (Revenue2String.NumericValue > (Revenue4 * 1.05M))
                     Revenue2Color = Color.Lime;
                 else
                     Revenue2Color = Color.LightSteelBlue;
 
                 // Set Colors for Profits labels (if profit decreasing by 10% every 2 years, a problem
-                if (RevenueTtm > 0 && CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
+                if (RevenueTtmString.NumericValue > 0 && CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
                 {
                     if (ProfitTTM < Profit2YearsAgo * .9M)
                         ProfitTtmColor = Color.Red;
