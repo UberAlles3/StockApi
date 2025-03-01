@@ -36,84 +36,38 @@ namespace StockApi
         /// Revenue4
         public StringSafeNumeric<Decimal> Revenue4String = new StringSafeNumeric<decimal>("--");
         public Color Revenue4Color = Color.LightSteelBlue;
-
-        /////////////////// Cost of RevenueTTM
-        private string costOfRevenueTtmString = NotApplicable;
-        private decimal costOfRevenueTtm = 0;
-        public string CostOfRevenueTtmString
-        {
-            get => costOfRevenueTtmString;
-            set
-            {
-                costOfRevenueTtmString = value;
-                if (NotNumber(value))
-                    CostOfRevenueTtm = 0;
-                else
-                {
-                    CostOfRevenueTtm = Convert.ToDecimal(CostOfRevenueTtmString);
-                }
-            }
-        }
-        public decimal CostOfRevenueTtm
-        {
-            get => costOfRevenueTtm;
-            set
-            {
-                costOfRevenueTtm = value;
-            }
-        }
-
-        /////////////////// Cost of Revenue2
-        private string costOfRevenue2String = NotApplicable;
-        private decimal costOfRevenue2 = 0;
-        public string CostOfRevenue2String
-        {
-            get => costOfRevenue2String;
-            set
-            {
-                costOfRevenue2String = value;
-                if (NotNumber(value))
-                    CostOfRevenue2 = 0;
-                else
-                {
-                    CostOfRevenue2 = Convert.ToDecimal(CostOfRevenue2String);
-                }
-            }
-        }
-        public decimal CostOfRevenue2
-        {
-            get => costOfRevenue2;
-            set
-            {
-                costOfRevenue2 = value;
-            }
-        }
-
+        /// Cost of RevenueTTM
+        public StringSafeNumeric<Decimal> CostOfRevenueTtmString = new StringSafeNumeric<decimal>("--");
+        /// Cost of Revenue2
+        public StringSafeNumeric<Decimal> CostOfRevenue2String = new StringSafeNumeric<decimal>("--");
         /////////////////// Cost of Revenue4
-        private string costOfRevenue4String = NotApplicable;
-        private decimal costOfRevenue4 = 0;
-        public string CostOfRevenue4String
-        {
-            get => costOfRevenue4String;
-            set
-            {
-                costOfRevenue4String = value;
-                if (NotNumber(value))
-                    CostOfRevenue4 = 0;
-                else
-                {
-                    CostOfRevenue4 = Convert.ToDecimal(CostOfRevenue4String);
-                }
-            }
-        }
-        public decimal CostOfRevenue4
-        {
-            get => costOfRevenue4;
-            set
-            {
-                costOfRevenue4 = value;
-            }
-        }
+        public StringSafeNumeric<Decimal> CostOfRevenue4String = new StringSafeNumeric<decimal>("--");
+
+
+        //private string costOfRevenue4String = NotApplicable;
+        //private decimal costOfRevenue4 = 0;
+        //public string CostOfRevenue4String
+        //{
+        //    get => costOfRevenue4String;
+        //    set
+        //    {
+        //        costOfRevenue4String = value;
+        //        if (NotNumber(value))
+        //            CostOfRevenue4 = 0;
+        //        else
+        //        {
+        //            CostOfRevenue4 = Convert.ToDecimal(CostOfRevenue4String);
+        //        }
+        //    }
+        //}
+        //public decimal CostOfRevenue4
+        //{
+        //    get => costOfRevenue4;
+        //    set
+        //    {
+        //        costOfRevenue4 = value;
+        //    }
+        //}
 
         /////////////////// Operating Expense TTM
         private string operatingExpenseTtmString = NotApplicable;
@@ -413,22 +367,22 @@ namespace StockApi
                     numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                     if (numbers.Count > 0)
-                        CostOfRevenueTtmString = numbers[0].Trim();
+                        CostOfRevenueTtmString.StringValue = numbers[0].Trim();
                     if (numbers.Count > 2)
-                        CostOfRevenue2String = numbers[2].Trim();
+                        CostOfRevenue2String.StringValue = numbers[2].Trim();
                     if (numbers.Count > 4)
-                        CostOfRevenue4String = numbers[4].Trim();
+                        CostOfRevenue4String.StringValue = numbers[4].Trim();
                     else if (numbers.Count > 3)
-                        CostOfRevenue4String = numbers[3].Trim();
+                        CostOfRevenue4String.StringValue = numbers[3].Trim();
                 }
                 else
-                    CostOfRevenueTtmString = CostOfRevenue2String = CostOfRevenue4String = "--";
+                    CostOfRevenueTtmString.StringValue = CostOfRevenue2String.StringValue = CostOfRevenue4String.StringValue = "--";
 
-                if (_revenueInMillions && CostOfRevenueTtm != 0 && CostOfRevenueTtmString != "--")
+                if (_revenueInMillions && CostOfRevenueTtmString.NumericValue != 0 && CostOfRevenueTtmString.StringValue != "--")
                 {
-                    CostOfRevenueTtmString = CostOfRevenueTtmString.Substring(0, CostOfRevenueTtmString.Length - 4);
-                    CostOfRevenue2String = CostOfRevenue2String.Substring(0, CostOfRevenue2String.Length - 4);
-                    CostOfRevenue4String = CostOfRevenue4String.Substring(0, CostOfRevenue4String.Length - 4);
+                    CostOfRevenueTtmString.StringValue = CostOfRevenueTtmString.StringValue.Substring(0, CostOfRevenueTtmString.StringValue.Length - 4);
+                    CostOfRevenue2String.StringValue = CostOfRevenue2String.StringValue.Substring(0, CostOfRevenue2String.StringValue.Length - 4);
+                    CostOfRevenue4String.StringValue = CostOfRevenue4String.StringValue.Substring(0, CostOfRevenue4String.StringValue.Length - 4);
                 }
 
                 // Operating Expenses
@@ -459,11 +413,11 @@ namespace StockApi
                 }
 
                 if (RevenueTtmString.NumericValue > 0)
-                    ProfitTTM = RevenueTtmString.NumericValue - CostOfRevenueTtm - OperatingExpenseTtm;
+                    ProfitTTM = RevenueTtmString.NumericValue - CostOfRevenueTtmString.NumericValue - OperatingExpenseTtm;
                 if (Revenue2String.NumericValue > 0)
-                    Profit2YearsAgo = Revenue2String.NumericValue - CostOfRevenue2 - OperatingExpense2;
+                    Profit2YearsAgo = Revenue2String.NumericValue - CostOfRevenue2String.NumericValue - OperatingExpense2;
                 if (Revenue4String.NumericValue > 0)
-                    Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4 - OperatingExpense4;
+                    Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4String.NumericValue - OperatingExpense4;
 
 
                 html = await GetHtmlForTicker(_statisticsUrl, Ticker);
@@ -503,7 +457,7 @@ namespace StockApi
                     Revenue2Color = Color.LightSteelBlue;
 
                 // Set Colors for Profits labels (if profit decreasing by 10% every 2 years, a problem
-                if (RevenueTtmString.NumericValue > 0 && CostOfRevenueTtm > 0 && CostOfRevenue4 > 0)
+                if (RevenueTtmString.NumericValue > 0 && CostOfRevenueTtmString.NumericValue > 0 && CostOfRevenue4String.NumericValue > 0)
                 {
                     if (ProfitTTM < Profit2YearsAgo * .9M)
                         ProfitTtmColor = Color.Red;

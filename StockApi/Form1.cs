@@ -535,9 +535,9 @@ namespace StockApi
             lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4String.StringValue;
 
             // Cost of Revenue
-            lblFinCostRevTTM.Text = _stockFinancials.CostOfRevenueTtmString;
-            lblFinCostRev2YearsAgo.Text = _stockFinancials.CostOfRevenue2String;
-            lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4String;
+            lblFinCostRevTTM.Text = _stockFinancials.CostOfRevenueTtmString.StringValue;
+            lblFinCostRev2YearsAgo.Text = _stockFinancials.CostOfRevenue2String.StringValue;
+            lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4String.StringValue;
 
             // Operating Expense
             lblOperExpTTM.Text = _stockFinancials.OperatingExpenseTtmString;
