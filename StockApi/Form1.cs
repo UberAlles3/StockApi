@@ -602,13 +602,13 @@ namespace StockApi
             _stockSummary.Valuation = StockSummary.ValuationEnum.FairValue;
             lblCalculatedPE.Text = _stockSummary.CalculatedPEString.StringValue;
 
-            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Way over valued
+            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
             {
                 lblValuation.ForeColor = Color.Red;
                 lblValuation.Text = "Overvalued";
                 _stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
             }
-            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Way over valued
+            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Under valued
             {
                 lblValuation.ForeColor = Color.Lime;
                 lblValuation.Text = "Undervalued";
