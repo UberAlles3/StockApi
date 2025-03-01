@@ -224,6 +224,7 @@ namespace StockApi
             {
                 totalMetric = .8M;
                 totalMetricString += $"  low end limited to {totalMetric.ToString(".00")}";
+                output.AppendLine($"Liquidate this stock!!!!!");
             }
             if (totalMetric > 1.2M)
             {
