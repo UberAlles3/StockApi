@@ -540,9 +540,9 @@ namespace StockApi
             lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4String.StringValue;
 
             // Operating Expense
-            lblOperExpTTM.Text = _stockFinancials.OperatingExpenseTtmString;
-            lblOperExp2YearsAgo.Text = _stockFinancials.OperatingExpense2String;
-            lblOperExp4YearsAgo.Text = _stockFinancials.OperatingExpense4String;
+            lblOperExpTTM.Text = _stockFinancials.OperatingExpenseTtmString.StringValue;
+            lblOperExp2YearsAgo.Text = _stockFinancials.OperatingExpense2String.StringValue;
+            lblOperExp4YearsAgo.Text = _stockFinancials.OperatingExpense4String.StringValue;
 
             // Operating Profit / Loss
             lblOperProfitTTM.Text = $"{_stockFinancials.ProfitTTM:n0}";
@@ -558,7 +558,7 @@ namespace StockApi
             lblFinTotalDebt.Text = _stockFinancials.TotalDebtString;
             lblFinTotalDebt.ForeColor = _stockFinancials.TotalDebtColor;
             // Debt Equity Ratio
-            lblFinDebtEquity.Text = _stockFinancials.DebtEquityString;
+            lblFinDebtEquity.Text = _stockFinancials.DebtEquityString.StringValue;
             lblFinDebtEquity.ForeColor = _stockFinancials.DebtEquityColor;
 
             // Short Interest

@@ -201,7 +201,7 @@ namespace StockApi
                 cashDebtMetric = .96M;
             else if (stockFinancials.TotalCash > stockFinancials.TotalDebt * 2) // lots of cash compared to debt
                 cashDebtMetric = 1.03M;
-            if (stockFinancials.DebtEquity > 120) // Over 120% D/E is bad
+            if (stockFinancials.DebtEquityString.NumericValue > 120) // Over 120% D/E is bad
                 cashDebtMetric = cashDebtMetric * .96M;
             output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".00")}");
 

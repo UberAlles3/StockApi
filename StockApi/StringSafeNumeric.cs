@@ -21,14 +21,14 @@ namespace StockApi
             set
             {
                 _stringValue = value;
+                string temp = value.Replace("%", "");
 
                 // set the generic numeric type, converting the string to the numeric type
                 switch (Type.GetTypeCode(typeof(T)))
                 {
                     // Built-in Byte type.
                     case TypeCode.Int32:
-                        //_stringValue = value.Replace("%", "");
-                        if (!value.IsInt())
+                        if (!temp.IsInt())
                         {
                             _numericValue = (T)(object)(int)0;
                             if (StringIfNotNumeric != null)
@@ -37,12 +37,11 @@ namespace StockApi
                         else
                         {
                             IsNumeric = true;
-                            _numericValue = (T)(object)Convert.ToInt32(value);
+                            _numericValue = (T)(object)Convert.ToInt32(temp);
                         }
                         break;
                     case TypeCode.Decimal:
-                        //_stringValue = value.Replace("%", "");
-                        if (!value.IsDecimal())
+                        if (!temp.IsDecimal())
                         {
                             _numericValue = (T)(object)(decimal)0;
                             if (StringIfNotNumeric != null)
@@ -51,7 +50,7 @@ namespace StockApi
                         else
                         {
                             IsNumeric = true;
-                            _numericValue = (T)(object)Convert.ToDecimal(value);
+                            _numericValue = (T)(object)Convert.ToDecimal(temp);
                         }
                         break;
                 }

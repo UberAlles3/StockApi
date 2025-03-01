@@ -26,7 +26,7 @@ namespace StockApi
         ////////////////////////////////////////////
         ///                Properties
         ////////////////////////////////////////////
-        ///
+
         /// RevenueTTM
         public StringSafeNumeric<Decimal> RevenueTtmString = new StringSafeNumeric<decimal>("--");
         public Color RevenueTtmColor = Color.LightSteelBlue;
@@ -40,113 +40,18 @@ namespace StockApi
         public StringSafeNumeric<Decimal> CostOfRevenueTtmString = new StringSafeNumeric<decimal>("--");
         /// Cost of Revenue2
         public StringSafeNumeric<Decimal> CostOfRevenue2String = new StringSafeNumeric<decimal>("--");
-        /////////////////// Cost of Revenue4
+        /// Cost of Revenue4
         public StringSafeNumeric<Decimal> CostOfRevenue4String = new StringSafeNumeric<decimal>("--");
-
-
-        //private string costOfRevenue4String = NotApplicable;
-        //private decimal costOfRevenue4 = 0;
-        //public string CostOfRevenue4String
-        //{
-        //    get => costOfRevenue4String;
-        //    set
-        //    {
-        //        costOfRevenue4String = value;
-        //        if (NotNumber(value))
-        //            CostOfRevenue4 = 0;
-        //        else
-        //        {
-        //            CostOfRevenue4 = Convert.ToDecimal(CostOfRevenue4String);
-        //        }
-        //    }
-        //}
-        //public decimal CostOfRevenue4
-        //{
-        //    get => costOfRevenue4;
-        //    set
-        //    {
-        //        costOfRevenue4 = value;
-        //    }
-        //}
-
-        /////////////////// Operating Expense TTM
-        private string operatingExpenseTtmString = NotApplicable;
-        private decimal operatingExpenseTtm = 0;
-        public string OperatingExpenseTtmString
-        {
-            get => operatingExpenseTtmString;
-            set
-            {
-                operatingExpenseTtmString = value;
-                if (NotNumber(value))
-                    OperatingExpenseTtm = 0;
-                else
-                {
-                    OperatingExpenseTtm = Convert.ToDecimal(OperatingExpenseTtmString);
-                }
-            }
-        }
-        public decimal OperatingExpenseTtm
-        {
-            get => operatingExpenseTtm;
-            set
-            {
-                operatingExpenseTtm = value;
-            }
-        }
-
-        ///////////////////  Operation Expense 2 Year
-        private string operatingExpense2String = NotApplicable;
-        private decimal operatingExpense2 = 0;
-        public string OperatingExpense2String
-        {
-            get => operatingExpense2String;
-            set
-            {
-                operatingExpense2String = value;
-                if (NotNumber(value))
-                    OperatingExpense2 = 0;
-                else
-                {
-                    OperatingExpense2 = Convert.ToDecimal(OperatingExpense2String);
-                }
-            }
-        }
-        public decimal OperatingExpense2
-        {
-            get => operatingExpense2;
-            set
-            {
-                operatingExpense2 = value;
-            }
-        }
-
-        ///////////////////  Operation Expense 4 Year
-        private string operatingExpense4String = NotApplicable;
-        private decimal operatingExpense4 = 0;
-        public string OperatingExpense4String
-        {
-            get => operatingExpense4String;
-            set
-            {
-                operatingExpense4String = value;
-                if (NotNumber(value))
-                    OperatingExpense4 = 0;
-                else
-                {
-                    OperatingExpense4 = Convert.ToDecimal(OperatingExpense4String);
-                }
-            }
-        }
-        public decimal OperatingExpense4
-        {
-            get => operatingExpense4;
-            set
-            {
-                operatingExpense4 = value;
-            }
-        }
-
+        /// Operating Expense TTM
+        public StringSafeNumeric<Decimal> OperatingExpenseTtmString = new StringSafeNumeric<decimal>("--");
+        ///  Operation Expense 2 Year
+        public StringSafeNumeric<Decimal> OperatingExpense2String = new StringSafeNumeric<decimal>("--");
+        ///  Operation Expense 4 Year
+        public StringSafeNumeric<Decimal> OperatingExpense4String = new StringSafeNumeric<decimal>("--");
+        /// DebtEquity
+        public StringSafeNumeric<Decimal> DebtEquityString = new StringSafeNumeric<decimal>("--");
+        public Color DebtEquityColor = Color.LightSteelBlue;
+        
         /////////////////// TotalCash
         public Color TotalCashColor = Color.LightSteelBlue;
         private string totalCashString = NotApplicable;
@@ -156,35 +61,12 @@ namespace StockApi
             get => totalCashString;
             set
             {
-                string temp;
-
                 totalCashString = value;
                 if (NotNumber(value))
                     TotalCash = 0;
                 else
                 {
-                    if (TotalCashString.IndexOf("T") > 0)
-                    {
-                        temp = TotalCashString.Replace("T", "");
-                        TotalCash = Convert.ToDecimal(temp) * 1000000000000;
-                    }
-                    else if (TotalCashString.IndexOf("B") > 0)
-                    {
-                        temp = TotalCashString.Replace("B", "");
-                        TotalCash = Convert.ToDecimal(temp) * 1000000000;
-                    }
-                    else if (TotalCashString.IndexOf("M") > 0)
-                    {
-                        temp = TotalCashString.Replace("M", "");
-                        TotalCash = Convert.ToDecimal(temp) * 1000000;
-                    }
-                    else if (TotalCashString.IndexOf("k") > 0)
-                    {
-                        temp = TotalCashString.Replace("k", "");
-                        TotalCash = Convert.ToDecimal(temp) * 1000;
-                    }
-                    else
-                        TotalCash = Convert.ToDecimal(value);
+                    TotalCash = ConvertNumericSuffix(value);
                 }
             }
         }
@@ -206,40 +88,41 @@ namespace StockApi
             get => totalDebtString;
             set
             {
-                string temp;
-
                 totalDebtString = value;
                 if (NotNumber(value))
                     TotalDebt = 0;
                 else
                 {
-                    try
-                    {
-                        if (TotalDebtString.IndexOf("B") > 0 || TotalDebtString.IndexOf("T") > 0)
-                        {
-                            temp = TotalDebtString.Replace("B", "").Replace("T", "");
-                            TotalDebt = Convert.ToDecimal(temp) * 1000000000;
-                        }
-                        else if (TotalDebtString.IndexOf("M") > 0)
-                        {
-                            temp = TotalDebtString.Replace("M", "");
-                            TotalDebt = Convert.ToDecimal(temp) * 1000000;
-                        }
-                        else if (TotalDebtString.IndexOf("k") > 0)
-                        {
-                            temp = TotalDebtString.Replace("k", "");
-                            TotalDebt = Convert.ToDecimal(temp) * 1000;
-                        }
-                        else
-                            TotalDebt = Convert.ToDecimal(value);
-                    }
-                    catch (Exception x)
-                    {
-                        MessageBox.Show(x.Message + "\n" + Ticker + "\n" + value);
-                    }
+                    TotalDebt = ConvertNumericSuffix(value);
                 }
             }
         }
+
+        private decimal ConvertNumericSuffix(string value)
+        {
+            string temp = "";
+            decimal number = 0;
+
+            if (value.IndexOf("B") > 0 || value.IndexOf("T") > 0)
+            {
+                temp = value.Replace("B", "").Replace("T", "");
+                number = Convert.ToDecimal(temp) * 1000000000;
+            }
+            else if (value.IndexOf("M") > 0)
+            {
+                temp = value.Replace("M", "");
+                number = Convert.ToDecimal(temp) * 1000000;
+            }
+            else if (TotalDebtString.IndexOf("k") > 0)
+            {
+                temp = TotalDebtString.Replace("k", "");
+                number = Convert.ToDecimal(temp) * 1000;
+            }
+            else
+                number = Convert.ToDecimal(value);
+            return number;
+        }
+
         public decimal TotalDebt
         {
             get => totalDebt;
@@ -249,34 +132,6 @@ namespace StockApi
             }
         }
 
-        /////////////////// DebtEquity
-        public Color DebtEquityColor = Color.LightSteelBlue;
-        private string debtEquityString = NotApplicable;
-        private decimal debtEquity = 0;
-        public string DebtEquityString
-        {
-            get => debtEquityString;
-            set
-            {
-                string temp = value.Replace("%", "");
-
-                debtEquityString = value;
-                if (NotNumber(temp))
-                    DebtEquity = 0;
-                else
-                {
-                    DebtEquity = Convert.ToDecimal(temp);
-                }
-            }
-        }
-        public decimal DebtEquity
-        {
-            get => debtEquity;
-            set
-            {
-                debtEquity = value;
-            }
-        }
 
         /////////////////// Short Interest
         public Color ShortInterestColor = Color.LightSteelBlue;
@@ -394,30 +249,30 @@ namespace StockApi
                     numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                     if (numbers.Count > 0)
-                        OperatingExpenseTtmString = numbers[0].Trim();
+                        OperatingExpenseTtmString.StringValue = numbers[0].Trim();
                     if (numbers.Count > 2)
-                        OperatingExpense2String = numbers[2].Trim();
+                        OperatingExpense2String.StringValue = numbers[2].Trim();
                     if (numbers.Count > 4)
-                        OperatingExpense4String = numbers[4].Trim();
+                        OperatingExpense4String.StringValue = numbers[4].Trim();
                     else if (numbers.Count > 3)
-                        OperatingExpense4String = numbers[3].Trim();
+                        OperatingExpense4String.StringValue = numbers[3].Trim();
                 }
                 else
-                    OperatingExpenseTtmString = OperatingExpense2String = OperatingExpense4String = "--";
+                    OperatingExpenseTtmString.StringValue = OperatingExpense2String.StringValue = OperatingExpense4String.StringValue = "--";
 
-                if (_revenueInMillions && OperatingExpenseTtm != 0 && OperatingExpenseTtmString != "--")
+                if (_revenueInMillions && OperatingExpenseTtmString.NumericValue != 0 && OperatingExpenseTtmString.StringValue != "--")
                 {
-                    OperatingExpenseTtmString = OperatingExpenseTtmString.Substring(0, OperatingExpenseTtmString.Length - 4);
-                    OperatingExpense2String = OperatingExpense2String.Substring(0, OperatingExpense2String.Length - 4);
-                    OperatingExpense4String = OperatingExpense4String.Substring(0, OperatingExpense4String.Length - 4);
+                    OperatingExpenseTtmString.StringValue = OperatingExpenseTtmString.StringValue.Substring(0, OperatingExpenseTtmString.StringValue.Length - 4);
+                    OperatingExpense2String.StringValue = OperatingExpense2String.StringValue.Substring(0, OperatingExpense2String.StringValue.Length - 4);
+                    OperatingExpense4String.StringValue = OperatingExpense4String.StringValue.Substring(0, OperatingExpense4String.StringValue.Length - 4);
                 }
 
                 if (RevenueTtmString.NumericValue > 0)
-                    ProfitTTM = RevenueTtmString.NumericValue - CostOfRevenueTtmString.NumericValue - OperatingExpenseTtm;
+                    ProfitTTM = RevenueTtmString.NumericValue - CostOfRevenueTtmString.NumericValue - OperatingExpenseTtmString.NumericValue;
                 if (Revenue2String.NumericValue > 0)
-                    Profit2YearsAgo = Revenue2String.NumericValue - CostOfRevenue2String.NumericValue - OperatingExpense2;
+                    Profit2YearsAgo = Revenue2String.NumericValue - CostOfRevenue2String.NumericValue - OperatingExpense2String.NumericValue;
                 if (Revenue4String.NumericValue > 0)
-                    Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4String.NumericValue - OperatingExpense4;
+                    Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4String.NumericValue - OperatingExpense4String.NumericValue;
 
 
                 html = await GetHtmlForTicker(_statisticsUrl, Ticker);
@@ -430,7 +285,7 @@ namespace StockApi
                 TotalDebtString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
                 // Debt/Equity Ratio
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
-                DebtEquityString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                DebtEquityString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
 
                 // Short Interest
@@ -483,9 +338,9 @@ namespace StockApi
                     TotalDebtColor = Color.LightSteelBlue;
 
                 // Set Colors of Debt Equity
-                if (DebtEquity > 60)
+                if (DebtEquityString.NumericValue > 60)
                     DebtEquityColor = Color.Red;
-                else if (DebtEquity < 35)
+                else if (DebtEquityString.NumericValue < 35)
                     DebtEquityColor = Color.Lime;
                 else
                     DebtEquityColor = Color.LightSteelBlue;
