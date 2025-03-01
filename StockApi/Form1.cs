@@ -591,17 +591,20 @@ namespace StockApi
             // Combine profit growth and margin into a number
             decimal marginFactor = 1 + (_stockSummary.ProfitMarginString.NumericValue / 100M);
             _stockSummary.CalculatedPEString.StringValue = (_stockSummary.ForwardPEString.NumericValue / (marginFactor * profitGrowth)).ToString("0.00");
+            _stockSummary.Valuation = StockSummary.ValuationEnum.FairValue;
             lblCalculatedPE.Text = _stockSummary.CalculatedPEString.StringValue;
 
             if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Way over valued
             {
                 lblValuation.ForeColor = Color.Red;
                 lblValuation.Text = "Overvalued";
+                _stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
             }
             if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Way over valued
             {
                 lblValuation.ForeColor = Color.Lime;
                 lblValuation.Text = "Undervalued";
+                _stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
             }
         }
 

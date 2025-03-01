@@ -123,17 +123,17 @@ namespace StockApi
             output.AppendLine($"Price Book Metric = {priceBookMetric.ToString(".00")}");
 
             // Profit Margin Metric
-            decimal ProfitMarginMetric = 1.00M;
+            decimal profitMarginMetric = 1.00M;
             if (stockSummary.ProfitMarginString.NumericValue < -6)
-                ProfitMarginMetric = .962M;
+                profitMarginMetric = .962M;
             else if (stockSummary.ProfitMarginString.NumericValue < -2)
-                ProfitMarginMetric = .981M;
+                profitMarginMetric = .981M;
             else if (stockSummary.ProfitMarginString.NumericValue > 6)
-                ProfitMarginMetric = 1.04M;
+                profitMarginMetric = 1.04M;
             else if (stockSummary.ProfitMarginString.NumericValue > 2)
-                ProfitMarginMetric = 1.02M;
+                profitMarginMetric = 1.02M;
 
-            output.AppendLine($"Profit Margin Metric = {ProfitMarginMetric.ToString(".00")}");
+            output.AppendLine($"Profit Margin Metric = {profitMarginMetric.ToString(".00")}");
 
             // Dividend Metric
             decimal dividendMetric = 1M;
@@ -205,11 +205,19 @@ namespace StockApi
                 cashDebtMetric = cashDebtMetric * .96M;
             output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".00")}");
 
+            // Valuation based on PE and sector
+            decimal valuationMetric = 1M;
+            if (stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
+                valuationMetric = .98M;
+            else if (stockSummary.Valuation == StockSummary.ValuationEnum.UnderValued)
+                valuationMetric = 1.02M;
+            output.AppendLine($"Valuation = {valuationMetric.ToString(".00")}");
+
             // Market
             decimal ecoMetric = 1 + ((analyzeInputs.MarketHealth - 5) / 50);
             output.AppendLine($"Market Metric = {ecoMetric.ToString(".00")}");
 
-            decimal totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * ProfitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric;
+            decimal totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * profitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric;
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
             if (totalMetric < .85M)

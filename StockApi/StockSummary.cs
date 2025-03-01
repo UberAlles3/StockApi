@@ -11,6 +11,13 @@ namespace StockApi
 {
     public class StockSummary : YahooFinance
     {
+        public enum ValuationEnum
+        {
+            UnderValued,
+            FairValue,
+            OverValued
+        }
+        
         //        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
         private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
 
@@ -25,6 +32,7 @@ namespace StockApi
         public string CompanyOverview = "";
         public string Sector = "";
         public int AverageSectorPE = 20;
+        public ValuationEnum Valuation = ValuationEnum.FairValue;
         public Dictionary<string, int> _sectors = new Dictionary<string, int>() { { "Technology", 35 }, { "Energy", 15 }, { "Materials", 25 }, { "Industrials", 26 }, { "Utilities", 21 }, { "Healthcare", 20 }, { "Real Estate", 36 }, { "Financial Services", 16 }, { "Communication Services", 21 }, { "Consumer Defensive", 24 } };
 
         public string CompanyName { get => companyName; set => companyName = value; }
