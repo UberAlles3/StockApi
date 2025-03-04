@@ -135,7 +135,7 @@ namespace Drake.Extensions
         /// </summary>
         /// <param name="str">The string to check</param>
         /// <returns>A bool value indicating whether or not this string is an int.</returns>
-        public static bool IsInt(this string str)
+        public static bool _IsInt(this string str)
         {
             int dummyInt;
             return int.TryParse(str, out dummyInt);
@@ -145,7 +145,7 @@ namespace Drake.Extensions
         /// </summary>
         /// <param name="str">The string to check</param>
         /// <returns>A bool value indicating whether or not this string is a long.</returns>
-        public static bool IsLong(this string str)
+        public static bool _IsLong(this string str)
         {
             long dummyLong;
             return long.TryParse(str, out dummyLong);
@@ -155,7 +155,7 @@ namespace Drake.Extensions
         /// </summary>
         /// <param name="str">The string to check</param>
         /// <returns>A bool value indicating whether or not this string is a long.</returns>
-        public static bool IsFloat(this string str)
+        public static bool _IsFloat(this string str)
         {
             long dummyFloat;
             return long.TryParse(str, out dummyFloat);
@@ -165,7 +165,7 @@ namespace Drake.Extensions
         /// </summary>
         /// <param name="str">The string to check</param>
         /// <returns>A bool value indicating whether or not this string is a decimal.</returns>
-        public static bool IsDecimal(this string str)
+        public static bool _IsDecimal(this string str)
         {
             decimal dummyDecimal;
             return decimal.TryParse(str, out dummyDecimal);

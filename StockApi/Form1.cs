@@ -16,7 +16,7 @@ namespace StockApi
     public partial class Form1 : Form
     {
         List<Setting> _settings = new List<Setting>();
-        private static bool _tickerFound = false; 
+        private static bool _tickerFound = false;
         private static StockSummary _stockSummary = new StockSummary();
         private static StockFinancials _stockFinancials = new StockFinancials();
         private static StockHistory _stockHistory = new StockHistory();
@@ -68,7 +68,7 @@ namespace StockApi
             lblFin2YearsAgo.Text = DateTime.Now.AddYears(-2).ToString("yyyy");
             lblFin4YearsAgo.Text = DateTime.Now.AddYears(-4).ToString("yyyy");
 
-             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
+            //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -99,7 +99,7 @@ namespace StockApi
                 float oneMonthAgoDOW = Convert.ToInt32(tickerTrades.First().ItemArray[1].ToString());
                 float currentDOW = Convert.ToInt32(tickerTrades.Last().ItemArray[1].ToString());
                 float perc = (currentDOW - oneMonthAgoDOW) / (currentDOW + oneMonthAgoDOW) * 120;
-                trackBar1.Value = 5 + Convert.ToInt32(perc); 
+                trackBar1.Value = 5 + Convert.ToInt32(perc);
             }
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
@@ -276,7 +276,7 @@ namespace StockApi
                 // Extract the individual data values from the html
                 _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
                 await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
-                
+
                 historicDataList = await _stockHistory.GetHistoricalDataForDateRange(_stockSummary.Ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
                 if (historicDataList.Count > 1)
                     _stockHistory.HistoricData3YearsAgo = historicDataList.First();
@@ -285,7 +285,7 @@ namespace StockApi
                 else if (historicDataList.Count > 0)
                     _stockHistory.HistoricData3YearsAgo = historicDataList.Last();
                 else
-                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue};
+                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue };
 
                 decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
@@ -323,7 +323,7 @@ namespace StockApi
             {
                 btnGetOne.Enabled = true;
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
-                if(_tickerFound)
+                if (_tickerFound)
                 {
                     lblPrice.Text = _stockSummary.PriceString.NumericValue.ToString("####.00");
                     lblVolatility.Text = _stockSummary.VolatilityString.StringValue;
@@ -408,7 +408,7 @@ namespace StockApi
                                         current = previous = 0;
                                         try
                                         {
-                                            if(i2 > 0)
+                                            if (i2 > 0)
                                                 previous = float.Parse(TickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
                                             current = float.Parse(TickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
                                         }
@@ -588,7 +588,7 @@ namespace StockApi
             }
 
             decimal profitGrowth = 1;
-            if(profit4Year + profitTTM == 0)
+            if (profit4Year + profitTTM == 0)
             {
                 profitGrowth = 1;
             }

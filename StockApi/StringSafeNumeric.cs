@@ -28,7 +28,7 @@ namespace StockApi
                 {
                     // Built-in Byte type.
                     case TypeCode.Int32:
-                        if (!temp.IsInt())
+                        if (!temp._IsInt())
                         {
                             _numericValue = (T)(object)(int)0;
                             if (StringIfNotNumeric != null)
@@ -41,7 +41,7 @@ namespace StockApi
                         }
                         break;
                     case TypeCode.Decimal:
-                        if (!temp.IsDecimal())
+                        if (!temp._IsDecimal())
                         {
                             _numericValue = (T)(object)(decimal)0;
                             if (StringIfNotNumeric != null)
@@ -63,8 +63,8 @@ namespace StockApi
         public T NumericValue
         {
             get { return _numericValue; }
-            set 
-            { 
+            set
+            {
                 _numericValue = value;
                 _stringValue = value.ToString();
             }

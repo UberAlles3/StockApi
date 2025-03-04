@@ -7,9 +7,6 @@ using System.Text;
 
 namespace StockApi
 {
-    /// <summary>
-    /// 
-    /// </summary>
     class Analyze : YahooFinance
     {
         public enum BuyOrSell
@@ -53,7 +50,7 @@ namespace StockApi
                 priceTrendMetric = .98M;
 
             // Consecutive buys or sells
-            List<DataRow> drList =  Form1.TickerTradesDataTable.Select().Take(3).ToList();
+            List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
             int buys = 0;
             int sells = 0;
             foreach (DataRow dr in drList)

@@ -17,7 +17,7 @@ namespace StockApi
             FairValue,
             OverValued
         }
-        
+
         //        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
         private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
 
@@ -152,7 +152,7 @@ namespace StockApi
                     this.Sector = words[0] + " " + words[1];
                 else
                     this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
-                
+
                 // find average PE for Sector
                 if (_sectors.ContainsKey(Sector))
                     AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;
@@ -195,7 +195,7 @@ namespace StockApi
                 OneYearTargetColor = Color.Red;
             else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
                 OneYearTargetColor = Color.Lime;
-            
+
             if (ForwardPEString.NumericValue > 50)
                 ForwardPEColor = Color.Red;
             else if (ForwardPEString.NumericValue < 15)

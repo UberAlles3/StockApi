@@ -129,7 +129,7 @@ namespace StockApi
             try
             {
                 if (beginDate.DayOfWeek == DayOfWeek.Saturday)
-                beginDate = beginDate.AddDays(-1);
+                    beginDate = beginDate.AddDays(-1);
                 if (beginDate.DayOfWeek == DayOfWeek.Sunday)
                     beginDate = beginDate.AddDays(-2);
 
@@ -142,9 +142,9 @@ namespace StockApi
                 }
 
                 html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
-                if(html.Length < 4000) // try again
+                if (html.Length < 4000) // try again
                 {
-                    Thread.Sleep(2000); 
+                    Thread.Sleep(2000);
                     html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
                 }
 
@@ -189,7 +189,7 @@ namespace StockApi
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Source + x.Message + "\n" + "GetHistoricalDataForDateRange() " + " " + ticker + " " + beginDate + " " + endDate + "\n" + html.Substring(0, html.Length/10));
+                MessageBox.Show(x.Source + x.Message + "\n" + "GetHistoricalDataForDateRange() " + " " + ticker + " " + beginDate + " " + endDate + "\n" + html.Substring(0, html.Length / 10));
             }
 
             return historicDataList;

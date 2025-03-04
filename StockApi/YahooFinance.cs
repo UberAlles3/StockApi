@@ -82,7 +82,7 @@ namespace StockApi
                 MessageBox.Show(x.Message + "\n" + html + "\n" + tagName);
                 throw;
             }
-         
+
             return middle;
         }
 
