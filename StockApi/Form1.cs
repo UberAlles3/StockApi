@@ -654,6 +654,11 @@ namespace StockApi
             OpenHyperlink("https://www.apmex.com/gold-price");
         }
 
+        private void earningsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink("https://earningshub.com/earnings-calendar/this-week");
+        }
+
         private void yahooMarketsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenHyperlink("https://finance.yahoo.com/markets/");

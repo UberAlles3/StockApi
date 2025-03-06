@@ -188,6 +188,7 @@ namespace StockApi
             this.finvizToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.apeWisdomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -1959,6 +1960,7 @@ namespace StockApi
             // 
             this.lINKSToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.kitcoGoldAndSilverToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.yahooMarketsToolStripMenuItem,
             this.yahooStockQuoteToolStripMenuItem,
             this.finvizToolStripMenuItem,
@@ -2032,6 +2034,13 @@ namespace StockApi
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(380, 644);
             this.panel3.TabIndex = 23;
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItem1.Text = "Earnings";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.earningsToolStripMenuItem1_Click);
             // 
             // Form1
             // 
@@ -2252,6 +2261,7 @@ namespace StockApi
         private System.Windows.Forms.Button btnChart;
         private System.Windows.Forms.Button btn3YearChart;
         private System.Windows.Forms.Button btn10DayChart;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 
