@@ -73,6 +73,8 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
+            txtStockTicker.Text = txtStockTicker.Text.ToUpper();
+
             if (string.IsNullOrEmpty(txtStockTicker.Text))
             {
                 MessageBox.Show("Enter a valid stock ticker.");
