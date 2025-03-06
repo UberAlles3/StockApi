@@ -682,5 +682,32 @@ namespace StockApi
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void btnChart_Click(object sender, EventArgs e)
+        {
+            ChartForm chartForm = new ChartForm();
+            chartForm.Owner = this;
+            chartForm.Text = txtStockTicker.Text + " - 1 Year Chart";
+            chartForm.Url = chartForm.Url1Year.Replace("?ticker?", txtStockTicker.Text);
+            chartForm.Show();
+        }
+
+        private void btn3YearChart_Click(object sender, EventArgs e)
+        {
+            ChartForm chartForm = new ChartForm();
+            chartForm.Owner = this;
+            chartForm.Text = txtStockTicker.Text + " - 3 Year Chart";
+            chartForm.Url = chartForm.Url3Year.Replace("?ticker?", txtStockTicker.Text);
+            chartForm.Show();
+        }
+
+        private void btn10DayChart_Click(object sender, EventArgs e)
+        {
+            ChartForm chartForm = new ChartForm();
+            chartForm.Owner = this;
+            chartForm.Text = txtStockTicker.Text + " - 10 Day Chart";
+            chartForm.Url = chartForm.Url10Day.Replace("?ticker?", txtStockTicker.Text);
+            chartForm.Show();
+        }
     }
 }
