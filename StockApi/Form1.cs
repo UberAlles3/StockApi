@@ -343,6 +343,10 @@ namespace StockApi
                     lblForwardPE.ForeColor = _stockSummary.ForwardPEColor;
                     lblSector.Text = _stockSummary.Sector;
                     lblAvgSectorPE.Text = _stockSummary.AverageSectorPE.ToString();
+                    lblBuyQuantity.Text = "0";
+                    lblBuyPrice.Text = "0.00";
+                    lblSellQuantity.Text = "0";
+                    lblSellPrice.Text = "0.00";
 
                     if (_stockSummary.YearsRangeHigh.NumericValue > 0)
                     {
@@ -385,7 +389,7 @@ namespace StockApi
                         foreach (DataRow r in TickerTradesDataTable.Rows)
                         {
                             // Color Buy and Sells
-                            if (r.ItemArray[2].ToString().Trim().ToLower() == "buy")
+                            if (r.ItemArray[2].ToString().Trim().ToLower().Contains("buy"))
                                 dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Lime;
                             else
                                 dataGridView2.Rows[i].Cells[2].Style.ForeColor = Color.Yellow;
