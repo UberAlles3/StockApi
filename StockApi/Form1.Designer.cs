@@ -183,12 +183,12 @@ namespace StockApi
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lINKSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kitcoGoldAndSilverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.yahooMarketsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.yahooStockQuoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.finvizToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.apeWisdomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -1468,7 +1468,7 @@ namespace StockApi
             // btn10DayChart
             // 
             this.btn10DayChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn10DayChart.Location = new System.Drawing.Point(85, 281);
+            this.btn10DayChart.Location = new System.Drawing.Point(262, 281);
             this.btn10DayChart.Name = "btn10DayChart";
             this.btn10DayChart.Size = new System.Drawing.Size(86, 28);
             this.btn10DayChart.TabIndex = 51;
@@ -1479,7 +1479,7 @@ namespace StockApi
             // btn3YearChart
             // 
             this.btn3YearChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn3YearChart.Location = new System.Drawing.Point(259, 281);
+            this.btn3YearChart.Location = new System.Drawing.Point(86, 281);
             this.btn3YearChart.Name = "btn3YearChart";
             this.btn3YearChart.Size = new System.Drawing.Size(81, 28);
             this.btn3YearChart.TabIndex = 50;
@@ -1977,6 +1977,13 @@ namespace StockApi
             this.kitcoGoldAndSilverToolStripMenuItem.Text = "AMPEX Gold and Silver";
             this.kitcoGoldAndSilverToolStripMenuItem.Click += new System.EventHandler(this.goldAndSilverToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItem1.Text = "Earnings";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.earningsToolStripMenuItem1_Click);
+            // 
             // yahooMarketsToolStripMenuItem
             // 
             this.yahooMarketsToolStripMenuItem.Name = "yahooMarketsToolStripMenuItem";
@@ -2034,13 +2041,6 @@ namespace StockApi
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(380, 644);
             this.panel3.TabIndex = 23;
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
-            this.toolStripMenuItem1.Text = "Earnings";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.earningsToolStripMenuItem1_Click);
             // 
             // Form1
             // 
