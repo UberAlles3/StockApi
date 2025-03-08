@@ -111,7 +111,7 @@ namespace StockApi
 
             if (_tickerFound)
             {
-                TickerTradesDataTable = null;
+                TickerTradesDataTable = new DataTable();
                 int DateColumn = 0;
 
                 GetFinancials();
@@ -291,7 +291,7 @@ namespace StockApi
 
                 decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterest}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterestString.NumericValue}");
                 builder.Append($",{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue}{Environment.NewLine}");
                 Thread.Sleep(1000);
             }
@@ -568,7 +568,7 @@ namespace StockApi
             lblFinDebtEquity.ForeColor = _stockFinancials.DebtEquityColor;
 
             // Short Interest
-            lblShortInterest.Text = _stockFinancials.ShortInterest.ToString() + "%";
+            lblShortInterest.Text = _stockFinancials.ShortInterestString.StringValue + "%";
             lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
             panelFinancials.Visible = true;
 
@@ -581,15 +581,6 @@ namespace StockApi
 
             if (profit4Year < 0)
             {
-                //if (profitTTM > 0)
-                //{
-                //    profit4Year = profit4Year + profitTTM;
-                //    profitTTM = profitTTM * 3;
-                //}
-                //else
-                //{
-                //    profitTTM = profit4Year; // just make it no growth
-                //}
                 profit4Year = 1;
             }
 

@@ -48,9 +48,12 @@ namespace StockApi
         public StringSafeNumeric<Decimal> OperatingExpense2String = new StringSafeNumeric<decimal>("--");
         ///  Operation Expense 4 Year
         public StringSafeNumeric<Decimal> OperatingExpense4String = new StringSafeNumeric<decimal>("--");
-        /// DebtEquity
+        /// Debt Equity
         public StringSafeNumeric<Decimal> DebtEquityString = new StringSafeNumeric<decimal>("--");
         public Color DebtEquityColor = Color.LightSteelBlue;
+        /// Short Interest
+        public StringSafeNumeric<Decimal> ShortInterestString = new StringSafeNumeric<decimal>("--");
+        public Color ShortInterestColor = Color.LightSteelBlue;
 
         /////////////////// TotalCash
         public Color TotalCashColor = Color.LightSteelBlue;
@@ -131,36 +134,7 @@ namespace StockApi
             return number;
         }
 
-        /////////////////// Short Interest
-        public Color ShortInterestColor = Color.LightSteelBlue;
-        private string shortInterestString = NotApplicable;
-        private decimal shortInterest = 0;
-        public string ShortInterestString
-        {
-            get => shortInterestString;
-            set
-            {
-                shortInterestString = value;
-                if (NotNumber(value))
-                    ShortInterest = 0;
-                else
-                    ShortInterest = Convert.ToDecimal(ShortInterestString);
-            }
-        }
-        public decimal ShortInterest
-        {
-            get => shortInterest;
-            set
-            {
-                shortInterest = value;
-                if (shortInterest > 8)
-                    ShortInterestColor = Color.Red;
-                else if (ShortInterest < 2)
-                    ShortInterestColor = Color.Lime;
-                else
-                    ShortInterestColor = Color.LightSteelBlue;
-            }
-        }
+ 
         private bool NotNumber(string value)
         {
             return value == YahooFinance.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;
@@ -291,11 +265,11 @@ namespace StockApi
 
                 // Short Interest
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Short Interest").Term;
-                shortInterestString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
-                if (shortInterestString != YahooFinance.NotApplicable && shortInterestString.IndexOf("%") > 0)
-                    ShortInterestString = shortInterestString.Substring(0, shortInterestString.IndexOf("%"));
+                ShortInterestString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
+                if (ShortInterestString.StringValue != YahooFinance.NotApplicable && ShortInterestString.StringValue.IndexOf("%") > 0)
+                    ShortInterestString.StringValue = ShortInterestString.StringValue.Substring(0, ShortInterestString.StringValue.IndexOf("%"));
                 else
-                    ShortInterestString = YahooFinance.NotApplicable;
+                    ShortInterestString.StringValue = "--";
 
                 // Set Colors of Revenue (if revenue decreasing by 5% every 2 years, a problem
                 if (RevenueTtmString.NumericValue < (Revenue2String.NumericValue * .95M))
@@ -345,6 +319,14 @@ namespace StockApi
                     DebtEquityColor = Color.Lime;
                 else
                     DebtEquityColor = Color.LightSteelBlue;
+
+                // Set Colors of Debt Equity
+                if (ShortInterestString.NumericValue > 8)
+                    ShortInterestColor = Color.Red;
+                else if (ShortInterestString.NumericValue < 2)
+                    ShortInterestColor = Color.Lime;
+                else
+                    ShortInterestColor = Color.LightSteelBlue;
             }
             catch (Exception x)
             {
