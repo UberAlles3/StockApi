@@ -188,7 +188,7 @@ namespace StockApi
                 }
                 else
                 {
-                    if (TickerTradesDataTable != null)
+                    if (TickerTradesDataTable != null && dataGridView2.Rows.Count > 0)
                         dataGridView2.Rows.Clear();
                     else
                         dataGridView2.DataSource = null;
