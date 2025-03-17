@@ -671,6 +671,19 @@ namespace StockApi
         {
             OpenHyperlink($"https://apewisdom.io/");
         }
+        //////////////////// Individual Stock Links  
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink($"https://finance.yahoo.com/quote/{txtStockTicker.Text}/");
+        }
+        private void insiderTradingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink($"https://www.marketbeat.com/stocks/NASDAQ/{txtStockTicker.Text}/insider-trades/");
+        }
+        private void marketBeatAnaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink($"https://www.marketbeat.com/stocks/NASDAQ/{txtStockTicker.Text}/");
+        }
 
         private static void OpenHyperlink(string url)
         {
