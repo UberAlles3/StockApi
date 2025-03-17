@@ -189,10 +189,15 @@ namespace StockApi
                 else
                 {
                     if (TickerTradesDataTable != null && dataGridView2.Rows.Count > 0)
-                        dataGridView2.Rows.Clear();
+                        try
+                        {
+                            dataGridView2.Rows.Clear();
+                        }
+                        catch
+                        { } // Do nothing
                     else
                         dataGridView2.DataSource = null;
-                    //dataGridView2.Rows.Clear();
+
                     dataGridView2.Refresh();
                 }
 
