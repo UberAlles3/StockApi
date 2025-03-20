@@ -33,7 +33,7 @@ namespace StockApi
 
             foreach(DataRow dr in tickerTrades)
             {
-                // Search for ticker
+                // Search in positions for ticker to get current price 
                 string ticker = dr.ItemArray[4].ToString();
                 string temp = positions.Where(x => x[0].ToString() == ticker).First().ItemArray[2].ToString();
                 decimal currentPrice = 0;
@@ -41,6 +41,18 @@ namespace StockApi
                 {
                     currentPrice = Convert.ToDecimal(temp);
                 }
+
+                // Get the buy price
+                temp = dr.ItemArray[5].ToString();
+                decimal buyPrice = 0;
+                if (temp._IsDecimal())
+                {
+                    buyPrice = Convert.ToDecimal(temp);
+                }
+
+                // profit/ loss   
+                decimal profit = currentPrice - buyPrice;
+
             }
 
 
