@@ -21,6 +21,7 @@ namespace StockApi
         private static StockFinancials _stockFinancials = new StockFinancials();
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
+        private static DataTable _positionsDataTable = null;
         private static DataTable _tradesDataTable = null;
         private static string _tradesExcelFilePath = "";
         private static DateTime _tradesImportDateTime = DateTime.Now;
@@ -68,6 +69,15 @@ namespace StockApi
             lblFin2YearsAgo.Text = DateTime.Now.AddYears(-2).ToString("yyyy");
             lblFin4YearsAgo.Text = DateTime.Now.AddYears(-4).ToString("yyyy");
 
+            _tradesExcelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
+
+            _positionsDataTable = (new ExcelManager()).ImportTrades(_tradesExcelFilePath, 0, 0);
+            _tradesDataTable = (new ExcelManager()).ImportTrades(_tradesExcelFilePath, 1, 40);
+            _tradesImportDateTime = DateTime.Now; // Update when the last import took place
+
+            Performance performance = new Performance();
+            performance.GetLatestBuyPerformance(_positionsDataTable, _tradesDataTable);
+
             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
@@ -82,11 +92,10 @@ namespace StockApi
             }
 
             // Trades
-            _tradesExcelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
             DateTime tradesExcelFileDateTime = System.IO.File.GetLastWriteTime(_tradesExcelFilePath);
-            if (_tradesDataTable == null || tradesExcelFileDateTime > _tradesImportDateTime)
+            if (tradesExcelFileDateTime > _tradesImportDateTime)
             {
-                _tradesDataTable = (new ExcelManager()).ImportTrades(_settings.Find(x => x.Name == "ExcelTradesPath").Value);
+                _tradesDataTable = (new ExcelManager()).ImportTrades(_tradesExcelFilePath, 1, 40);
                 _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                 _tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
                 //_trades.Columns[0].ColumnName = "Date";

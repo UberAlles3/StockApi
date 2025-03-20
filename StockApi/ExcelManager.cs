@@ -12,7 +12,7 @@ namespace StockApi
 
         }
 
-        public DataTable ImportTrades(string filePath)
+        public DataTable ImportTrades(string filePath, int sheetIdx, int startRow)
         {
             string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
 
@@ -51,10 +51,11 @@ namespace StockApi
                         // Gets or sets a callback to determine whether to include the current sheet
                         // in the DataSet. Called once per sheet before ConfigureDataTable.
 
-                        FilterSheet = (tableReader, sheetIndex) => (sheetIndex == 1),
+                        FilterSheet = (tableReader, sheetIndex) => (sheetIndex == sheetIdx),
                         ConfigureDataTable = _ => new ExcelDataTableConfiguration()
                         {
-                            FilterRow = rowReader => rowReader.RowCount > 40,
+                            //FilterRow = rowReader => rowReader.RowCount > startRow,
+                            FilterRow = rowReader => rowReader.Depth > startRow,
                             FilterColumn = (rowReader, columnIndex) => columnIndex < 10,
                         }
                     });  // The result of each spreadsheet is in result.Tables
