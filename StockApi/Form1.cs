@@ -75,9 +75,6 @@ namespace StockApi
             _tradesDataTable = (new ExcelManager()).ImportTrades(_tradesExcelFilePath, 1, 40);
             _tradesImportDateTime = DateTime.Now; // Update when the last import took place
 
-            Performance performance = new Performance();
-            performance.GetLatestBuyPerformance(_positionsDataTable, _tradesDataTable);
-
             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
@@ -736,6 +733,13 @@ namespace StockApi
             chartForm.Text = txtStockTicker.Text + " - 10 Day Chart";
             chartForm.Url = chartForm.Url10Day.Replace("?ticker?", txtStockTicker.Text);
             chartForm.Show();
+        }
+
+        private void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Performance performance = new Performance();
+            performance.GetLatestBuyPerformance(_positionsDataTable, _tradesDataTable);
+            performance.ShowPerformanceForm(this);  
         }
     }
 }

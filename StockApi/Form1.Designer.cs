@@ -190,8 +190,10 @@ namespace StockApi
             this.tickerLinksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.insiderTradingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.marketBeatAnaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.performanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.last20BuysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -1946,7 +1948,8 @@ namespace StockApi
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mainToolStripMenuItem,
             this.lINKSToolStripMenuItem,
-            this.tickerLinksToolStripMenuItem});
+            this.tickerLinksToolStripMenuItem,
+            this.performanceToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1444, 24);
@@ -2032,6 +2035,13 @@ namespace StockApi
             this.insiderTradingToolStripMenuItem.Text = "MarketBeat Insider Trading";
             this.insiderTradingToolStripMenuItem.Click += new System.EventHandler(this.insiderTradingToolStripMenuItem_Click);
             // 
+            // marketBeatAnaToolStripMenuItem
+            // 
+            this.marketBeatAnaToolStripMenuItem.Name = "marketBeatAnaToolStripMenuItem";
+            this.marketBeatAnaToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.marketBeatAnaToolStripMenuItem.Text = "MarketBeat News && Analysis";
+            this.marketBeatAnaToolStripMenuItem.Click += new System.EventHandler(this.marketBeatAnaToolStripMenuItem_Click);
+            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.Transparent;
@@ -2062,12 +2072,20 @@ namespace StockApi
             this.panel3.Size = new System.Drawing.Size(380, 644);
             this.panel3.TabIndex = 23;
             // 
-            // marketBeatAnaToolStripMenuItem
+            // performanceToolStripMenuItem
             // 
-            this.marketBeatAnaToolStripMenuItem.Name = "marketBeatAnaToolStripMenuItem";
-            this.marketBeatAnaToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.marketBeatAnaToolStripMenuItem.Text = "MarketBeat News && Analysis";
-            this.marketBeatAnaToolStripMenuItem.Click += new System.EventHandler(this.marketBeatAnaToolStripMenuItem_Click);
+            this.performanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.last20BuysToolStripMenuItem});
+            this.performanceToolStripMenuItem.Name = "performanceToolStripMenuItem";
+            this.performanceToolStripMenuItem.Size = new System.Drawing.Size(87, 20);
+            this.performanceToolStripMenuItem.Text = "Performance";
+            // 
+            // last20BuysToolStripMenuItem
+            // 
+            this.last20BuysToolStripMenuItem.Name = "last20BuysToolStripMenuItem";
+            this.last20BuysToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.last20BuysToolStripMenuItem.Text = "Last 20 Buys";
+            this.last20BuysToolStripMenuItem.Click += new System.EventHandler(this.last20BuysToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -2292,6 +2310,8 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem insiderTradingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem marketBeatAnaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem performanceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem last20BuysToolStripMenuItem;
     }
 }
 
