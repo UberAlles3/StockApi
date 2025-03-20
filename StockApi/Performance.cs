@@ -61,6 +61,14 @@ namespace StockApi
                 // profit/ loss   
                 decimal profit = currentPrice - buyPrice;
 
+                // Get the DOW level
+                temp = dr.ItemArray[1].ToString();
+                int dowLevel = 0;
+                if (temp._IsDecimal())
+                {
+                    dowLevel = Convert.ToInt32(temp);
+                }
+
                 PerformanceItem pi = new PerformanceItem()
                 {
                     BuyDate = Convert.ToDateTime(dr.ItemArray[0].ToString()),
@@ -69,7 +77,8 @@ namespace StockApi
                     BuyPrice = buyPrice,
                     CurrentPrice = currentPrice,
                     Profit = profit,
-                    TotalProfit = quantity * profit
+                    TotalProfit = quantity * profit,
+                    DowLevel = dowLevel
                 };
 
                 _performanceList.Add(pi);
@@ -77,72 +86,21 @@ namespace StockApi
         }
         public void ShowPerformanceForm(Form1 form1)
         {
-            PerformanceForm pf = new PerformanceForm();
+            PerformanceForm pf = new PerformanceForm(_performanceList);
             pf.Owner = form1;
-            pf.Text = "Buy Performance";
-
             pf.Show();
-
-            var bindingList = new BindingList<PerformanceItem>(_performanceList);
-            var source = new BindingSource(bindingList, null);
-
-            pf.dataGridView2.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
-            pf.dataGridView2.DefaultCellStyle.SelectionForeColor = Color.LightSteelBlue; 
-            pf.dataGridView2.DefaultCellStyle.BackColor = Color.Black;
-            pf.dataGridView2.DefaultCellStyle.SelectionBackColor = Color.Black;
-            
-            pf.dataGridView2.DataSource = source;
-            pf.dataGridView2.Columns[0].HeaderText = "Date";
-            pf.dataGridView2.Columns[0].Width = 80;
-            ////pf.dataGridView2.Columns[0].DefaultCellStyle.Format = "MM/dd/yyyy";
-            pf.dataGridView2.Columns[1].HeaderText = "Ticker";
-            pf.dataGridView2.Columns[1].Width = 50;
-            pf.dataGridView2.Columns[2].HeaderText = "Quan.";
-            pf.dataGridView2.Columns[2].Width = 60;
-            pf.dataGridView2.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            pf.dataGridView2.Columns[2].DefaultCellStyle.Format = "#####";
-
-            pf.dataGridView2.Columns[3].HeaderText = "Bought";
-            pf.dataGridView2.Columns[3].Width = 77;
-            pf.dataGridView2.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            pf.dataGridView2.Columns[3].DefaultCellStyle.Format = "N2";
-            
-            pf.dataGridView2.Columns[4].HeaderText = "Current";
-            pf.dataGridView2.Columns[4].Width = 77;
-            pf.dataGridView2.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            pf.dataGridView2.Columns[4].DefaultCellStyle.Format = "N2";
-
-            pf.dataGridView2.Columns[5].HeaderText = "Profit";
-            pf.dataGridView2.Columns[5].Width = 77;
-            pf.dataGridView2.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            pf.dataGridView2.Columns[5].DefaultCellStyle.Format = "N2";
-
-            pf.dataGridView2.Columns[6].HeaderText = "Tot. Profit";
-            pf.dataGridView2.Columns[6].Width = 77;
-            pf.dataGridView2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            pf.dataGridView2.Columns[6].DefaultCellStyle.Format = "N2";
-
-            pf.dataGridView2.Refresh();
-
-            pf.lblTotalProfit.Text = _performanceList.Sum(x => x.TotalProfit).ToString("0.00");
         }
     }
 
     public class PerformanceItem
     {
-        [DisplayName("Date")] 
         public DateTime BuyDate { get; set; }
-        [DisplayName("Ticker")]
         public string Ticker { get; set; }
-        [DisplayName("Quantity")]
         public int Quantity { get; set; }
-        [DisplayName("Bought")]
         public decimal BuyPrice { get; set; }
-        [DisplayName("Current")]
         public decimal CurrentPrice { get; set; }
-        [DisplayName("Profit")]
         public decimal Profit { get; set; }
-        [DisplayName("Tot. Profit")]
         public decimal TotalProfit { get; set; }
+        public int DowLevel { get; set; }
     }
 }
