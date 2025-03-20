@@ -70,8 +70,10 @@ namespace StockApi
 
             // Total Cost
             decimal totCost = _performanceList.Sum(x => (x.Quantity) * x.BuyPrice);
+            lblCost.Text = totCost.ToString("N2");
             // Current Worth
             decimal totWorth = _performanceList.Sum(x => (x.Quantity) * x.CurrentPrice);
+            lblWorth.Text = totWorth.ToString("N2");
             // Buy Gain
             decimal buyGain = ((totWorth - totCost) / totCost) * 100M;
             lblPortfolioGain.Text = buyGain.ToString("N1") + "%";

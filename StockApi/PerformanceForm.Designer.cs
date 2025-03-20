@@ -39,13 +39,14 @@ namespace StockApi
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lblCost = new System.Windows.Forms.Label();
             this.lblTotalProfit = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lblDowGain = new System.Windows.Forms.Label();
             this.lblPortfolioGain = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.lblWorth = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -153,15 +154,15 @@ namespace StockApi
             this.label3.TabIndex = 54;
             this.label3.Text = "Ticker";
             // 
-            // label4
+            // lblCost
             // 
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label4.Location = new System.Drawing.Point(386, 545);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(74, 21);
-            this.label4.TabIndex = 55;
-            this.label4.Text = "Total Profit:";
+            this.lblCost.BackColor = System.Drawing.Color.Transparent;
+            this.lblCost.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblCost.Location = new System.Drawing.Point(230, 544);
+            this.lblCost.Name = "lblCost";
+            this.lblCost.Size = new System.Drawing.Size(74, 21);
+            this.lblCost.TabIndex = 55;
+            this.lblCost.Text = "Cost";
             // 
             // lblTotalProfit
             // 
@@ -225,19 +226,30 @@ namespace StockApi
             this.label6.TabIndex = 61;
             this.label6.Text = "DOW";
             // 
+            // lblWorth
+            // 
+            this.lblWorth.BackColor = System.Drawing.Color.Transparent;
+            this.lblWorth.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblWorth.Location = new System.Drawing.Point(304, 544);
+            this.lblWorth.Name = "lblWorth";
+            this.lblWorth.Size = new System.Drawing.Size(74, 21);
+            this.lblWorth.TabIndex = 62;
+            this.lblWorth.Text = "Worth";
+            // 
             // PerformanceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(799, 580);
+            this.Controls.Add(this.lblWorth);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.lblPortfolioGain);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.lblDowGain);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.lblTotalProfit);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.lblCost);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -264,12 +276,13 @@ namespace StockApi
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblCost;
         public System.Windows.Forms.Label lblTotalProfit;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lblDowGain;
         private System.Windows.Forms.Label lblPortfolioGain;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblWorth;
     }
 }
