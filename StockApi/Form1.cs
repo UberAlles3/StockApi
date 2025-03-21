@@ -101,11 +101,6 @@ namespace StockApi
 
             _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
-            //PositionsDataTable = (new ExcelManager()).ImportTrades(_excelFilePath, 0, 0);
-            //_positionsImportDateTime = DateTime.Now; // Update when the last import took place
-            //TradesDataTable = (new ExcelManager()).ImportTrades(_excelFilePath, 1, 42);
-            //_tradesImportDateTime = DateTime.Now;    // Update when the last import took place
-
             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 

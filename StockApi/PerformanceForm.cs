@@ -60,6 +60,18 @@ namespace StockApi
 
             dataGridView2.Refresh();
 
+            int i = 0;
+            foreach (PerformanceItem pi in _performanceList)
+            {
+                if(pi.TotalProfit < 0)
+                {
+                    dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.LightYellow;
+                    dataGridView2.Rows[i].Cells[6].Style.ForeColor = Color.LightYellow;
+                }
+                i++;
+            }
+
+
             // DOW gain / loss
             decimal dowGain = Convert.ToDecimal((_performanceList[0].DowLevel - _performanceList[19].DowLevel)) / Convert.ToDecimal(_performanceList[0].DowLevel) * 100;
             lblDowGain.Text = dowGain.ToString("N1") + "%";

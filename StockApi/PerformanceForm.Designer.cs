@@ -216,7 +216,7 @@ namespace StockApi
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(84, 21);
             this.label7.TabIndex = 59;
-            this.label7.Text = "20 Buys Gain:";
+            this.label7.Text = "25 Buys Gain:";
             // 
             // label6
             // 
