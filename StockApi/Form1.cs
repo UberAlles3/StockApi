@@ -21,12 +21,42 @@ namespace StockApi
         private static StockFinancials _stockFinancials = new StockFinancials();
         private static StockHistory _stockHistory = new StockHistory();
         private static Analyze _analyze = new Analyze();
+        public static DataTable TickerTradesDataTable = null;
+
+        private static string _excelFilePath = "";
+        private static DateTime _tradesImportDateTime = DateTime.Now.AddYears(-2);
+        private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
         private static DataTable _positionsDataTable = null;
         private static DataTable _tradesDataTable = null;
-        private static string _tradesExcelFilePath = "";
-        private static DateTime _tradesImportDateTime = DateTime.Now;
-
-        public static DataTable TickerTradesDataTable = null;
+        public static DataTable PositionsDataTable 
+        {
+            get 
+            {
+                DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
+                if (excelFileDateTime > _positionsImportDateTime)
+                {
+                    _positionsDataTable = (new ExcelManager()).ImportTrades(_excelFilePath, 0, 0);
+                    _positionsImportDateTime = DateTime.Now; // Update when the last import took place
+                }
+                return _positionsDataTable;
+            }
+            set => _positionsDataTable = value; 
+        }
+        public static DataTable TradesDataTable 
+        {
+            get
+            {
+                DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
+                if (excelFileDateTime > _tradesImportDateTime)
+                {
+                    _tradesDataTable = (new ExcelManager()).ImportTrades(_excelFilePath, 1, 40);
+                    _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
+                    _tradesImportDateTime = DateTime.Now; // Update when the last import took place
+                }
+                return _tradesDataTable;
+            }
+            set => _tradesDataTable = value; 
+        }
 
         public Form1()
         {
@@ -69,11 +99,12 @@ namespace StockApi
             lblFin2YearsAgo.Text = DateTime.Now.AddYears(-2).ToString("yyyy");
             lblFin4YearsAgo.Text = DateTime.Now.AddYears(-4).ToString("yyyy");
 
-            _tradesExcelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
+            _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
-            _positionsDataTable = (new ExcelManager()).ImportTrades(_tradesExcelFilePath, 0, 0);
-            _tradesDataTable = (new ExcelManager()).ImportTrades(_tradesExcelFilePath, 1, 40);
-            _tradesImportDateTime = DateTime.Now; // Update when the last import took place
+            //PositionsDataTable = (new ExcelManager()).ImportTrades(_excelFilePath, 0, 0);
+            //_positionsImportDateTime = DateTime.Now; // Update when the last import took place
+            //TradesDataTable = (new ExcelManager()).ImportTrades(_excelFilePath, 1, 42);
+            //_tradesImportDateTime = DateTime.Now;    // Update when the last import took place
 
             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
@@ -88,27 +119,18 @@ namespace StockApi
                 return;
             }
 
+            DataTable tradesDataTable = TradesDataTable;
             // Trades
-            DateTime tradesExcelFileDateTime = System.IO.File.GetLastWriteTime(_tradesExcelFilePath);
-            if (tradesExcelFileDateTime > _tradesImportDateTime)
-            {
-                _tradesDataTable = (new ExcelManager()).ImportTrades(_tradesExcelFilePath, 1, 40);
-                _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
-                _tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
-                //_trades.Columns[0].ColumnName = "Date";
-                //_trades.DefaultView.Sort = "Date desc";
+            tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
 
-                _tradesImportDateTime = DateTime.Now; // Update when the last import took place
-
-                /////////// Set Bullish / Bearish scale
-                // Get DOW level from a month ago
-                var tickerTrades = _tradesDataTable.AsEnumerable().Where(x => DateTime.ParseExact(x[0].ToString(), "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-30) && x[1].ToString().Trim() != "").ToList();
-                // get first and last row's DOW
-                float oneMonthAgoDOW = Convert.ToInt32(tickerTrades.First().ItemArray[1].ToString());
-                float currentDOW = Convert.ToInt32(tickerTrades.Last().ItemArray[1].ToString());
-                float perc = (currentDOW - oneMonthAgoDOW) / (currentDOW + oneMonthAgoDOW) * 120;
-                trackBar1.Value = 5 + Convert.ToInt32(perc);
-            }
+            /////////// Set Bullish / Bearish scale
+            // Get DOW level from a month ago
+            var tickerTradesList = tradesDataTable.AsEnumerable().Where(x => DateTime.ParseExact(x[0].ToString(), "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-30) && x[1].ToString().Trim() != "").ToList();
+            // get first and last row's DOW
+            float oneMonthAgoDOW = Convert.ToInt32(tickerTradesList.First().ItemArray[1].ToString());
+            float currentDOW = Convert.ToInt32(tickerTradesList.Last().ItemArray[1].ToString());
+            float perc = (currentDOW - oneMonthAgoDOW) / (currentDOW + oneMonthAgoDOW) * 120;
+            trackBar1.Value = 5 + Convert.ToInt32(perc);
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
@@ -124,7 +146,7 @@ namespace StockApi
 
                 DateTime outDate = DateTime.Now;
                 // filter on stock ticker then order by date descending
-                var tickerTrades = _tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
+                var tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
                 tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
 
                 List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
@@ -152,7 +174,7 @@ namespace StockApi
                 // bind data list to grid control
                 BindListToHistoricPriceGrid(historicDisplayList);
 
-                if (_tradesDataTable.Rows.Count > 0 && tickerTrades.Count() > 0)
+                if (tradesDataTable.Rows.Count > 0 && tickerTrades.Count() > 0)
                 {
                     TickerTradesDataTable = tickerTrades.Where(r => r[3].ToString() != "0").CopyToDataTable();
 
@@ -738,7 +760,7 @@ namespace StockApi
         private void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance();
-            performance.GetLatestBuyPerformance(_positionsDataTable, _tradesDataTable);
+            performance.GetLatestBuyPerformance(PositionsDataTable, TradesDataTable);
             performance.ShowPerformanceForm(this);  
         }
     }

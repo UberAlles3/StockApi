@@ -20,15 +20,15 @@ namespace StockApi
 
         }
 
-        public void GetLatestBuyPerformance(DataTable _positionsDataTable, DataTable _tradesDataTable)
+        public void GetLatestBuyPerformance(DataTable positionsDataTable, DataTable tradesDataTable)
         {
             int DateColumn = 0;
 
-            // Get last 20 buys
-            var positions = _positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() !="");
+            // Get last 25 buys
+            var positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() !="");
             
-            var tickerTrades = _tradesDataTable.AsEnumerable().Where(x => x[2].ToString() == "Buy" && x[1].ToString().Trim() != "").Skip(700);
-            tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]).Take(20);
+            var tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[2].ToString() == "Buy" && x[1].ToString().Trim() != "").Skip(700);
+            tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]).Take(25);
 
             _performanceList.Clear();
             foreach (DataRow dr in tickerTrades)

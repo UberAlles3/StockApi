@@ -81,7 +81,7 @@ namespace StockApi
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 25;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView2.Size = new System.Drawing.Size(570, 508);
+            this.dataGridView2.Size = new System.Drawing.Size(570, 631);
             this.dataGridView2.TabIndex = 44;
             // 
             // label42
@@ -158,7 +158,7 @@ namespace StockApi
             // 
             this.lblCost.BackColor = System.Drawing.Color.Transparent;
             this.lblCost.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblCost.Location = new System.Drawing.Point(230, 544);
+            this.lblCost.Location = new System.Drawing.Point(230, 667);
             this.lblCost.Name = "lblCost";
             this.lblCost.Size = new System.Drawing.Size(74, 21);
             this.lblCost.TabIndex = 55;
@@ -168,7 +168,7 @@ namespace StockApi
             // 
             this.lblTotalProfit.BackColor = System.Drawing.Color.Transparent;
             this.lblTotalProfit.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblTotalProfit.Location = new System.Drawing.Point(463, 545);
+            this.lblTotalProfit.Location = new System.Drawing.Point(469, 668);
             this.lblTotalProfit.Name = "lblTotalProfit";
             this.lblTotalProfit.Size = new System.Drawing.Size(66, 21);
             this.lblTotalProfit.TabIndex = 56;
@@ -230,7 +230,7 @@ namespace StockApi
             // 
             this.lblWorth.BackColor = System.Drawing.Color.Transparent;
             this.lblWorth.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblWorth.Location = new System.Drawing.Point(304, 544);
+            this.lblWorth.Location = new System.Drawing.Point(304, 667);
             this.lblWorth.Name = "lblWorth";
             this.lblWorth.Size = new System.Drawing.Size(74, 21);
             this.lblWorth.TabIndex = 62;
@@ -241,7 +241,7 @@ namespace StockApi
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(799, 580);
+            this.ClientSize = new System.Drawing.Size(799, 693);
             this.Controls.Add(this.lblWorth);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.lblPortfolioGain);
@@ -259,7 +259,7 @@ namespace StockApi
             this.Controls.Add(this.label42);
             this.Controls.Add(this.dataGridView2);
             this.Name = "PerformanceForm";
-            this.Text = "Performance for last 20 buys";
+            this.Text = "Performance for last 25 buys";
             this.Load += new System.EventHandler(this.PerformanceForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
