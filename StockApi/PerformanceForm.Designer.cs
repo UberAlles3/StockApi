@@ -158,21 +158,23 @@ namespace StockApi
             // 
             this.lblCost.BackColor = System.Drawing.Color.Transparent;
             this.lblCost.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblCost.Location = new System.Drawing.Point(230, 667);
+            this.lblCost.Location = new System.Drawing.Point(205, 667);
             this.lblCost.Name = "lblCost";
             this.lblCost.Size = new System.Drawing.Size(74, 21);
             this.lblCost.TabIndex = 55;
             this.lblCost.Text = "Cost";
+            this.lblCost.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // lblTotalProfit
             // 
             this.lblTotalProfit.BackColor = System.Drawing.Color.Transparent;
             this.lblTotalProfit.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblTotalProfit.Location = new System.Drawing.Point(469, 668);
+            this.lblTotalProfit.Location = new System.Drawing.Point(437, 668);
             this.lblTotalProfit.Name = "lblTotalProfit";
             this.lblTotalProfit.Size = new System.Drawing.Size(66, 21);
             this.lblTotalProfit.TabIndex = 56;
             this.lblTotalProfit.Text = "Total Profit";
+            this.lblTotalProfit.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label5
             // 
@@ -230,11 +232,12 @@ namespace StockApi
             // 
             this.lblWorth.BackColor = System.Drawing.Color.Transparent;
             this.lblWorth.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblWorth.Location = new System.Drawing.Point(304, 667);
+            this.lblWorth.Location = new System.Drawing.Point(279, 667);
             this.lblWorth.Name = "lblWorth";
             this.lblWorth.Size = new System.Drawing.Size(74, 21);
             this.lblWorth.TabIndex = 62;
             this.lblWorth.Text = "Worth";
+            this.lblWorth.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // PerformanceForm
             // 
