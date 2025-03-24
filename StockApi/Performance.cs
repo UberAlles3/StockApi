@@ -24,10 +24,18 @@ namespace StockApi
         {
             int DateColumn = 0;
 
+            // Get latest DOW level from trades, replace that latest trade's DOW level with this.
+            string dow = tradesDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "").Last().ItemArray[1].ToString();
+            int dowL = 0;
+            if (dow._IsDecimal())
+            {
+                dowL = Convert.ToInt32(dow);
+            }
+
             // Get last 25 buys
-            var positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() !="");
-            
-            var tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[2].ToString() == "Buy" && x[1].ToString().Trim() != "").Skip(700);
+            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() !="");
+
+            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[2].ToString() == "Buy" && x[1].ToString().Trim() != "").Skip(700);
             tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]).Take(25);
 
             _performanceList.Clear();
@@ -83,6 +91,7 @@ namespace StockApi
 
                 _performanceList.Add(pi);
             }
+            _performanceList.First().DowLevel = dowL;
         }
         public void ShowPerformanceForm(Form1 form1)
         {

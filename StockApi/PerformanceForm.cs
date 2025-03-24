@@ -60,20 +60,8 @@ namespace StockApi
 
             dataGridView2.Refresh();
 
-            int i = 0;
-            foreach (PerformanceItem pi in _performanceList)
-            {
-                if(pi.TotalProfit < 0)
-                {
-                    dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.LightYellow;
-                    dataGridView2.Rows[i].Cells[6].Style.ForeColor = Color.LightYellow;
-                }
-                i++;
-            }
-
-
             // DOW gain / loss
-            decimal dowGain = Convert.ToDecimal((_performanceList[0].DowLevel - _performanceList[19].DowLevel)) / Convert.ToDecimal(_performanceList[0].DowLevel) * 100;
+            decimal dowGain = Convert.ToDecimal((_performanceList.First().DowLevel - _performanceList.Last().DowLevel)) / Convert.ToDecimal(_performanceList[0].DowLevel) * 100;
             lblDowGain.Text = dowGain.ToString("N1") + "%";
 
             // Total Profit
@@ -90,6 +78,22 @@ namespace StockApi
             decimal buyGain = ((totWorth - totCost) / totCost) * 100M;
             lblPortfolioGain.Text = buyGain.ToString("N1") + "%";
 
+            // Color big gainers and losers
+            int i = 0;
+            foreach (PerformanceItem pi in _performanceList)
+            {
+                if (pi.TotalProfit > Math.Abs(totProfit) / 12)
+                {
+                    dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.LightGreen;
+                    dataGridView2.Rows[i].Cells[6].Style.ForeColor = Color.LightGreen;
+                }
+                if (pi.TotalProfit < 0)
+                {
+                    dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.LightPink;
+                    dataGridView2.Rows[i].Cells[6].Style.ForeColor = Color.LightPink;
+                }
+                i++;
+            }
         }
     }
 }
