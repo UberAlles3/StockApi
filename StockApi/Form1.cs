@@ -150,7 +150,7 @@ namespace StockApi
                 }
                 catch (Exception ex)
                 {
-                    ReenableFormControls();
+                    ResetFormControls();
 
                     MessageBox.Show(ex.Message + Environment.NewLine + ex.Source + Environment.NewLine + ex.InnerException);
                     return;
@@ -243,7 +243,7 @@ namespace StockApi
 
         }
 
-        private void ReenableFormControls()
+        private void ResetFormControls()
         {
             btnGetOne.Enabled = true;
             picSpinner.Visible = false;
@@ -370,7 +370,7 @@ namespace StockApi
 
         private void PostSummaryWebCall()
         {
-            btnGetOne.Enabled = true;
+            ResetFormControls();
             try
             {
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
@@ -511,13 +511,13 @@ namespace StockApi
                 } // Ticker found.
                 else // Ticker not found.
                 {
+                    ResetFormControls();
                     MessageBox.Show("Stock ticker was not found.");
-                    panel1.Visible = panel2.Visible = panel3.Visible = false;
                 }
             }
             catch (Exception e)
             {
-                ReenableFormControls();
+                ResetFormControls();
                 MessageBox.Show($"Error: {e.Message} {e.InnerException} {e.StackTrace}");
             }
         }
