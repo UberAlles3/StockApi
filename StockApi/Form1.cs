@@ -136,15 +136,25 @@ namespace StockApi
             {
                 TickerTradesDataTable = new DataTable();
                 int DateColumn = 0;
-
-                GetFinancials();
-
                 DateTime outDate = DateTime.Now;
-                // filter on stock ticker then order by date descending
-                var tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
-                tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
-
                 List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
+                EnumerableRowCollection<DataRow> tickerTrades;
+
+                try
+                {
+                    GetFinancials();
+
+                    // filter on stock ticker then order by date descending
+                    tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
+                    tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
+                }
+                catch (Exception ex)
+                {
+                    ReenableFormControls();
+
+                    MessageBox.Show(ex.Message + Environment.NewLine + ex.Source + Environment.NewLine + ex.InnerException);
+                    return;
+                }
 
                 // try to get a price history from 3 years ago so you don't have to hit the yahoo web site.
                 //var threeYearAgo = tickerTrades.AsEnumerable().Where(x => x[DateColumn].ToString().Contains("/" + DateTime.Now.AddMonths(-40).Year.ToString()));
@@ -231,6 +241,14 @@ namespace StockApi
 
             PostSummaryWebCall(); // displays the data returned
 
+        }
+
+        private void ReenableFormControls()
+        {
+            btnGetOne.Enabled = true;
+            picSpinner.Visible = false;
+            Cursor.Current = Cursors.Default;
+            panel1.Visible = panel2.Visible = panel3.Visible = false;
         }
 
         private void SetTrendImages()
@@ -352,9 +370,9 @@ namespace StockApi
 
         private void PostSummaryWebCall()
         {
+            btnGetOne.Enabled = true;
             try
             {
-                btnGetOne.Enabled = true;
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
                 if (_tickerFound)
                 {
@@ -499,10 +517,9 @@ namespace StockApi
             }
             catch (Exception e)
             {
+                ReenableFormControls();
                 MessageBox.Show($"Error: {e.Message} {e.InnerException} {e.StackTrace}");
             }
-            picSpinner.Visible = false;
-            Cursor.Current = Cursors.Default;
         }
 
         private void btnAnalyze_Click(object sender, EventArgs e)
