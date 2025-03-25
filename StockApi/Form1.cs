@@ -147,34 +147,19 @@ namespace StockApi
                     // filter on stock ticker then order by date descending
                     tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
                     tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
+
+                    // get 3 year ago price
+                    historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, false, false);
                 }
                 catch (Exception ex)
                 {
                     ResetFormControls();
 
-                    MessageBox.Show(ex.Message + Environment.NewLine + ex.Source + Environment.NewLine + ex.InnerException);
+                    MessageBox.Show("Error somewhere in GetFinancials() or GetPriceHistoryForTodayWeekMonthYear()"+ Environment.NewLine 
+                                                                                                                + ex.Message + Environment.NewLine 
+                                                                                                                + ex.StackTrace + Environment.NewLine + ex.InnerException);
                     return;
                 }
-
-                // try to get a price history from 3 years ago so you don't have to hit the yahoo web site.
-                //var threeYearAgo = tickerTrades.AsEnumerable().Where(x => x[DateColumn].ToString().Contains("/" + DateTime.Now.AddMonths(-40).Year.ToString()));
-                //DataRow gotOne = null;
-                //if (threeYearAgo.Count() > 0)
-                //{
-                //    gotOne = threeYearAgo.First();
-
-                //    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { PeriodType = "3Y", PriceDate = DateTime.Parse(gotOne.ItemArray[0].ToString()), Ticker = gotOne.ItemArray[4].ToString(), Price = decimal.Parse(gotOne.ItemArray[5].ToString()) };
-                //    historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, false, false, false);
-                //    //historicDisplayList.Add(new StockHistory.HistoricPriceData() { PeriodType = "3Y", PriceDate = DateTime.Parse(gotOne.ItemArray[0].ToString()), Ticker = gotOne.ItemArray[4].ToString(), Price = float.Parse(gotOne.ItemArray[5].ToString()) });
-                //}
-                //else
-                //{
-                // Get the three year prior price from Yahoo. Todays price will be replaced with summary data's latest price
-                //historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, false, false);
-                //}
-
-                // get 3 year ago price
-                historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, false, false);
 
                 // bind data list to grid control
                 BindListToHistoricPriceGrid(historicDisplayList);
