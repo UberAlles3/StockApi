@@ -1065,6 +1065,7 @@ namespace StockApi
             this.lblCompanyNameAndTicker.TabIndex = 10;
             this.lblCompanyNameAndTicker.Text = "lblCompanyNameAndTicker";
             this.lblCompanyNameAndTicker.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblCompanyNameAndTicker.UseMnemonic = false;
             // 
             // label11
             // 
@@ -2055,7 +2056,7 @@ namespace StockApi
             // last20BuysToolStripMenuItem
             // 
             this.last20BuysToolStripMenuItem.Name = "last20BuysToolStripMenuItem";
-            this.last20BuysToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.last20BuysToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.last20BuysToolStripMenuItem.Text = "Last 25 Buys";
             this.last20BuysToolStripMenuItem.Click += new System.EventHandler(this.last20BuysToolStripMenuItem_Click);
             // 

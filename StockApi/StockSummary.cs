@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 
 namespace StockApi
@@ -69,6 +70,7 @@ namespace StockApi
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
+            CompanyName = HttpUtility.HtmlDecode(CompanyName);
 
             if (CompanyName == "")
             {
@@ -140,7 +142,8 @@ namespace StockApi
 
                 // Company Overview
                 searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
-                string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4200);
+                string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4500);
+                htmlSnippet = HttpUtility.HtmlDecode(htmlSnippet);
                 string[] parts = htmlSnippet.Split(">");
                 string longest = parts.OrderByDescending(s => s.Length).First();
 
