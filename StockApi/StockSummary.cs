@@ -50,6 +50,11 @@ namespace StockApi
         public StringSafeNumeric<Decimal> ForwardPEString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> CalculatedPEString = new StringSafeNumeric<decimal>("--");
 
+        // Markets
+        public decimal Market_DOW = 0M;    // symbol\":\"^DJI -> regularMarketPrice :40608.45,
+        public decimal Market_NASDAQ = 0M; // symbol\":\"^IXIC -> regularMarketPrice
+
+
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
@@ -66,6 +71,7 @@ namespace StockApi
                 html = await GetHtmlForTicker(_summaryUrl, Ticker);
             }
 
+            Market_DOW = GetMarketData(html, "Market_DOW");
             //html = Regex.Replace(html, @"[^\u0020-\u007e]", "");
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
@@ -207,6 +213,20 @@ namespace StockApi
                 ForwardPEColor = Color.LightSteelBlue;
 
             return true;
+        }
+
+        public decimal GetMarketData(string html, string searchTerm)
+        {
+            decimal value = 0M;
+            searchTerm = SearchTerms.Find(x => x.Name == searchTerm).Term;
+            string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 600);
+            htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 40).Substring(20,12)._TrimSuffix(".");
+            if(htmlSnippet._IsDecimal())
+            {
+                value = Convert.ToDecimal(htmlSnippet);
+            }
+
+            return value; 
         }
     }
 }
