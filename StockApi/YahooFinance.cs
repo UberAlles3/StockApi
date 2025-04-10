@@ -96,6 +96,9 @@ namespace StockApi
                 return "";
             }
 
+            if (length > html.Length)
+                length = html.Length - 1;
+
             return html.Substring(loc1 + 1, length);
         }
 

@@ -27,8 +27,8 @@ namespace StockApi
 
             // Get latest DOW level from trades, replace that latest trade's DOW level with this.
             int dowLast;
-            if(_stockSummary.Market_DOW > 0)
-                dowLast = Convert.ToInt32(_stockSummary.Market_DOW);
+            if(_stockSummary.Market_Dow.CurrentLevel.NumericValue > 0)
+                dowLast = Convert.ToInt32(_stockSummary.Market_Dow.CurrentLevel.NumericValue);
             else
             {
                 string dow = tradesDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "").Last().ItemArray[1].ToString();

@@ -1,5 +1,6 @@
 ﻿using Drake.Extensions;
 using System;
+using System.Linq;
 
 namespace StockApi
 {
@@ -21,7 +22,7 @@ namespace StockApi
             set
             {
                 _stringValue = value;
-                string temp = value.Replace("%", "");
+                string temp = new string(value.Where(c => char.IsDigit(c) || "-.".Contains(c)).ToArray());
 
                 // set the generic numeric type, converting the string to the numeric type
                 switch (Type.GetTypeCode(typeof(T)))

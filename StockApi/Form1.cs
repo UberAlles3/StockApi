@@ -385,30 +385,63 @@ namespace StockApi
                     lblSellQuantity.Text = "0";
                     lblSellPrice.Text = "0.00";
 
-                    lblSandP500.Text = _stockSummary.Market_SandP500.ToString();
-                    if (_stockSummary.Market_SandP500Change > 10)
+                    /////////  Market Data
+                    lblSandP500.Text = _stockSummary.Market_SandP.CurrentLevel.NumericValue.ToString("N0");
+                    lblSandP500Change.Text = _stockSummary.Market_SandP.Change.ToString();
+                    lblSandP500PercChange.Text = _stockSummary.Market_SandP.PercentageChange.ToString("0.0") + "%";
+                    if (_stockSummary.Market_SandP.Change > 10)
+                    {
                         lblSandP500Change.ForeColor = Color.Lime;
-                    else if(_stockSummary.Market_SandP500Change < 10)
+                        lblSandP500PercChange.ForeColor = Color.Lime;
+                    }
+                    else if(_stockSummary.Market_SandP.Change < -10)
+                    {
                         lblSandP500Change.ForeColor = Color.Red;
+                        lblSandP500PercChange.ForeColor = Color.Red;
+                    }
                     else
+                    {
                         lblSandP500Change.ForeColor = Color.LightSteelBlue;
-                    lblSandP500Change.Text = _stockSummary.Market_SandP500Change.ToString();
+                        lblSandP500PercChange.ForeColor = Color.LightSteelBlue;
+                    }
 
-                    lblDOW30.Text = _stockSummary.Market_DOW.ToString();
-                    if (_stockSummary.Market_DOWChange > 30)
+                    lblDOW30.Text = _stockSummary.Market_Dow.CurrentLevel.NumericValue.ToString("N0");
+                    lblDOW30Change.Text = _stockSummary.Market_Dow.Change.ToString();
+                    lblDOW30PercChange.Text = _stockSummary.Market_Dow.PercentageChange.ToString("0.0") + "%";
+                    if (_stockSummary.Market_Dow.Change > 30)
+                    {
                         lblDOW30Change.ForeColor = Color.Lime;
-                    else if (_stockSummary.Market_DOWChange < 28)
+                        lblDOW30PercChange.ForeColor = Color.Lime;
+                    }
+                    else if (_stockSummary.Market_Dow.Change < -28)
+                    {
                         lblDOW30Change.ForeColor = Color.Red;
+                        lblDOW30PercChange.ForeColor = Color.Red;
+                    }
                     else
+                    {
                         lblDOW30Change.ForeColor = Color.LightSteelBlue;
-                    lblDOW30Change.Text = _stockSummary.Market_DOWChange.ToString();
+                        lblDOW30PercChange.ForeColor = Color.LightSteelBlue;
+                    }
 
-                    lblNasdaq.Text = _stockSummary.Market_NASDAQ.ToString();
-                    if (_stockSummary.Market_NASDAQChange > 0)
+                    lblNasdaq.Text = _stockSummary.Market_Nasdaq.CurrentLevel.NumericValue.ToString("N0");
+                    lblNasdaqChange.Text = _stockSummary.Market_Nasdaq.Change.ToString();
+                    lblNasdaqPercChange.Text = _stockSummary.Market_Nasdaq.PercentageChange.ToString("0.0") + "%";
+                    if (_stockSummary.Market_Nasdaq.Change > 20)
+                    {
                         lblNasdaqChange.ForeColor = Color.Lime;
-                    else
+                        lblNasdaqPercChange.ForeColor = Color.Lime;
+                    }
+                    else if (_stockSummary.Market_Dow.Change < -18)
+                    {
                         lblNasdaqChange.ForeColor = Color.Red;
-                    lblNasdaqChange.Text = _stockSummary.Market_NASDAQChange.ToString();
+                        lblNasdaqPercChange.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        lblNasdaqChange.ForeColor = Color.LightSteelBlue;
+                        lblNasdaqPercChange.ForeColor = Color.LightSteelBlue;
+                    }
 
                     panelMarkets.Visible = true;
 

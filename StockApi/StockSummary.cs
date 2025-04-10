@@ -51,12 +51,12 @@ namespace StockApi
         public StringSafeNumeric<Decimal> CalculatedPEString = new StringSafeNumeric<decimal>("--");
 
         // Markets
-        public decimal Market_SandP500 = 0M; // symbol\":\"^GSPC -> regularMarketPrice
-        public decimal Market_SandP500Change = 0M; // symbol\":\"^GSPC -> regularMarketPrice
-        public decimal Market_DOW = 0M;    // symbol\":\"^DJI -> regularMarketPrice :40608.45,
-        public decimal Market_DOWChange = 0M;    // symbol\":\"^DJI -> regularMarketPrice :40608.45,
-        public decimal Market_NASDAQ = 0M; // symbol\":\"^IXIC -> regularMarketPrice
-        public decimal Market_NASDAQChange = 0M; // symbol\":\"^IXIC -> regularMarketPrice
+        public MarketData Market_SandP;
+        public MarketData Market_Dow;
+        public MarketData Market_Nasdaq;
+
+        //public decimal Market_NASDAQ = 0M; // symbol\":\"^IXIC -> regularMarketPrice
+        //public decimal Market_NASDAQChange = 0M; // symbol\":\"^IXIC -> regularMarketPrice
 
 
         ////////////////////////////////////////////
@@ -75,10 +75,9 @@ namespace StockApi
                 html = await GetHtmlForTicker(_summaryUrl, Ticker);
             }
 
-            Market_SandP500 = GetMarketData(html, "Market_SandP500", out Market_SandP500Change);
-            Market_DOW = GetMarketData(html, "Market_DOW", out Market_DOWChange);
-            Market_NASDAQ = GetMarketData(html, "Market_NASDAQ", out Market_NASDAQChange);
-            //html = Regex.Replace(html, @"[^\u0020-\u007e]", "");
+            Market_SandP = GetMarketData(html, "Market_SandP500");
+            Market_Dow = GetMarketData(html, "Market_DOW");
+            Market_Nasdaq = GetMarketData(html, "Market_NASDAQ");
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
@@ -221,28 +220,22 @@ namespace StockApi
             return true;
         }
 
-        public decimal GetMarketData(string html, string searchTerm, out decimal change)
+        public MarketData GetMarketData(string html, string searchTerm)
         {
-            string temp = "";
+            MarketData marketData = new MarketData();
+            marketData.RetreivedDate = DateTime.Now;
+            
             string htmlSnippet = "";
-            decimal previousClose = 0M;
-            decimal close = 0M;
-            change = 0M;
             searchTerm = SearchTerms.Find(x => x.Name == searchTerm).Term;
-            htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1200);
-            temp = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 80).Substring(19, 12).Replace(":", "")._TrimSuffix(".");
-            if (temp._IsDecimal())
+            marketData.Ticker = searchTerm.Replace("\\", "");
+            htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1500);
+            if(htmlSnippet.Length > 100)
             {
-                close = Convert.ToDecimal(temp);
-            }
-            temp = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "previousClose", 80).Substring(14, 12).Replace(":", "")._TrimSuffix(".");
-            if (temp._IsDecimal())
-            {
-                previousClose = Convert.ToDecimal(temp);
-                change = close - previousClose;
+                marketData.CurrentLevel.StringValue = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 100).Substring(19, 12).Replace(":", "")._TrimSuffix(".");
+                marketData.PreviousClose.StringValue = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "previousClose", 100).Substring(14, 12).Replace(":", "")._TrimSuffix(".");
             }
 
-            return close; 
+            return marketData; 
         }
     }
 }
