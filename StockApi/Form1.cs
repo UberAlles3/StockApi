@@ -401,9 +401,8 @@ namespace StockApi
                         lblDOW30Change.ForeColor = Color.Red;
                     else
                         lblDOW30Change.ForeColor = Color.LightSteelBlue;
-
-                    lblDOW30Change.ForeColor = Color.Red;
                     lblDOW30Change.Text = _stockSummary.Market_DOWChange.ToString();
+
                     lblNasdaq.Text = _stockSummary.Market_NASDAQ.ToString();
                     if (_stockSummary.Market_NASDAQChange > 0)
                         lblNasdaqChange.ForeColor = Color.Lime;
