@@ -198,12 +198,12 @@ namespace StockApi
             this.lblSandP500 = new System.Windows.Forms.Label();
             this.lblSandP500Change = new System.Windows.Forms.Label();
             this.panelMarkets = new System.Windows.Forms.Panel();
-            this.lblDOW30 = new System.Windows.Forms.Label();
-            this.lblDOW30Change = new System.Windows.Forms.Label();
-            this.label75 = new System.Windows.Forms.Label();
             this.lblNasdaq = new System.Windows.Forms.Label();
             this.lblNasdaqChange = new System.Windows.Forms.Label();
             this.label76 = new System.Windows.Forms.Label();
+            this.lblDOW30 = new System.Windows.Forms.Label();
+            this.lblDOW30Change = new System.Windows.Forms.Label();
+            this.label75 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -2105,7 +2105,7 @@ namespace StockApi
             // 
             this.label70.BackColor = System.Drawing.Color.Transparent;
             this.label70.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label70.Location = new System.Drawing.Point(8, 18);
+            this.label70.Location = new System.Drawing.Point(14, 18);
             this.label70.Name = "label70";
             this.label70.Size = new System.Drawing.Size(62, 22);
             this.label70.TabIndex = 41;
@@ -2153,41 +2153,6 @@ namespace StockApi
             this.panelMarkets.Size = new System.Drawing.Size(237, 105);
             this.panelMarkets.TabIndex = 44;
             // 
-            // lblDOW30
-            // 
-            this.lblDOW30.BackColor = System.Drawing.Color.Transparent;
-            this.lblDOW30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblDOW30.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblDOW30.Location = new System.Drawing.Point(79, 37);
-            this.lblDOW30.Name = "lblDOW30";
-            this.lblDOW30.Size = new System.Drawing.Size(57, 22);
-            this.lblDOW30.TabIndex = 45;
-            this.lblDOW30.Text = "0.00";
-            this.lblDOW30.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // lblDOW30Change
-            // 
-            this.lblDOW30Change.BackColor = System.Drawing.Color.Transparent;
-            this.lblDOW30Change.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblDOW30Change.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblDOW30Change.Location = new System.Drawing.Point(142, 37);
-            this.lblDOW30Change.Name = "lblDOW30Change";
-            this.lblDOW30Change.Size = new System.Drawing.Size(57, 22);
-            this.lblDOW30Change.TabIndex = 46;
-            this.lblDOW30Change.Text = "0.00";
-            this.lblDOW30Change.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label75
-            // 
-            this.label75.BackColor = System.Drawing.Color.Transparent;
-            this.label75.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label75.Location = new System.Drawing.Point(8, 37);
-            this.label75.Name = "label75";
-            this.label75.Size = new System.Drawing.Size(62, 22);
-            this.label75.TabIndex = 44;
-            this.label75.Text = "Dow 30:";
-            this.label75.UseMnemonic = false;
-            // 
             // lblNasdaq
             // 
             this.lblNasdaq.BackColor = System.Drawing.Color.Transparent;
@@ -2216,12 +2181,47 @@ namespace StockApi
             // 
             this.label76.BackColor = System.Drawing.Color.Transparent;
             this.label76.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label76.Location = new System.Drawing.Point(8, 58);
+            this.label76.Location = new System.Drawing.Point(14, 58);
             this.label76.Name = "label76";
             this.label76.Size = new System.Drawing.Size(62, 22);
             this.label76.TabIndex = 47;
             this.label76.Text = "Nasdaq:";
             this.label76.UseMnemonic = false;
+            // 
+            // lblDOW30
+            // 
+            this.lblDOW30.BackColor = System.Drawing.Color.Transparent;
+            this.lblDOW30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblDOW30.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblDOW30.Location = new System.Drawing.Point(79, 37);
+            this.lblDOW30.Name = "lblDOW30";
+            this.lblDOW30.Size = new System.Drawing.Size(57, 22);
+            this.lblDOW30.TabIndex = 45;
+            this.lblDOW30.Text = "0.00";
+            this.lblDOW30.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblDOW30Change
+            // 
+            this.lblDOW30Change.BackColor = System.Drawing.Color.Transparent;
+            this.lblDOW30Change.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblDOW30Change.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblDOW30Change.Location = new System.Drawing.Point(142, 37);
+            this.lblDOW30Change.Name = "lblDOW30Change";
+            this.lblDOW30Change.Size = new System.Drawing.Size(57, 22);
+            this.lblDOW30Change.TabIndex = 46;
+            this.lblDOW30Change.Text = "0.00";
+            this.lblDOW30Change.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label75
+            // 
+            this.label75.BackColor = System.Drawing.Color.Transparent;
+            this.label75.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label75.Location = new System.Drawing.Point(14, 37);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(62, 22);
+            this.label75.TabIndex = 44;
+            this.label75.Text = "Dow 30:";
+            this.label75.UseMnemonic = false;
             // 
             // Form1
             // 

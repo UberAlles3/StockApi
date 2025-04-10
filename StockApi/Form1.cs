@@ -384,17 +384,25 @@ namespace StockApi
                     lblBuyPrice.Text = "0.00";
                     lblSellQuantity.Text = "0";
                     lblSellPrice.Text = "0.00";
+
                     lblSandP500.Text = _stockSummary.Market_SandP500.ToString();
-                    if (_stockSummary.Market_SandP500Change > 0)
+                    if (_stockSummary.Market_SandP500Change > 10)
                         lblSandP500Change.ForeColor = Color.Lime;
-                    else
+                    else if(_stockSummary.Market_SandP500Change < 10)
                         lblSandP500Change.ForeColor = Color.Red;
-                    lblSandP500Change.Text = _stockSummary.Market_SandP500Change.ToString();
-                    lblDOW30.Text = _stockSummary.Market_DOW.ToString();
-                    if (_stockSummary.Market_DOWChange > 0)
-                        lblDOW30Change.ForeColor = Color.Lime;
                     else
+                        lblSandP500Change.ForeColor = Color.LightSteelBlue;
+                    lblSandP500Change.Text = _stockSummary.Market_SandP500Change.ToString();
+
+                    lblDOW30.Text = _stockSummary.Market_DOW.ToString();
+                    if (_stockSummary.Market_DOWChange > 30)
+                        lblDOW30Change.ForeColor = Color.Lime;
+                    else if (_stockSummary.Market_DOWChange < 28)
                         lblDOW30Change.ForeColor = Color.Red;
+                    else
+                        lblDOW30Change.ForeColor = Color.LightSteelBlue;
+
+                    lblDOW30Change.ForeColor = Color.Red;
                     lblDOW30Change.Text = _stockSummary.Market_DOWChange.ToString();
                     lblNasdaq.Text = _stockSummary.Market_NASDAQ.ToString();
                     if (_stockSummary.Market_NASDAQChange > 0)
