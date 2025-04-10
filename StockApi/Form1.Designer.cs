@@ -194,6 +194,16 @@ namespace StockApi
             this.performanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.last20BuysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label70 = new System.Windows.Forms.Label();
+            this.lblSandP500 = new System.Windows.Forms.Label();
+            this.lblSandP500Change = new System.Windows.Forms.Label();
+            this.panelMarkets = new System.Windows.Forms.Panel();
+            this.lblDOW30 = new System.Windows.Forms.Label();
+            this.lblDOW30Change = new System.Windows.Forms.Label();
+            this.label75 = new System.Windows.Forms.Label();
+            this.lblNasdaq = new System.Windows.Forms.Label();
+            this.lblNasdaqChange = new System.Windows.Forms.Label();
+            this.label76 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -212,6 +222,7 @@ namespace StockApi
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panelMarkets.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGetOne
@@ -1384,7 +1395,7 @@ namespace StockApi
             // 
             this.picSpinner.BackColor = System.Drawing.Color.Transparent;
             this.picSpinner.Image = ((System.Drawing.Image)(resources.GetObject("picSpinner.Image")));
-            this.picSpinner.Location = new System.Drawing.Point(3, 565);
+            this.picSpinner.Location = new System.Drawing.Point(4, 659);
             this.picSpinner.Name = "picSpinner";
             this.picSpinner.Size = new System.Drawing.Size(58, 56);
             this.picSpinner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1906,7 +1917,7 @@ namespace StockApi
             // picUpTrend
             // 
             this.picUpTrend.Image = global::StockApi.Properties.Resources.UpTrend1;
-            this.picUpTrend.Location = new System.Drawing.Point(90, 566);
+            this.picUpTrend.Location = new System.Drawing.Point(91, 660);
             this.picUpTrend.Name = "picUpTrend";
             this.picUpTrend.Size = new System.Drawing.Size(35, 34);
             this.picUpTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1916,7 +1927,7 @@ namespace StockApi
             // picDownTrend
             // 
             this.picDownTrend.Image = global::StockApi.Properties.Resources.downTrend1;
-            this.picDownTrend.Location = new System.Drawing.Point(172, 566);
+            this.picDownTrend.Location = new System.Drawing.Point(173, 660);
             this.picDownTrend.Name = "picDownTrend";
             this.picDownTrend.Size = new System.Drawing.Size(35, 34);
             this.picDownTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1926,7 +1937,7 @@ namespace StockApi
             // picSidewaysTrend
             // 
             this.picSidewaysTrend.Image = global::StockApi.Properties.Resources.RightArrow;
-            this.picSidewaysTrend.Location = new System.Drawing.Point(131, 566);
+            this.picSidewaysTrend.Location = new System.Drawing.Point(132, 660);
             this.picSidewaysTrend.Name = "picSidewaysTrend";
             this.picSidewaysTrend.Size = new System.Drawing.Size(32, 34);
             this.picSidewaysTrend.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2090,6 +2101,128 @@ namespace StockApi
             this.panel3.Size = new System.Drawing.Size(380, 644);
             this.panel3.TabIndex = 23;
             // 
+            // label70
+            // 
+            this.label70.BackColor = System.Drawing.Color.Transparent;
+            this.label70.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label70.Location = new System.Drawing.Point(8, 18);
+            this.label70.Name = "label70";
+            this.label70.Size = new System.Drawing.Size(62, 22);
+            this.label70.TabIndex = 41;
+            this.label70.Text = "S&P 500:";
+            this.label70.UseMnemonic = false;
+            // 
+            // lblSandP500
+            // 
+            this.lblSandP500.BackColor = System.Drawing.Color.Transparent;
+            this.lblSandP500.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblSandP500.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblSandP500.Location = new System.Drawing.Point(79, 18);
+            this.lblSandP500.Name = "lblSandP500";
+            this.lblSandP500.Size = new System.Drawing.Size(57, 22);
+            this.lblSandP500.TabIndex = 42;
+            this.lblSandP500.Text = "0.00";
+            this.lblSandP500.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblSandP500Change
+            // 
+            this.lblSandP500Change.BackColor = System.Drawing.Color.Transparent;
+            this.lblSandP500Change.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblSandP500Change.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblSandP500Change.Location = new System.Drawing.Point(142, 18);
+            this.lblSandP500Change.Name = "lblSandP500Change";
+            this.lblSandP500Change.Size = new System.Drawing.Size(57, 22);
+            this.lblSandP500Change.TabIndex = 43;
+            this.lblSandP500Change.Text = "0.00";
+            this.lblSandP500Change.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // panelMarkets
+            // 
+            this.panelMarkets.BackColor = System.Drawing.Color.Transparent;
+            this.panelMarkets.Controls.Add(this.lblNasdaq);
+            this.panelMarkets.Controls.Add(this.lblNasdaqChange);
+            this.panelMarkets.Controls.Add(this.label76);
+            this.panelMarkets.Controls.Add(this.lblDOW30);
+            this.panelMarkets.Controls.Add(this.lblDOW30Change);
+            this.panelMarkets.Controls.Add(this.label75);
+            this.panelMarkets.Controls.Add(this.lblSandP500);
+            this.panelMarkets.Controls.Add(this.lblSandP500Change);
+            this.panelMarkets.Controls.Add(this.label70);
+            this.panelMarkets.Location = new System.Drawing.Point(4, 529);
+            this.panelMarkets.Name = "panelMarkets";
+            this.panelMarkets.Size = new System.Drawing.Size(237, 105);
+            this.panelMarkets.TabIndex = 44;
+            // 
+            // lblDOW30
+            // 
+            this.lblDOW30.BackColor = System.Drawing.Color.Transparent;
+            this.lblDOW30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblDOW30.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblDOW30.Location = new System.Drawing.Point(79, 37);
+            this.lblDOW30.Name = "lblDOW30";
+            this.lblDOW30.Size = new System.Drawing.Size(57, 22);
+            this.lblDOW30.TabIndex = 45;
+            this.lblDOW30.Text = "0.00";
+            this.lblDOW30.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblDOW30Change
+            // 
+            this.lblDOW30Change.BackColor = System.Drawing.Color.Transparent;
+            this.lblDOW30Change.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblDOW30Change.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblDOW30Change.Location = new System.Drawing.Point(142, 37);
+            this.lblDOW30Change.Name = "lblDOW30Change";
+            this.lblDOW30Change.Size = new System.Drawing.Size(57, 22);
+            this.lblDOW30Change.TabIndex = 46;
+            this.lblDOW30Change.Text = "0.00";
+            this.lblDOW30Change.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label75
+            // 
+            this.label75.BackColor = System.Drawing.Color.Transparent;
+            this.label75.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label75.Location = new System.Drawing.Point(8, 37);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(62, 22);
+            this.label75.TabIndex = 44;
+            this.label75.Text = "Dow 30:";
+            this.label75.UseMnemonic = false;
+            // 
+            // lblNasdaq
+            // 
+            this.lblNasdaq.BackColor = System.Drawing.Color.Transparent;
+            this.lblNasdaq.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblNasdaq.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblNasdaq.Location = new System.Drawing.Point(79, 58);
+            this.lblNasdaq.Name = "lblNasdaq";
+            this.lblNasdaq.Size = new System.Drawing.Size(57, 22);
+            this.lblNasdaq.TabIndex = 48;
+            this.lblNasdaq.Text = "0.00";
+            this.lblNasdaq.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblNasdaqChange
+            // 
+            this.lblNasdaqChange.BackColor = System.Drawing.Color.Transparent;
+            this.lblNasdaqChange.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblNasdaqChange.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblNasdaqChange.Location = new System.Drawing.Point(142, 58);
+            this.lblNasdaqChange.Name = "lblNasdaqChange";
+            this.lblNasdaqChange.Size = new System.Drawing.Size(57, 22);
+            this.lblNasdaqChange.TabIndex = 49;
+            this.lblNasdaqChange.Text = "0.00";
+            this.lblNasdaqChange.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label76
+            // 
+            this.label76.BackColor = System.Drawing.Color.Transparent;
+            this.label76.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label76.Location = new System.Drawing.Point(8, 58);
+            this.label76.Name = "label76";
+            this.label76.Size = new System.Drawing.Size(62, 22);
+            this.label76.TabIndex = 47;
+            this.label76.Text = "Nasdaq:";
+            this.label76.UseMnemonic = false;
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -2099,6 +2232,7 @@ namespace StockApi
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1444, 691);
+            this.Controls.Add(this.panelMarkets);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.webView21);
             this.Controls.Add(this.picSidewaysTrend);
@@ -2148,6 +2282,7 @@ namespace StockApi
             this.menuStrip1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.panelMarkets.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2315,6 +2450,16 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem marketBeatAnaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem performanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem last20BuysToolStripMenuItem;
+        private System.Windows.Forms.Label label70;
+        private System.Windows.Forms.Label lblSandP500;
+        private System.Windows.Forms.Label lblSandP500Change;
+        private System.Windows.Forms.Panel panelMarkets;
+        private System.Windows.Forms.Label lblDOW30;
+        private System.Windows.Forms.Label lblDOW30Change;
+        private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.Label lblNasdaq;
+        private System.Windows.Forms.Label lblNasdaqChange;
+        private System.Windows.Forms.Label label76;
     }
 }
 

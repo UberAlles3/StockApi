@@ -14,10 +14,11 @@ namespace StockApi
     public class Performance
     {
         private List<PerformanceItem> _performanceList = new List<PerformanceItem>();
+        StockSummary _stockSummary;
 
-        public Performance()
+        public Performance(StockSummary stockSummary)
         {
-
+            _stockSummary = stockSummary;
         }
 
         public void GetLatestBuyPerformance(DataTable positionsDataTable, DataTable tradesDataTable)
@@ -25,11 +26,17 @@ namespace StockApi
             int DateColumn = 0;
 
             // Get latest DOW level from trades, replace that latest trade's DOW level with this.
-            string dow = tradesDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "").Last().ItemArray[1].ToString();
-            int dowL = 0;
-            if (dow._IsDecimal())
+            int dowLast;
+            if(_stockSummary.Market_DOW > 0)
+                dowLast = Convert.ToInt32(_stockSummary.Market_DOW);
+            else
             {
-                dowL = Convert.ToInt32(dow);
+                string dow = tradesDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "").Last().ItemArray[1].ToString();
+                dowLast = 0;
+                if (dow._IsDecimal())
+                {
+                    dowLast = Convert.ToInt32(dow);
+                }
             }
 
             // Get last 25 buys
@@ -91,7 +98,7 @@ namespace StockApi
 
                 _performanceList.Add(pi);
             }
-            _performanceList.First().DowLevel = dowL;
+            _performanceList.First().DowLevel = dowLast;
         }
         public void ShowPerformanceForm(Form1 form1)
         {
