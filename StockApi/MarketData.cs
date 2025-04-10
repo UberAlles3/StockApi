@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace StockApi
@@ -17,6 +18,21 @@ namespace StockApi
         public decimal PercentageChange
         {
             get => ((CurrentLevel.NumericValue - PreviousClose.NumericValue) / PreviousClose.NumericValue) * 100; 
+        }
+
+        public Color MarketColor
+        {
+            get
+            {
+                Color color = Color.LightSteelBlue;
+
+                if (Change > PreviousClose.NumericValue / 1000)
+                    color = Color.LimeGreen;
+                else if (Change < -PreviousClose.NumericValue / 1000)
+                    color = Color.Red;
+
+                return color;
+            }
         }
     }
 }

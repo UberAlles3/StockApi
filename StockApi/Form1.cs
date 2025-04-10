@@ -389,62 +389,24 @@ namespace StockApi
                     lblSandP500.Text = _stockSummary.Market_SandP.CurrentLevel.NumericValue.ToString("N0");
                     lblSandP500Change.Text = _stockSummary.Market_SandP.Change.ToString();
                     lblSandP500PercChange.Text = _stockSummary.Market_SandP.PercentageChange.ToString("0.0") + "%";
-                    if (_stockSummary.Market_SandP.Change > 10)
-                    {
-                        lblSandP500Change.ForeColor = Color.Lime;
-                        lblSandP500PercChange.ForeColor = Color.Lime;
-                    }
-                    else if(_stockSummary.Market_SandP.Change < -10)
-                    {
-                        lblSandP500Change.ForeColor = Color.Red;
-                        lblSandP500PercChange.ForeColor = Color.Red;
-                    }
-                    else
-                    {
-                        lblSandP500Change.ForeColor = Color.LightSteelBlue;
-                        lblSandP500PercChange.ForeColor = Color.LightSteelBlue;
-                    }
+                    lblSandP500Change.ForeColor = _stockSummary.Market_SandP.MarketColor;
+                    lblSandP500PercChange.ForeColor = _stockSummary.Market_SandP.MarketColor;
 
                     lblDOW30.Text = _stockSummary.Market_Dow.CurrentLevel.NumericValue.ToString("N0");
                     lblDOW30Change.Text = _stockSummary.Market_Dow.Change.ToString();
                     lblDOW30PercChange.Text = _stockSummary.Market_Dow.PercentageChange.ToString("0.0") + "%";
-                    if (_stockSummary.Market_Dow.Change > 30)
-                    {
-                        lblDOW30Change.ForeColor = Color.Lime;
-                        lblDOW30PercChange.ForeColor = Color.Lime;
-                    }
-                    else if (_stockSummary.Market_Dow.Change < -28)
-                    {
-                        lblDOW30Change.ForeColor = Color.Red;
-                        lblDOW30PercChange.ForeColor = Color.Red;
-                    }
-                    else
-                    {
-                        lblDOW30Change.ForeColor = Color.LightSteelBlue;
-                        lblDOW30PercChange.ForeColor = Color.LightSteelBlue;
-                    }
+                    lblDOW30Change.ForeColor = _stockSummary.Market_Dow.MarketColor;
+                    lblDOW30PercChange.ForeColor = _stockSummary.Market_Dow.MarketColor;
 
                     lblNasdaq.Text = _stockSummary.Market_Nasdaq.CurrentLevel.NumericValue.ToString("N0");
                     lblNasdaqChange.Text = _stockSummary.Market_Nasdaq.Change.ToString();
                     lblNasdaqPercChange.Text = _stockSummary.Market_Nasdaq.PercentageChange.ToString("0.0") + "%";
-                    if (_stockSummary.Market_Nasdaq.Change > 20)
-                    {
-                        lblNasdaqChange.ForeColor = Color.Lime;
-                        lblNasdaqPercChange.ForeColor = Color.Lime;
-                    }
-                    else if (_stockSummary.Market_Dow.Change < -18)
-                    {
-                        lblNasdaqChange.ForeColor = Color.Red;
-                        lblNasdaqPercChange.ForeColor = Color.Red;
-                    }
-                    else
-                    {
-                        lblNasdaqChange.ForeColor = Color.LightSteelBlue;
-                        lblNasdaqPercChange.ForeColor = Color.LightSteelBlue;
-                    }
+                    lblNasdaqChange.ForeColor = _stockSummary.Market_Nasdaq.MarketColor;
+                    lblNasdaqPercChange.ForeColor = _stockSummary.Market_Nasdaq.MarketColor;
 
                     panelMarkets.Visible = true;
 
+                    ///////////  52 week range
                     if (_stockSummary.YearsRangeHigh.NumericValue > 0)
                     {
                         lbl52WeekArrow.Visible = true;
@@ -458,6 +420,7 @@ namespace StockApi
                         lbl52WeekArrow.Visible = false;
                     }
 
+                    //////////  Ticker Trades
                     if (TickerTradesDataTable != null && TickerTradesDataTable.Rows.Count > 0)
                     {
                         DataRow latestRow = TickerTradesDataTable.Rows[0];

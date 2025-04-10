@@ -229,7 +229,7 @@ namespace StockApi
             searchTerm = SearchTerms.Find(x => x.Name == searchTerm).Term;
             marketData.Ticker = searchTerm.Replace("\\", "");
             htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1500);
-            if(htmlSnippet.Length > 100)
+            if(htmlSnippet.Length > 200)
             {
                 marketData.CurrentLevel.StringValue = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 100).Substring(19, 12).Replace(":", "")._TrimSuffix(".");
                 marketData.PreviousClose.StringValue = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "previousClose", 100).Substring(14, 12).Replace(":", "")._TrimSuffix(".");
