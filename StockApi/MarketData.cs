@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Drake.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -33,6 +34,32 @@ namespace StockApi
 
                 return color;
             }
+        }
+
+        public static MarketData GetMarketData(StockSummary stockSummary, string html, string searchTerm)
+        {
+            MarketData marketData = new MarketData();
+            marketData.RetreivedDate = DateTime.Now;
+
+            string htmlSnippet = "";
+            searchTerm = StockSummary.SearchTerms.Find(x => x.Name == searchTerm).Term;
+            marketData.Ticker = searchTerm.Replace("\\", "");
+            htmlSnippet = stockSummary.GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1500);
+            if (htmlSnippet.Length > 200)
+            {
+                string temp = stockSummary.GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 100);
+                if (temp.Length > 20)
+                {
+                    marketData.CurrentLevel.StringValue = temp.Substring(19, 12).Replace(":", "")._TrimSuffix(".");
+                    temp = stockSummary.GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "previousClose", 100);
+                    if (temp.Length > 20)
+                    {
+                        marketData.PreviousClose.StringValue = temp.Substring(14, 12).Replace(":", "")._TrimSuffix(".");
+                    }
+                }
+            }
+
+            return marketData;
         }
     }
 }

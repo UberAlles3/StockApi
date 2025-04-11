@@ -11,7 +11,7 @@ namespace StockApi
         public static string NotApplicable = "N/A";
         //private static readonly object syncObj = new object();
         private string _ticker;
-        protected static List<SearchTerm> SearchTerms = new List<SearchTerm>(); // singleton instance, load once
+        public static List<SearchTerm> SearchTerms = new List<SearchTerm>(); // singleton instance, load once
 
         public string Ticker
         {
@@ -86,7 +86,7 @@ namespace StockApi
             return middle;
         }
 
-        protected static string GetPartialHtmlFromHtmlBySearchTerm(string html, string searchText, int length)
+        public string GetPartialHtmlFromHtmlBySearchTerm(string html, string searchText, int length)
         {
             int loc1 = 0;
 

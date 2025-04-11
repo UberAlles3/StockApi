@@ -75,9 +75,9 @@ namespace StockApi
                 html = await GetHtmlForTicker(_summaryUrl, Ticker);
             }
 
-            Market_SandP = GetMarketData(html, "Market_SandP500");
-            Market_Dow = GetMarketData(html, "Market_DOW");
-            Market_Nasdaq = GetMarketData(html, "Market_NASDAQ");
+            Market_SandP = MarketData.GetMarketData(this, html, "Market_SandP500");
+            Market_Dow = MarketData.GetMarketData(this, html, "Market_DOW");
+            Market_Nasdaq = MarketData.GetMarketData(this, html, "Market_NASDAQ");
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
@@ -220,22 +220,6 @@ namespace StockApi
             return true;
         }
 
-        public MarketData GetMarketData(string html, string searchTerm)
-        {
-            MarketData marketData = new MarketData();
-            marketData.RetreivedDate = DateTime.Now;
-            
-            string htmlSnippet = "";
-            searchTerm = SearchTerms.Find(x => x.Name == searchTerm).Term;
-            marketData.Ticker = searchTerm.Replace("\\", "");
-            htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1500);
-            if(htmlSnippet.Length > 200)
-            {
-                marketData.CurrentLevel.StringValue = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 100).Substring(19, 12).Replace(":", "")._TrimSuffix(".");
-                marketData.PreviousClose.StringValue = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "previousClose", 100).Substring(14, 12).Replace(":", "")._TrimSuffix(".");
-            }
-
-            return marketData; 
-        }
+ 
     }
 }
