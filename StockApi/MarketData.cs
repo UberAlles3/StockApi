@@ -18,7 +18,15 @@ namespace StockApi
         }
         public decimal PercentageChange
         {
-            get => ((CurrentLevel.NumericValue - PreviousClose.NumericValue) / PreviousClose.NumericValue) * 100; 
+            get
+            {
+                decimal change = 0;
+                
+                if(PreviousClose.NumericValue > 0 )
+                    change = ((CurrentLevel.NumericValue - PreviousClose.NumericValue) / PreviousClose.NumericValue) * 100;
+                
+                return change;  
+            }
         }
 
         public Color MarketColor
