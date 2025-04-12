@@ -86,7 +86,7 @@ namespace StockApi
             return middle;
         }
 
-        public string GetPartialHtmlFromHtmlBySearchTerm(string html, string searchText, int length)
+        public static string GetPartialHtmlFromHtmlBySearchTerm(string html, string searchText, int length)
         {
             int loc1 = 0;
 

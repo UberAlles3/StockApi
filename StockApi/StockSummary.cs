@@ -75,9 +75,9 @@ namespace StockApi
                 html = await GetHtmlForTicker(_summaryUrl, Ticker);
             }
 
-            Market_SandP = MarketData.GetMarketData(this, html, "Market_SandP500");
-            Market_Dow = MarketData.GetMarketData(this, html, "Market_DOW");
-            Market_Nasdaq = MarketData.GetMarketData(this, html, "Market_NASDAQ");
+            Market_SandP = MarketData.GetMarketData(html, "Market_SandP500");
+            Market_Dow = MarketData.GetMarketData(html, "Market_DOW");
+            Market_Nasdaq = MarketData.GetMarketData(html, "Market_NASDAQ");
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);

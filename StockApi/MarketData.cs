@@ -6,10 +6,10 @@ using System.Text;
 
 namespace StockApi
 {
-    public class MarketData
+    public class MarketData : YahooFinance
     {
         public DateTime RetreivedDate { get; set; }
-        public string Ticker { get; set; } = "";
+        //public string Ticker { get; set; } = "";
         public StringSafeNumeric<decimal> PreviousClose { get; set; } = new StringSafeNumeric<decimal>("");
         public StringSafeNumeric<decimal> CurrentLevel { get; set; } = new StringSafeNumeric<decimal>("");
         public decimal Change
@@ -44,22 +44,22 @@ namespace StockApi
             }
         }
 
-        public static MarketData GetMarketData(StockSummary stockSummary, string html, string searchTerm)
+        public static MarketData GetMarketData(string html, string searchTerm)
         {
             MarketData marketData = new MarketData();
             marketData.RetreivedDate = DateTime.Now;
 
             string htmlSnippet = "";
-            searchTerm = StockSummary.SearchTerms.Find(x => x.Name == searchTerm).Term;
+            searchTerm = SearchTerms.Find(x => x.Name == searchTerm).Term;
             marketData.Ticker = searchTerm.Replace("\\", "");
-            htmlSnippet = stockSummary.GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1500);
+            htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1500);
             if (htmlSnippet.Length > 200)
             {
-                string temp = stockSummary.GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 100);
+                string temp = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 100);
                 if (temp.Length > 20)
                 {
                     marketData.CurrentLevel.StringValue = temp.Substring(19, 12).Replace(":", "")._TrimSuffix(".");
-                    temp = stockSummary.GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "previousClose", 100);
+                    temp = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "previousClose", 100);
                     if (temp.Length > 20)
                     {
                         marketData.PreviousClose.StringValue = temp.Substring(14, 12).Replace(":", "")._TrimSuffix(".");
