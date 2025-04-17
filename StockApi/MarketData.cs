@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
 
 namespace StockApi
 {
@@ -65,6 +66,10 @@ namespace StockApi
                         marketData.PreviousClose.StringValue = temp.Substring(14, 12).Replace(":", "")._TrimSuffix(".");
                     }
                 }
+            }
+            if(marketData.CurrentLevel.NumericValue == 0)
+            {
+                MessageBox.Show("Market Data\n" + htmlSnippet)
             }
 
             return marketData;
