@@ -69,10 +69,11 @@ namespace StockApi
 
             string html = await GetHtmlForTicker(_summaryUrl, Ticker);
 
-            if (html.Length < 4000) // try again
+            if (html.Length < 3400) // try again
             {
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
                 html = await GetHtmlForTicker(_summaryUrl, Ticker);
+                Thread.Sleep(1000);
             }
 
             Market_SandP = MarketData.GetMarketData(html, "Market_SandP500");
