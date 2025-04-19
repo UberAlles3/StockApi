@@ -66,6 +66,10 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // int unixTimestamp = (int)DateTime.UtcNow.AddDays(-7).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            // https://query2.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1744492585&period2=1745097662&interval=1d
+
+
             ApplyStyles();
 
             label37.BackColor = label38.BackColor = trackBar1.BackColor;

@@ -69,7 +69,7 @@ namespace StockApi
             }
             if(marketData.CurrentLevel.NumericValue == 0)
             {
-                MessageBox.Show("Market Data\n" + htmlSnippet)
+                MessageBox.Show("Market Data\n" + htmlSnippet);
             }
 
             return marketData;
