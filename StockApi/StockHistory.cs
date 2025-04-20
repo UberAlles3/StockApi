@@ -81,12 +81,27 @@ namespace StockApi
             /////// Get price history for 3 years ago to determine long trend
             if (get3Year)
             {
-                historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
-                if (historicDataList.Count > 0)
+                HistoricData3YearsAgo = new HistoricPriceData();
+                YahooFinanceAPI yahooFinanceAPI = new YahooFinanceAPI();
+                
+                //string json =
+                List<StockQuote> quoteList = await yahooFinanceAPI.GetQuotes("AAPL", DateTime.Now.AddYears(-3).AddDays(-4), 4);
+                if (quoteList.Count > 0)
                 {
-                    HistoricData3YearsAgo = historicDataList.First();
+                    StockQuote stockQuote = quoteList.Last();
+                    HistoricData3YearsAgo.Ticker = ticker;
                     HistoricData3YearsAgo.PeriodType = "3Y";
+                    HistoricData3YearsAgo.Price = stockQuote.Close;
+                    HistoricData3YearsAgo.PriceDate = stockQuote.QuoteDate;
+                    HistoricData3YearsAgo.Volume = stockQuote.Volume.ToString();
                 }
+
+                //historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
+                //if (historicDataList.Count > 0)
+                //{
+                //    HistoricData3YearsAgo = historicDataList.First();
+                //    HistoricData3YearsAgo.PeriodType = "3Y";
+                //}
             }
 
             List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
@@ -281,17 +296,11 @@ namespace StockApi
 
         public class HistoricPriceData
         {
-            private string ticker = "";
-            private string periodType = "";
-            private DateTime priceDate;
-            private decimal price = 0;
-            private string volume = YahooFinance.NotApplicable;
-
-            public string Ticker { get => ticker; set => ticker = value; }
-            public string PeriodType { get => periodType; set => periodType = value; }
-            public DateTime PriceDate { get => priceDate; set => priceDate = value; }
-            public decimal Price { get => price; set => price = value; }
-            public string Volume { get => volume; set => volume = value; }
+            public string Ticker { get; set; }
+            public string PeriodType { get; set; }
+            public DateTime PriceDate { get; set; }
+            public decimal Price { get; set; }
+            public string Volume { get; set; }
 
             public override string ToString()
             {

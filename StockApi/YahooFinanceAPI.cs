@@ -38,6 +38,12 @@ namespace StockApi
                 listQuotes[i++].QuoteDate = quoteDate.Date;
             }
 
+            i = 0;
+            foreach (int volume in quotes.chart.result[0].indicators.quote[0].volume)
+            {
+                listQuotes[i++].Volume = volume;
+            }
+
             return listQuotes;
         }
 
@@ -133,6 +139,7 @@ namespace StockApi
         public DateTime QuoteDate { get; set; }
         //public string Ticker { get; set; } = "";
         public decimal Close { get; set; }
+        public int Volume { get; set; }
     }
 
     /////////////////////////////////////////////////

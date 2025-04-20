@@ -108,13 +108,7 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-            // int unixTimestamp = (int)DateTime.UtcNow.AddDays(-7).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            // https://query2.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1744492585&period2=1745097662&interval=1d
-            YahooFinanceAPI yahooFinanceAPI = new YahooFinanceAPI();
-            //string json =
-            List<StockQuote> quoteList = await yahooFinanceAPI.GetQuotes("AAPL", DateTime.Now.AddYears(-3).AddDays(-4), 5);
-
-
+  
             txtStockTicker.Text = txtStockTicker.Text.ToUpper();
 
             if (string.IsNullOrEmpty(txtStockTicker.Text))
