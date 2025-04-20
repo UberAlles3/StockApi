@@ -316,12 +316,10 @@ namespace StockApi
                 _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
                 await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
 
-                historicDataList = await _stockHistory.GetHistoricalDataForDateRange(_stockSummary.Ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
-                if (historicDataList.Count > 1)
-                    _stockHistory.HistoricData3YearsAgo = historicDataList.First();
-                else if (historicDataList.Count > 0)
-                    _stockHistory.HistoricData3YearsAgo = _stockHistory.HistoricDataYearAgo;
-                else if (historicDataList.Count > 0)
+                // get 3 year ago price
+                historicDataList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockSummary, true, false, false);
+
+                if (historicDataList.Count > 0)
                     _stockHistory.HistoricData3YearsAgo = historicDataList.Last();
                 else
                     _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue };
@@ -329,8 +327,8 @@ namespace StockApi
                 decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterestString.NumericValue}");
-                builder.Append($",{_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue}{Environment.NewLine}");
-                Thread.Sleep(1000);
+                builder.Append($", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue}{Environment.NewLine}");
+                Thread.Sleep(800);
             }
             txtTickerList.Text = builder.ToString();
         }

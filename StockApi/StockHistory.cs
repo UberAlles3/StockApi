@@ -13,8 +13,6 @@ namespace StockApi
     /// </summary>
     public class StockHistory : YahooFinance
     {
-        private static readonly string _url = "https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&filter=history&frequency=1d&includeAdjustedClose=true";
-
         public enum TrendEnum
         {
             Down,
@@ -22,6 +20,8 @@ namespace StockApi
             Up,
             Unknown
         }
+
+        YahooFinanceAPI _yahooFinanceAPI;
 
         public HistoricPriceData HistoricDataToday;
         public HistoricPriceData HistoricDataWeekAgo;
@@ -33,10 +33,14 @@ namespace StockApi
         public TrendEnum YearTrend = TrendEnum.Sideways;
         public TrendEnum ThreeYearTrend = TrendEnum.Sideways;
 
+        public StockHistory()
+        {
+            _yahooFinanceAPI = new YahooFinanceAPI();
+        }
+
         public async Task<List<StockHistory.HistoricPriceData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary, bool get3Year, bool get1Year, bool getMonthAndWeek)
         {
             /////// Get price history, today, week ago, month ago to determine short trend
-            List<StockHistory.HistoricPriceData> historicDataList;
             DateTime findDate;
 
             HistoricDataWeekAgo = null;
@@ -44,22 +48,30 @@ namespace StockApi
             HistoricDataYearAgo = null;
             if (getMonthAndWeek)
             {
-                historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), DateTime.Now.AddDays(1));
+                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), 34);
 
-                // Today will be the last in the list
-                HistoricDataToday = historicDataList.Last();
-                HistoricDataToday.Price = summary.PriceString.NumericValue; // Use latest price for todays data.
-                HistoricDataToday.PeriodType = "D";
+                if (quoteList.Count > 0)
+                {
+                    // Today will be the last in the list
+                    StockQuote stockQuote = quoteList.Last();
+                    HistoricDataToday = HistoricPriceData.MapFromApiStockQuote(stockQuote, "D");
 
-                // Last Week
-                findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
-                HistoricDataWeekAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.AddDays(1));
-                if (HistoricDataWeekAgo != null)
-                    HistoricDataWeekAgo.PeriodType = "W";
+                    // Last Week
+                    findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
+                    stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1));
+                    if (stockQuote != null)
+                    {
+                        HistoricDataWeekAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "W");
+                    }
 
-                // Last Month (really 31 days ago)
-                findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-31).Date);
-                HistoricDataMonthAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1) || x.PriceDate.Date == findDate.Date.AddDays(2) || x.PriceDate.Date == findDate.Date.AddDays(3));
+                    //// Last Month (really 31 days ago)
+                    findDate = GetMondayIfWeekend(DateTime.Now.AddMonths(-1).Date);
+                    stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(2));
+                    if (stockQuote != null)
+                    {
+                        HistoricDataMonthAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "M");
+                    }
+                }
             }
             else
             {
@@ -69,39 +81,26 @@ namespace StockApi
             /////// Get price history for a year ago to determine long trend
             if (get1Year)
             {
-                historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-1).AddDays(-1), DateTime.Now.AddYears(-1).AddDays(4));
-                // Last Year
-                findDate = GetMondayIfWeekend(DateTime.Now.AddYears(-1).Date);
-                HistoricDataYearAgo = historicDataList.Find(x => x.PriceDate.Date == findDate.Date || x.PriceDate.Date == findDate.Date.AddDays(1));
-                if (HistoricDataYearAgo != null)
-                    HistoricDataYearAgo.PeriodType = "Y";
+                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4);
+
+                if (quoteList.Count > 0)
+                {
+                    StockQuote stockQuote = quoteList.Last();
+                    HistoricDataYearAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "Y");
+                }
             }
 
 
             /////// Get price history for 3 years ago to determine long trend
             if (get3Year)
             {
-                HistoricData3YearsAgo = new HistoricPriceData();
-                YahooFinanceAPI yahooFinanceAPI = new YahooFinanceAPI();
+                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4);
                 
-                //string json =
-                List<StockQuote> quoteList = await yahooFinanceAPI.GetQuotes("AAPL", DateTime.Now.AddYears(-3).AddDays(-4), 4);
                 if (quoteList.Count > 0)
                 {
                     StockQuote stockQuote = quoteList.Last();
-                    HistoricData3YearsAgo.Ticker = ticker;
-                    HistoricData3YearsAgo.PeriodType = "3Y";
-                    HistoricData3YearsAgo.Price = stockQuote.Close;
-                    HistoricData3YearsAgo.PriceDate = stockQuote.QuoteDate;
-                    HistoricData3YearsAgo.Volume = stockQuote.Volume.ToString();
+                    HistoricData3YearsAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "3Y");
                 }
-
-                //historicDataList = await GetHistoricalDataForDateRange(ticker, DateTime.Now.AddYears(-3).AddDays(-1), DateTime.Now.AddYears(-3).AddDays(4));
-                //if (historicDataList.Count > 0)
-                //{
-                //    HistoricData3YearsAgo = historicDataList.First();
-                //    HistoricData3YearsAgo.PeriodType = "3Y";
-                //}
             }
 
             List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
@@ -131,118 +130,7 @@ namespace StockApi
 
             return theDate;
         }
-
-        public async Task<List<HistoricPriceData>> GetHistoricalDataForDateRange(string ticker, DateTime beginDate, DateTime endDate)
-        {
-            string formattedDate = "";
-            string html = "";
-
-            Ticker = ticker;
-
-            List<HistoricPriceData> historicDataList = new List<HistoricPriceData>();
-
-            try
-            {
-                if (beginDate.DayOfWeek == DayOfWeek.Saturday)
-                    beginDate = beginDate.AddDays(-1);
-                if (beginDate.DayOfWeek == DayOfWeek.Sunday)
-                    beginDate = beginDate.AddDays(-2);
-
-                double totalDays = endDate.Subtract(beginDate).TotalDays;
-
-                if (beginDate < DateTime.Today.AddYears(-2))
-                {
-                    totalDays = 200;
-                    endDate = beginDate.AddDays(200);
-                }
-
-                html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
-                if (html.Length < 4000) // try again
-                {
-                    Thread.Sleep(2000);
-                    html = await GetHistoryHtmlForTicker(Ticker, beginDate, endDate);
-                }
-
-                for (int i = 0; i < totalDays; i++)
-                {
-                    formattedDate = beginDate.AddDays(i).ToString("MMM dd, yyyy");
-                    int index = html.IndexOf(formattedDate);
-
-                    if (index < 0)
-                    {
-                        formattedDate = beginDate.AddDays(i).ToString("MMM d, yyyy");
-                        index = html.IndexOf(formattedDate);
-                    }
-
-                    if (index < 0)
-                        continue;
-
-                    string htmlForDate = html.Substring(index, 600);
-
-                    var numbers = GetNumbersFromHtml(htmlForDate);
-
-                    if (numbers.Count < 6)
-                    {
-                        numbers.Add("0");
-                    }
-
-                    if (numbers[5].IndexOf(",") < 0)
-                        numbers[5] = "0";
-
-                    HistoricPriceData historicData = new HistoricPriceData();
-
-                    historicData.Ticker = Ticker;
-                    historicData.PriceDate = beginDate.AddDays(i).Date;
-                    historicData.Price = Convert.ToDecimal(numbers[3]);
-                    historicData.Volume = numbers[5];
-
-                    historicDataList.Add(historicData);
-
-                    if (beginDate < DateTime.Today.AddYears(-1) && historicDataList.Count > 3)
-                        break;
-                }
-            }
-            catch (Exception x)
-            {
-                MessageBox.Show(x.Source + x.Message + "\n" + "GetHistoricalDataForDateRange() " + " " + ticker + " " + beginDate + " " + endDate + "\n" + html.Substring(0, html.Length / 10));
-            }
-
-            return historicDataList;
-        }
-
-        private async Task<string> GetHistoryHtmlForTicker(string ticker, DateTime beginDate, DateTime endDate)
-        {
-            // https://finance.yahoo.com/quote/?ticker?/history?period1=?period1?&period2=?period2?&interval=1d&filter=history&frequency=1d&includeAdjustedClose=true
-            // 3 year https://finance.yahoo.com/quote/IMPP/history/?frequency=1wk&period1=1563818349&period2=1721671130
-
-            string formattedUrl = _url.Replace("?ticker?", ticker);
-
-            if (beginDate < DateTime.Today.AddYears(-2))
-            {
-                formattedUrl = formattedUrl.Replace("frequency=1d", "frequency=1wk");
-            }
-
-            Ticker = ticker;
-
-            // Get seconds pasesed since 1/1/1970
-            double beginEpoch = beginDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            double endEpoch = endDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-
-            formattedUrl = formattedUrl.Replace("?period1?", Convert.ToInt32(beginEpoch).ToString());
-            formattedUrl = formattedUrl.Replace("?period2?", Convert.ToInt32(endEpoch).ToString());
-
-            string html = await GetHtml(formattedUrl);
-
-            int historyLocation = html.IndexOf("data-testid=\"history-table");
-            historyLocation = html.IndexOf("<table");
-
-
-
-            html = html.Substring(historyLocation);
-
-            return html;
-        }
-
+         
         public void SetTrends()
         {
             if (HistoricData3YearsAgo != null)
@@ -301,6 +189,19 @@ namespace StockApi
             public DateTime PriceDate { get; set; }
             public decimal Price { get; set; }
             public string Volume { get; set; }
+
+            public static HistoricPriceData MapFromApiStockQuote(StockQuote stockQuote, string periodType)
+            {
+                HistoricPriceData historicPriceData = new HistoricPriceData();
+
+                historicPriceData.Ticker = stockQuote.Ticker;
+                historicPriceData.PeriodType = periodType;
+                historicPriceData.Price = stockQuote.Close;
+                historicPriceData.PriceDate = stockQuote.QuoteDate;
+                historicPriceData.Volume = stockQuote.Volume.ToString("N0");
+
+                return historicPriceData;
+            }
 
             public override string ToString()
             {

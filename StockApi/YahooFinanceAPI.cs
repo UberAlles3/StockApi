@@ -28,7 +28,7 @@ namespace StockApi
 
             foreach(double close in quotes.chart.result[0].indicators.quote[0].close)
             {
-                listQuotes.Add(new StockQuote() { Close = Convert.ToDecimal(close) });
+                listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(close.ToString("0.000")) });
             }
 
             int i = 0;
@@ -73,7 +73,7 @@ namespace StockApi
                             json = await content.ReadAsStringAsync();
                             return JsonConvert.DeserializeObject<QuoteRoot>(json);
                         }
-                        throw new GeneralExceptions().HandlePlaylistExceptions((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+                        throw new GeneralExceptions().HandlePlaylistExceptions(ticker, (int)response.StatusCode, await response.Content.ReadAsStringAsync());
                     }
                 }
             }
@@ -94,14 +94,14 @@ namespace StockApi
 
     public class GeneralExceptions
     {
-        public Exception HandlePlaylistExceptions(int code, string content)
+        public Exception HandlePlaylistExceptions(string ticker, int code, string content)
         {
             JObject obj = JObject.Parse(content);
             string exceptionMessage = string.Empty;
             int errorCode = int.Parse(obj["error"]["code"].ToString());
             foreach (var e in obj["error"]["errors"])
             {
-                exceptionMessage += $"({e["reason"]}) {e["reason"]} : {e["message"]})";
+                exceptionMessage += $"GetJsonAsync({ticker}, string period1, string period2)\n({e["reason"]}) {e["reason"]} : {e["message"]})";
             }
             switch (errorCode)
             {
@@ -136,6 +136,7 @@ namespace StockApi
     /////////////////////////////////////////////////
     public class StockQuote
     {
+        public string Ticker { get; set; }
         public DateTime QuoteDate { get; set; }
         //public string Ticker { get; set; } = "";
         public decimal Close { get; set; }
