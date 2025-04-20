@@ -112,7 +112,7 @@ namespace StockApi
             // https://query2.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1744492585&period2=1745097662&interval=1d
             YahooFinanceAPI yahooFinanceAPI = new YahooFinanceAPI();
             //string json =
-            await yahooFinanceAPI.GetQuotes("AAPL", DateTime.Now.AddDays(-4), 4);
+            List<StockQuote> quoteList = await yahooFinanceAPI.GetQuotes("AAPL", DateTime.Now.AddYears(-3).AddDays(-4), 5);
 
 
             txtStockTicker.Text = txtStockTicker.Text.ToUpper();

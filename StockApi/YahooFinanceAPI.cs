@@ -14,18 +14,31 @@ namespace StockApi
     {
         private HttpClient _httpClient;
         private readonly string _baseUri = "https://query2.finance.yahoo.com/v8/finance/chart/[ticker]";
+        private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         // "?symbol=[ticker]&period1=1744492585&period2=1745097662&interval=1d";
 
         public async Task<List<StockQuote>> GetQuotes(string ticker, DateTime startDate, int numberOfdays)
         {
             // Convert date to UNIX seconds from 1970
             int unixStartTimestamp = (int)startDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            int unixEndTimestamp = (int)DateTime.UtcNow.AddDays(numberOfdays).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-
+            int unixEndTimestamp = (int)startDate.AddDays(numberOfdays).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            List<StockQuote> listQuotes = new List<StockQuote>();
 
             QuoteRoot quotes = await GetJsonAsync(ticker, unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
 
-            return null;
+            foreach(double close in quotes.chart.result[0].indicators.quote[0].close)
+            {
+                listQuotes.Add(new StockQuote() { Close = Convert.ToDecimal(close) });
+            }
+
+            int i = 0;
+            foreach (int timestamp in quotes.chart.result[0].timestamp)
+            {
+                DateTime quoteDate = unixEpoch.AddSeconds(Convert.ToInt32(timestamp));
+                listQuotes[i++].QuoteDate = quoteDate.Date;
+            }
+
+            return listQuotes;
         }
 
         public async Task<QuoteRoot> GetJsonAsync(string ticker, string period1, string period2)
