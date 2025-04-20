@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -66,10 +67,6 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // int unixTimestamp = (int)DateTime.UtcNow.AddDays(-7).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            // https://query2.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1744492585&period2=1745097662&interval=1d
-
-
             ApplyStyles();
 
             label37.BackColor = label38.BackColor = trackBar1.BackColor;
@@ -111,6 +108,13 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
+            // int unixTimestamp = (int)DateTime.UtcNow.AddDays(-7).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            // https://query2.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1744492585&period2=1745097662&interval=1d
+            YahooFinanceAPI yahooFinanceAPI = new YahooFinanceAPI();
+            //string json =
+            await yahooFinanceAPI.GetQuotes("AAPL", DateTime.Now.AddDays(-4), 4);
+
+
             txtStockTicker.Text = txtStockTicker.Text.ToUpper();
 
             if (string.IsNullOrEmpty(txtStockTicker.Text))
