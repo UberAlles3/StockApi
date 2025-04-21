@@ -19,7 +19,6 @@ namespace StockApi
             OverValued
         }
 
-        //        private static readonly string _url = "https://finance.yahoo.com/quote/????p=???";
         private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
 
         public Color DividendColor = Color.LightSteelBlue;
@@ -49,10 +48,6 @@ namespace StockApi
         public StringSafeNumeric<Decimal> YearsRangeHigh = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> ForwardPEString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> CalculatedPEString = new StringSafeNumeric<decimal>("--");
-
-        //public decimal Market_NASDAQ = 0M; // symbol\":\"^IXIC -> regularMarketPrice
-        //public decimal Market_NASDAQChange = 0M; // symbol\":\"^IXIC -> regularMarketPrice
-
 
         ////////////////////////////////////////////
         ///                Methods
