@@ -140,8 +140,8 @@ namespace StockApi
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
             MarketData marketData = new MarketData();
-            Market_SandP = await marketData.GetMarketData("^GSPC");
-            Market_Dow = await marketData.GetMarketData("^DJI");
+            Market_SandP =  await marketData.GetMarketData("^GSPC");
+            Market_Dow =    await marketData.GetMarketData("^DJI");
             Market_Nasdaq = await marketData.GetMarketData("^IXIC");
 
             // Extract the individual data values from the html

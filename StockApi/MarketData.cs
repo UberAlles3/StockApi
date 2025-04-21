@@ -11,7 +11,7 @@ namespace StockApi
 {
     public class MarketData 
     {
-        public  string Ticker { get; set; }
+        public string Ticker { get; set; }
         public DateTime RetreivedDate { get; set; }
         //public string Ticker { get; set; } = "";
         public StringSafeNumeric<decimal> PreviousClose { get; set; } = new StringSafeNumeric<decimal>("");
