@@ -28,31 +28,31 @@ namespace StockApi
         ////////////////////////////////////////////
 
         /// RevenueTTM
-        public StringSafeNumeric<Decimal> RevenueTtmString = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> RevenueTtmString = new StringSafeType<decimal>("--");
         public Color RevenueTtmColor = Color.LightSteelBlue;
         /// Revenue2
-        public StringSafeNumeric<Decimal> Revenue2String = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> Revenue2String = new StringSafeType<decimal>("--");
         public Color Revenue2Color = Color.LightSteelBlue;
         /// Revenue4
-        public StringSafeNumeric<Decimal> Revenue4String = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> Revenue4String = new StringSafeType<decimal>("--");
         public Color Revenue4Color = Color.LightSteelBlue;
         /// Cost of RevenueTTM
-        public StringSafeNumeric<Decimal> CostOfRevenueTtmString = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> CostOfRevenueTtmString = new StringSafeType<decimal>("--");
         /// Cost of Revenue2
-        public StringSafeNumeric<Decimal> CostOfRevenue2String = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> CostOfRevenue2String = new StringSafeType<decimal>("--");
         /// Cost of Revenue4
-        public StringSafeNumeric<Decimal> CostOfRevenue4String = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> CostOfRevenue4String = new StringSafeType<decimal>("--");
         /// Operating Expense TTM
-        public StringSafeNumeric<Decimal> OperatingExpenseTtmString = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> OperatingExpenseTtmString = new StringSafeType<decimal>("--");
         ///  Operation Expense 2 Year
-        public StringSafeNumeric<Decimal> OperatingExpense2String = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> OperatingExpense2String = new StringSafeType<decimal>("--");
         ///  Operation Expense 4 Year
-        public StringSafeNumeric<Decimal> OperatingExpense4String = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> OperatingExpense4String = new StringSafeType<decimal>("--");
         /// Debt Equity
-        public StringSafeNumeric<Decimal> DebtEquityString = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> DebtEquityString = new StringSafeType<decimal>("--");
         public Color DebtEquityColor = Color.LightSteelBlue;
         /// Short Interest
-        public StringSafeNumeric<Decimal> ShortInterestString = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> ShortInterestString = new StringSafeType<decimal>("--");
         public Color ShortInterestColor = Color.LightSteelBlue;
 
         /////////////////// TotalCash

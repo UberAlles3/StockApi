@@ -368,12 +368,14 @@ namespace StockApi
 
         private void PostSummaryWebCall()
         {
+            string errorPlace = "";
             ResetFormControls();
             try
             {
                 lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
                 if (_tickerFound)
                 {
+                    errorPlace = "Setting labels #1";
                     lblPrice.Text = _stockSummary.PriceString.NumericValue.ToString("####.00");
                     lblVolatility.Text = _stockSummary.VolatilityString.StringValue;
                     lblEPS.Text = _stockSummary.EarningsPerShareString.StringValue;
@@ -390,13 +392,15 @@ namespace StockApi
                     lbl52WeekHigh.Text = _stockSummary.YearsRangeHigh.StringValue;
                     lblForwardPE.Text = _stockSummary.ForwardPEString.NumericValue.ToString();
                     lblForwardPE.ForeColor = _stockSummary.ForwardPEColor;
+                    lblEarningsDate.Text = _stockSummary.EarningsDateString.DateTimeValue.ToString();
+                    lblEarningsDate.ForeColor = _stockSummary.EarningsDateColor;
                     lblSector.Text = _stockSummary.Sector;
                     lblAvgSectorPE.Text = _stockSummary.AverageSectorPE.ToString();
                     lblBuyQuantity.Text = "0";
                     lblBuyPrice.Text = "0.00";
                     lblSellQuantity.Text = "0";
                     lblSellPrice.Text = "0.00";
-
+                    errorPlace = "Setting labels #2";
                     /////////  Market Data
                     lblSandP500.Text = Market_SandP.CurrentLevel.NumericValue.ToString("N0");
                     lblSandP500Change.Text = Market_SandP.Change.ToString();
@@ -421,6 +425,7 @@ namespace StockApi
                     ///////////  52 week range
                     if (_stockSummary.YearsRangeHigh.NumericValue > 0)
                     {
+                        errorPlace = "52 week range";
                         lbl52WeekArrow.Visible = true;
                         int w52 = lbl52WeekHighArrow.Left - lbl52WeekLowArrow.Left; // distance between controls 
                         decimal range52 = _stockSummary.YearsRangeHigh.NumericValue - _stockSummary.YearsRangeLow.NumericValue; // total price range
@@ -435,6 +440,7 @@ namespace StockApi
                     //////////  Ticker Trades
                     if (TickerTradesDataTable != null && TickerTradesDataTable.Rows.Count > 0)
                     {
+                        errorPlace = "Ticker trades";
                         DataRow latestRow = TickerTradesDataTable.Rows[0];
                         txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
                         if (txtSharesOwned.Text.Trim() == "")
@@ -539,7 +545,7 @@ namespace StockApi
             catch (Exception e)
             {
                 ResetFormControls();
-                MessageBox.Show($"Error: {e.Message} {e.InnerException} {e.StackTrace}");
+                MessageBox.Show($"PostSummaryWebCall()\n {errorPlace}\n Error: {e.Message} {e.InnerException} {e.StackTrace}");
             }
         }
 

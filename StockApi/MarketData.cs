@@ -14,8 +14,8 @@ namespace StockApi
         public string Ticker { get; set; }
         public DateTime RetreivedDate { get; set; }
         //public string Ticker { get; set; } = "";
-        public StringSafeNumeric<decimal> PreviousClose { get; set; } = new StringSafeNumeric<decimal>("");
-        public StringSafeNumeric<decimal> CurrentLevel { get; set; } = new StringSafeNumeric<decimal>("");
+        public StringSafeType<decimal> PreviousClose { get; set; } = new StringSafeType<decimal>("");
+        public StringSafeType<decimal> CurrentLevel { get; set; } = new StringSafeType<decimal>("");
         public int Change
         {
             get => Convert.ToInt32(CurrentLevel.NumericValue - PreviousClose.NumericValue);

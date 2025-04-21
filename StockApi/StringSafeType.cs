@@ -4,12 +4,13 @@ using System.Linq;
 
 namespace StockApi
 {
-    public class StringSafeNumeric<T> where T : IConvertible
+    public class StringSafeType<T> where T : IConvertible
     {
         public bool IsNumeric = false;
+        public bool IsDateTime = false;
         public string StringIfNotNumeric = null; // string to return if string fails numeric.
 
-        public StringSafeNumeric(string stringIfNotNumeric)
+        public StringSafeType(string stringIfNotNumeric)
         {
             _stringValue = stringIfNotNumeric;
             StringIfNotNumeric = stringIfNotNumeric;
@@ -22,15 +23,17 @@ namespace StockApi
             set
             {
                 _stringValue = value;
-                string temp = new string(value.Where(c => char.IsDigit(c) || "-.".Contains(c)).ToArray());
+                string temp = value;
 
                 // set the generic numeric type, converting the string to the numeric type
                 switch (Type.GetTypeCode(typeof(T)))
                 {
                     // Built-in Byte type.
                     case TypeCode.Int32:
+                        temp = new string(value.Where(c => char.IsDigit(c) || "-.".Contains(c)).ToArray());
                         if (!temp._IsInt())
                         {
+                            IsNumeric = false;
                             _numericValue = (T)(object)(int)0;
                             if (StringIfNotNumeric != null)
                                 _stringValue = StringIfNotNumeric;
@@ -42,8 +45,10 @@ namespace StockApi
                         }
                         break;
                     case TypeCode.Decimal:
+                        temp = new string(value.Where(c => char.IsDigit(c) || "-.".Contains(c)).ToArray());
                         if (!temp._IsDecimal())
                         {
+                            IsNumeric = false;
                             _numericValue = (T)(object)(decimal)0;
                             if (StringIfNotNumeric != null)
                                 _stringValue = StringIfNotNumeric;
@@ -54,9 +59,25 @@ namespace StockApi
                             _numericValue = (T)(object)Convert.ToDecimal(temp);
                         }
                         break;
+                    case TypeCode.DateTime:
+                        IsNumeric = false;
+                        DateTime val;
+                        if (DateTime.TryParse(temp, out val) == false)
+                        {
+                            IsDateTime = false;
+                            _datetimeValue = null;
+                            _stringValue = temp;
+                            if (StringIfNotNumeric != null)
+                                _stringValue = StringIfNotNumeric;
+                        }
+                        else
+                        {
+                            IsDateTime = true;
+                            _datetimeValue = val;
+                            _stringValue = _datetimeValue.ToString();
+                        }
+                        break;
                 }
-                if (!IsNumeric)
-                    _stringValue = StringIfNotNumeric;
             }
         }
 
@@ -67,6 +88,17 @@ namespace StockApi
             set
             {
                 _numericValue = value;
+                _stringValue = value.ToString();
+            }
+        }
+
+        private DateTime? _datetimeValue;
+        public DateTime? DateTimeValue
+        {
+            get { return _datetimeValue; }
+            set
+            {
+                _datetimeValue = value;
                 _stringValue = value.ToString();
             }
         }

@@ -27,6 +27,7 @@ namespace StockApi
         public Color ProfitMarginColor = Color.LightSteelBlue;
         public Color OneYearTargetColor = Color.LightSteelBlue;
         public Color ForwardPEColor = Color.LightSteelBlue;
+        public Color EarningsDateColor = Color.LightSteelBlue;
 
         private string companyName = "";
         public string CompanyOverview = "";
@@ -37,17 +38,18 @@ namespace StockApi
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
-        public StringSafeNumeric<Decimal> DividendString = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> EarningsPerShareString = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> ProfitMarginString = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> PriceBookString = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> OneYearTargetPriceString = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> PriceString = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> VolatilityString = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> YearsRangeLow = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> YearsRangeHigh = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> ForwardPEString = new StringSafeNumeric<decimal>("--");
-        public StringSafeNumeric<Decimal> CalculatedPEString = new StringSafeNumeric<decimal>("--");
+        public StringSafeType<Decimal> DividendString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> EarningsPerShareString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> ProfitMarginString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> PriceBookString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> OneYearTargetPriceString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> PriceString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> VolatilityString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> YearsRangeLow = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> YearsRangeHigh = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> ForwardPEString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> CalculatedPEString = new StringSafeType<decimal>("--");
+        public StringSafeType<DateTime> EarningsDateString = new StringSafeType<DateTime>("--");
 
         ////////////////////////////////////////////
         ///                Methods
@@ -138,6 +140,10 @@ namespace StockApi
                 searchTerm = SearchTerms.Find(x => x.Name == "Forward P/E").Term;
                 ForwardPEString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
 
+                // Earnings Date
+                searchTerm = SearchTerms.Find(x => x.Name == "Earnings Date").Term;
+                EarningsDateString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
+
                 // Company Overview
                 searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
                 string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 4500);
@@ -165,7 +171,7 @@ namespace StockApi
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Source + x.Message + "\n" + "GetSummaryData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
+                MessageBox.Show("GetSummaryData() " + " " + ticker + "\n" + x.Source + x.Message + "\n" + html.Substring(0, html.Length / 10));
             }
 
             //*******************
@@ -204,9 +210,17 @@ namespace StockApi
             else
                 ForwardPEColor = Color.LightSteelBlue;
 
+            ForwardPEColor = Color.LightSteelBlue;
+            if (EarningsDateString.IsDateTime)
+            {
+                TimeSpan? diff = EarningsDateString.DateTimeValue - DateTime.Now;
+                if (diff.Value.TotalDays < 1)
+                    EarningsDateColor = Color.Lime;
+                else if (diff.Value.TotalDays < 2)
+                    EarningsDateColor = Color.LightGreen;
+            }
+
             return true;
         }
-
- 
     }
 }
