@@ -15,7 +15,6 @@ namespace StockApi
         private HttpClient _httpClient;
         private readonly string _baseUri = "https://query2.finance.yahoo.com/v8/finance/chart/[ticker]";
         private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        // "?symbol=[ticker]&period1=1744492585&period2=1745097662&interval=1d";
 
         public async Task<List<StockQuote>> GetQuotes(string ticker, DateTime startDate, int numberOfdays)
         {

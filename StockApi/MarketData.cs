@@ -45,13 +45,13 @@ namespace StockApi
             }
         }
 
-        public static MarketData GetMarketData(string html, string searchTerm)
+        public MarketData GetMarketData(string html, string searchName)
         {
             MarketData marketData = new MarketData();
             marketData.RetreivedDate = DateTime.Now;
 
             string htmlSnippet = "";
-            searchTerm = SearchTerms.Find(x => x.Name == searchTerm).Term;
+            string searchTerm = SearchTerms.Find(x => x.Name == searchName).Term;
             marketData.Ticker = searchTerm.Replace("\\", "");
             htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1500);
             if (htmlSnippet.Length > 200)
@@ -69,7 +69,7 @@ namespace StockApi
             }
             if(marketData.CurrentLevel.NumericValue == 0)
             {
-                MessageBox.Show("Market Data\n" + htmlSnippet);
+                MessageBox.Show($"GetMarketData()\n{searchTerm}\n{html}\n\n{htmlSnippet}");
             }
 
             return marketData;
