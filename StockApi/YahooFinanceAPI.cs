@@ -139,7 +139,7 @@ namespace StockApi
         public DateTime QuoteDate { get; set; }
         //public string Ticker { get; set; } = "";
         public decimal Close { get; set; }
-        public int Volume { get; set; }
+        public long Volume { get; set; }
     }
 
     /////////////////////////////////////////////////
@@ -187,7 +187,7 @@ namespace StockApi
         public double fiftyTwoWeekLow { get; set; }
         public double regularMarketDayHigh { get; set; }
         public double regularMarketDayLow { get; set; }
-        public int regularMarketVolume { get; set; }
+        public long regularMarketVolume { get; set; }
         public string longName { get; set; }
         public string shortName { get; set; }
         public double chartPreviousClose { get; set; }
@@ -217,7 +217,7 @@ namespace StockApi
     public class JJJQuote
     {
         public List<double> open { get; set; }
-        public List<int> volume { get; set; }
+        public List<long> volume { get; set; }
         public List<double> high { get; set; }
         public List<double> low { get; set; }
         public List<double> close { get; set; }

@@ -2,20 +2,23 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StockApi
 {
-    public class MarketData : YahooFinance
+    public class MarketData 
     {
+        public  string Ticker { get; set; }
         public DateTime RetreivedDate { get; set; }
         //public string Ticker { get; set; } = "";
         public StringSafeNumeric<decimal> PreviousClose { get; set; } = new StringSafeNumeric<decimal>("");
         public StringSafeNumeric<decimal> CurrentLevel { get; set; } = new StringSafeNumeric<decimal>("");
-        public decimal Change
+        public int Change
         {
-            get => CurrentLevel.NumericValue - PreviousClose.NumericValue;
+            get => Convert.ToInt32(CurrentLevel.NumericValue - PreviousClose.NumericValue);
         }
         public decimal PercentageChange
         {
@@ -45,32 +48,22 @@ namespace StockApi
             }
         }
 
-        public MarketData GetMarketData(string html, string searchName)
+        public async Task<MarketData> GetMarketData(string ticker)
         {
             MarketData marketData = new MarketData();
             marketData.RetreivedDate = DateTime.Now;
 
-            string htmlSnippet = "";
-            string searchTerm = SearchTerms.Find(x => x.Name == searchName).Term;
-            marketData.Ticker = searchTerm.Replace("\\", "");
-            htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 1500);
-            if (htmlSnippet.Length > 200)
-            {
-                string temp = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "regularMarketPrice", 100);
-                if (temp.Length > 20)
-                {
-                    marketData.CurrentLevel.StringValue = temp.Substring(19, 12).Replace(":", "")._TrimSuffix(".");
-                    temp = GetPartialHtmlFromHtmlBySearchTerm(htmlSnippet, "previousClose", 100);
-                    if (temp.Length > 20)
-                    {
-                        marketData.PreviousClose.StringValue = temp.Substring(14, 12).Replace(":", "")._TrimSuffix(".");
-                    }
-                }
-            }
-            if(marketData.CurrentLevel.NumericValue == 0)
-            {
-                MessageBox.Show($"GetMarketData()\n{searchTerm}\n{html}\n\n{htmlSnippet}");
-            }
+            YahooFinanceAPI _yahooFinanceAPI = new YahooFinanceAPI();
+            List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-5), 6);
+            quoteList.Reverse();
+
+            StockQuote currentQuote = quoteList[0];
+            StockQuote previousQuote = quoteList[1];
+
+            marketData.Ticker = ticker;
+            marketData.RetreivedDate = DateTime.Now;
+            marketData.CurrentLevel.NumericValue = currentQuote.Close;
+            marketData.PreviousClose.NumericValue = previousQuote.Close;
 
             return marketData;
         }

@@ -21,14 +21,14 @@ namespace StockApi
             _stockSummary = stockSummary;
         }
 
-        public void GetLatestBuyPerformance(DataTable positionsDataTable, DataTable tradesDataTable)
+        public void GetLatestBuyPerformance(MarketData dowMarket, DataTable positionsDataTable, DataTable tradesDataTable)
         {
             int DateColumn = 0;
 
             // Get latest DOW level from trades, replace that latest trade's DOW level with this.
             int dowLast;
-            if(_stockSummary.Market_Dow.CurrentLevel.NumericValue > 0)
-                dowLast = Convert.ToInt32(_stockSummary.Market_Dow.CurrentLevel.NumericValue);
+            if(dowMarket.CurrentLevel.NumericValue > 0)
+                dowLast = Convert.ToInt32(dowMarket.CurrentLevel.NumericValue);
             else
             {
                 string dow = tradesDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "").Last().ItemArray[1].ToString();

@@ -50,11 +50,6 @@ namespace StockApi
         public StringSafeNumeric<Decimal> ForwardPEString = new StringSafeNumeric<decimal>("--");
         public StringSafeNumeric<Decimal> CalculatedPEString = new StringSafeNumeric<decimal>("--");
 
-        // Markets
-        public MarketData Market_SandP;
-        public MarketData Market_Dow;
-        public MarketData Market_Nasdaq;
-
         //public decimal Market_NASDAQ = 0M; // symbol\":\"^IXIC -> regularMarketPrice
         //public decimal Market_NASDAQChange = 0M; // symbol\":\"^IXIC -> regularMarketPrice
 
@@ -75,11 +70,6 @@ namespace StockApi
                 html = await GetHtmlForTicker(_summaryUrl, Ticker);
                 Thread.Sleep(1000);
             }
-
-            MarketData marketData = new MarketData();
-            Market_SandP = marketData.GetMarketData(html, "Market_SandP500");
-            Market_Dow = marketData.GetMarketData(html, "Market_DOW");
-            Market_Nasdaq = marketData.GetMarketData(html, "Market_NASDAQ");
 
             CompanyName = GetDataByTagName(html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);

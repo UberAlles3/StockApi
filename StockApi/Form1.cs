@@ -21,6 +21,12 @@ namespace StockApi
         private static StockSummary _stockSummary = new StockSummary();
         private static StockFinancials _stockFinancials = new StockFinancials();
         private static StockHistory _stockHistory = new StockHistory();
+
+        // Markets
+        public MarketData Market_SandP;
+        public MarketData Market_Dow;
+        public MarketData Market_Nasdaq;
+
         private static Analyze _analyze = new Analyze();
         public static DataTable TickerTradesDataTable = null;
 
@@ -127,10 +133,16 @@ namespace StockApi
             // get first and last row's DOW
             float oneMonthAgoDOW = Convert.ToInt32(tickerTradesList.First().ItemArray[1].ToString());
             float currentDOW = Convert.ToInt32(tickerTradesList.Last().ItemArray[1].ToString());
-            float perc = (currentDOW - oneMonthAgoDOW) / (currentDOW + oneMonthAgoDOW) * 120;
+            float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 120;
+            if (perc < -5) perc = -5;
             trackBar1.Value = 5 + Convert.ToInt32(perc);
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
+
+            MarketData marketData = new MarketData();
+            Market_SandP = await marketData.GetMarketData("^GSPC");
+            Market_Dow = await marketData.GetMarketData("^DJI");
+            Market_Nasdaq = await marketData.GetMarketData("^IXIC");
 
             // Extract the individual data values from the html
             _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
@@ -386,23 +398,23 @@ namespace StockApi
                     lblSellPrice.Text = "0.00";
 
                     /////////  Market Data
-                    lblSandP500.Text = _stockSummary.Market_SandP.CurrentLevel.NumericValue.ToString("N0");
-                    lblSandP500Change.Text = _stockSummary.Market_SandP.Change.ToString();
-                    lblSandP500PercChange.Text = _stockSummary.Market_SandP.PercentageChange.ToString("0.0") + "%";
-                    lblSandP500Change.ForeColor = _stockSummary.Market_SandP.MarketColor;
-                    lblSandP500PercChange.ForeColor = _stockSummary.Market_SandP.MarketColor;
+                    lblSandP500.Text = Market_SandP.CurrentLevel.NumericValue.ToString("N0");
+                    lblSandP500Change.Text = Market_SandP.Change.ToString();
+                    lblSandP500PercChange.Text = Market_SandP.PercentageChange.ToString("0.0") + "%";
+                    lblSandP500Change.ForeColor = Market_SandP.MarketColor;
+                    lblSandP500PercChange.ForeColor = Market_SandP.MarketColor;
 
-                    lblDOW30.Text = _stockSummary.Market_Dow.CurrentLevel.NumericValue.ToString("N0");
-                    lblDOW30Change.Text = _stockSummary.Market_Dow.Change.ToString();
-                    lblDOW30PercChange.Text = _stockSummary.Market_Dow.PercentageChange.ToString("0.0") + "%";
-                    lblDOW30Change.ForeColor = _stockSummary.Market_Dow.MarketColor;
-                    lblDOW30PercChange.ForeColor = _stockSummary.Market_Dow.MarketColor;
+                    lblDOW30.Text = Market_Dow.CurrentLevel.NumericValue.ToString("N0");
+                    lblDOW30Change.Text = Market_Dow.Change.ToString();
+                    lblDOW30PercChange.Text = Market_Dow.PercentageChange.ToString("0.0") + "%";
+                    lblDOW30Change.ForeColor = Market_Dow.MarketColor;
+                    lblDOW30PercChange.ForeColor = Market_Dow.MarketColor;
 
-                    lblNasdaq.Text = _stockSummary.Market_Nasdaq.CurrentLevel.NumericValue.ToString("N0");
-                    lblNasdaqChange.Text = _stockSummary.Market_Nasdaq.Change.ToString();
-                    lblNasdaqPercChange.Text = _stockSummary.Market_Nasdaq.PercentageChange.ToString("0.0") + "%";
-                    lblNasdaqChange.ForeColor = _stockSummary.Market_Nasdaq.MarketColor;
-                    lblNasdaqPercChange.ForeColor = _stockSummary.Market_Nasdaq.MarketColor;
+                    lblNasdaq.Text = Market_Nasdaq.CurrentLevel.NumericValue.ToString("N0");
+                    lblNasdaqChange.Text = Market_Nasdaq.Change.ToString();
+                    lblNasdaqPercChange.Text = Market_Nasdaq.PercentageChange.ToString("0.0") + "%";
+                    lblNasdaqChange.ForeColor = Market_Nasdaq.MarketColor;
+                    lblNasdaqPercChange.ForeColor = Market_Nasdaq.MarketColor;
 
                     panelMarkets.Visible = true;
 
@@ -781,7 +793,7 @@ namespace StockApi
         private void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockSummary);
-            performance.GetLatestBuyPerformance(PositionsDataTable, TradesDataTable);
+            performance.GetLatestBuyPerformance(Market_Dow, PositionsDataTable, TradesDataTable);
             performance.ShowPerformanceForm(this);  
         }
     }
