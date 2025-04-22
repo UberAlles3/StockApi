@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace StockApi
 {
-    public class StringSafeType<T> where T : IConvertible
+    public class StringSafeType<T> where T : struct
     {
         public bool IsNumeric = false;
         public bool IsDateTime = false;
@@ -28,8 +28,9 @@ namespace StockApi
                 // set the generic numeric type, converting the string to the numeric type
                 switch (Type.GetTypeCode(typeof(T)))
                 {
-                    // Built-in Byte type.
                     case TypeCode.Int32:
+                        IsDateTime = false;
+
                         temp = new string(value.Where(c => char.IsDigit(c) || "-.".Contains(c)).ToArray());
                         if (!temp._IsInt())
                         {
@@ -45,6 +46,8 @@ namespace StockApi
                         }
                         break;
                     case TypeCode.Decimal:
+                        IsDateTime = false;
+
                         temp = new string(value.Where(c => char.IsDigit(c) || "-.".Contains(c)).ToArray());
                         if (!temp._IsDecimal())
                         {
@@ -61,6 +64,8 @@ namespace StockApi
                         break;
                     case TypeCode.DateTime:
                         IsNumeric = false;
+                        _numericValue = default(T);
+
                         DateTime val;
                         if (DateTime.TryParse(temp, out val) == false)
                         {
@@ -73,7 +78,7 @@ namespace StockApi
                         else
                         {
                             IsDateTime = true;
-                            _datetimeValue = val;
+                            _datetimeValue = (T)(object)val;
                             _stringValue = _datetimeValue.ToString();
                         }
                         break;
@@ -92,8 +97,8 @@ namespace StockApi
             }
         }
 
-        private DateTime? _datetimeValue;
-        public DateTime? DateTimeValue
+        private T? _datetimeValue;
+        public T? DateTimeValue
         {
             get { return _datetimeValue; }
             set
