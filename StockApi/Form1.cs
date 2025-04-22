@@ -23,6 +23,7 @@ namespace StockApi
         private static StockHistory _stockHistory = new StockHistory();
 
         // Markets
+        MarketData _marketData;
         public MarketData Market_SandP;
         public MarketData Market_Dow;
         public MarketData Market_Nasdaq;
@@ -69,6 +70,7 @@ namespace StockApi
         {
             InitializeComponent();
             _settings = ConfigurationManager.GetSection("Settings") as List<Setting>;
+            _marketData = new MarketData();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -139,10 +141,9 @@ namespace StockApi
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
-            MarketData marketData = new MarketData();
-            Market_SandP =  await marketData.GetMarketData("^GSPC");
-            Market_Dow =    await marketData.GetMarketData("^DJI");
-            Market_Nasdaq = await marketData.GetMarketData("^IXIC");
+            Market_SandP =  await _marketData.GetMarketData("^GSPC");
+            Market_Dow =    await _marketData.GetMarketData("^DJI");
+            Market_Nasdaq = await _marketData.GetMarketData("^IXIC");
 
             // Extract the individual data values from the html
             _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
@@ -338,8 +339,12 @@ namespace StockApi
 
                 decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
+                Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
+                SetUpAnalyzeInputs(analyzeInputs);
+                decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, true);
+
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterestString.NumericValue}");
-                builder.Append($", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue}{Environment.NewLine}");
+                builder.Append($", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
                 Thread.Sleep(800);
             }
             txtTickerList.Text = builder.ToString();
@@ -552,21 +557,25 @@ namespace StockApi
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
+            SetUpAnalyzeInputs(analyzeInputs);
+            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, false);
 
-            analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
-            analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
-            analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
-            analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
-            analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
-            analyzeInputs.MarketHealth = trackBar1.Value;
-
-            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs);
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
 
             lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
             lblBuyPrice.Text = _analyze.BuyPrice.ToString();
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
             lblSellPrice.Text = _analyze.SellPrice.ToString();
+        }
+
+        private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
+        {
+            analyzeInputs.SharesOwned = 1;
+            analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
+            analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
+            analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
+            analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
+            analyzeInputs.MarketHealth = 5;
         }
 
         private void ApplyStyles()
@@ -796,9 +805,13 @@ namespace StockApi
             chartForm.Show();
         }
 
-        private void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockSummary);
+            if(Market_Dow == null)
+            {
+                Market_Dow = await _marketData.GetMarketData("^DJI");
+            }
             performance.GetLatestBuyPerformance(Market_Dow, PositionsDataTable, TradesDataTable);
             performance.ShowPerformanceForm(this);  
         }

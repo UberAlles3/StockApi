@@ -23,7 +23,7 @@ namespace StockApi
         public decimal SellPrice = 0;
         public string AnalysisMetricsOutputText;
 
-        public void AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, StockFinancials stockFinancials, AnalyzeInputs analyzeInputs)
+        public decimal AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, StockFinancials stockFinancials, AnalyzeInputs analyzeInputs, bool forMetricOnly)
         {
             _buyless = false;
             StringBuilder output = new StringBuilder();
@@ -50,35 +50,36 @@ namespace StockApi
                 priceTrendMetric = .98M;
 
             // Consecutive buys or sells
-            List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
-            int buys = 0;
-            int sells = 0;
-            foreach (DataRow dr in drList)
+            if(forMetricOnly == false)
             {
-                if (dr.ItemArray[2].ToString() == "Buy")
+                List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
+                int buys = 0;
+                int sells = 0;
+                foreach (DataRow dr in drList)
                 {
-                    if (sells > 0)
-                        break;
-                    buys++;
+                    if (dr.ItemArray[2].ToString() == "Buy")
+                    {
+                        if (sells > 0)
+                            break;
+                        buys++;
+                    }
+                    if (dr.ItemArray[2].ToString() == "Sell")
+                    {
+                        if (buys > 0)
+                            break;
+                        sells++;
+                    }
                 }
-                if (dr.ItemArray[2].ToString() == "Sell")
-                {
-                    if (buys > 0)
-                        break;
-                    sells++;
-                }
+
+                if (buys == 2)
+                    priceTrendMetric = (priceTrendMetric + 1) / 2 - .02M;
+                if (buys == 3)
+                    priceTrendMetric = (priceTrendMetric + 1) / 2 - .03M;
+                if (sells == 2)
+                    priceTrendMetric = (priceTrendMetric + 1) / 2 + .02M;
+                if (sells == 3)
+                    priceTrendMetric = (priceTrendMetric + 1) / 2 + .03M;
             }
-
-            if (buys == 2)
-                priceTrendMetric = (priceTrendMetric + 1) / 2 - .02M;
-            if (buys == 3)
-                priceTrendMetric = (priceTrendMetric + 1) / 2 - .03M;
-            if (sells == 2)
-                priceTrendMetric = (priceTrendMetric + 1) / 2 + .02M;
-            if (sells == 3)
-                priceTrendMetric = (priceTrendMetric + 1) / 2 + .03M;
-
-
 
             output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".00")}");
 
@@ -112,11 +113,13 @@ namespace StockApi
 
             // Price / Book
             decimal priceBookMetric = 1M;
-            if (stockSummary.PriceBookColor == Color.Red)
-                priceBookMetric = .99M;
-            if (stockSummary.PriceBookColor == Color.Lime)
-                priceBookMetric = 1.01M;
-
+            if (forMetricOnly == false)
+            {
+                if (stockSummary.PriceBookColor == Color.Red)
+                    priceBookMetric = .99M;
+                if (stockSummary.PriceBookColor == Color.Lime)
+                    priceBookMetric = 1.01M;
+            }
             output.AppendLine($"Price Book Metric = {priceBookMetric.ToString(".00")}");
 
             // Profit Margin Metric
@@ -217,20 +220,24 @@ namespace StockApi
             decimal totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * profitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric;
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
-            if (totalMetric < .8M)
+            if (totalMetric < .78M)
             {
-                totalMetric = .8M;
+                totalMetric = .78M;
                 totalMetricString += $"  low end limited to {totalMetric.ToString(".00")}";
                 output.AppendLine($"Liquidate this stock!!!!!");
             }
-            if (totalMetric > 1.2M)
+            if (totalMetric > 1.24M)
             {
-                totalMetric = 1.2M;
+                totalMetric = 1.24M;
                 totalMetricString += $"  high end limited to {totalMetric.ToString(".00")}";
             }
-
             output.AppendLine(totalMetricString);
 
+            totalMetric = Math.Round(totalMetric, 2);
+            if (forMetricOnly == true)
+            {
+                return totalMetric;
+            }
             output.AppendLine("");
 
 
@@ -370,6 +377,8 @@ namespace StockApi
             }
 
             AnalysisMetricsOutputText = output.ToString();
+
+            return totalMetric;
         }
 
         public class AnalyzeInputs
