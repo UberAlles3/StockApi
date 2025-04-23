@@ -340,6 +340,7 @@ namespace StockApi
                 decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
                 Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
+                txtSharesOwned.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
                 decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, true);
 
