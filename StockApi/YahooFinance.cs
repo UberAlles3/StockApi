@@ -66,7 +66,7 @@ namespace StockApi
         {
             int loc1 = html.IndexOf("<" + tagName) + 1;
             int loc2 = html.IndexOf("</" + tagName, loc1 + 5); //</title
-            string middle;
+            string middle = "?????";
 
             if (loc1 == -1)
             {
@@ -79,8 +79,7 @@ namespace StockApi
             }
             catch (System.Exception x)
             {
-                MessageBox.Show(x.Message + "\n" + html + "\n" + tagName);
-                throw;
+                MessageBox.Show($"GetDataByTagName{x.Message}\n{tagName}\n{html}\n{loc1}\n{loc2}");
             }
 
             return middle;
