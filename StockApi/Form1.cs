@@ -570,7 +570,7 @@ namespace StockApi
 
         private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
         {
-            analyzeInputs.SharesOwned = 1;
+            analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text); 
             analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
             analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);

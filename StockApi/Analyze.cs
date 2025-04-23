@@ -113,13 +113,11 @@ namespace StockApi
 
             // Price / Book
             decimal priceBookMetric = 1M;
-            if (forMetricOnly == false)
-            {
-                if (stockSummary.PriceBookColor == Color.Red)
-                    priceBookMetric = .99M;
-                if (stockSummary.PriceBookColor == Color.Lime)
-                    priceBookMetric = 1.01M;
-            }
+            if (stockSummary.PriceBookString.NumericValue > 5)
+                priceBookMetric = .99M; 
+            else if (stockSummary.PriceBookString.NumericValue < 1)
+                priceBookMetric = 1.01M; 
+
             output.AppendLine($"Price Book Metric = {priceBookMetric.ToString(".00")}");
 
             // Profit Margin Metric
@@ -217,7 +215,7 @@ namespace StockApi
             decimal ecoMetric = 1 + ((analyzeInputs.MarketHealth - 5) / 50);
             output.AppendLine($"Market Metric = {ecoMetric.ToString(".00")}");
 
-            decimal totalMetric = priceTrendMetric * targetPriceMetric * epsMetric * priceBookMetric * dividendMetric * profitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric;
+            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric;
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
             if (totalMetric < .78M)
@@ -226,9 +224,9 @@ namespace StockApi
                 totalMetricString += $"  low end limited to {totalMetric.ToString(".00")}";
                 output.AppendLine($"Liquidate this stock!!!!!");
             }
-            if (totalMetric > 1.24M)
+            if (totalMetric > 1.32M)
             {
-                totalMetric = 1.24M;
+                totalMetric = 1.32M;
                 totalMetricString += $"  high end limited to {totalMetric.ToString(".00")}";
             }
             output.AppendLine(totalMetricString);
@@ -240,7 +238,8 @@ namespace StockApi
             }
             output.AppendLine("");
 
-
+            ///////////////////////////////////////////////////////////
+            ///                     BUY and SELL
             ///////////// Setting Price Movement Multipliers
             // Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
             decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockSummary.Volatility) + 1)) + 1; 
@@ -275,8 +274,8 @@ namespace StockApi
             output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
 
-            buyPrice = buyPrice * totalMetric;
-            sellPrice = sellPrice * totalMetric;
+            buyPrice = buyPrice * ((totalMetric + 1) / 2);
+            sellPrice = sellPrice * ((totalMetric + 1) / 2); 
 
             if (sellPrice < analyzeInputs.SharesTradedPrice)
                 sellPrice = analyzeInputs.SharesTradedPrice * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.

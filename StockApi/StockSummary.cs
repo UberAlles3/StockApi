@@ -191,6 +191,7 @@ namespace StockApi
                 ProfitMarginColor = Color.Lime;
             else
                 ProfitMarginColor = Color.LightSteelBlue;
+            
             if (PriceBookString.NumericValue > 5)
                 PriceBookColor = Color.Red;
             else if (PriceBookString.NumericValue < 1)
