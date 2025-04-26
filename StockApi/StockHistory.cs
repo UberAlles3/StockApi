@@ -101,6 +101,17 @@ namespace StockApi
                     StockQuote stockQuote = quoteList.Last();
                     HistoricData3YearsAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "3Y");
                 }
+
+                if(summary.YearsRangeLow.StringValue == summary.YearsRangeHigh.StringValue) // Mutual fund range was faked
+                {
+                    if (HistoricData3YearsAgo.Price < summary.PriceString.NumericValue) // going up
+                        summary.YearsRangeLow.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
+                    else
+                    {
+                        summary.YearsRangeLow.NumericValue = summary.PriceString.NumericValue * .95M;
+                        summary.YearsRangeHigh.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
+                    }
+                }
             }
 
             List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();

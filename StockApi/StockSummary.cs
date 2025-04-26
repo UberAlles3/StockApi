@@ -39,7 +39,7 @@ namespace StockApi
         public string CompanyName { get => companyName; set => companyName = value; }
 
         public StringSafeType<Decimal> DividendString = new StringSafeType<decimal>("--");
-        public StringSafeType<Decimal> EarningsPerShareString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> EarningsPerShareString = new StringSafeType<decimal>("0.1");
         public StringSafeType<Decimal> ProfitMarginString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> PriceBookString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> OneYearTargetPriceString = new StringSafeType<decimal>("--");
@@ -105,14 +105,16 @@ namespace StockApi
                 }
                 else
                 {
-                    searchTerm = "Yield";
-                    dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                    searchTerm = SearchTerms.Find(x => x.Name == "Dividend2").Term;
+                    dividend = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 3);
                 }
                 DividendString.StringValue = dividend;
 
                 // One year target
                 searchTerm = SearchTerms.Find(x => x.Name == "One Year Target").Term;
                 OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4).Trim();
+                if (OneYearTargetPriceString.NumericValue == 0)
+                    OneYearTargetPriceString.StringValue = PriceString.StringValue;
 
                 // Price / Book
                 searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
@@ -134,6 +136,12 @@ namespace StockApi
                 {
                     YearsRangeLow.StringValue = range.Substring(0, idx).Trim();
                     YearsRangeHigh.StringValue = range.Substring(idx + 1).Trim();
+                }
+                else // Mutual funds don't have 52 week range value on yahoo!
+                {
+
+                    YearsRangeLow.StringValue = PriceString.StringValue;  // Fake it
+                    YearsRangeHigh.StringValue = PriceString.StringValue;
                 }
 
                 // Forward P/E

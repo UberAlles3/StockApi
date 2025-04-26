@@ -342,6 +342,7 @@ namespace StockApi
                 Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
                 txtSharesOwned.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
+                analyzeInputs.MarketHealth = 5;
                 decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, true);
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterestString.NumericValue}");
@@ -559,6 +560,7 @@ namespace StockApi
         {
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             SetUpAnalyzeInputs(analyzeInputs);
+            analyzeInputs.MarketHealth = trackBar1.Value;
             _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, false);
 
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
@@ -576,7 +578,6 @@ namespace StockApi
             analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
-            analyzeInputs.MarketHealth = 5;
         }
 
         private void ApplyStyles()
