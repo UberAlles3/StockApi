@@ -135,7 +135,7 @@ namespace StockApi
             // get first and last row's DOW
             float oneMonthAgoDOW = Convert.ToInt32(tickerTradesList.First().ItemArray[1].ToString());
             float currentDOW = Convert.ToInt32(tickerTradesList.Last().ItemArray[1].ToString());
-            float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 120;
+            float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 60;
             if (perc < -5) perc = -5;
             trackBar1.Value = 5 + Convert.ToInt32(perc);
 
