@@ -817,5 +817,12 @@ namespace StockApi
             performance.GetLatestBuyPerformance(Market_Dow, PositionsDataTable, TradesDataTable);
             performance.ShowPerformanceForm(this);  
         }
+
+        private async void liquidationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Performance performance = new Performance(_stockSummary);
+            List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(TradesDataTable);
+            performance.ShowLiquidationPerformanceForm(this, performanceList);
+        }
     }
 }

@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace StockApi
 {
-    public partial class PerformanceForm : Form
+    public partial class PerformanceFormLiquidations : Form
     {
         List<PerformanceItem> _performanceList = null;
 
-        public PerformanceForm(List<PerformanceItem> performanceList)
+        public PerformanceFormLiquidations(List<PerformanceItem> performanceList)
         {
             InitializeComponent();
             _performanceList = performanceList;
@@ -54,15 +54,9 @@ namespace StockApi
             dataGridView2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridView2.Columns[6].DefaultCellStyle.Format = "N2";
             // DOW
-            dataGridView2.Columns[7].Width = 70;
-            dataGridView2.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridView2.Columns[7].DefaultCellStyle.Format = "N0";
+            dataGridView2.Columns[7].Visible = false;
 
             dataGridView2.Refresh();
-
-            // DOW gain / loss
-            decimal dowGain = Convert.ToDecimal((_performanceList.First().DowLevel - _performanceList.Last().DowLevel)) / Convert.ToDecimal(_performanceList[0].DowLevel) * 100;
-            lblDowGain.Text = dowGain.ToString("N1") + "%";
 
             // Total Profit
             decimal totProfit = _performanceList.Sum(x => x.TotalProfit);
@@ -75,8 +69,12 @@ namespace StockApi
             decimal totWorth = _performanceList.Sum(x => (x.Quantity) * x.CurrentPrice);
             lblWorth.Text = totWorth.ToString("N2");
             // Buy Gain
-            decimal buyGain = ((totWorth - totCost) / totCost) * 100M;
-            lblPortfolioGain.Text = buyGain.ToString("N1") + "%";
+            
+            
+            
+            
+            decimal sellingGain = ((totCost - totWorth) / totCost) * 100M;
+            lblSellingGain.Text = sellingGain.ToString("N1") + "%";
 
             // Color big gainers and losers
             int i = 0;
@@ -94,6 +92,10 @@ namespace StockApi
                 }
                 i++;
             }
+
+            lblCost.Top = 42 + _performanceList.Count * 25;
+            lblWorth.Top = lblTotalProfit.Top = lblCost.Top;
+            this.Height = lblWorth.Top + 80;
         }
     }
 }
