@@ -34,6 +34,11 @@ namespace StockApi
             foreach (int timestamp in quotes.chart.result[0].timestamp)
             {
                 DateTime quoteDate = unixEpoch.AddSeconds(Convert.ToInt32(timestamp));
+                if(quoteDate.Date == DateTime.Now.Date)
+                {
+                    listQuotes[i].Price = Convert.ToDecimal(quotes.chart.result[0].meta.regularMarketPrice.ToString("0.000"));
+                }
+                
                 listQuotes[i++].QuoteDate = quoteDate.Date;
             }
 
@@ -139,6 +144,7 @@ namespace StockApi
         public DateTime QuoteDate { get; set; }
         //public string Ticker { get; set; } = "";
         public decimal Close { get; set; }
+        public decimal Price { get; set; } // Only valued for current date
         public long Volume { get; set; }
     }
 

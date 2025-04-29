@@ -147,7 +147,7 @@ namespace StockApi
                 dividendMetric = .99M;
 
             if (priceTrendMetric < .92M && dividendMetric > 1.04M)
-                dividendMetric = 1.01M; // if the price is going steeply down, who cares about a high dividend
+                dividendMetric = (1M + dividendMetric) / 2M; // if the price is going steeply down, who cares about a high dividend
 
             output.AppendLine($"Dividend Metric = {dividendMetric.ToString(".00")}");
 

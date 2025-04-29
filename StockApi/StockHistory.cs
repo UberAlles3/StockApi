@@ -41,7 +41,7 @@ namespace StockApi
         public async Task<decimal> GetTodaysPrice(string ticker)
         {
             /////// Get price history, today, week ago, month ago to determine short trend
-            List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-4), 4);
+            List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-3), 4);
 
             if (quoteList.Count > 0)
             {
