@@ -43,7 +43,7 @@ namespace StockApi
                 DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
                 if (excelFileDateTime > _positionsImportDateTime)
                 {
-                    _positionsDataTable = (new ExcelManager()).ImportTrades(_excelFilePath, 0, 0);
+                    _positionsDataTable = (new ExcelManager()).ImportExceelSheet(_excelFilePath, 0, 0);
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
                 }
                 return _positionsDataTable;
@@ -57,7 +57,7 @@ namespace StockApi
                 DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
                 if (excelFileDateTime > _tradesImportDateTime)
                 {
-                    _tradesDataTable = (new ExcelManager()).ImportTrades(_excelFilePath, 1, 40);
+                    _tradesDataTable = (new ExcelManager()).ImportExceelSheet(_excelFilePath, 1, 40);
                     _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                     _tradesImportDateTime = DateTime.Now; // Update when the last import took place
                 }
@@ -822,6 +822,13 @@ namespace StockApi
         {
             Performance performance = new Performance(_stockSummary);
             List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(TradesDataTable);
+            performance.ShowLiquidationPerformanceForm(this, performanceList);
+        }
+
+        private async void last25SellsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Performance performance = new Performance(_stockSummary);
+            List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(PositionsDataTable, TradesDataTable);
             performance.ShowLiquidationPerformanceForm(this, performanceList);
         }
     }

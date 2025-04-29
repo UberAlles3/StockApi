@@ -50,7 +50,6 @@ namespace StockApi
             foreach (DataRow dr in tickerTrades)
             {
                 // Search in positions for ticker to get current price 
-
                 string ticker = dr.ItemArray[4].ToString();
                 string temp = dr.ItemArray[3].ToString();
                 int quantity = 0;
@@ -106,6 +105,85 @@ namespace StockApi
             PerformanceForm pf = new PerformanceForm(_performanceList);
             pf.Owner = form1;
             pf.Show();
+        }
+
+        public List<PerformanceItem> GetLatestSellPerformance(DataTable positionsDataTable, DataTable tradesDataTable)
+        {
+            int DateColumn = 0;
+            //int DowColumn = 1;
+            int BuySoldColumn = 2;
+            int QuantityTradedColumn = 3;
+            int TickerColumn = 4;
+            int TradePriceColumn = 5;
+            int TotalQuantity = 6;
+
+            StockHistory stockHistory = new StockHistory();
+            List<PerformanceItem> performanceList = new List<PerformanceItem>();
+
+            // Get all positions to get current price
+            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "");
+
+            // Get last 25 sells
+            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[BuySoldColumn].ToString() == "Sell" && x[(int)ExcelManager.TradesColumns.TradeDate].ToString().Trim() != "" && x[TotalQuantity].ToString().Trim() != "0");
+            //tickerTrades = tickerTrades.Skip(tickerTrades.Count() - 30);
+            tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]).Take(25);
+
+            performanceList.Clear();
+            foreach (DataRow dr in tickerTrades)
+            {
+                // Search in trades for ticker to get quantity sold
+                string ticker = dr.ItemArray[TickerColumn].ToString();
+                string temp = dr.ItemArray[QuantityTradedColumn].ToString();
+                int quantity = 0;
+                if (temp._IsInt())
+                {
+                    quantity = Convert.ToInt32(temp);
+                }
+
+                // Search in positions for ticker to get current price 
+                if(positions.Where(x => x[0].ToString() == ticker).Count() == 0)
+                {
+                    continue; // Sold a stock that has been liquidated and has no current price in the positions table
+                }
+                    
+                temp = positions.Where(x => x[0].ToString() == ticker).First().ItemArray[2].ToString();
+                decimal currentPrice = 0;
+                if (temp._IsDecimal())
+                {
+                    currentPrice = Convert.ToDecimal(temp);
+                }
+                else
+                {
+                    currentPrice = 0M;
+                }
+
+                // Get the price sold from trades table
+                temp = dr.ItemArray[TradePriceColumn].ToString();
+                decimal soldPrice = 0;
+                if (temp._IsDecimal())
+                {
+                    soldPrice = Convert.ToDecimal(temp);
+                }
+
+                // profit/ loss   
+                decimal profit = soldPrice - currentPrice;
+
+                PerformanceItem pi = new PerformanceItem()
+                {
+                    TradeDate = Convert.ToDateTime(dr.ItemArray[0].ToString()),
+                    Ticker = ticker,
+                    Quantity = quantity,
+                    TradePrice = soldPrice,
+                    CurrentPrice = currentPrice,
+                    Profit = profit,
+                    TotalProfit = quantity * profit,
+                    DowLevel = 0
+                };
+
+                performanceList.Add(pi);
+            }
+
+            return performanceList;
         }
 
         public async Task<List<PerformanceItem>> GetLiquidationPerformance(DataTable tradesDataTable)
@@ -173,6 +251,7 @@ namespace StockApi
             pf.Show();
         }
     }
+
     public class PerformanceItem
     {
         public DateTime TradeDate { get; set; }

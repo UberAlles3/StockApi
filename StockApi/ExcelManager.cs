@@ -6,13 +6,19 @@ namespace StockApi
 {
     public class ExcelManager
     {
+        public enum TradesColumns
+        {
+            TradeDate = 0,
+            DowLevel = 1
+        }
+
 
         public ExcelManager()
         {
 
         }
 
-        public DataTable ImportTrades(string filePath, int sheetIdx, int startRow)
+        public DataTable ImportExceelSheet(string filePath, int sheetIdx, int startRow)
         {
             string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
 
