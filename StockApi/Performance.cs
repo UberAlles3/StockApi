@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Drake.Extensions;
+using PC = StockApi.ExcelManager.PositionColumns;
 using TC = StockApi.ExcelManager.TradeColumns;
 
 namespace StockApi
@@ -112,7 +113,7 @@ namespace StockApi
             List<PerformanceItem> performanceList = new List<PerformanceItem>();
 
             // Get all positions to get current price
-            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "");
+            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.QuantityHeld].ToString().Trim() != "0" && x[(int)PC.QuantityHeld].ToString().Trim() != "");
 
             // Get last 25 buys to elimate fro the sell list
             IEnumerable<DataRow> buys = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Buy" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
@@ -146,12 +147,12 @@ namespace StockApi
                 }
 
                 // Search in positions for ticker to get current price 
-                if(positions.Where(x => x[0].ToString() == ticker).Count() == 0)
+                if(positions.Where(x => x[(int)PC.Ticker].ToString() == ticker).Count() == 0)
                 {
                     continue; // Sold a stock that has been liquidated and has no current price in the positions table
                 }
                     
-                temp = positions.Where(x => x[0].ToString() == ticker).First().ItemArray[2].ToString();
+                temp = positions.Where(x => x[(int)PC.Ticker].ToString() == ticker).First().ItemArray[(int)PC.Price].ToString();
                 decimal currentPrice = 0;
                 if (temp._IsDecimal())
                 {
@@ -193,17 +194,12 @@ namespace StockApi
 
         public async Task<List<PerformanceItem>> GetLiquidationPerformance(DataTable tradesDataTable)
         {
-            int DateColumn = 0;
-            //int DowColumn = 1;
-            int BuySoldColumn = 2;
-            int TotalQuantity = 6;
-
             StockHistory stockHistory = new StockHistory();
             List<PerformanceItem> performanceList = new List<PerformanceItem>();
 
             // Get liquidations for this last year
-            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[BuySoldColumn].ToString() == "Sell" && x[DateColumn].ToString().Trim() != "" && Convert.ToDateTime(x[DateColumn]) > DateTime.Now.AddYears(-1) && x[TotalQuantity].ToString().Trim() == "0").Skip(5);
-            tickerTrades = tickerTrades.OrderBy(x => x[DateColumn]).Take(25);
+            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && Convert.ToDateTime(x[(int)TC.TradeDate]) > DateTime.Now.AddYears(-1) && x[(int)TC.QuantityHeld].ToString().Trim() == "0").Skip(5);
+            tickerTrades = tickerTrades.OrderBy(x => x[(int)TC.TradeDate]).Take(25);
 
             performanceList.Clear();
             foreach (DataRow dr in tickerTrades)
