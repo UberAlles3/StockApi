@@ -25,8 +25,6 @@ namespace StockApi
 
         public void GetLatestBuyPerformance(MarketData dowMarket, DataTable positionsDataTable, DataTable tradesDataTable)
         {
-            int DateColumn = 0;
-
             // Get latest DOW level from trades, replace that latest trade's DOW level with this.
             int dowLast;
             if (dowMarket.CurrentLevel.NumericValue > 0)
@@ -45,7 +43,7 @@ namespace StockApi
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "");
 
             IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[2].ToString() == "Buy" && x[1].ToString().Trim() != "").Skip(700);
-            tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]).Take(25);
+            tickerTrades = tickerTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25).OrderBy(x => x[(int)TC.TradeDate]);
 
             _performanceList.Clear();
             foreach (DataRow dr in tickerTrades)
@@ -116,16 +114,30 @@ namespace StockApi
             // Get all positions to get current price
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "");
 
+            // Get last 25 buys to elimate fro the sell list
+            IEnumerable<DataRow> buys = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Buy" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
+            buys = buys.OrderByDescending(x => x[(int)TC.TradeDate]).Take(30);
+
             // Get last 25 sells
-            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
+            IEnumerable<DataRow> sellTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
             //tickerTrades = tickerTrades.Skip(tickerTrades.Count() - 30);
-            tickerTrades = tickerTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25);
+            sellTrades = sellTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25).OrderBy(x => x[(int)TC.TradeDate]);
 
             performanceList.Clear();
-            foreach (DataRow dr in tickerTrades)
+            foreach (DataRow dr in sellTrades)
             {
-                // Search in trades for ticker to get quantity sold
                 string ticker = dr.ItemArray[(int)TC.Ticker].ToString();
+
+                // See if there was a later buyback and eliminate it
+                if (buys.Where(x => x[(int)TC.Ticker].ToString() == ticker).Count() > 0)
+                {
+                    var buy = buys.Where(x => x[(int)TC.Ticker].ToString() == ticker).Last();
+
+                    if ((DateTime)buy.ItemArray[(int)TC.TradeDate] > (DateTime)dr.ItemArray[(int)TC.TradeDate])
+                        continue;
+                }
+
+                // Search in trades for ticker to get quantity sold
                 string temp = dr.ItemArray[(int)TC.QuantityTraded].ToString();
                 int quantity = 0;
                 if (temp._IsInt())
@@ -237,9 +249,10 @@ namespace StockApi
 
             return performanceList;
         }
-        public void ShowLiquidationPerformanceForm(Form1 form1, List<PerformanceItem> performanceList)
+        public void ShowLiquidationPerformanceForm(Form1 form1, List<PerformanceItem> performanceList, string title)
         {
             PerformanceFormLiquidations pf = new PerformanceFormLiquidations(performanceList);
+            pf.Text = title;
             pf.Owner = form1;
             pf.Show();
         }
