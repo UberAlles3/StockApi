@@ -825,7 +825,7 @@ namespace StockApi
             performance.ShowLiquidationPerformanceForm(this, performanceList);
         }
 
-        private async void last25SellsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void last25SellsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockSummary);
             List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(PositionsDataTable, TradesDataTable);

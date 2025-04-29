@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Drake.Extensions;
+using TC = StockApi.ExcelManager.TradeColumns;
 
 namespace StockApi
 {
@@ -109,14 +110,6 @@ namespace StockApi
 
         public List<PerformanceItem> GetLatestSellPerformance(DataTable positionsDataTable, DataTable tradesDataTable)
         {
-            int DateColumn = 0;
-            //int DowColumn = 1;
-            int BuySoldColumn = 2;
-            int QuantityTradedColumn = 3;
-            int TickerColumn = 4;
-            int TradePriceColumn = 5;
-            int TotalQuantity = 6;
-
             StockHistory stockHistory = new StockHistory();
             List<PerformanceItem> performanceList = new List<PerformanceItem>();
 
@@ -124,16 +117,16 @@ namespace StockApi
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "");
 
             // Get last 25 sells
-            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[BuySoldColumn].ToString() == "Sell" && x[(int)ExcelManager.TradesColumns.TradeDate].ToString().Trim() != "" && x[TotalQuantity].ToString().Trim() != "0");
+            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
             //tickerTrades = tickerTrades.Skip(tickerTrades.Count() - 30);
-            tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]).Take(25);
+            tickerTrades = tickerTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25);
 
             performanceList.Clear();
             foreach (DataRow dr in tickerTrades)
             {
                 // Search in trades for ticker to get quantity sold
-                string ticker = dr.ItemArray[TickerColumn].ToString();
-                string temp = dr.ItemArray[QuantityTradedColumn].ToString();
+                string ticker = dr.ItemArray[(int)TC.Ticker].ToString();
+                string temp = dr.ItemArray[(int)TC.QuantityTraded].ToString();
                 int quantity = 0;
                 if (temp._IsInt())
                 {
@@ -158,7 +151,7 @@ namespace StockApi
                 }
 
                 // Get the price sold from trades table
-                temp = dr.ItemArray[TradePriceColumn].ToString();
+                temp = dr.ItemArray[(int)TC.TradePrice].ToString();
                 decimal soldPrice = 0;
                 if (temp._IsDecimal())
                 {
