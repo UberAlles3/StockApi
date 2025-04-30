@@ -118,7 +118,7 @@ namespace StockApi
 
                 _performanceList.Add(pi);
             }
-            _performanceList.First().DowLevel = dowLast;
+            _performanceList.Last().DowLevel = dowLast;
         }
         public void ShowPerformanceForm(Form1 form1)
         {

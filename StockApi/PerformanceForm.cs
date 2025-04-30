@@ -78,7 +78,7 @@ namespace StockApi
             dataGridView2.Refresh();
 
             // DOW gain / loss
-            decimal dowGain = Convert.ToDecimal((_performanceList.First().DowLevel - _performanceList.Last().DowLevel)) / Convert.ToDecimal(_performanceList[0].DowLevel) * 100;
+            decimal dowGain = Convert.ToDecimal((_performanceList.Last().DowLevel - _performanceList.First().DowLevel)) / Convert.ToDecimal(_performanceList.First().DowLevel) * 100;
             lblDowGain.Text = dowGain.ToString("N1") + "%";
 
             // Total Profit
