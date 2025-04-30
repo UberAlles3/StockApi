@@ -111,13 +111,14 @@ namespace StockApi
         {
             StockHistory stockHistory = new StockHistory();
             List<PerformanceItem> performanceList = new List<PerformanceItem>();
+            bool soldAndBought = false;
 
             // Get all positions to get current price
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.QuantityHeld].ToString().Trim() != "0" && x[(int)PC.QuantityHeld].ToString().Trim() != "");
 
-            // Get last 25 buys to elimate fro the sell list
+            // Get last 60 buys to elimate fro the sell list
             IEnumerable<DataRow> buys = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Buy" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
-            buys = buys.OrderByDescending(x => x[(int)TC.TradeDate]).Take(30);
+            buys = buys.OrderByDescending(x => x[(int)TC.TradeDate]).Take(60);
 
             // Get last 25 sells
             IEnumerable<DataRow> sellTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
@@ -128,15 +129,6 @@ namespace StockApi
             foreach (DataRow dr in sellTrades)
             {
                 string ticker = dr.ItemArray[(int)TC.Ticker].ToString();
-
-                // See if there was a later buyback and eliminate it
-                if (buys.Where(x => x[(int)TC.Ticker].ToString() == ticker).Count() > 0)
-                {
-                    var buy = buys.Where(x => x[(int)TC.Ticker].ToString() == ticker).Last();
-
-                    if ((DateTime)buy.ItemArray[(int)TC.TradeDate] > (DateTime)dr.ItemArray[(int)TC.TradeDate])
-                        continue;
-                }
 
                 // Search in trades for ticker to get quantity sold
                 string temp = dr.ItemArray[(int)TC.QuantityTraded].ToString();
@@ -163,6 +155,19 @@ namespace StockApi
                     currentPrice = 0M;
                 }
 
+                // See if there was a later buyback and eliminate it
+                soldAndBought = false;
+                if (buys.Where(x => x[(int)TC.Ticker].ToString() == ticker).Count() > 0)
+                {
+                    var buy = buys.Where(x => x[(int)TC.Ticker].ToString() == ticker).Last();
+
+                    if ((DateTime)buy.ItemArray[(int)TC.TradeDate] > (DateTime)dr.ItemArray[(int)TC.TradeDate])
+                    {
+                        currentPrice = Convert.ToDecimal(buy.ItemArray[(int)TC.TradePrice]);
+                        soldAndBought = true;
+                    }
+                }
+
                 // Get the price sold from trades table
                 temp = dr.ItemArray[(int)TC.TradePrice].ToString();
                 decimal soldPrice = 0;
@@ -183,7 +188,8 @@ namespace StockApi
                     CurrentPrice = currentPrice,
                     Profit = profit,
                     TotalProfit = quantity * profit,
-                    DowLevel = 0
+                    DowLevel = 0,
+                    SoldAndBought = soldAndBought
                 };
 
                 performanceList.Add(pi);
@@ -245,11 +251,12 @@ namespace StockApi
 
             return performanceList;
         }
-        public void ShowLiquidationPerformanceForm(Form1 form1, List<PerformanceItem> performanceList, string title)
+        public void ShowLiquidationPerformanceForm(Form1 form1, List<PerformanceItem> performanceList, string title, int formType)
         {
             PerformanceFormLiquidations pf = new PerformanceFormLiquidations(performanceList);
             pf.Text = title;
             pf.Owner = form1;
+            pf.formType = formType;
             pf.Show();
         }
     }
@@ -264,5 +271,6 @@ namespace StockApi
         public decimal Profit { get; set; }
         public decimal TotalProfit { get; set; }
         public int DowLevel { get; set; }
+        public bool SoldAndBought { get; set; }
     }
 }

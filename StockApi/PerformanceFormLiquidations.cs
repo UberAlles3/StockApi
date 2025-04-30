@@ -12,6 +12,7 @@ namespace StockApi
     public partial class PerformanceFormLiquidations : Form
     {
         List<PerformanceItem> _performanceList = null;
+        public int formType = 0;
 
         public PerformanceFormLiquidations(List<PerformanceItem> performanceList)
         {
@@ -21,6 +22,11 @@ namespace StockApi
 
         private void PerformanceForm_Load(object sender, EventArgs e)
         {
+            if (formType == 0)
+                lblColorExplanation.Visible = true;
+            else
+                lblColorExplanation.Visible = false;
+
             var bindingList = new BindingList<PerformanceItem>(_performanceList);
             dataGridView2.DataSource = new BindingSource(bindingList, null); 
 
@@ -54,7 +60,10 @@ namespace StockApi
             dataGridView2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridView2.Columns[6].DefaultCellStyle.Format = "N2";
             // DOW
+            dataGridView2.Columns[7].Width = 0;
             dataGridView2.Columns[7].Visible = false;
+            dataGridView2.Columns[8].Width = 0;
+            dataGridView2.Columns[8].Visible = false;
 
             dataGridView2.Refresh();
 
@@ -80,6 +89,10 @@ namespace StockApi
             int i = 0;
             foreach (PerformanceItem pi in _performanceList)
             {
+                if (pi.SoldAndBought)
+                {
+                    dataGridView2.Rows[i].Cells[4].Style.ForeColor = Color.LightYellow;
+                }
                 if (pi.TotalProfit > Math.Abs(totProfit) / 12)
                 {
                     dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.LightGreen;

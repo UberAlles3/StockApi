@@ -2070,7 +2070,7 @@ namespace StockApi
             this.last25SellsToolStripMenuItem.Name = "last25SellsToolStripMenuItem";
             this.last25SellsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.last25SellsToolStripMenuItem.Text = "Latest Sells";
-            this.last25SellsToolStripMenuItem.Click += new System.EventHandler(this.last25SellsToolStripMenuItem_Click);
+            this.last25SellsToolStripMenuItem.Click += new System.EventHandler(this.latestSellsToolStripMenuItem_Click);
             // 
             // liguidationsToolStripMenuItem
             // 

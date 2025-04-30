@@ -57,6 +57,9 @@ namespace StockApi
             dataGridView2.Columns[7].Width = 70;
             dataGridView2.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridView2.Columns[7].DefaultCellStyle.Format = "N0";
+            // SoldAndBought
+            dataGridView2.Columns[8].Width = 0;
+            dataGridView2.Columns[8].Visible = false;
 
             dataGridView2.Refresh();
 
