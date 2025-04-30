@@ -77,7 +77,7 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ApplyStyles();
+            //ApplyStyles();
 
             label37.BackColor = label38.BackColor = trackBar1.BackColor;
 
@@ -582,32 +582,32 @@ namespace StockApi
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
         }
 
-        private void ApplyStyles()
-        {
-            Color forecolor = Color.FromArgb(220, 235, 245);
+        //private void ApplyStyles()
+        //{
+        //    Color forecolor = Color.FromArgb(220, 235, 245);
 
-            foreach (Control control in this.Controls)
-            {
-                if (control.GetType() == typeof(System.Windows.Forms.Label))
-                {
-                    control.ForeColor = forecolor;
-                }
-            }
-            foreach (Control control in panel1.Controls)
-            {
-                if (control.GetType() == typeof(System.Windows.Forms.Label))
-                {
-                    control.ForeColor = forecolor;
-                }
-            }
-            foreach (Control control in panel2.Controls)
-            {
-                if (control.GetType() == typeof(System.Windows.Forms.Label))
-                {
-                    control.ForeColor = forecolor;
-                }
-            }
-        }
+        //    foreach (Control control in this.Controls)
+        //    {
+        //        if (control.GetType() == typeof(System.Windows.Forms.Label))
+        //        {
+        //            control.ForeColor = forecolor;
+        //        }
+        //    }
+        //    foreach (Control control in panel1.Controls)
+        //    {
+        //        if (control.GetType() == typeof(System.Windows.Forms.Label))
+        //        {
+        //            control.ForeColor = forecolor;
+        //        }
+        //    }
+        //    foreach (Control control in panel2.Controls)
+        //    {
+        //        if (control.GetType() == typeof(System.Windows.Forms.Label))
+        //        {
+        //            control.ForeColor = forecolor;
+        //        }
+        //    }
+        //}
 
         private async void GetFinancials()
         {
