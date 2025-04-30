@@ -37,7 +37,7 @@ namespace StockApi
         {
             get
             {
-                Color color = Color.LightSteelBlue;
+                Color color = Form1.TextForeColor;
 
                 if (Change > PreviousClose.NumericValue / 1000)
                     color = Color.LimeGreen;

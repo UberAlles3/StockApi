@@ -16,6 +16,8 @@ namespace StockApi
 {
     public partial class Form1 : Form
     {
+        public static Color TextForeColor = Color.LightSteelBlue;
+        
         List<Setting> _settings = new List<Setting>();
         private static bool _tickerFound = false;
         private static StockSummary _stockSummary = new StockSummary();
@@ -187,7 +189,7 @@ namespace StockApi
                     // bind data list to trades grid control
                     BindingSource tradeSource = new BindingSource();
                     tradeSource.DataSource = TickerTradesDataTable;
-                    dataGridView2.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
+                    dataGridView2.DefaultCellStyle.ForeColor = Form1.TextForeColor;
                     dataGridView2.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
                     dataGridView2.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
                     dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
@@ -292,7 +294,7 @@ namespace StockApi
         {
             var bindingList = new BindingList<StockHistory.HistoricPriceData>(historicDisplayList);
             var source = new BindingSource(bindingList, null);
-            dataGridView1.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
+            dataGridView1.DefaultCellStyle.ForeColor = Form1.TextForeColor;
             dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
             dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
             dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;

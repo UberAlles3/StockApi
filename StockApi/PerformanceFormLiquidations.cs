@@ -31,8 +31,8 @@ namespace StockApi
             dataGridView2.DataSource = new BindingSource(bindingList, null); 
 
             this.BackColor = dataGridView2.BackgroundColor;
-            dataGridView2.DefaultCellStyle.ForeColor = Color.LightSteelBlue;
-            dataGridView2.DefaultCellStyle.SelectionForeColor = Color.LightSteelBlue;
+            dataGridView2.DefaultCellStyle.ForeColor = Form1.TextForeColor;
+            dataGridView2.DefaultCellStyle.SelectionForeColor = Form1.TextForeColor;
             dataGridView2.DefaultCellStyle.BackColor = Color.Black;
             dataGridView2.DefaultCellStyle.SelectionBackColor = Color.Black;
 

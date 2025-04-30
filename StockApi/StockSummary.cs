@@ -21,13 +21,13 @@ namespace StockApi
 
         private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
 
-        public Color DividendColor = Color.LightSteelBlue;
-        public Color EPSColor = Color.LightSteelBlue;
-        public Color PriceBookColor = Color.LightSteelBlue;
-        public Color ProfitMarginColor = Color.LightSteelBlue;
-        public Color OneYearTargetColor = Color.LightSteelBlue;
-        public Color ForwardPEColor = Color.LightSteelBlue;
-        public Color EarningsDateColor = Color.LightSteelBlue;
+        public Color DividendColor = Form1.TextForeColor;
+        public Color EPSColor = Form1.TextForeColor;
+        public Color PriceBookColor = Form1.TextForeColor;
+        public Color ProfitMarginColor = Form1.TextForeColor;
+        public Color OneYearTargetColor = Form1.TextForeColor;
+        public Color ForwardPEColor = Form1.TextForeColor;
+        public Color EarningsDateColor = Form1.TextForeColor;
 
         private string companyName = "";
         public string CompanyOverview = "";
@@ -185,10 +185,10 @@ namespace StockApi
             //*******************
             //    Set Colors
             //*******************
-            DividendColor = Color.LightSteelBlue;
+            DividendColor = Form1.TextForeColor;
             if (DividendString.NumericValue > 1.5M)
                 DividendColor = Color.Lime;
-            EPSColor = Color.LightSteelBlue;
+            EPSColor = Form1.TextForeColor;
             if (EarningsPerShareString.NumericValue < -1)
                 EPSColor = Color.Red;
             else if (EarningsPerShareString.NumericValue > 1)
@@ -198,15 +198,15 @@ namespace StockApi
             else if (ProfitMarginString.NumericValue > 2)
                 ProfitMarginColor = Color.Lime;
             else
-                ProfitMarginColor = Color.LightSteelBlue;
+                ProfitMarginColor = Form1.TextForeColor;
             
             if (PriceBookString.NumericValue > 5)
                 PriceBookColor = Color.Red;
             else if (PriceBookString.NumericValue < 1)
                 PriceBookColor = Color.Lime;
             else
-                PriceBookColor = Color.LightSteelBlue;
-            OneYearTargetColor = Color.LightSteelBlue;
+                PriceBookColor = Form1.TextForeColor;
+            OneYearTargetColor = Form1.TextForeColor;
             if (OneYearTargetPriceString.NumericValue < PriceString.NumericValue * .9M)
                 OneYearTargetColor = Color.Red;
             else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
@@ -217,9 +217,9 @@ namespace StockApi
             else if (ForwardPEString.NumericValue < 15)
                 ForwardPEColor = Color.Lime;
             else
-                ForwardPEColor = Color.LightSteelBlue;
+                ForwardPEColor = Form1.TextForeColor;
 
-            ForwardPEColor = Color.LightSteelBlue;
+            ForwardPEColor = Form1.TextForeColor;
             if (EarningsDateString.IsDateTime)
             {
                 TimeSpan? diff = EarningsDateString.DateTimeValue - DateTime.Now;
