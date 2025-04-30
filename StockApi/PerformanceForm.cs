@@ -99,15 +99,19 @@ namespace StockApi
             int i = 0;
             foreach (PerformanceItem pi in _performanceList)
             {
+                if (pi.SoldAndBought)
+                {
+                    dataGridView2.Rows[i].Cells[(int)GridColumns.CurrentPrice].Style.ForeColor = Color.LightYellow;
+                }
                 if (pi.TotalProfit > Math.Abs(totProfit) / 12)
                 {
-                    dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.LightGreen;
-                    dataGridView2.Rows[i].Cells[6].Style.ForeColor = Color.LightGreen;
+                    dataGridView2.Rows[i].Cells[(int)GridColumns.Profit].Style.ForeColor = Color.LightGreen;
+                    dataGridView2.Rows[i].Cells[(int)GridColumns.TotalProfit].Style.ForeColor = Color.LightGreen;
                 }
                 if (pi.TotalProfit < 0)
                 {
-                    dataGridView2.Rows[i].Cells[5].Style.ForeColor = Color.LightPink;
-                    dataGridView2.Rows[i].Cells[6].Style.ForeColor = Color.LightPink;
+                    dataGridView2.Rows[i].Cells[(int)GridColumns.Profit].Style.ForeColor = Color.LightPink;
+                    dataGridView2.Rows[i].Cells[(int)GridColumns.TotalProfit].Style.ForeColor = Color.LightPink;
                 }
                 i++;
             }

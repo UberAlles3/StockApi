@@ -47,6 +47,7 @@ namespace StockApi
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.lblWorth = new System.Windows.Forms.Label();
+            this.lblColorExplanation = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -239,12 +240,23 @@ namespace StockApi
             this.lblWorth.Text = "Worth";
             this.lblWorth.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // lblColorExplanation
+            // 
+            this.lblColorExplanation.BackColor = System.Drawing.Color.Transparent;
+            this.lblColorExplanation.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblColorExplanation.Location = new System.Drawing.Point(612, 147);
+            this.lblColorExplanation.Name = "lblColorExplanation";
+            this.lblColorExplanation.Size = new System.Drawing.Size(133, 46);
+            this.lblColorExplanation.TabIndex = 64;
+            this.lblColorExplanation.Text = "Yellow color means that the stock was bought and then sold off.";
+            // 
             // PerformanceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(799, 693);
+            this.Controls.Add(this.lblColorExplanation);
             this.Controls.Add(this.lblWorth);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.lblPortfolioGain);
@@ -287,5 +299,6 @@ namespace StockApi
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblWorth;
+        private System.Windows.Forms.Label lblColorExplanation;
     }
 }

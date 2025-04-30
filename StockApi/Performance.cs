@@ -26,6 +26,8 @@ namespace StockApi
 
         public void GetLatestBuyPerformance(MarketData dowMarket, DataTable positionsDataTable, DataTable tradesDataTable)
         {
+            bool buyAndSold;
+
             // Get latest DOW level from trades, replace that latest trade's DOW level with this.
             int dowLast;
             if (dowMarket.CurrentLevel.NumericValue > 0)
@@ -39,6 +41,10 @@ namespace StockApi
                     dowLast = Convert.ToInt32(dow);
                 }
             }
+
+            // Get last 50 sells to elimate from the buy list
+            IEnumerable<DataRow> sells = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
+            sells = sells.OrderByDescending(x => x[(int)TC.TradeDate]).Take(50).OrderBy(x => x[(int)TC.TradeDate]);
 
             // Get last 25 buys
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "");
@@ -63,6 +69,19 @@ namespace StockApi
                 if (temp._IsDecimal())
                 {
                     currentPrice = Convert.ToDecimal(temp);
+                }
+
+                // See if there was a later sell off and eliminate it
+                buyAndSold = false;
+                if (sells.Where(x => x[(int)TC.Ticker].ToString() == ticker).Count() > 0)
+                {
+                    var sell = sells.Where(x => x[(int)TC.Ticker].ToString() == ticker).Last();
+
+                    if ((DateTime)sell.ItemArray[(int)TC.TradeDate] > (DateTime)dr.ItemArray[(int)TC.TradeDate])
+                    {
+                        currentPrice = Convert.ToDecimal(sell.ItemArray[(int)TC.TradePrice]);
+                        buyAndSold = true;
+                    }
                 }
 
                 // Get the buy price
@@ -93,7 +112,8 @@ namespace StockApi
                     CurrentPrice = currentPrice,
                     Profit = profit,
                     TotalProfit = quantity * profit,
-                    DowLevel = dowLevel
+                    DowLevel = dowLevel,
+                    SoldAndBought = buyAndSold
                 };
 
                 _performanceList.Add(pi);
@@ -116,9 +136,9 @@ namespace StockApi
             // Get all positions to get current price
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.QuantityHeld].ToString().Trim() != "0" && x[(int)PC.QuantityHeld].ToString().Trim() != "");
 
-            // Get last 60 buys to elimate fro the sell list
+            // Get last 50 buys to elimate fro the sell list
             IEnumerable<DataRow> buys = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Buy" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
-            buys = buys.OrderByDescending(x => x[(int)TC.TradeDate]).Take(60);
+            buys = buys.OrderByDescending(x => x[(int)TC.TradeDate]).Take(50).OrderBy(x => x[(int)TC.TradeDate]);
 
             // Get last 25 sells
             IEnumerable<DataRow> sellTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
