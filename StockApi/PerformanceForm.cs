@@ -11,6 +11,20 @@ namespace StockApi
 {
     public partial class PerformanceForm : Form
     {
+        private enum GridColumns
+        {
+            TradeDate,
+            Ticker,
+            Quantity,
+            TradePrice, 
+            CurrentPrice,
+            Profit,
+            TotalProfit,
+            DowLevel,
+            SoldAndBought
+        }
+        
+        
         List<PerformanceItem> _performanceList = null;
 
         public PerformanceForm(List<PerformanceItem> performanceList)
@@ -29,37 +43,37 @@ namespace StockApi
             dataGridView2.DefaultCellStyle.SelectionForeColor = Color.LightSteelBlue;
             dataGridView2.DefaultCellStyle.BackColor = Color.Black;
             dataGridView2.DefaultCellStyle.SelectionBackColor = Color.Black;
-
-            dataGridView2.Columns[0].Width = 80;
-            ////dataGridView2.Columns[0].DefaultCellStyle.Format = "MM/dd/yyyy";
-            dataGridView2.Columns[1].Width = 50;
+            // TradeDate
+            dataGridView2.Columns[(int)GridColumns.TradeDate].Width = 80;
+            // Ticker
+            dataGridView2.Columns[(int)GridColumns.Ticker].Width = 50;
             // Quantity
-            dataGridView2.Columns[2].Width = 60;
-            dataGridView2.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridView2.Columns[2].DefaultCellStyle.Format = "#####";
+            dataGridView2.Columns[(int)GridColumns.Quantity].Width = 60;
+            dataGridView2.Columns[(int)GridColumns.Quantity].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView2.Columns[(int)GridColumns.Quantity].DefaultCellStyle.Format = "#####";
             // Bought Price
-            dataGridView2.Columns[3].Width = 75;
-            dataGridView2.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridView2.Columns[3].DefaultCellStyle.Format = "N2";
+            dataGridView2.Columns[(int)GridColumns.TradePrice].Width = 75;
+            dataGridView2.Columns[(int)GridColumns.TradePrice].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView2.Columns[(int)GridColumns.TradePrice].DefaultCellStyle.Format = "N2";
             // Current Price
-            dataGridView2.Columns[4].Width = 75;
-            dataGridView2.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridView2.Columns[4].DefaultCellStyle.Format = "N2";
+            dataGridView2.Columns[(int)GridColumns.CurrentPrice].Width = 75;
+            dataGridView2.Columns[(int)GridColumns.CurrentPrice].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView2.Columns[(int)GridColumns.CurrentPrice].DefaultCellStyle.Format = "N2";
             // Profit
-            dataGridView2.Columns[5].Width = 75;
-            dataGridView2.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridView2.Columns[5].DefaultCellStyle.Format = "N2";
+            dataGridView2.Columns[(int)GridColumns.Profit].Width = 75;
+            dataGridView2.Columns[(int)GridColumns.Profit].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView2.Columns[(int)GridColumns.Profit].DefaultCellStyle.Format = "N2";
             // Total Profit
-            dataGridView2.Columns[6].Width = 75;
-            dataGridView2.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridView2.Columns[6].DefaultCellStyle.Format = "N2";
+            dataGridView2.Columns[(int)GridColumns.TotalProfit].Width = 75;
+            dataGridView2.Columns[(int)GridColumns.TotalProfit].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView2.Columns[(int)GridColumns.TotalProfit].DefaultCellStyle.Format = "N2";
             // DOW
-            dataGridView2.Columns[7].Width = 70;
-            dataGridView2.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridView2.Columns[7].DefaultCellStyle.Format = "N0";
+            dataGridView2.Columns[(int)GridColumns.DowLevel].Width = 70;
+            dataGridView2.Columns[(int)GridColumns.DowLevel].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridView2.Columns[(int)GridColumns.DowLevel].DefaultCellStyle.Format = "N0";
             // SoldAndBought
-            dataGridView2.Columns[8].Width = 0;
-            dataGridView2.Columns[8].Visible = false;
+            dataGridView2.Columns[(int)GridColumns.SoldAndBought].Width = 0;
+            dataGridView2.Columns[(int)GridColumns.SoldAndBought].Visible = false;
 
             dataGridView2.Refresh();
 

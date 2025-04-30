@@ -264,13 +264,13 @@ namespace StockApi
     public class PerformanceItem
     {
         public DateTime TradeDate { get; set; }
-        public string Ticker { get; set; }
-        public int Quantity { get; set; }
-        public decimal TradePrice { get; set; }
-        public decimal CurrentPrice { get; set; }
-        public decimal Profit { get; set; }
-        public decimal TotalProfit { get; set; }
-        public int DowLevel { get; set; }
-        public bool SoldAndBought { get; set; }
+        public string   Ticker { get; set; }
+        public int      Quantity { get; set; }
+        public decimal  TradePrice { get; set; }
+        public decimal  CurrentPrice { get; set; }
+        public decimal  Profit { get; set; }
+        public decimal  TotalProfit { get; set; }
+        public int      DowLevel { get; set; }
+        public bool     SoldAndBought { get; set; }
     }
 }
