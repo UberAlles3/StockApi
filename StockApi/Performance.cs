@@ -34,7 +34,7 @@ namespace StockApi
                 dowLast = Convert.ToInt32(dowMarket.CurrentLevel.NumericValue);
             else
             {
-                string dow = tradesDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "").Last().ItemArray[1].ToString();
+                string dow = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.DowLevel].ToString().Trim() != "0" && x[(int)TC.DowLevel].ToString().Trim() != "").Last().ItemArray[(int)TC.DowLevel].ToString();
                 dowLast = 0;
                 if (dow._IsDecimal())
                 {
@@ -47,24 +47,24 @@ namespace StockApi
             sells = sells.OrderByDescending(x => x[(int)TC.TradeDate]).Take(50).OrderBy(x => x[(int)TC.TradeDate]);
 
             // Get last 25 buys
-            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[1].ToString().Trim() != "0" && x[1].ToString().Trim() != "");
+            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)TC.DowLevel].ToString().Trim() != "0" && x[(int)TC.DowLevel].ToString().Trim() != "");
 
-            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[2].ToString() == "Buy" && x[1].ToString().Trim() != "").Skip(700);
+            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Buy" && x[(int)TC.DowLevel].ToString().Trim() != "").Skip(700);
             tickerTrades = tickerTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25).OrderBy(x => x[(int)TC.TradeDate]);
 
             _performanceList.Clear();
-            foreach (DataRow dr in tickerTrades)
+            foreach (DataRow trade in tickerTrades)
             {
                 // Search in positions for ticker to get current price 
-                string ticker = dr.ItemArray[4].ToString();
-                string temp = dr.ItemArray[3].ToString();
+                string ticker = trade.ItemArray[(int)TC.Ticker].ToString();
+                string temp = trade.ItemArray[(int)TC.QuantityTraded].ToString();
                 int quantity = 0;
                 if (temp._IsInt())
                 {
                     quantity = Convert.ToInt32(temp);
                 }
 
-                temp = positions.Where(x => x[0].ToString() == ticker).First().ItemArray[2].ToString();
+                temp = positions.Where(x => x[(int)PC.Ticker].ToString() == ticker).First().ItemArray[(int)PC.Price].ToString();
                 decimal currentPrice = 0;
                 if (temp._IsDecimal())
                 {
@@ -77,7 +77,7 @@ namespace StockApi
                 {
                     var sell = sells.Where(x => x[(int)TC.Ticker].ToString() == ticker).Last();
 
-                    if ((DateTime)sell.ItemArray[(int)TC.TradeDate] > (DateTime)dr.ItemArray[(int)TC.TradeDate])
+                    if ((DateTime)sell.ItemArray[(int)TC.TradeDate] > (DateTime)trade.ItemArray[(int)TC.TradeDate])
                     {
                         currentPrice = Convert.ToDecimal(sell.ItemArray[(int)TC.TradePrice]);
                         buyAndSold = true;
@@ -85,7 +85,7 @@ namespace StockApi
                 }
 
                 // Get the buy price
-                temp = dr.ItemArray[5].ToString();
+                temp = trade.ItemArray[(int)TC.TradePrice].ToString();
                 decimal buyPrice = 0;
                 if (temp._IsDecimal())
                 {
@@ -96,7 +96,7 @@ namespace StockApi
                 decimal profit = currentPrice - buyPrice;
 
                 // Get the DOW level
-                temp = dr.ItemArray[1].ToString();
+                temp = trade.ItemArray[1].ToString();
                 int dowLevel = 0;
                 if (temp._IsDecimal())
                 {
@@ -105,7 +105,7 @@ namespace StockApi
 
                 PerformanceItem pi = new PerformanceItem()
                 {
-                    TradeDate = Convert.ToDateTime(dr.ItemArray[0].ToString()),
+                    TradeDate = Convert.ToDateTime(trade.ItemArray[0].ToString()),
                     Ticker = ticker,
                     Quantity = quantity,
                     TradePrice = buyPrice,
@@ -146,12 +146,12 @@ namespace StockApi
             sellTrades = sellTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25).OrderBy(x => x[(int)TC.TradeDate]);
 
             performanceList.Clear();
-            foreach (DataRow dr in sellTrades)
+            foreach (DataRow trade in sellTrades)
             {
-                string ticker = dr.ItemArray[(int)TC.Ticker].ToString();
+                string ticker = trade.ItemArray[(int)TC.Ticker].ToString();
 
                 // Search in trades for ticker to get quantity sold
-                string temp = dr.ItemArray[(int)TC.QuantityTraded].ToString();
+                string temp = trade.ItemArray[(int)TC.QuantityTraded].ToString();
                 int quantity = 0;
                 if (temp._IsInt())
                 {
@@ -181,7 +181,7 @@ namespace StockApi
                 {
                     var buy = buys.Where(x => x[(int)TC.Ticker].ToString() == ticker).Last();
 
-                    if ((DateTime)buy.ItemArray[(int)TC.TradeDate] > (DateTime)dr.ItemArray[(int)TC.TradeDate])
+                    if ((DateTime)buy.ItemArray[(int)TC.TradeDate] > (DateTime)trade.ItemArray[(int)TC.TradeDate])
                     {
                         currentPrice = Convert.ToDecimal(buy.ItemArray[(int)TC.TradePrice]);
                         soldAndBought = true;
@@ -189,7 +189,7 @@ namespace StockApi
                 }
 
                 // Get the price sold from trades table
-                temp = dr.ItemArray[(int)TC.TradePrice].ToString();
+                temp = trade.ItemArray[(int)TC.TradePrice].ToString();
                 decimal soldPrice = 0;
                 if (temp._IsDecimal())
                 {
@@ -201,7 +201,7 @@ namespace StockApi
 
                 PerformanceItem pi = new PerformanceItem()
                 {
-                    TradeDate = Convert.ToDateTime(dr.ItemArray[0].ToString()),
+                    TradeDate = Convert.ToDateTime(trade.ItemArray[0].ToString()),
                     Ticker = ticker,
                     Quantity = quantity,
                     TradePrice = soldPrice,
@@ -228,12 +228,11 @@ namespace StockApi
             tickerTrades = tickerTrades.OrderBy(x => x[(int)TC.TradeDate]).Take(25);
 
             performanceList.Clear();
-            foreach (DataRow dr in tickerTrades)
+            foreach (DataRow trade in tickerTrades)
             {
                 // Search in positions for ticker to get current price 
-
-                string ticker = dr.ItemArray[4].ToString();
-                string temp = dr.ItemArray[3].ToString();
+                string ticker = trade.ItemArray[(int)TC.Ticker].ToString();
+                string temp = trade.ItemArray[(int)TC.QuantityTraded].ToString();
                 int quantity = 0;
                 if (temp._IsInt())
                 {
@@ -244,7 +243,7 @@ namespace StockApi
                 decimal currentPrice = await stockHistory.GetTodaysPrice(ticker);
 
                 // Get the price sold
-                temp = dr.ItemArray[5].ToString();
+                temp = trade.ItemArray[(int)TC.TradePrice].ToString();
                 decimal soldPrice = 0;
                 if (temp._IsDecimal())
                 {
@@ -256,7 +255,7 @@ namespace StockApi
 
                 PerformanceItem pi = new PerformanceItem()
                 {
-                    TradeDate = Convert.ToDateTime(dr.ItemArray[0].ToString()),
+                    TradeDate = Convert.ToDateTime(trade.ItemArray[0].ToString()),
                     Ticker = ticker,
                     Quantity = quantity,
                     TradePrice = soldPrice,

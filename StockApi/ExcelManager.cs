@@ -6,14 +6,14 @@ namespace StockApi
 {
     public class ExcelManager
     {
-        public enum PositionColumns
+        public enum PositionColumns : int
         {
             Ticker = 0,
             QuantityHeld = 1,
             Price = 2
         }
 
-        public enum TradeColumns
+        public enum TradeColumns : int
         {
             TradeDate = 0,
             DowLevel = 1,
