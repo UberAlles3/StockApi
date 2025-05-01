@@ -42,9 +42,9 @@ namespace StockApi
                 }
             }
 
-            // Get last 50 sells to elimate from the buy list
+            // Get last 60 sells to elimate from the buy list
             IEnumerable<DataRow> sells = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
-            sells = sells.OrderByDescending(x => x[(int)TC.TradeDate]).Take(50).OrderBy(x => x[(int)TC.TradeDate]);
+            sells = sells.OrderByDescending(x => x[(int)TC.TradeDate]).Take(60).OrderBy(x => x[(int)TC.TradeDate]);
 
             // Get last 25 buys
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)TC.DowLevel].ToString().Trim() != "0" && x[(int)TC.DowLevel].ToString().Trim() != "");
@@ -136,9 +136,9 @@ namespace StockApi
             // Get all positions to get current price
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.QuantityHeld].ToString().Trim() != "0" && x[(int)PC.QuantityHeld].ToString().Trim() != "");
 
-            // Get last 50 buys to elimate fro the sell list
+            // Get last 60 buys to elimate fro the sell list
             IEnumerable<DataRow> buys = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Buy" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
-            buys = buys.OrderByDescending(x => x[(int)TC.TradeDate]).Take(50).OrderBy(x => x[(int)TC.TradeDate]);
+            buys = buys.OrderByDescending(x => x[(int)TC.TradeDate]).Take(60).OrderBy(x => x[(int)TC.TradeDate]);
 
             // Get last 25 sells
             IEnumerable<DataRow> sellTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
