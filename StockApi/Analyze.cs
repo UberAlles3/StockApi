@@ -371,7 +371,7 @@ namespace StockApi
             decimal profit = (SellPrice - stockSummary.PriceString.NumericValue) * SellQuantity;
             if (profit < 20M && totalMetric > .91M) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
             {
-                SellPrice = (20M / SellQuantity) + stockSummary.PriceString.NumericValue;
+                SellPrice = (20M / (SellQuantity + 3)) + stockSummary.PriceString.NumericValue;
                 output.AppendLine($"Minimum profit set to $20. Sell Price: {SellPrice.ToString("##.##")}");
             }
 
