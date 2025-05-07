@@ -14,8 +14,7 @@ namespace StockApi
         private static readonly string _statisticsUrl = "https://finance.yahoo.com/quote/???/key-statistics/";
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
 
-        public bool _revenueInMillions = false;
-        public decimal ProfitTTM = 0;
+//        public decimal ProfitTTM = 0;
         public Color ProfitTtmColor = Form1.TextForeColor;
         public decimal Profit2YearsAgo = 0;
         public Color Profit2YearsAgoColor = Form1.TextForeColor;
@@ -46,6 +45,9 @@ namespace StockApi
         public StringSafeType<Decimal> OperatingExpenseTtmString = new StringSafeType<decimal>("--");
         ///  Operation Expense 2 Year
         public StringSafeType<Decimal> OperatingExpense2String = new StringSafeType<decimal>("--");
+        /// Profit TTM
+        public StringSafeType<Decimal> ProfitTtmString = new StringSafeType<decimal>("--");
+
         ///  Operation Expense 4 Year
         public StringSafeType<Decimal> OperatingExpense4String = new StringSafeType<decimal>("--");
         /// Debt Equity
@@ -69,7 +71,7 @@ namespace StockApi
                     TotalCash = 0;
                 else
                 {
-                    TotalCash = ConvertNumericSuffix(value);
+                    TotalCash = ShortInterestString.ConvertNumericSuffix(value);
                 }
             }
         }
@@ -96,7 +98,7 @@ namespace StockApi
                     TotalDebt = 0;
                 else
                 {
-                    TotalDebt = ConvertNumericSuffix(value);
+                    TotalDebt = ShortInterestString.ConvertNumericSuffix(value);
                 }
             }
         }
@@ -109,32 +111,7 @@ namespace StockApi
             }
         }
 
-        private decimal ConvertNumericSuffix(string value)
-        {
-            string temp = "";
-            decimal number = 0;
 
-            if (value.IndexOf("B") > 0 || value.IndexOf("T") > 0)
-            {
-                temp = value.Replace("B", "").Replace("T", "");
-                number = Convert.ToDecimal(temp) * 1000000000;
-            }
-            else if (value.IndexOf("M") > 0)
-            {
-                temp = value.Replace("M", "");
-                number = Convert.ToDecimal(temp) * 1000000;
-            }
-            else if (TotalDebtString.IndexOf("k") > 0)
-            {
-                temp = TotalDebtString.Replace("k", "");
-                number = Convert.ToDecimal(temp) * 1000;
-            }
-            else
-                number = Convert.ToDecimal(value);
-            return number;
-        }
-
- 
         private bool NotNumber(string value)
         {
             return value == YahooFinance.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;
@@ -166,10 +143,12 @@ namespace StockApi
                     return false; //=====>>>>>>>
 
                 List<string> numbers = GetNumbersFromHtml(partial);
-                numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                 if (numbers.Count > 0)
+                {
                     RevenueTtmString.StringValue = numbers[0].Trim();
+
+                }
                 if (numbers.Count > 2)
                     Revenue2String.StringValue = numbers[2].Trim();
                 if (numbers.Count > 4)
@@ -177,24 +156,13 @@ namespace StockApi
                 else if (numbers.Count > 3)
                     Revenue4String.StringValue = numbers[3].Trim();
 
-                _revenueInMillions = false; // reset
-                if (RevenueTtmString.StringValue.Length > 7 && Revenue4String.StringValue.Length > 7)
-                {
-                    _revenueInMillions = true;
-                    RevenueTtmString.StringValue = RevenueTtmString.StringValue.Substring(0, RevenueTtmString.StringValue.Length - 4);
-                    if (Revenue2String.StringValue.Length > 7)
-                        Revenue2String.StringValue = Revenue2String.StringValue.Substring(0, Revenue2String.StringValue.Length - 4);
-                    if (Revenue4String.StringValue.Length > 7)
-                        Revenue4String.StringValue = Revenue4String.StringValue.Substring(0, Revenue4String.StringValue.Length - 4);
-                }
-
                 // Cost of Revenue History
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
                 partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
                 if (partial != "")
                 {
                     numbers = GetNumbersFromHtml(partial);
-                    numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
+                    //numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                     if (numbers.Count > 0)
                         CostOfRevenueTtmString.StringValue = numbers[0].Trim();
@@ -208,20 +176,13 @@ namespace StockApi
                 else
                     CostOfRevenueTtmString.StringValue = CostOfRevenue2String.StringValue = CostOfRevenue4String.StringValue = "--";
 
-                if (_revenueInMillions && CostOfRevenueTtmString.NumericValue != 0 && CostOfRevenueTtmString.StringValue != "--")
-                {
-                    CostOfRevenueTtmString.StringValue = CostOfRevenueTtmString.StringValue.Substring(0, CostOfRevenueTtmString.StringValue.Length - 4);
-                    CostOfRevenue2String.StringValue = CostOfRevenue2String.StringValue.Substring(0, CostOfRevenue2String.StringValue.Length - 4);
-                    CostOfRevenue4String.StringValue = CostOfRevenue4String.StringValue.Substring(0, CostOfRevenue4String.StringValue.Length - 4);
-                }
-
                 // Operating Expenses
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Operating Expense").Term;
                 partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
                 if (partial != "")
                 {
                     numbers = GetNumbersFromHtml(partial);
-                    numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
+                    //numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
 
                     if (numbers.Count > 0)
                         OperatingExpenseTtmString.StringValue = numbers[0].Trim();
@@ -235,15 +196,12 @@ namespace StockApi
                 else
                     OperatingExpenseTtmString.StringValue = OperatingExpense2String.StringValue = OperatingExpense4String.StringValue = "--";
 
-                if (_revenueInMillions && OperatingExpenseTtmString.NumericValue != 0 && OperatingExpenseTtmString.StringValue != "--")
+                if (RevenueTtmString.NumericValue > 0)
                 {
-                    OperatingExpenseTtmString.StringValue = OperatingExpenseTtmString.StringValue.Substring(0, OperatingExpenseTtmString.StringValue.Length - 4);
-                    OperatingExpense2String.StringValue = OperatingExpense2String.StringValue.Substring(0, OperatingExpense2String.StringValue.Length - 4);
-                    OperatingExpense4String.StringValue = OperatingExpense4String.StringValue.Substring(0, OperatingExpense4String.StringValue.Length - 4);
+                    ProfitTtmString.NumericValue = RevenueTtmString.NumericValue - CostOfRevenueTtmString.NumericValue - OperatingExpenseTtmString.NumericValue;
+                    ProfitTtmString.StringValue = ProfitTtmString.NumericValue.ToString("n0");
                 }
 
-                if (RevenueTtmString.NumericValue > 0)
-                    ProfitTTM = RevenueTtmString.NumericValue - CostOfRevenueTtmString.NumericValue - OperatingExpenseTtmString.NumericValue;
                 if (Revenue2String.NumericValue > 0)
                     Profit2YearsAgo = Revenue2String.NumericValue - CostOfRevenue2String.NumericValue - OperatingExpense2String.NumericValue;
                 if (Revenue4String.NumericValue > 0)
@@ -289,9 +247,9 @@ namespace StockApi
                 // Set Colors for Profits labels (if profit decreasing by 10% every 2 years, a problem
                 if (RevenueTtmString.NumericValue > 0 && CostOfRevenueTtmString.NumericValue > 0 && CostOfRevenue4String.NumericValue > 0)
                 {
-                    if (ProfitTTM < Profit2YearsAgo * .9M)
+                    if (ProfitTtmString.NumericValue < Profit2YearsAgo * .9M)
                         ProfitTtmColor = Color.Red;
-                    else if (ProfitTTM > (Profit2YearsAgo * 1.11M))
+                    else if (ProfitTtmString.NumericValue > (Profit2YearsAgo * 1.11M))
                         ProfitTtmColor = Color.Lime;
                     else
                         ProfitTtmColor = Form1.TextForeColor;

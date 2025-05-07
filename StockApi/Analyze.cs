@@ -179,15 +179,15 @@ namespace StockApi
                 profitMetric = 1.02M;
             if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99M)
                 profitMetric = .98M;
-            if (stockFinancials.ProfitTTM > stockFinancials.Profit2YearsAgo * 1.01M)
+            if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit2YearsAgo * 1.01M)
                 profitMetric *= 1.02M;
-            if (stockFinancials.ProfitTTM < stockFinancials.Profit2YearsAgo * .99M)
+            if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit2YearsAgo * .99M)
                 profitMetric *= .98M;
-            if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.2M)
+            if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.2M)
                 profitMetric *= 1.01M;
-            else if (stockFinancials.ProfitTTM > stockFinancials.Profit4YearsAgo * 1.02M)
+            else if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.02M)
                 profitMetric *= 1.01M;
-            if (stockFinancials.ProfitTTM < stockFinancials.Profit4YearsAgo * .98M)
+            if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit4YearsAgo * .98M)
                 profitMetric *= .985M;
             if (revenueMetric * profitMetric < .87M)
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}         * Financials are Bad *");

@@ -77,7 +77,9 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //ApplyStyles();
+            StringSafeType<decimal> t = new StringSafeType<decimal>("");
+
+            t.StringValue = "3.71B";
 
             label37.BackColor = label38.BackColor = trackBar1.BackColor;
 
@@ -616,11 +618,6 @@ namespace StockApi
             panelFinancials.Visible = false;
             bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
 
-            if (_stockFinancials._revenueInMillions == true)
-                lblRevenueInMillions.Text = "(all number in millions)";
-            else
-                lblRevenueInMillions.Text = "(all number in thousands)";
-
             // Revenue
             lblFinRevTTM.Text = _stockFinancials.RevenueTtmString.StringValue;
             lblFinRevTTM.ForeColor = _stockFinancials.RevenueTtmColor;
@@ -639,7 +636,7 @@ namespace StockApi
             lblOperExp4YearsAgo.Text = _stockFinancials.OperatingExpense4String.StringValue;
 
             // Operating Profit / Loss
-            lblOperProfitTTM.Text = $"{_stockFinancials.ProfitTTM:n0}";
+            lblOperProfitTTM.Text = _stockFinancials.ProfitTtmString.StringValue;
             lblOperProfitTTM.ForeColor = _stockFinancials.ProfitTtmColor;
             lblOperProfit2YearsAgo.Text = $"{_stockFinancials.Profit2YearsAgo:n0}";
             lblOperProfit2YearsAgo.ForeColor = _stockFinancials.Profit2YearsAgoColor;
@@ -664,8 +661,8 @@ namespace StockApi
             // 1. Average PE for the sector
             // 2. How large the profits are. We can use current profit margin. >15% is a high profit margin. -15% is a bad profit margin.
             // 3. How fast profits are growing/decreasing. (Current profit / Prior Profit)
-            decimal profitTTM = _stockFinancials.ProfitTTM + (_stockFinancials.ProfitTTM + _stockFinancials.Profit4YearsAgo) / 3;
-            decimal profit4Year = _stockFinancials.Profit4YearsAgo + (_stockFinancials.ProfitTTM + _stockFinancials.Profit4YearsAgo) / 3;
+            decimal profitTTM = _stockFinancials.ProfitTtmString.NumericValue + (_stockFinancials.ProfitTtmString.NumericValue + _stockFinancials.Profit4YearsAgo) / 3;
+            decimal profit4Year = _stockFinancials.Profit4YearsAgo + (_stockFinancials.ProfitTtmString.NumericValue + _stockFinancials.Profit4YearsAgo) / 3;
 
             if (profit4Year < 0)
             {
