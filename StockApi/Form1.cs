@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Drake.Extensions;
 
 namespace StockApi
 {
@@ -187,6 +188,7 @@ namespace StockApi
                 if (tradesDataTable.Rows.Count > 0 && tickerTrades.Count() > 0)
                 {
                     TickerTradesDataTable = tickerTrades.Where(r => r[3].ToString() != "0").CopyToDataTable();
+                    ApplyStockSplits(TickerTradesDataTable);
 
                     // bind data list to trades grid control
                     BindingSource tradeSource = new BindingSource();
@@ -246,6 +248,35 @@ namespace StockApi
 
             PostSummaryWebCall(); // displays the data returned
 
+        }
+
+        private void ApplyStockSplits(DataTable TickerTradesDataTable)
+        {
+            DataRow splitDR = TickerTradesDataTable.AsEnumerable().Where(r => r[(int)ExcelManager.TradeColumns.Splits].ToString().Contains("Split")).FirstOrDefault();
+            if (splitDR != null)
+            {
+                bool splitting = false;
+                int ratio = 1;
+                foreach (DataRow currentRow in TickerTradesDataTable.Rows)
+                {
+                    string sss = currentRow.ItemArray[(int)ExcelManager.TradeColumns.Splits].ToString();
+                    if (sss.Contains("Split"))
+                    {
+                        splitting = true;
+                        ratio = Convert.ToInt32(sss._Between("Split", "-"));
+                    }
+
+                    if (splitting)
+                    {
+                        int quantity = Convert.ToInt32(currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityTraded]) / ratio;
+                        decimal price = Convert.ToDecimal(currentRow.ItemArray[(int)ExcelManager.TradeColumns.TradePrice]) * ratio;
+                        int totShares = Convert.ToInt32(currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityHeld]) / ratio;
+                        currentRow[(int)ExcelManager.TradeColumns.QuantityTraded] = quantity;
+                        currentRow[(int)ExcelManager.TradeColumns.TradePrice] = price;
+                        currentRow[(int)ExcelManager.TradeColumns.QuantityHeld] = totShares;
+                    }
+                }
+            }
         }
 
         private void ResetFormControls()

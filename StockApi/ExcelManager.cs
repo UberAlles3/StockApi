@@ -22,7 +22,8 @@ namespace StockApi
             Ticker = 4,
             TradePrice = 5,
             QuantityHeld = 6,
-            AccountValue = 7
+            AccountValue = 7,
+            Splits = 8
         }
 
         public ExcelManager()
