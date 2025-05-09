@@ -829,5 +829,10 @@ namespace StockApi
             List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(TradesDataTable);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Liquidation Performance", 1);
         }
+
+        private void btnApplySplit_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
