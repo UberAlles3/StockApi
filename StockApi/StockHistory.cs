@@ -111,8 +111,17 @@ namespace StockApi
             /////// Get price history for 3 years ago to determine long trend
             if (get3Year)
             {
-                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4);
-                
+                List<StockQuote> quoteList = new List<StockQuote>();
+                try
+                {
+                    quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4);
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
+
                 if (quoteList.Count > 0)
                 {
                     StockQuote stockQuote = quoteList.Last();

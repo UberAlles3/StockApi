@@ -77,7 +77,7 @@ namespace StockApi
                             json = await content.ReadAsStringAsync();
                             return JsonConvert.DeserializeObject<QuoteRoot>(json);
                         }
-                        throw new GeneralExceptions().HandlePlaylistExceptions(ticker, (int)response.StatusCode, await response.Content.ReadAsStringAsync());
+                        throw new GeneralExceptions().HandleJsonRequestExceptions(ticker, (int)response.StatusCode, await response.Content.ReadAsStringAsync());
                     }
                 }
             }
@@ -98,15 +98,23 @@ namespace StockApi
 
     public class GeneralExceptions
     {
-        public Exception HandlePlaylistExceptions(string ticker, int code, string content)
+        public Exception HandleJsonRequestExceptions(string ticker, int code, string content)
         {
             JObject obj = JObject.Parse(content);
-            string exceptionMessage = string.Empty;
-            int errorCode = int.Parse(obj["error"]["code"].ToString());
-            foreach (var e in obj["error"]["errors"])
+            string exceptionMessage = $"GetJsonAsync({ticker}, string period1, string period2)";
+            int errorCode = 0;
+
+            if (obj["error"] != null)
             {
-                exceptionMessage += $"GetJsonAsync({ticker}, string period1, string period2)\n({e["reason"]}) {e["reason"]} : {e["message"]})";
+                foreach (var e in obj["error"]["errors"])
+                {
+                    exceptionMessage += $"\n({e["reason"]}) {e["reason"]} : {e["message"]})";
+                }
+                errorCode = int.Parse(obj["error"]["code"].ToString());
             }
+            else
+                exceptionMessage += obj["chart"]["error"];
+            
             switch (errorCode)
             {
                 case 400:

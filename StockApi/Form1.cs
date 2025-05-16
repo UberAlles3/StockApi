@@ -121,7 +121,15 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-  
+
+            bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+
+            if(networkUp == false)
+            {
+                MessageBox.Show("Your network connection is unavailable.");
+                return;
+            }
+
             txtStockTicker.Text = txtStockTicker.Text.ToUpper();
 
             if (string.IsNullOrEmpty(txtStockTicker.Text))
