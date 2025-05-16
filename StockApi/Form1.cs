@@ -357,6 +357,14 @@ namespace StockApi
             List<string> stockList = new List<string>();
             List<StockHistory.HistoricPriceData> historicDataList = new List<StockHistory.HistoricPriceData>();
 
+            bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+
+            if (networkUp == false)
+            {
+                MessageBox.Show("Your network connection is unavailable.");
+                return;
+            }
+
             stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
             stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
 
