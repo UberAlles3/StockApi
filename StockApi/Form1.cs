@@ -239,14 +239,10 @@ namespace StockApi
                 else
                 {
                     if (TickerTradesDataTable != null && dataGridView2.Rows.Count > 0)
-                        try
-                        {
-                            dataGridView2.Rows.Clear();
-                        }
-                        catch
-                        { } // Do nothing
-                    else
+                    {
+                        TickerTradesDataTable.Rows.Clear();
                         dataGridView2.DataSource = null;
+                    }
 
                     dataGridView2.Refresh();
                 }
@@ -632,33 +628,6 @@ namespace StockApi
             analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
         }
-
-        //private void ApplyStyles()
-        //{
-        //    Color forecolor = Color.FromArgb(220, 235, 245);
-
-        //    foreach (Control control in this.Controls)
-        //    {
-        //        if (control.GetType() == typeof(System.Windows.Forms.Label))
-        //        {
-        //            control.ForeColor = forecolor;
-        //        }
-        //    }
-        //    foreach (Control control in panel1.Controls)
-        //    {
-        //        if (control.GetType() == typeof(System.Windows.Forms.Label))
-        //        {
-        //            control.ForeColor = forecolor;
-        //        }
-        //    }
-        //    foreach (Control control in panel2.Controls)
-        //    {
-        //        if (control.GetType() == typeof(System.Windows.Forms.Label))
-        //        {
-        //            control.ForeColor = forecolor;
-        //        }
-        //    }
-        //}
 
         private async void GetFinancials()
         {
