@@ -276,7 +276,11 @@ namespace StockApi
                     {
                         int quantity = Convert.ToInt32(currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityTraded]) / ratio;
                         decimal price = Convert.ToDecimal(currentRow.ItemArray[(int)ExcelManager.TradeColumns.TradePrice]) * ratio;
-                        int totShares = Convert.ToInt32(currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityHeld]) / ratio;
+                        
+                        int totShares = 0;
+                        if (currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityHeld] != System.DBNull.Value)
+                           totShares = Convert.ToInt32(currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityHeld]) / ratio;
+                        
                         currentRow[(int)ExcelManager.TradeColumns.QuantityTraded] = quantity;
                         currentRow[(int)ExcelManager.TradeColumns.TradePrice] = price;
                         currentRow[(int)ExcelManager.TradeColumns.QuantityHeld] = totShares;
