@@ -143,12 +143,12 @@ namespace StockApi
             tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
 
             /////////// Set Bullish / Bearish scale
-            // Get DOW level from a month ago
-            var tickerTradesList = tradesDataTable.AsEnumerable().Where(x => DateTime.ParseExact(x[0].ToString(), "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-30) && x[1].ToString().Trim() != "").ToList();
+            // Get DOW level from 2 months ago
+            var tickerTradesList = tradesDataTable.AsEnumerable().Where(x => DateTime.ParseExact(x[0].ToString(), "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-60) && x[1].ToString().Trim() != "").ToList();
             // get first and last row's DOW
             float oneMonthAgoDOW = Convert.ToInt32(tickerTradesList.First().ItemArray[1].ToString());
             float currentDOW = Convert.ToInt32(tickerTradesList.Last().ItemArray[1].ToString());
-            float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 50;
+            float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 45;
             if (perc < -5) perc = -5;
             if (perc > 5) perc = 5;
             
