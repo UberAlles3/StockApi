@@ -24,28 +24,36 @@ namespace StockApi
             List<StockQuote> listQuotes = new List<StockQuote>();
 
             QuoteRoot quotes = await GetJsonAsync(ticker, unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
+            //QuoteRoot quotes = await GetJsonAsync("intc", unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
+            //quotes = await GetJsonAsync("vgslx", unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
 
-            foreach(double close in quotes.chart.result[0].indicators.quote[0].close)
+            foreach (string close in quotes.chart.result[0].indicators.quote[0].close)
             {
-                listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(close.ToString("0.000")) });
+                listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(close) });
             }
 
             int i = 0;
             foreach (int timestamp in quotes.chart.result[0].timestamp)
             {
                 DateTime quoteDate = unixEpoch.AddSeconds(Convert.ToInt32(timestamp));
+                
                 if(quoteDate.Date == DateTime.Now.Date)
                 {
                     listQuotes[i].Price = Convert.ToDecimal(quotes.chart.result[0].meta.regularMarketPrice.ToString("0.000"));
                 }
-                
+
+                //if (listQuotes[i].Price == 0)
+                //{
+                //    listQuotes[i].Price = 999;
+                //}
+
                 listQuotes[i++].QuoteDate = quoteDate.Date;
             }
 
             i = 0;
-            foreach (int volume in quotes.chart.result[0].indicators.quote[0].volume)
+            foreach (string volume in quotes.chart.result[0].indicators.quote[0].volume)
             {
-                listQuotes[i++].Volume = volume;
+                listQuotes[i++].Volume = Convert.ToInt32(volume);
             }
 
             return listQuotes;
@@ -75,7 +83,18 @@ namespace StockApi
                         if (response.IsSuccessStatusCode)
                         {
                             json = await content.ReadAsStringAsync();
-                            return JsonConvert.DeserializeObject<QuoteRoot>(json);
+                            QuoteRoot qr;
+                            
+                            try
+                            {
+                                qr = JsonConvert.DeserializeObject<QuoteRoot>(json);
+                            }
+                            catch (Exception ex)
+                            {
+                                throw ex;
+                            }
+                            
+                            return qr;
                         }
                         throw new GeneralExceptions().HandleJsonRequestExceptions(ticker, (int)response.StatusCode, await response.Content.ReadAsStringAsync());
                     }
@@ -161,7 +180,7 @@ namespace StockApi
     /////////////////////////////////////////////////
     public class Adjclose
     {
-        public List<double> adjclose { get; set; }
+        public List<string> adjclose { get; set; }
     }
 
     public class JJJChart
@@ -230,11 +249,11 @@ namespace StockApi
 
     public class JJJQuote
     {
-        public List<double> open { get; set; }
-        public List<long> volume { get; set; }
-        public List<double> high { get; set; }
-        public List<double> low { get; set; }
-        public List<double> close { get; set; }
+        public List<string> open { get; set; }
+        public List<string> volume { get; set; }
+        public List<string> high { get; set; }
+        public List<string> low { get; set; }
+        public List<string> close { get; set; }
     }
 
     public class JJJRegular

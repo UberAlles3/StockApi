@@ -47,6 +47,11 @@ namespace StockApi
             {
                 // Today will be the last in the list
                 StockQuote stockQuote = quoteList.Last();
+                if(stockQuote.Close == 0)
+                {
+                    stockQuote.Close = stockQuote.Price; // for mutual funds or ETF
+                }
+                
                 return stockQuote.Close;
             }
             else

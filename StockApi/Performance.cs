@@ -242,6 +242,12 @@ namespace StockApi
                 // Get current price for sold stock
                 decimal currentPrice = await stockHistory.GetTodaysPrice(ticker);
 
+                if(currentPrice == 0)
+                {
+                    currentPrice = 999;
+                }
+
+
                 // Get the price sold
                 temp = trade.ItemArray[(int)TC.TradePrice].ToString();
                 decimal soldPrice = 0;
