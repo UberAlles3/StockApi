@@ -53,7 +53,15 @@ namespace StockApi
             i = 0;
             foreach (string volume in quotes.chart.result[0].indicators.quote[0].volume)
             {
-                listQuotes[i++].Volume = Convert.ToInt32(volume);
+                string temp = volume;
+
+                if (temp == null)
+                    temp = "0";
+
+                if (temp.Length > 9)
+                    temp = volume.Substring(0, volume.Length - 3);
+                
+                listQuotes[i++].Volume = Convert.ToInt32(temp);
             }
 
             return listQuotes;
