@@ -380,6 +380,18 @@ namespace StockApi
 
                 // Extract the individual data values from the html
                 _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+
+                if(_stockSummary.EarningsPerShareString.StringValue == "--")
+                {
+                    Thread.Sleep(1000);
+                    _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                    if (_stockSummary.EarningsPerShareString.StringValue == "--")
+                    {
+                        Thread.Sleep(1000);
+                        _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                    }
+                }
+
                 await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
 
                 // get 3 year ago price
