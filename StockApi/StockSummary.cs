@@ -39,7 +39,7 @@ namespace StockApi
         public string CompanyName { get => companyName; set => companyName = value; }
 
         public StringSafeType<Decimal> DividendString = new StringSafeType<decimal>("--");
-        public StringSafeType<Decimal> EarningsPerShareString = new StringSafeType<decimal>("0.1");
+        public StringSafeType<Decimal> EarningsPerShareString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> ProfitMarginString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> PriceBookString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> OneYearTargetPriceString = new StringSafeType<decimal>("--");

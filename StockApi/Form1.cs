@@ -148,7 +148,7 @@ namespace StockApi
             // get first and last row's DOW
             float oneMonthAgoDOW = Convert.ToInt32(tickerTradesList.First().ItemArray[1].ToString());
             float currentDOW = Convert.ToInt32(tickerTradesList.Last().ItemArray[1].ToString());
-            float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 45;
+            float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 10;
             if (perc < -5) perc = -5;
             if (perc > 5) perc = 5;
             
@@ -438,7 +438,7 @@ namespace StockApi
                     errorPlace = "Setting labels #1";
                     lblPrice.Text = _stockSummary.PriceString.NumericValue.ToString("####.00");
                     lblVolatility.Text = _stockSummary.VolatilityString.StringValue;
-                    lblEPS.Text = _stockSummary.EarningsPerShareString.StringValue;
+                    lblEPS.Text = _stockSummary.EarningsPerShareString.NumericValue.ToString("####.00");
                     lblEPS.ForeColor = _stockSummary.EPSColor;
                     lblPriceBook.Text = _stockSummary.PriceBookString.NumericValue.ToString();
                     lblPriceBook.ForeColor = _stockSummary.PriceBookColor;
