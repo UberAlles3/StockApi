@@ -238,7 +238,7 @@ namespace StockApi
 
                 historicPriceData.Ticker = stockQuote.Ticker;
                 historicPriceData.PeriodType = periodType;
-                historicPriceData.Price = stockQuote.Close;
+                historicPriceData.Price = Math.Round(stockQuote.Close, 2);
                 historicPriceData.PriceDate = stockQuote.QuoteDate;
                 historicPriceData.Volume = stockQuote.Volume.ToString("N0");
 

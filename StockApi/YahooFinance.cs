@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -30,7 +31,13 @@ namespace StockApi
             string html;
 
             HttpClient cl = new HttpClient();
-            cl.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
+            string browserVer = "";
+            //if (DateTime.Now.Second > 30)
+            //    browserVer = "Chrome/111.0.0.0";
+            //else
+            browserVer = "Mozilla/5.0 (compatible)";
+
+            cl.DefaultRequestHeaders.UserAgent.ParseAdd($"{browserVer}");
             cl.DefaultRequestHeaders.Accept.ParseAdd("text/html");
             HttpResponseMessage hrm = await cl.GetAsync(url);
             html = await hrm.Content.ReadAsStringAsync();
