@@ -383,12 +383,17 @@ namespace StockApi
 
                 if(_stockSummary.EarningsPerShareString.StringValue == "--")
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
                     if (_stockSummary.EarningsPerShareString.StringValue == "--")
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(2000);
                         _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                        if (_stockSummary.EarningsPerShareString.StringValue == "--")
+                        {
+                            Thread.Sleep(2000);
+                            _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                        }
                     }
                 }
 
