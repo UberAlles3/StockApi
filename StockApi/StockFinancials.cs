@@ -208,11 +208,19 @@ namespace StockApi
                     Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4String.NumericValue - OperatingExpense4String.NumericValue;
 
 
+                Thread.Sleep(1000);
                 html = await GetHtmlForTicker(_statisticsUrl, Ticker);
 
                 // Total Cash
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Cash").Term;
                 TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+
+                if (TotalCashString == "--") // try again
+                {
+                    Thread.Sleep(2000);
+                    html = await GetHtmlForTicker(_statisticsUrl, Ticker);
+                }
+
                 // Total Debt
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Debt").Term;
                 TotalDebtString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
