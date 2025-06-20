@@ -219,6 +219,9 @@ namespace StockApi
                 {
                     Thread.Sleep(2000);
                     html = await GetHtmlForTicker(_statisticsUrl, Ticker);
+                    // Total Cash
+                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Cash").Term;
+                    TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
                 }
 
                 // Total Debt
