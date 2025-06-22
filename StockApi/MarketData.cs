@@ -54,7 +54,7 @@ namespace StockApi
             marketData.RetreivedDate = DateTime.Now;
 
             YahooFinanceAPI _yahooFinanceAPI = new YahooFinanceAPI();
-            List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-5), 6);
+            List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-5), 6, "1d");
             quoteList.Reverse();
 
             StockQuote currentQuote = quoteList[0];

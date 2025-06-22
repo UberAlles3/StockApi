@@ -16,14 +16,14 @@ namespace StockApi
         private readonly string _baseUri = "https://query2.finance.yahoo.com/v8/finance/chart/[ticker]";
         private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
-        public async Task<List<StockQuote>> GetQuotes(string ticker, DateTime startDate, int numberOfdays)
+        public async Task<List<StockQuote>> GetQuotes(string ticker, DateTime startDate, int numberOfdays, string interval)
         {
             // Convert date to UNIX seconds from 1970
             int unixStartTimestamp = (int)startDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
             int unixEndTimestamp = (int)startDate.AddDays(numberOfdays).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
             List<StockQuote> listQuotes = new List<StockQuote>();
 
-            QuoteRoot quotes = await GetJsonAsync(ticker, unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
+            QuoteRoot quotes = await GetJsonAsync(ticker, unixStartTimestamp.ToString(), unixEndTimestamp.ToString(), interval);
             //QuoteRoot quotes = await GetJsonAsync("intc", unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
             //quotes = await GetJsonAsync("vgslx", unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
 
@@ -67,7 +67,7 @@ namespace StockApi
             return listQuotes;
         }
 
-        public async Task<QuoteRoot> GetJsonAsync(string ticker, string period1, string period2)
+        public async Task<QuoteRoot> GetJsonAsync(string ticker, string period1, string period2, string interval)
         {
             CancellationToken token = new CancellationToken();
             Uri requrestUri;
@@ -80,7 +80,7 @@ namespace StockApi
                 _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
                 _httpClient.DefaultRequestHeaders.Accept.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                requrestUri = CreateUri(ticker, period1, period2, "1d");
+                requrestUri = CreateUri(ticker, period1, period2, interval);
                 string json = "";
 
                 // Call the finance API

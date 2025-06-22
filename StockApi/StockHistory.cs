@@ -41,7 +41,7 @@ namespace StockApi
         public async Task<decimal> GetTodaysPrice(string ticker)
         {
             /////// Get price history, today, week ago, month ago to determine short trend
-            List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-3), 4);
+            List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-3), 4, "1d");
 
             if (quoteList.Count > 0)
             {
@@ -70,7 +70,7 @@ namespace StockApi
             HistoricDataYearAgo = null;
             if (getMonthAndWeek)
             {
-                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), 34);
+                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), 34, "1d");
 
                 if (quoteList.Count > 0)
                 {
@@ -103,7 +103,7 @@ namespace StockApi
             /////// Get price history for a year ago to determine long trend
             if (get1Year)
             {
-                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4);
+                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
 
                 if (quoteList.Count > 0)
                 {
@@ -119,7 +119,7 @@ namespace StockApi
                 List<StockQuote> quoteList = new List<StockQuote>();
                 try
                 {
-                    quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4);
+                    quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4, "1d");
                 }
                 catch (Exception ex)
                 {
