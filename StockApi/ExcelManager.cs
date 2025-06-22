@@ -10,7 +10,8 @@ namespace StockApi
         {
             Ticker = 0,
             QuantityHeld = 1,
-            Price = 2
+            Price = 2,
+            Metric = 32
         }
 
         public enum TradeColumns : int
@@ -31,7 +32,7 @@ namespace StockApi
 
         }
 
-        public DataTable ImportExceelSheet(string filePath, int sheetIdx, int startRow)
+        public DataTable ImportExceelSheet(string filePath, int sheetIdx, int startRow, int columns = 10)
         {
             string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
 
@@ -75,7 +76,7 @@ namespace StockApi
                         {
                             //FilterRow = rowReader => rowReader.RowCount > startRow,
                             FilterRow = rowReader => rowReader.Depth > startRow,
-                            FilterColumn = (rowReader, columnIndex) => columnIndex < 10,
+                            FilterColumn = (rowReader, columnIndex) => columnIndex < columns,
                         }
                     });  // The result of each spreadsheet is in result.Tables
 

@@ -46,7 +46,7 @@ namespace StockApi
                 DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
                 if (excelFileDateTime > _positionsImportDateTime)
                 {
-                    _positionsDataTable = (new ExcelManager()).ImportExceelSheet(_excelFilePath, 0, 0);
+                    _positionsDataTable = (new ExcelManager()).ImportExceelSheet(_excelFilePath, 0, 0, 36);
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
                 }
                 return _positionsDataTable;
@@ -876,7 +876,7 @@ namespace StockApi
 
         private void offHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OffHighs offHighs = new OffHighs(_tradesDataTable);
+            OffHighs offHighs = new OffHighs(PositionsDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }

@@ -38,6 +38,7 @@ namespace StockApi
             this.ClientSize = new System.Drawing.Size(800, 498);
             this.Name = "OffHighs";
             this.Text = "OffHighs";
+            this.Load += new System.EventHandler(this.OffHighs_Load);
             this.ResumeLayout(false);
 
         }
