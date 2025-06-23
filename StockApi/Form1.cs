@@ -876,7 +876,7 @@ namespace StockApi
 
         private void offHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OffHighs offHighs = new OffHighs(PositionsDataTable);
+            OffHighs offHighs = new OffHighs(PositionsDataTable, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }
