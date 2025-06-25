@@ -40,12 +40,16 @@ namespace StockApi
             {
                 // Find last five price by week
                 List<StockQuote> quotes = await yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-40), 40, "5d");
+                // Find last five price by week
+                List<StockQuote> current = await yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-3), 4, "1d");
+
+
                 // Get highest price got last 5 weeks
                 decimal high = quotes.Max(x => x.Close);
 
                 if (quotes.Last().Close < high * .94M)
                 {
-                    txtTickerList.Text += $"{(ticker + "   ").Substring(0, 5)}    {(high).ToString("00.00").PadLeft(7, ' ')}    {quotes.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .94M).ToString(" 00.00").PadLeft(7, ' ')} ";
+                    txtTickerList.Text += $"{(ticker + "   ").Substring(0, 5)}    {(high).ToString("00.00").PadLeft(7, ' ')}    {current.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .94M).ToString(" 00.00").PadLeft(7, ' ')} ";
 
                     DataRow trade = tickerTrades.Where(x => x[(int)TC.Ticker].ToString() == ticker).LastOrDefault();
 
