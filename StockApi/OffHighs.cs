@@ -38,6 +38,9 @@ namespace StockApi
             txtTickerList.Text = "Ticker      High    Current     Target" + Environment.NewLine;
             foreach (string ticker in tickers)
             {
+                //if (ticker != "LEN")
+                //    continue;
+
                 // Find last five price by week
                 List<StockQuote> quotes = await yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-40), 40, "5d");
                 // Find last five price by week
@@ -47,20 +50,19 @@ namespace StockApi
                 // Get highest price got last 5 weeks
                 decimal high = quotes.Max(x => x.Close);
 
-                if (quotes.Last().Close < high * .94M)
+                txtTickerList.Text += $"{(ticker + "   ").Substring(0, 5)}";
+                if (current.Last().Close < high * .94M)
                 {
-                    txtTickerList.Text += $"{(ticker + "   ").Substring(0, 5)}    {(high).ToString("00.00").PadLeft(7, ' ')}    {current.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .94M).ToString(" 00.00").PadLeft(7, ' ')} ";
+                    txtTickerList.Text += $"    {(high).ToString("00.00").PadLeft(7, ' ')}    {current.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .94M).ToString(" 00.00").PadLeft(7, ' ')} ";
 
                     DataRow trade = tickerTrades.Where(x => x[(int)TC.Ticker].ToString() == ticker).LastOrDefault();
 
-                    if(trade != null && Convert.ToDateTime(trade.ItemArray[(int)TC.TradeDate]) > DateTime.Now.AddDays(-10)) // If already bought in the last 10 days
+                    if(trade != null && Convert.ToDateTime(trade.ItemArray[(int)TC.TradeDate]) > DateTime.Now.AddDays(-15)) // If already bought in the last 15 days
                     {
                         txtTickerList.Text += $" Already bought at {trade.ItemArray[(int)TC.TradePrice]}";
                     }
-
-                    txtTickerList.Text += Environment.NewLine;
-                    //MessageBox.Show(ticker);
                 }
+                txtTickerList.Text += Environment.NewLine;
             }
         }
 

@@ -151,8 +151,8 @@ namespace StockApi
             float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 10;
             if (perc < -5) perc = -5;
             if (perc > 5) perc = 5;
-            
-            trackBar1.Value = 5 + Convert.ToInt32(perc);
+
+            trackBar1.Value = 5; // Not used, User can set this on their own//// + Convert.ToInt32(perc);
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
 

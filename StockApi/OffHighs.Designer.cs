@@ -39,14 +39,15 @@ namespace StockApi
             this.txtTickerList.Location = new System.Drawing.Point(12, 23);
             this.txtTickerList.Multiline = true;
             this.txtTickerList.Name = "txtTickerList";
-            this.txtTickerList.Size = new System.Drawing.Size(477, 292);
+            this.txtTickerList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtTickerList.Size = new System.Drawing.Size(477, 449);
             this.txtTickerList.TabIndex = 12;
             // 
             // OffHighs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 335);
+            this.ClientSize = new System.Drawing.Size(501, 484);
             this.Controls.Add(this.txtTickerList);
             this.Name = "OffHighs";
             this.Text = "Off Highs";
