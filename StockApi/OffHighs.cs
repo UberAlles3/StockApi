@@ -14,12 +14,14 @@ namespace StockApi
 {
     public partial class OffHighs : Form
     {
+        private List<string> _tickers;
         private DataTable _positionsDataTable;
         private DataTable _tradesDataTable;
 
-        public OffHighs(DataTable positionsDataTable, DataTable tradesDataTable)
+        public OffHighs(List<string> tickers, DataTable positionsDataTable, DataTable tradesDataTable)
         {
             InitializeComponent();
+            _tickers = tickers;
             _positionsDataTable = positionsDataTable;
             _tradesDataTable = tradesDataTable;
         }
@@ -27,7 +29,7 @@ namespace StockApi
         private async void OffHighs_Load(object sender, EventArgs e)
         {
             // Read the trades table and find all tickers the have a metric of over 1.2
-            List<string> tickers = GetTickers();
+            //List<string> tickers = GetHighMetricTickers();
             YahooFinanceAPI yahooFinanceAPI = new YahooFinanceAPI();
 
             // Get all buys for the last week
@@ -35,8 +37,8 @@ namespace StockApi
             tickerTrades = tickerTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(20).OrderBy(x => x[(int)TC.TradeDate]);
 
             //string ticker = tickers[0];
-            txtTickerList.Text = "Ticker      High    Current     Target" + Environment.NewLine;
-            foreach (string ticker in tickers)
+            txtTickerList.Text = ""; // "Ticker      High    Current     Target" + Environment.NewLine;
+            foreach (string ticker in _tickers)
             {
                 //if (ticker != "LEN")
                 //    continue;
@@ -66,11 +68,26 @@ namespace StockApi
             }
         }
 
-        List<string> GetTickers()
+        public static List<string> GetHighMetricTickers(DataTable positionsDataTable)
         {
             List<string> tickers = new List<string>();
 
-            IEnumerable<DataRow> tickersDR = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Metric].ToString().Contains("1.2") || x[(int)PC.Metric].ToString().Contains("1.3"));
+            IEnumerable<DataRow> tickersDR = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Metric].ToString().Contains("1.2") || x[(int)PC.Metric].ToString().Contains("1.3"));
+            tickersDR = tickersDR.OrderBy(x => x[(int)PC.Ticker]);
+
+            foreach (DataRow trade in tickersDR)
+            {
+                // Fill tickers list
+                tickers.Add(trade.ItemArray[(int)PC.Ticker].ToString());
+            }
+
+            return tickers;
+        }
+        public static List<string> GetWatchListTickers(DataTable positionsDataTable)
+        {
+            List<string> tickers = new List<string>();
+
+            IEnumerable<DataRow> tickersDR = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.QuantityHeld].ToString() == "0" && (x[(int)PC.Metric].ToString().Contains("1.1") || x[(int)PC.Metric].ToString().Contains("1.2") || x[(int)PC.Metric].ToString().Contains("1.3")));
             tickersDR = tickersDR.OrderBy(x => x[(int)PC.Ticker]);
 
             foreach (DataRow trade in tickersDR)

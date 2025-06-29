@@ -123,8 +123,13 @@ namespace StockApi
                 }
                 catch (Exception ex)
                 {
-
-                    MessageBox.Show(ex.Message);
+                    if(ex.Message.Contains("Data doesn't exist for startDate"))
+                    {
+                        // Stock must be new and not have a 3 year quote
+                        HistoricData3YearsAgo = HistoricDataYearAgo;
+                    }
+                    else
+                        MessageBox.Show(ex.Message);
                 }
 
                 if (quoteList.Count > 0)

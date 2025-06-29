@@ -210,6 +210,7 @@ namespace StockApi
             this.lblDOW30 = new System.Windows.Forms.Label();
             this.lblDOW30Change = new System.Windows.Forms.Label();
             this.label75 = new System.Windows.Forms.Label();
+            this.watchOffHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -2072,28 +2073,29 @@ namespace StockApi
             // last20BuysToolStripMenuItem
             // 
             this.last20BuysToolStripMenuItem.Name = "last20BuysToolStripMenuItem";
-            this.last20BuysToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.last20BuysToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.last20BuysToolStripMenuItem.Text = "Last 25 Buys";
             this.last20BuysToolStripMenuItem.Click += new System.EventHandler(this.last20BuysToolStripMenuItem_Click);
             // 
             // last25SellsToolStripMenuItem
             // 
             this.last25SellsToolStripMenuItem.Name = "last25SellsToolStripMenuItem";
-            this.last25SellsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.last25SellsToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.last25SellsToolStripMenuItem.Text = "Latest Sells";
             this.last25SellsToolStripMenuItem.Click += new System.EventHandler(this.latestSellsToolStripMenuItem_Click);
             // 
             // liguidationsToolStripMenuItem
             // 
             this.liguidationsToolStripMenuItem.Name = "liguidationsToolStripMenuItem";
-            this.liguidationsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.liguidationsToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.liguidationsToolStripMenuItem.Text = "Liquidations";
             this.liguidationsToolStripMenuItem.Click += new System.EventHandler(this.liquidationsToolStripMenuItem_Click);
             // 
             // tradeMonitorToolStripMenuItem
             // 
             this.tradeMonitorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.offHighsToolStripMenuItem});
+            this.offHighsToolStripMenuItem,
+            this.watchOffHighsToolStripMenuItem});
             this.tradeMonitorToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.tradeMonitorToolStripMenuItem.Name = "tradeMonitorToolStripMenuItem";
             this.tradeMonitorToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
@@ -2102,8 +2104,8 @@ namespace StockApi
             // offHighsToolStripMenuItem
             // 
             this.offHighsToolStripMenuItem.Name = "offHighsToolStripMenuItem";
-            this.offHighsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.offHighsToolStripMenuItem.Text = "Off Highs";
+            this.offHighsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.offHighsToolStripMenuItem.Text = "High Metrics Off Highs";
             this.offHighsToolStripMenuItem.Click += new System.EventHandler(this.offHighsToolStripMenuItem_Click);
             // 
             // panel3
@@ -2296,6 +2298,13 @@ namespace StockApi
             this.label75.TabIndex = 44;
             this.label75.Text = "Dow 30:";
             this.label75.UseMnemonic = false;
+            // 
+            // watchOffHighsToolStripMenuItem
+            // 
+            this.watchOffHighsToolStripMenuItem.Name = "watchOffHighsToolStripMenuItem";
+            this.watchOffHighsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.watchOffHighsToolStripMenuItem.Text = "Watch List Off Highs";
+            this.watchOffHighsToolStripMenuItem.Click += new System.EventHandler(this.watchOffHighsToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -2540,6 +2549,7 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem last25SellsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tradeMonitorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem offHighsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem watchOffHighsToolStripMenuItem;
     }
 }
 
