@@ -52,7 +52,7 @@ namespace StockApi
                 // Get highest price got last 5 weeks
                 decimal high = quotes.Max(x => x.Close);
 
-                txtTickerList.Text += $"{(ticker + "   ").Substring(0, 5)}";
+                txtTickerList.Text += $"{(ticker + "    ").Substring(0, 5)}";
                 if (current.Last().Close < high * .94M)
                 {
                     txtTickerList.Text += $"    {(high).ToString("00.00").PadLeft(7, ' ')}    {current.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .94M).ToString(" 00.00").PadLeft(7, ' ')} ";
