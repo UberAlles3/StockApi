@@ -64,7 +64,17 @@ namespace StockApi
                     quantity = Convert.ToInt32(temp);
                 }
 
-                temp = positions.Where(x => x[(int)PC.Ticker].ToString() == ticker).First().ItemArray[(int)PC.Price].ToString();
+
+                try
+                {
+                    temp = positions.Where(x => x[(int)PC.Ticker].ToString() == ticker).First().ItemArray[(int)PC.Price].ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Couldn't find the ticker {ticker} that was in buy trades in the position table.");
+                    continue;
+                }
+                
                 decimal currentPrice = 0;
                 if (temp._IsDecimal())
                 {

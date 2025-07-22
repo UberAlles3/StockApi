@@ -370,13 +370,13 @@ namespace StockApi
             stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
             stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
 
-            txtTickerList.Text = ".";
+            txtTickerList.Text = "";
             //builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend, 3YearPrice, 3YearPriceChange{Environment.NewLine}");
             foreach (string ticker in stockList)
             {
                 _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
 
-                txtTickerList.Text += ".";
+                txtTickerList.Text += $"{ticker}" + Environment.NewLine;
 
                 // Extract the individual data values from the html
                 _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
