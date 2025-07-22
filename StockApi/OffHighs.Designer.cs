@@ -36,12 +36,12 @@ namespace StockApi
             // txtTickerList
             // 
             this.txtTickerList.AcceptsReturn = true;
-            this.txtTickerList.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtTickerList.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtTickerList.Location = new System.Drawing.Point(12, 32);
             this.txtTickerList.Multiline = true;
             this.txtTickerList.Name = "txtTickerList";
             this.txtTickerList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtTickerList.Size = new System.Drawing.Size(477, 491);
+            this.txtTickerList.Size = new System.Drawing.Size(477, 639);
             this.txtTickerList.TabIndex = 12;
             // 
             // label1
@@ -57,7 +57,7 @@ namespace StockApi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 535);
+            this.ClientSize = new System.Drawing.Size(501, 683);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtTickerList);
             this.Name = "OffHighs";
