@@ -180,6 +180,7 @@ namespace StockApi
             catch (Exception x)
             {
                 MessageBox.Show("GetSummaryData() " + " " + ticker + "\n" + x.Source + x.Message + "\n" + html.Substring(0, html.Length / 10));
+                EarningsPerShareString.StringValue = "0";
             }
 
             //*******************
