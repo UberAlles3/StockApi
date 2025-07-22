@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Windows.Forms;
 
 namespace StockApi
 {
@@ -99,6 +100,7 @@ namespace StockApi
                             }
                             catch (Exception ex)
                             {
+                                MessageBox.Show($"JsonConvert.DeserializeObject {json}");
                                 throw ex;
                             }
                             

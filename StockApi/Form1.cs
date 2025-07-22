@@ -156,9 +156,28 @@ namespace StockApi
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
-            Market_SandP =  await _marketData.GetMarketData("^GSPC");
-            Market_Dow =    await _marketData.GetMarketData("^DJI");
-            Market_Nasdaq = await _marketData.GetMarketData("^IXIC");
+            try
+            {
+                Market_SandP = await _marketData.GetMarketData("^GSPC");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("SNP Market data failed.");
+                Market_SandP.CurrentLevel.StringValue = "0";
+            }
+
+            try
+            {
+                Market_Dow = await _marketData.GetMarketData("^DJI");
+                Market_Nasdaq = await _marketData.GetMarketData("^IXIC");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("DOW Market data failed.");
+                Market_Dow.CurrentLevel.StringValue = "0";
+                Market_Nasdaq.CurrentLevel.StringValue = "0";
+            }
+
 
             // Extract the individual data values from the html
             _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
