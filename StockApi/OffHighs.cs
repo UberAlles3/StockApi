@@ -59,7 +59,7 @@ namespace StockApi
 
                     DataRow trade = tickerTrades.Where(x => x[(int)TC.Ticker].ToString() == ticker).LastOrDefault();
 
-                    if(trade != null && Convert.ToDateTime(trade.ItemArray[(int)TC.TradeDate]) > DateTime.Now.AddDays(-15)) // If already bought in the last 15 days
+                    if(trade != null && Convert.ToDateTime(trade.ItemArray[(int)TC.TradeDate]) > DateTime.Now.AddDays(-20)) // If already bought in the last 20 days
                     {
                         txtTickerList.Text += $" Already bought at {trade.ItemArray[(int)TC.TradePrice]}";
                     }
