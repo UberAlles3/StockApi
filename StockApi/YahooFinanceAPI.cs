@@ -106,7 +106,7 @@ namespace StockApi
                             
                             return qr;
                         }
-                        throw new GeneralExceptions().HandleJsonRequestExceptions(ticker, (int)response.StatusCode, await response.Content.ReadAsStringAsync());
+                        throw new GeneralExceptions().HandleJsonRequestExceptions(ticker, (int)response.StatusCode, await response.Content.ReadAsStringAsync(), requrestUri.ToString());
                     }
                 }
             }
@@ -127,34 +127,11 @@ namespace StockApi
 
     public class GeneralExceptions
     {
-        public Exception HandleJsonRequestExceptions(string ticker, int code, string content)
+        public Exception HandleJsonRequestExceptions(string ticker, int code, string content, string Uri)
         {
-            JObject obj = JObject.Parse(content);
-            string exceptionMessage = $"GetJsonAsync({ticker}, string period1, string period2)";
-            int errorCode = 0;
+            string exceptionMessage = $"GetJsonAsync({ticker}, string period1, string period2, {content}, {Uri})";
 
-            if (obj["error"] != null)
-            {
-                foreach (var e in obj["error"]["errors"])
-                {
-                    exceptionMessage += $"\n({e["reason"]}) {e["reason"]} : {e["message"]})";
-                }
-                errorCode = int.Parse(obj["error"]["code"].ToString());
-            }
-            else
-                exceptionMessage += obj["chart"]["error"];
-            
-            switch (errorCode)
-            {
-                case 400:
-                    return new BadRequest(exceptionMessage);
-                case 403:
-                    return new ForbiddenException(exceptionMessage);
-                case 404:
-                    return new NotFoundException(exceptionMessage);
-                default:
-                    return new Exception(exceptionMessage);
-            }
+            return new Exception(exceptionMessage);
         }
 
         private class NotFoundException : Exception

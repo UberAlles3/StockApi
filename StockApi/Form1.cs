@@ -78,6 +78,10 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            FinnhubAPI finnhubAPI = new FinnhubAPI();
+            finnhubAPI.Test();
+            
+            
             StringSafeType<decimal> t = new StringSafeType<decimal>("");
 
             t.StringValue = "3.71B";
@@ -162,7 +166,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                MessageBox.Show("SNP Market data failed.");
+                MessageBox.Show($"SNP Market data failed." + Environment.NewLine + ex.Message);
                 Market_SandP.CurrentLevel.StringValue = "0";
             }
 
@@ -173,8 +177,12 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                MessageBox.Show("DOW Market data failed.");
+                MessageBox.Show($"DOW Market data failed." + Environment.NewLine + ex.Message);
+                if(Market_Dow == null)
+                    Market_Dow = new MarketData();
                 Market_Dow.CurrentLevel.StringValue = "0";
+                if (Market_Nasdaq == null)
+                    Market_Nasdaq = new MarketData();
                 Market_Nasdaq.CurrentLevel.StringValue = "0";
             }
 
