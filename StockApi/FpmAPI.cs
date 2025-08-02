@@ -1,16 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StockApi
 {
-    class FpmAPI
+    public class FpmAPI
     {
-        //https://financialmodelingprep.com/stable/quote?symbol=^DJI&apikey=irXC95S3Hmlih4AtFtDkxj49w1OUpLZs
-        string _apiKey = "irXC95S3Hmlih4AtFtDkxj49w1OUpLZs";
+        static string _apiKey = "irXC95S3Hmlih4AtFtDkxj49w1OUpLZs";
 
+        string requestUrl = $"https://financialmodelingprep.com/stable/quote?symbol=[ticker]&apikey={_apiKey}";
 
+        private readonly HttpClient client = new HttpClient();
 
+        public async Task<MarketData> GetQuote(string ticker)
+        {
+            //string symbol = "^DJI"; // Example stock symbol
+            MarketData marketData = new MarketData();
 
+            requestUrl = requestUrl.Replace("[ticker]", ticker);
+
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(requestUrl);
+                response.EnsureSuccessStatusCode(); // Throw an exception if not a success status code
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the JSON response (example for a simple quote)
+                using (JsonDocument doc = JsonDocument.Parse(responseBody))
+                {
+                    JsonElement root = doc.RootElement;
+                    marketData.PreviousClose.NumericValue = root[0].GetProperty("previousClose").GetDecimal();
+                    marketData.CurrentLevel.NumericValue = root[0].GetProperty("price").GetDecimal();
+                    marketData.RetreivedDate = DateTime.Now;
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                MessageBox.Show($"Request Error: {e.Message}");
+            }
+            catch (JsonException e)
+            {
+                MessageBox.Show($"JSON Deserialization Error: {e.Message}");
+            }
+
+            return marketData;
+        }
     }
 }

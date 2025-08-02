@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace StockApi
 {
     public class FinnhubAPI
     {
         string _apiKey = "d25pcqhr01qhge4do43gd25pcqhr01qhge4do440";
-        string _requestSecret = "\"X-Finnhub-Secret\": \"d25pcqhr01qhge4do450\"";
+        //string _requestSecret = "\"X-Finnhub-Secret\": \"d25pcqhr01qhge4do450\"";
         private readonly HttpClient client = new HttpClient();
 
-        public async void Test()
+        public async Task<decimal> GetQuote(string ticker)
         {
-            string symbol = "AAPL"; // Example stock symbol
-
             // Construct the API URL
-            string requestUrl = $"https://finnhub.io/api/v1/quote?symbol=DJIA&token={_apiKey}";
+            string requestUrl = $"https://finnhub.io/api/v1/quote?symbol=ticker&token={_apiKey}";
+            decimal currentPrice = 0;
 
             try
             {
@@ -30,18 +30,19 @@ namespace StockApi
                 using (JsonDocument doc = JsonDocument.Parse(responseBody))
                 {
                     JsonElement root = doc.RootElement;
-                    decimal currentPrice = root.GetProperty("c").GetDecimal();
-                    Console.WriteLine($"Current price of {symbol}: {currentPrice}");
+                    currentPrice = root.GetProperty("c").GetDecimal();
                 }
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine($"Request Error: {e.Message}");
+                 Console.WriteLine($"Request Error: {e.Message}");
             }
             catch (JsonException e)
             {
                 Console.WriteLine($"JSON Deserialization Error: {e.Message}");
             }
+
+            return currentPrice;
         }
     }
 }

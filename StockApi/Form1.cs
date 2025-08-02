@@ -78,10 +78,13 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            FinnhubAPI finnhubAPI = new FinnhubAPI();
-            finnhubAPI.Test();
-            
-            
+            //FinnhubAPI finnhubAPI = new FinnhubAPI();
+            //finnhubAPI.Test(); FinnhubAPI finnhubAPI = new FinnhubAPI();
+
+            //FpmAPI fpmAPI = new FpmAPI();
+            //fpmAPI.Test();
+
+
             StringSafeType<decimal> t = new StringSafeType<decimal>("");
 
             t.StringValue = "3.71B";

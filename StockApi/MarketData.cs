@@ -50,20 +50,8 @@ namespace StockApi
 
         public async Task<MarketData> GetMarketData(string ticker)
         {
-            MarketData marketData = new MarketData();
-            marketData.RetreivedDate = DateTime.Now;
-
-            YahooFinanceAPI _yahooFinanceAPI = new YahooFinanceAPI();
-            List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-5), 6, "1d");
-            quoteList.Reverse();
-
-            StockQuote currentQuote = quoteList[0];
-            StockQuote previousQuote = quoteList[1];
-
-            marketData.Ticker = ticker;
-            marketData.RetreivedDate = DateTime.Now;
-            marketData.CurrentLevel.NumericValue = currentQuote.Close;
-            marketData.PreviousClose.NumericValue = previousQuote.Close;
+            FpmAPI fpmAPI = new FpmAPI();
+            MarketData marketData = await fpmAPI.GetQuote(ticker);
 
             return marketData;
         }
