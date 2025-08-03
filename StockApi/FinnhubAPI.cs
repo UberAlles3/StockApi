@@ -9,14 +9,20 @@ namespace StockApi
 {
     public class FinnhubAPI
     {
-        string _apiKey = "d25pcqhr01qhge4do43gd25pcqhr01qhge4do440";
+        private const string _apiKey = "d25pcqhr01qhge4do43gd25pcqhr01qhge4do440";
+        private const string BaseUrl = "https://finnhub.io/api/v1/";
         //string _requestSecret = "\"X-Finnhub-Secret\": \"d25pcqhr01qhge4do450\"";
         private readonly HttpClient client = new HttpClient();
 
-        public async Task<decimal> GetQuote(string ticker)
+        public async Task<MarketData> GetQuote(string symbol, DateTime startDate, int numberOfdays)
         {
+            int unixStartTimestamp = (int)startDate.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            int unixEndTimestamp = (int)startDate.AddDays(numberOfdays).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+
             // Construct the API URL
-            string requestUrl = $"https://finnhub.io/api/v1/quote?symbol=ticker&token={_apiKey}";
+            string requestUrl = $"{BaseUrl}quote?symbol=ticker&token={_apiKey}";
+            // costs money    var requestUrl = $"{BaseUrl}stock/candle?symbol={symbol}&resolution=D&from={unixStartTimestamp}&to={unixEndTimestamp}&token={_apiKey}";
             decimal currentPrice = 0;
 
             try
@@ -42,7 +48,7 @@ namespace StockApi
                 Console.WriteLine($"JSON Deserialization Error: {e.Message}");
             }
 
-            return currentPrice;
+            return null;
         }
     }
 }

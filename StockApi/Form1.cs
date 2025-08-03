@@ -78,9 +78,6 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //FinnhubAPI finnhubAPI = new FinnhubAPI();
-            //finnhubAPI.Test(); FinnhubAPI finnhubAPI = new FinnhubAPI();
-
             //FpmAPI fpmAPI = new FpmAPI();
             //fpmAPI.Test();
 
@@ -128,6 +125,8 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
+            FinnhubAPI finnhubAPI = new FinnhubAPI();
+            MarketData marketData = await finnhubAPI.GetQuote("INTC", DateTime.Now.AddDays(-3), 1);
 
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
 
