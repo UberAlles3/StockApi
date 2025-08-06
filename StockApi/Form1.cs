@@ -81,6 +81,8 @@ namespace StockApi
             //FpmAPI fpmAPI = new FpmAPI();
             //fpmAPI.Test();
 
+            this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
+            this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
 
             StringSafeType<decimal> t = new StringSafeType<decimal>("");
 
@@ -919,6 +921,50 @@ namespace StockApi
             OffHighs offHighs = new OffHighs(tickers, PositionsDataTable, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
+        }
+    }
+    public class CustomColorTable : ProfessionalColorTable
+    {
+        //a bunch of other overrides...
+
+        public override Color ToolStripBorder
+        {
+            get { return Color.FromArgb(0, 0, 0); }
+        }
+
+        
+
+        public override Color MenuItemPressedGradientBegin
+        {
+            get { return Color.FromArgb(8, 32, 64); }
+        }
+        public override Color MenuItemPressedGradientEnd
+        {
+            get { return Color.FromArgb(8, 32, 64); }
+        }
+        public override Color MenuItemSelectedGradientBegin
+        {
+            get { return Color.FromArgb(8, 32, 64); }
+        }
+        public override Color MenuItemSelectedGradientEnd
+        {
+            get { return Color.FromArgb(8, 32, 64); }
+        }
+        public override Color ToolStripDropDownBackground
+        {
+            get { return Color.FromArgb(8, 32, 64); }
+        }
+        public override Color ToolStripGradientBegin
+        {
+            get { return Color.FromArgb(8, 32, 64); }
+        }
+        public override Color ToolStripGradientEnd
+        {
+            get { return Color.FromArgb(8, 32, 64); }
+        }
+        public override Color ToolStripGradientMiddle
+        {
+            get { return Color.FromArgb(8, 32, 64); }
         }
     }
 }

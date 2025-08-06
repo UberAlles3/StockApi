@@ -196,6 +196,7 @@ namespace StockApi
             this.liguidationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tradeMonitorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.offHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.watchOffHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label70 = new System.Windows.Forms.Label();
             this.lblSandP500 = new System.Windows.Forms.Label();
@@ -210,7 +211,6 @@ namespace StockApi
             this.lblDOW30 = new System.Windows.Forms.Label();
             this.lblDOW30Change = new System.Windows.Forms.Label();
             this.label75 = new System.Windows.Forms.Label();
-            this.watchOffHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -1960,6 +1960,7 @@ namespace StockApi
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mainToolStripMenuItem,
             this.lINKSToolStripMenuItem,
@@ -1974,26 +1975,30 @@ namespace StockApi
             // 
             // mainToolStripMenuItem
             // 
-            this.mainToolStripMenuItem.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.mainToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
+            this.mainToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.mainToolStripMenuItem.Name = "mainToolStripMenuItem";
             this.mainToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.mainToolStripMenuItem.Text = "&Main";
             // 
             // lINKSToolStripMenuItem
             // 
+            this.lINKSToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.lINKSToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.kitcoGoldAndSilverToolStripMenuItem,
             this.toolStripMenuItem1,
             this.yahooMarketsToolStripMenuItem,
             this.finvizToolStripMenuItem,
             this.apeWisdomToolStripMenuItem});
-            this.lINKSToolStripMenuItem.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.lINKSToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.lINKSToolStripMenuItem.Name = "lINKSToolStripMenuItem";
             this.lINKSToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.lINKSToolStripMenuItem.Text = "Links";
             // 
             // kitcoGoldAndSilverToolStripMenuItem
             // 
+            this.kitcoGoldAndSilverToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.kitcoGoldAndSilverToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.kitcoGoldAndSilverToolStripMenuItem.Name = "kitcoGoldAndSilverToolStripMenuItem";
             this.kitcoGoldAndSilverToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.kitcoGoldAndSilverToolStripMenuItem.Text = "AMPEX Gold and Silver";
@@ -2001,6 +2006,8 @@ namespace StockApi
             // 
             // toolStripMenuItem1
             // 
+            this.toolStripMenuItem1.BackColor = System.Drawing.Color.Black;
+            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.White;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
             this.toolStripMenuItem1.Text = "Earnings";
@@ -2008,6 +2015,8 @@ namespace StockApi
             // 
             // yahooMarketsToolStripMenuItem
             // 
+            this.yahooMarketsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.yahooMarketsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.yahooMarketsToolStripMenuItem.Name = "yahooMarketsToolStripMenuItem";
             this.yahooMarketsToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.yahooMarketsToolStripMenuItem.Text = "Yahoo Markets";
@@ -2015,6 +2024,8 @@ namespace StockApi
             // 
             // finvizToolStripMenuItem
             // 
+            this.finvizToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.finvizToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.finvizToolStripMenuItem.Name = "finvizToolStripMenuItem";
             this.finvizToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.finvizToolStripMenuItem.Text = "finviz";
@@ -2022,6 +2033,8 @@ namespace StockApi
             // 
             // apeWisdomToolStripMenuItem
             // 
+            this.apeWisdomToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.apeWisdomToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.apeWisdomToolStripMenuItem.Name = "apeWisdomToolStripMenuItem";
             this.apeWisdomToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.apeWisdomToolStripMenuItem.Text = "Ape Wisdom";
@@ -2029,17 +2042,20 @@ namespace StockApi
             // 
             // tickerLinksToolStripMenuItem
             // 
+            this.tickerLinksToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.tickerLinksToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem2,
             this.insiderTradingToolStripMenuItem,
             this.marketBeatAnaToolStripMenuItem});
-            this.tickerLinksToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.tickerLinksToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.tickerLinksToolStripMenuItem.Name = "tickerLinksToolStripMenuItem";
             this.tickerLinksToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
             this.tickerLinksToolStripMenuItem.Text = "Ticker Links";
             // 
             // toolStripMenuItem2
             // 
+            this.toolStripMenuItem2.BackColor = System.Drawing.Color.Black;
+            this.toolStripMenuItem2.ForeColor = System.Drawing.Color.White;
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItem2.Text = "Yahoo Quote";
@@ -2047,6 +2063,8 @@ namespace StockApi
             // 
             // insiderTradingToolStripMenuItem
             // 
+            this.insiderTradingToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.insiderTradingToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.insiderTradingToolStripMenuItem.Name = "insiderTradingToolStripMenuItem";
             this.insiderTradingToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.insiderTradingToolStripMenuItem.Text = "MarketBeat Insider Trading";
@@ -2054,6 +2072,8 @@ namespace StockApi
             // 
             // marketBeatAnaToolStripMenuItem
             // 
+            this.marketBeatAnaToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.marketBeatAnaToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.marketBeatAnaToolStripMenuItem.Name = "marketBeatAnaToolStripMenuItem";
             this.marketBeatAnaToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.marketBeatAnaToolStripMenuItem.Text = "MarketBeat News && Analysis";
@@ -2061,17 +2081,20 @@ namespace StockApi
             // 
             // performanceToolStripMenuItem
             // 
+            this.performanceToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.performanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.last20BuysToolStripMenuItem,
             this.last25SellsToolStripMenuItem,
             this.liguidationsToolStripMenuItem});
-            this.performanceToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.performanceToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.performanceToolStripMenuItem.Name = "performanceToolStripMenuItem";
             this.performanceToolStripMenuItem.Size = new System.Drawing.Size(87, 20);
             this.performanceToolStripMenuItem.Text = "Performance";
             // 
             // last20BuysToolStripMenuItem
             // 
+            this.last20BuysToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.last20BuysToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.last20BuysToolStripMenuItem.Name = "last20BuysToolStripMenuItem";
             this.last20BuysToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.last20BuysToolStripMenuItem.Text = "Last 25 Buys";
@@ -2079,6 +2102,8 @@ namespace StockApi
             // 
             // last25SellsToolStripMenuItem
             // 
+            this.last25SellsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.last25SellsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.last25SellsToolStripMenuItem.Name = "last25SellsToolStripMenuItem";
             this.last25SellsToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.last25SellsToolStripMenuItem.Text = "Latest Sells";
@@ -2086,6 +2111,8 @@ namespace StockApi
             // 
             // liguidationsToolStripMenuItem
             // 
+            this.liguidationsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.liguidationsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.liguidationsToolStripMenuItem.Name = "liguidationsToolStripMenuItem";
             this.liguidationsToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.liguidationsToolStripMenuItem.Text = "Liquidations";
@@ -2093,20 +2120,32 @@ namespace StockApi
             // 
             // tradeMonitorToolStripMenuItem
             // 
+            this.tradeMonitorToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.tradeMonitorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.offHighsToolStripMenuItem,
             this.watchOffHighsToolStripMenuItem});
-            this.tradeMonitorToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.tradeMonitorToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.tradeMonitorToolStripMenuItem.Name = "tradeMonitorToolStripMenuItem";
             this.tradeMonitorToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
             this.tradeMonitorToolStripMenuItem.Text = "Trade Monitor";
             // 
             // offHighsToolStripMenuItem
             // 
+            this.offHighsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.offHighsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.offHighsToolStripMenuItem.Name = "offHighsToolStripMenuItem";
             this.offHighsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.offHighsToolStripMenuItem.Text = "High Metrics Off Highs";
             this.offHighsToolStripMenuItem.Click += new System.EventHandler(this.offHighsToolStripMenuItem_Click);
+            // 
+            // watchOffHighsToolStripMenuItem
+            // 
+            this.watchOffHighsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.watchOffHighsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.watchOffHighsToolStripMenuItem.Name = "watchOffHighsToolStripMenuItem";
+            this.watchOffHighsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.watchOffHighsToolStripMenuItem.Text = "Watch List Off Highs";
+            this.watchOffHighsToolStripMenuItem.Click += new System.EventHandler(this.watchOffHighsToolStripMenuItem_Click);
             // 
             // panel3
             // 
@@ -2298,13 +2337,6 @@ namespace StockApi
             this.label75.TabIndex = 44;
             this.label75.Text = "Dow 30:";
             this.label75.UseMnemonic = false;
-            // 
-            // watchOffHighsToolStripMenuItem
-            // 
-            this.watchOffHighsToolStripMenuItem.Name = "watchOffHighsToolStripMenuItem";
-            this.watchOffHighsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.watchOffHighsToolStripMenuItem.Text = "Watch List Off Highs";
-            this.watchOffHighsToolStripMenuItem.Click += new System.EventHandler(this.watchOffHighsToolStripMenuItem_Click);
             // 
             // Form1
             // 
