@@ -83,7 +83,7 @@ namespace StockApi
 
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
-
+ 
             StringSafeType<decimal> t = new StringSafeType<decimal>("");
 
             t.StringValue = "3.71B";
@@ -123,6 +123,15 @@ namespace StockApi
 
             panelMarkets.Visible = false;
             //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            using (Pen pen = new Pen(Color.DarkGray, 1))
+            {
+                // Adjust coordinates as needed
+                e.Graphics.DrawLine(pen, 0, menuStrip1.Bottom + 1, this.ClientSize.Width, menuStrip1.Bottom + 1);
+            }
         }
 
         private async void btnGetOne_click(object sender, EventArgs e)
@@ -931,8 +940,6 @@ namespace StockApi
         {
             get { return Color.FromArgb(0, 0, 0); }
         }
-
-        
 
         public override Color MenuItemPressedGradientBegin
         {
