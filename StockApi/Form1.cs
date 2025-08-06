@@ -136,8 +136,9 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-            FinnhubAPI finnhubAPI = new FinnhubAPI();
-            MarketData marketData = await finnhubAPI.GetQuote("INTC", DateTime.Now.AddDays(-3), 1);
+            //Finnhub can not get historic quotes, so not used 
+            //FinnhubAPI finnhubAPI = new FinnhubAPI();
+            //MarketData marketData = await finnhubAPI.GetQuote("INTC", DateTime.Now.AddDays(-3), 1);
 
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
 
