@@ -71,7 +71,7 @@ namespace StockApi
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Couldn't find the ticker {ticker} that was in buy trades in the position table.");
+                    MessageBox.Show($"Couldn't find the ticker {ticker} that was in buy trades in the position table.\n  " + ex.Message);
                     continue;
                 }
                 

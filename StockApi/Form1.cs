@@ -78,30 +78,27 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            ////// Testing section
             //FpmAPI fpmAPI = new FpmAPI();
             //fpmAPI.Test();
+            //StringSafeType<decimal> t = new StringSafeType<decimal>("");
+            //t.StringValue = "3.71B";
 
+
+            // For dark menu.
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
  
-            StringSafeType<decimal> t = new StringSafeType<decimal>("");
-
-            t.StringValue = "3.71B";
-
             label37.BackColor = label38.BackColor = trackBar1.BackColor;
-
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             panel1.Visible = false;
-
             panel2.BackColor = panel1.BackColor;
             panel2.Visible = false;
-
             panel3.BackColor = panel1.BackColor;
             panel3.Visible = false;
 
+            // Wait gif
             picSpinner.Visible = false;
-            //picSpinner.Left = 220;
-            //picSpinner.Top = 8; 
             picSpinner.Left = (this.Width / 2) + 56;
             picSpinner.Top = this.Height / 2 - 56;
 
@@ -112,8 +109,7 @@ namespace StockApi
             lblCompanyNameAndTicker.Text = txtSharesTraded.Text = "";
 
             // temporary for testing
-            txtStockTicker.Text = "INTC";
-            txtSharesTraded.Text = "80";
+            txtStockTicker.Text = "AAPL";
 
             // Revenue year labels TTM, 2 years ago, 4 years ago
             lblFin2YearsAgo.Text = DateTime.Now.AddYears(-2).ToString("yyyy");
@@ -122,14 +118,13 @@ namespace StockApi
             _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
             panelMarkets.Visible = false;
-            //txtTickerList.Text = "AB" + Environment.NewLine + "ACB" + Environment.NewLine + "AG" + Environment.NewLine;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            // Dark menu.
             using (Pen pen = new Pen(Color.DarkGray, 1))
             {
-                // Adjust coordinates as needed
                 e.Graphics.DrawLine(pen, 0, menuStrip1.Bottom + 1, this.ClientSize.Width, menuStrip1.Bottom + 1);
             }
         }
@@ -164,44 +159,33 @@ namespace StockApi
             // Get DOW level from 2 months ago
             var tickerTradesList = tradesDataTable.AsEnumerable().Where(x => DateTime.ParseExact(x[0].ToString(), "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-60) && x[1].ToString().Trim() != "").ToList();
             // get first and last row's DOW
-            float oneMonthAgoDOW = Convert.ToInt32(tickerTradesList.First().ItemArray[1].ToString());
-            float currentDOW = Convert.ToInt32(tickerTradesList.Last().ItemArray[1].ToString());
-            float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 10;
-            if (perc < -5) perc = -5;
-            if (perc > 5) perc = 5;
+            //float oneMonthAgoDOW = Convert.ToInt32(tickerTradesList.First().ItemArray[1].ToString());
+            //float currentDOW = Convert.ToInt32(tickerTradesList.Last().ItemArray[1].ToString());
+            //float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 10;
+            //if (perc < -5) perc = -5;
+            //if (perc > 5) perc = 5;
 
             trackBar1.Value = 5; // Not used, User can set this on their own//// + Convert.ToInt32(perc);
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
+            Market_SandP = new MarketData();
+            Market_Dow = new MarketData();
+            Market_Nasdaq = new MarketData();
             try
             {
                 Market_SandP = await _marketData.GetMarketData("^GSPC");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"SNP Market data failed." + Environment.NewLine + ex.Message);
-                Market_SandP.CurrentLevel.StringValue = "0";
-            }
-
-            try
-            {
                 Market_Dow = await _marketData.GetMarketData("^DJI");
                 Market_Nasdaq = await _marketData.GetMarketData("^IXIC");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"DOW Market data failed." + Environment.NewLine + ex.Message);
-                if(Market_Dow == null)
-                    Market_Dow = new MarketData();
+                MessageBox.Show($"Market data failed." + Environment.NewLine + ex.Message);
+                Market_SandP.CurrentLevel.StringValue = "0";
                 Market_Dow.CurrentLevel.StringValue = "0";
-                if (Market_Nasdaq == null)
-                    Market_Nasdaq = new MarketData();
                 Market_Nasdaq.CurrentLevel.StringValue = "0";
             }
 
-
-            // Extract the individual data values from the html
             _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
 
             if (_tickerFound)
