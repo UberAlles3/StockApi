@@ -436,6 +436,7 @@ namespace StockApi
 
                 Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
                 txtSharesOwned.Text = "1";
+                txtSharesTraded.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
                 analyzeInputs.MarketHealth = 5;
                 decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, true);
@@ -547,6 +548,8 @@ namespace StockApi
                         txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
                         if (txtSharesOwned.Text.Trim() == "")
                             txtSharesOwned.Text = "1";
+                        if (txtSharesTraded.Text.Trim() == "")
+                            txtSharesTraded.Text = "1";
                         txtSharesTraded.Text = latestRow.ItemArray[3].ToString();     // Quan. Traded
                         txtSharesTradePrice.Text = ((double)latestRow.ItemArray[5]).ToString("0.00"); // Price
                         if (latestRow.ItemArray[2].ToString().Trim().ToLower() == "buy")

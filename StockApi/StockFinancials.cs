@@ -256,7 +256,7 @@ namespace StockApi
                     Revenue2Color = Form1.TextForeColor;
 
                 // Set Colors for Profits labels (if profit decreasing by 10% every 2 years, a problem
-                if (RevenueTtmString.NumericValue > 0 && CostOfRevenueTtmString.NumericValue > 0 && CostOfRevenue4String.NumericValue > 0)
+                if (RevenueTtmString.NumericValue > 0) // && CostOfRevenueTtmString.NumericValue > 0 && CostOfRevenue4String.NumericValue > 0 <-- Why was this in there?
                 {
                     if (ProfitTtmString.NumericValue < Profit2YearsAgo * .9M)
                         ProfitTtmColor = Color.Red;
