@@ -51,8 +51,11 @@ namespace StockApi
             else if (stockHistory.HistoricDataToday.Price < stockHistory.HistoricData3YearsAgo.Price * 0.93M)
                 priceTrendMetric = .98M;
 
+            output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".00")}");
+
             // Consecutive buys or sells
-            if(forMetricOnly == false)
+            decimal buySellMetric = 1M;
+            if (forMetricOnly == false)
             {
                 List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
                 int buys = 0;
@@ -74,16 +77,14 @@ namespace StockApi
                 }
 
                 if (buys == 2)
-                    priceTrendMetric = (priceTrendMetric + 1) / 2 - .02M;
+                    buySellMetric = .98M;
                 if (buys == 3)
-                    priceTrendMetric = (priceTrendMetric + 1) / 2 - .03M;
+                    buySellMetric = .96M;
                 if (sells == 2)
-                    priceTrendMetric = (priceTrendMetric + 1) / 2 + .02M;
+                    buySellMetric = 1.02M;
                 if (sells == 3)
-                    priceTrendMetric = (priceTrendMetric + 1) / 2 + .03M;
+                    buySellMetric = 1.04M;
             }
-
-            output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".00")}");
 
             // One Year Target - Not a very valuable metric. 
             decimal targetPriceMetric = 1M;
@@ -160,37 +161,72 @@ namespace StockApi
             {
                 if (stockFinancials.Revenue4String.NumericValue > 0)
                 {
-                    if (stockFinancials.Revenue2String.NumericValue > stockFinancials.Revenue4String.NumericValue * 1.05M) // Revenue 2 years ago is 5% above revenue 4 years ago 
+                    // 4 years ago compaered to 2 years ago
+                    if (stockFinancials.Revenue2String.NumericValue > Math.Max(stockFinancials.Revenue4String.NumericValue, 100)  * 1.2M) // Revenue 2 years ago is 6% above revenue 4 years ago 
+                        revenueMetric = 1.03M;
+                    else if (stockFinancials.Revenue2String.NumericValue > Math.Max(stockFinancials.Revenue4String.NumericValue, 100) * 1.08M) // Revenue 2 years ago is 6% above revenue 4 years ago 
                         revenueMetric = 1.025M;
-                    if (stockFinancials.Revenue2String.NumericValue < stockFinancials.Revenue4String.NumericValue * .98M) // Revenue 2 years ago is 1% below revenue 4 years ago 
+                    else if (stockFinancials.Revenue2String.NumericValue > stockFinancials.Revenue4String.NumericValue * 1.03M) // Revenue 2 years ago is 2% above revenue 4 years ago 
+                        revenueMetric = 1.01M;
+                    if (stockFinancials.Revenue2String.NumericValue < stockFinancials.Revenue4String.NumericValue * .97M) // Revenue 2 years ago is 2% below revenue 4 years ago 
                         revenueMetric = .98M;
-                    if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue2String.NumericValue * 1.05M) // Revenue TTM is 5% above revenue 2 years ago 
-                        revenueMetric = revenueMetric * 1.025M;
-                    if (stockFinancials.RevenueTtmString.NumericValue < stockFinancials.Revenue2String.NumericValue * .98M) // Revenue TTM is 1% below revenue 2 years ago 
-                        revenueMetric = revenueMetric * .98M;
-                    if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue4String.NumericValue * 1.03M) // Revenue TTM is 5% above revenue 4 years ago 
-                        revenueMetric = revenueMetric * 1.01M;
+
+                    // Current compared to 2 years ago
+                    if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue2String.NumericValue * 1.08M) // Revenue TTM is 5% above revenue 2 years ago 
+                        revenueMetric += + .02M;
+                    else if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue2String.NumericValue * 1.03M) // Revenue TTM is 5% above revenue 2 years ago 
+                        revenueMetric += + .01M;
+                    if (stockFinancials.RevenueTtmString.NumericValue < stockFinancials.Revenue2String.NumericValue * .97M) // Revenue TTM is 1% below revenue 2 years ago 
+                        revenueMetric -= .01M;
+
+                    // Current compared to 4 years ago
+                    if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue4String.NumericValue * 1.2M) // Revenue TTM is 5% above revenue 4 years ago 
+                        revenueMetric += .015M;
+                    else if (stockFinancials.RevenueTtmString.NumericValue > stockFinancials.Revenue4String.NumericValue * 1.1M) // Revenue TTM is 5% above revenue 4 years ago 
+                        revenueMetric += .01M;
                     if (stockFinancials.RevenueTtmString.NumericValue < stockFinancials.Revenue4String.NumericValue * .98M) // Revenue TTM is 1% below revenue 4 years ago 
-                        revenueMetric = revenueMetric * .99M;
+                        revenueMetric -=  .01M;
                 }
             }
             output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".00")}");
-            // Profit - Revenue - Cost of Revenue
+            /////////// Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
-            if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.01M)
-                profitMetric = 1.02M;
-            if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99M)
-                profitMetric = .98M;
-            if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit2YearsAgo * 1.01M)
-                profitMetric *= 1.02M;
+            if(stockFinancials.Profit4YearsAgo < 0)
+            {
+                if(stockFinancials.Profit2YearsAgo > 0)
+                    profitMetric = 1.04M;
+                if(stockFinancials.ProfitTtmString.NumericValue > 0)
+                    profitMetric += .02M;
+            }
+            else
+            {
+                // 2 years ago compared to 4 years ago
+                if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.25M)
+                    profitMetric = 1.04M;
+                else if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.12M)
+                    profitMetric = 1.025M;
+                else if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.04M)
+                    profitMetric = 1.01M;
+                if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99M)
+                    profitMetric = .98M;
+
+                // This year compared to 4 years ago
+                if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.5M)
+                    profitMetric += .02M;
+                else if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.1M)
+                    profitMetric += .01M;
+                if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit4YearsAgo * .98M)
+                    profitMetric -= .01M;
+            }
+
+            // This year compared to 2 years ago
+            if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit2YearsAgo * 1.25M)
+                profitMetric += .025M;
+            else if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit2YearsAgo * 1.1M)
+                profitMetric += .01M;
             if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit2YearsAgo * .99M)
-                profitMetric *= .98M;
-            if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.2M)
-                profitMetric *= 1.01M;
-            else if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.02M)
-                profitMetric *= 1.01M;
-            if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit4YearsAgo * .98M)
-                profitMetric *= .985M;
+                profitMetric -= .02M;
+            
             if (revenueMetric * profitMetric < .87M)
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}         * Financials are Bad *");
             else
@@ -213,11 +249,13 @@ namespace StockApi
                 valuationMetric = 1.02M;
             output.AppendLine($"Valuation = {valuationMetric.ToString(".00")}");
 
+            output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
+
             // Market
             decimal ecoMetric = 1 + ((analyzeInputs.MarketHealth - 5) / 50);
             output.AppendLine($"Market Metric = {ecoMetric.ToString(".00")}");
 
-            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric;
+            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric * buySellMetric;
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
             if (totalMetric < .78M)
