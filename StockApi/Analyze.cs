@@ -42,6 +42,8 @@ namespace StockApi
                 priceTrendMetric = 1.06M;
             else if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 1.3M)
                 priceTrendMetric = 1.04M;
+            else if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 1.2M)
+                priceTrendMetric = 1.02M;
             else if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 1.1M)
                 priceTrendMetric = 1.01M;
             else if (stockHistory.HistoricDataToday.Price < stockHistory.HistoricData3YearsAgo.Price * 0.6M)

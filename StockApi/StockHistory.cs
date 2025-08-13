@@ -125,8 +125,7 @@ namespace StockApi
                 {
                     if(ex.Message.Contains("Data doesn't exist for startDate"))
                     {
-                        // Stock must be new and not have a 3 year quote
-                        HistoricData3YearsAgo = HistoricDataYearAgo;
+                        quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
                     }
                     else
                         MessageBox.Show(ex.Message);

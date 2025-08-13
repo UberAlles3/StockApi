@@ -206,6 +206,11 @@ namespace StockApi
 
                     // get 3 year ago price
                     historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, false, false);
+
+                    if (historicDisplayList.Count > 0)
+                        _stockHistory.HistoricData3YearsAgo = historicDisplayList.Last();
+                    else
+                        _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue };
                 }
                 catch (Exception ex)
                 {
