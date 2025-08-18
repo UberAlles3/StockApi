@@ -29,6 +29,7 @@ namespace StockApi
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
@@ -211,6 +212,7 @@ namespace StockApi
             this.lblDOW30 = new System.Windows.Forms.Label();
             this.lblDOW30Change = new System.Windows.Forms.Label();
             this.label75 = new System.Windows.Forms.Label();
+            this.MetricsTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -2338,6 +2340,10 @@ namespace StockApi
             this.label75.Text = "Dow 30:";
             this.label75.UseMnemonic = false;
             // 
+            // MetricsTimer
+            // 
+            this.MetricsTimer.Interval = 10000;
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -2583,6 +2589,7 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem tradeMonitorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem offHighsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem watchOffHighsToolStripMenuItem;
+        private System.Windows.Forms.Timer MetricsTimer;
     }
 }
 

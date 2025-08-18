@@ -74,6 +74,7 @@ namespace StockApi
             InitializeComponent();
             _settings = ConfigurationManager.GetSection("Settings") as List<Setting>;
             _marketData = new MarketData();
+            SetupDailyTimer();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -790,6 +791,43 @@ namespace StockApi
         private void lnkCompanyOverview_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             MessageBox.Show(_stockSummary.CompanyOverview, "Company Overview", MessageBoxButtons.OK);
+        }
+
+
+        //////////////////////////////
+        //      Metrics Timer
+        //////////////////////////////
+        private void SetupDailyTimer()
+        {
+            MetricsTimer.Tick += MetricsTimer_Tick;
+            SetNextDailyExecutionTime();
+            MetricsTimer.Start();
+        }
+        private void SetNextDailyExecutionTime()
+        {
+            DateTime now = DateTime.Now;
+            DateTime targetTime = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0); // Example: 8:00 AM
+
+            if (now > targetTime)
+            {
+                targetTime = targetTime.AddDays(1); // If target time has passed today, set for tomorrow
+            }
+
+            TimeSpan timeUntilExecution = targetTime - now;
+            MetricsTimer.Interval = (int)timeUntilExecution.TotalMilliseconds;
+        }
+        private async void MetricsTimer_Tick(object sender, EventArgs e)
+        {
+            // Stop the timer to prevent immediate re-triggering
+            MetricsTimer.Stop();
+
+            // Execute your daily function here
+            MetricsExport metricsExport = new MetricsExport();
+            await metricsExport.DailyGetMetrics();
+
+            // Reset the timer for the next daily execution
+            SetNextDailyExecutionTime();
+            MetricsTimer.Start();
         }
 
 
