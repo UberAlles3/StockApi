@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Drake.Extensions;
+using System.IO;
 
 namespace StockApi
 {
@@ -285,6 +286,30 @@ namespace StockApi
 
             PostSummaryWebCall(); // displays the data returned
 
+        }
+
+        private void btnGetHtml_Click(object sender, EventArgs e)
+        {
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StockSummaryHtml.txt");
+
+            try
+            {
+                File.WriteAllText(filePath, _stockSummary._html);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error writing to file: {ex.Message}", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // Exit if file writing fails
+            }
+
+            try
+            {
+                Process.Start("notepad.exe", filePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening Notepad: {ex.Message}", "Process Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ApplyStockSplits(DataTable TickerTradesDataTable)
