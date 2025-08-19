@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace StockApi
 {
@@ -40,20 +41,20 @@ namespace StockApi
             }
 
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
+            stockList = stockList.Take(2).ToList();
 
-
-
-            // set up file for output           form1.txtTickerList.Text = "";
-            //builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend, 3YearPrice, 3YearPriceChange{Environment.NewLine}");
+            string stockMetricString = "";
             foreach (string ticker in stockList)
             {
 
-                string stockMetricString = await GetStockMetric(ticker, analyzeInputs);
-
-                // TODO  Write to file.
-
+                stockMetricString = await GetStockMetric(ticker, analyzeInputs);
+                builder.Append(stockMetricString);
                 Thread.Sleep(800);
             }
+
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            File.WriteAllText(Path.Combine(desktopPath, "StockMetrics.txt"), builder.ToString());
+
 
             MessageBox.Show("Daily function executed!");
 
