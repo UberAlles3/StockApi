@@ -851,8 +851,8 @@ namespace StockApi
             MetricsTimer.Stop();
 
             // Execute your daily function here
-            Metrics metricsExport = new Metrics();
-            await metricsExport.DailyGetMetrics(PositionsDataTable);
+            Metrics metrics = new Metrics();
+            int x = await metrics.DailyGetMetrics(PositionsDataTable);
 
             // Reset the timer for the next daily execution
             SetNextDailyExecutionTime();
