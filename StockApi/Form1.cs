@@ -85,8 +85,6 @@ namespace StockApi
             //fpmAPI.Test();
             //StringSafeType<decimal> t = new StringSafeType<decimal>("");
             //t.StringValue = "3.71B";
-
-
             // For dark menu.
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
@@ -133,6 +131,12 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
+
+         ////////// TODO take out
+            Metrics metrics = new Metrics();
+            int x = await metrics.DailyGetMetrics(PositionsDataTable);
+
+
             //Finnhub can not get historic quotes, so not used 
             //FinnhubAPI finnhubAPI = new FinnhubAPI();
             //MarketData marketData = await finnhubAPI.GetQuote("INTC", DateTime.Now.AddDays(-3), 1);

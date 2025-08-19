@@ -1,6 +1,8 @@
 ﻿using ExcelDataReader;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 
 namespace StockApi
 {
@@ -86,7 +88,16 @@ namespace StockApi
                     //Debug.Print(json);
                     return result.Tables[0];
                 }
+
             }
+        }
+        public List<string> GetStockListFromPositionsTable(DataTable positionsDataTable)
+        {
+            List<string> stockList;
+            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)PositionColumns.Ticker].ToString().Trim() != "" && !x[(int)PositionColumns.Ticker].ToString().Contains("*") && x[(int)PositionColumns.QuantityHeld].ToString().Trim() != "" && x[(int)PositionColumns.QuantityHeld].ToString().Trim() != "0");
+            stockList = positions.Select(x => x[(int)PositionColumns.Ticker].ToString().Trim()).ToList();
+            stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
+            return stockList;
         }
     }
 }

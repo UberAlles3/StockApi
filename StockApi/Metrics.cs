@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using PC = StockApi.ExcelManager.PositionColumns;
 
 namespace StockApi
 {
@@ -19,11 +18,11 @@ namespace StockApi
         private StockFinancials _stockFinancials = new StockFinancials();
         private StockHistory _stockHistory = new StockHistory();
         private Analyze _analyze = new Analyze();
+        private ExcelManager _excelManager = new ExcelManager();
 
         public async Task<int> DailyGetMetrics(DataTable positionsDataTable)
         {
             // Get all tickers from position table
-            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0");
             List<string> stockList = new List<string>();
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             analyzeInputs.SharesOwned = 1;
@@ -40,8 +39,9 @@ namespace StockApi
                 return 1;
             }
 
-            //stockList = form1.txtTickerList.Text.Split(Environment.NewLine).ToList();
-            stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
+            stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
+
+
 
             // set up file for output           form1.txtTickerList.Text = "";
             //builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend, 3YearPrice, 3YearPriceChange{Environment.NewLine}");
