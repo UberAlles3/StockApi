@@ -7,7 +7,7 @@ using System.Text;
 
 namespace StockApi
 {
-    class Analyze : YahooFinance
+    public class Analyze : YahooFinance
     {
         public enum BuyOrSell
         {
@@ -257,7 +257,8 @@ namespace StockApi
             decimal ecoMetric = 1 + ((analyzeInputs.MarketHealth - 5) / 50);
             output.AppendLine($"Market Metric = {ecoMetric.ToString(".00")}");
 
-            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * ecoMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric;
+            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric * ecoMetric;
+
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
             if (totalMetric < .78M)
@@ -276,8 +277,9 @@ namespace StockApi
             totalMetric = Math.Round(totalMetric, 2);
             if (forMetricOnly == true)
             {
-                return totalMetric;
+                return totalMetric; //========================>>>>>>>>>>>>>>>>>>>>  Get out
             }
+
             output.AppendLine("");
 
             ///////////////////////////////////////////////////////////
@@ -285,7 +287,7 @@ namespace StockApi
             ///////////// Setting Price Movement Multipliers
 
             // Adjust based on series of buys or sells
-            totalMetric *= buySellMetric;
+            totalMetric = totalMetric * buySellMetric;
 
             // Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
             decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockSummary.Volatility) + 1)) + 1; 

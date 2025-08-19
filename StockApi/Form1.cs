@@ -847,19 +847,17 @@ namespace StockApi
             MetricsTimer.Stop();
 
             // Execute your daily function here
-            MetricsExport metricsExport = new MetricsExport();
-            await metricsExport.DailyGetMetrics();
+            Metrics metricsExport = new Metrics();
+            await metricsExport.DailyGetMetrics(PositionsDataTable);
 
             // Reset the timer for the next daily execution
             SetNextDailyExecutionTime();
             MetricsTimer.Start();
         }
 
-
         //////////////////////////////
         //      Menu Items
         //////////////////////////////
-
         private void goldAndSilverToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenHyperlink("https://www.apmex.com/gold-price");
@@ -963,11 +961,6 @@ namespace StockApi
             Performance performance = new Performance(_stockSummary);
             List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(TradesDataTable);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Liquidation Performance", 1);
-        }
-
-        private void btnApplySplit_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void offHighsToolStripMenuItem_Click(object sender, EventArgs e)

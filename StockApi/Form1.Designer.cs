@@ -2439,7 +2439,7 @@ namespace StockApi
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox txtTickerList;
+        public System.Windows.Forms.TextBox txtTickerList;
         private System.Windows.Forms.Button btnAnalyze;
         private System.Windows.Forms.PictureBox picSpinner;
         private System.Windows.Forms.Label label8;
