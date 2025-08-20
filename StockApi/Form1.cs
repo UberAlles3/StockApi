@@ -133,8 +133,8 @@ namespace StockApi
         {
 
          ////////// TODO take out
-            Metrics metrics = new Metrics();
-            int x = await metrics.DailyGetMetrics(PositionsDataTable);
+            //Metrics metrics = new Metrics();
+            //int x = await metrics.DailyGetMetrics(PositionsDataTable);
 
 
             //Finnhub can not get historic quotes, so not used 
@@ -835,7 +835,8 @@ namespace StockApi
         private void SetNextDailyExecutionTime()
         {
             DateTime now = DateTime.Now;
-            DateTime targetTime = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0); // Example: 8:00 AM
+            DateTime targetTime = new DateTime(now.Year, now.Month, now.Day, 7, 0, 0); // Example: 7:00 AM
+            //DateTime targetTime = DateTime.Now.AddSeconds(15); // Example: 8:00 AM
 
             if (now > targetTime)
             {

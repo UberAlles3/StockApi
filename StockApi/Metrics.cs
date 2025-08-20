@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace StockApi
 {
@@ -41,7 +42,7 @@ namespace StockApi
             }
 
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
-            stockList = stockList.Take(12).ToList();
+            stockList = stockList.Take(60).ToList();
 
             string stockMetricString = "";
             foreach (string ticker in stockList)
@@ -49,11 +50,16 @@ namespace StockApi
 
                 stockMetricString = await GetStockMetric(ticker, analyzeInputs);
                 builder.Append(stockMetricString);
+                Debug.Print(stockMetricString);
                 Thread.Sleep(800);
             }
 
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            File.WriteAllText(Path.Combine(desktopPath, "StockMetrics.txt"), builder.ToString());
+            desktopPath = Path.Combine(desktopPath, "StockMetrics.txt");
+            if (Directory.Exists(desktopPath))
+                Directory.Delete(desktopPath);
+            
+            File.WriteAllText(desktopPath, builder.ToString());
 
 
             MessageBox.Show("Daily function executed!");
