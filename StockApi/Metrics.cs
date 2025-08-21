@@ -51,7 +51,7 @@ namespace StockApi
             }
 
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
-            stockList = stockList.Skip(120).Take(30).ToList();
+            stockList = stockList.Skip(0).Take(60).ToList();
 
             string stockMetricString = "";
             foreach (string ticker in stockList)
