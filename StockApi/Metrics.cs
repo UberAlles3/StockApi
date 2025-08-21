@@ -26,12 +26,21 @@ namespace StockApi
         {
             // Get all tickers from position table
             List<string> stockList = new List<string>();
+            StringBuilder builder = new StringBuilder();
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             analyzeInputs.SharesOwned = 1;
             analyzeInputs.QuantityTraded = 1;
             analyzeInputs.MarketHealth = 5;
 
-            StringBuilder builder = new StringBuilder();
+            try
+            {
+                await new MarketData().GetMarketData("^GSPC");
+                Thread.Sleep(2000); // wait 2 seconds
+            }
+            catch (Exception ex)
+            {
+               // just a refresh of network connection
+            }
 
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
 
