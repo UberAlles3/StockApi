@@ -180,9 +180,9 @@ namespace StockApi
             Market_Nasdaq = new MarketData();
             try
             {
-                Market_SandP = await _marketData.GetMarketData("^GSPC");
-                Market_Dow = await _marketData.GetMarketData("^DJI");
-                Market_Nasdaq = await _marketData.GetMarketData("^IXIC");
+                Market_SandP = await _marketData.GetMarketData("^GSPC", true);
+                Market_Dow = await _marketData.GetMarketData("^DJI", true);
+                Market_Nasdaq = await _marketData.GetMarketData("^IXIC", true);
             }
             catch (Exception ex)
             {
@@ -949,7 +949,7 @@ namespace StockApi
             Performance performance = new Performance(_stockSummary);
             if(Market_Dow == null)
             {
-                Market_Dow = await _marketData.GetMarketData("^DJI");
+                Market_Dow = await _marketData.GetMarketData("^DJI", true);
             }
             performance.GetLatestBuyPerformance(Market_Dow, PositionsDataTable, TradesDataTable);
             performance.ShowPerformanceForm(this);  

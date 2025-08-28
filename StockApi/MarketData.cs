@@ -48,10 +48,10 @@ namespace StockApi
             }
         }
 
-        public async Task<MarketData> GetMarketData(string ticker)
+        public async Task<MarketData> GetMarketData(string ticker, bool showMessageBox)
         {
             FpmAPI fpmAPI = new FpmAPI();
-            MarketData marketData = await fpmAPI.GetQuote(ticker);
+            MarketData marketData = await fpmAPI.GetQuote(ticker, showMessageBox);
 
             return marketData;
         }

@@ -16,7 +16,7 @@ namespace StockApi
 
         private readonly HttpClient client = new HttpClient();
 
-        public async Task<MarketData> GetQuote(string ticker)
+        public async Task<MarketData> GetQuote(string ticker, bool showMessageBox)
         {
             //string symbol = "^DJI"; // Example stock symbol
             MarketData marketData = new MarketData();
@@ -41,11 +41,13 @@ namespace StockApi
             }
             catch (HttpRequestException e)
             {
-                MessageBox.Show($"Request Error: {e.Message}");
+                if(showMessageBox)
+                    MessageBox.Show($"Request Error: {e.Message}");
             }
             catch (JsonException e)
             {
-                MessageBox.Show($"JSON Deserialization Error: {e.Message}");
+                if (showMessageBox)
+                    MessageBox.Show($"JSON Deserialization Error: {e.Message}");
             }
 
             return marketData;

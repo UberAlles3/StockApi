@@ -34,10 +34,10 @@ namespace StockApi
 
             try
             {
-                await new MarketData().GetMarketData("^GSPC");
+                await new MarketData().GetMarketData("^GSPC", false);
                 Thread.Sleep(2000); // wait 2 seconds
             }
-            catch (Exception ex)
+            catch 
             {
                // just a refresh of network connection
             }
@@ -51,7 +51,18 @@ namespace StockApi
             }
 
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
-            stockList = stockList.Skip(0).Take(60).ToList();
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+                stockList = stockList.Skip(0).Take(30).ToList();
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
+                stockList = stockList.Skip(30).Take(30).ToList();
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
+                stockList = stockList.Skip(60).Take(30).ToList();
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
+                return 0;
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
+                stockList = stockList.Skip(90).Take(60).ToList();
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                return 0;
 
             string stockMetricString = "";
             foreach (string ticker in stockList)
