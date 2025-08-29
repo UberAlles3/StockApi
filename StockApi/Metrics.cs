@@ -50,11 +50,21 @@ namespace StockApi
                 return 1;
             }
 
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
             if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+            {
                 stockList = stockList.Skip(0).Take(30).ToList();
+                desktopPath = Path.Combine(desktopPath, "StockMetricsMonday.txt");
+            }
+
             if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
+            {
                 stockList = stockList.Skip(30).Take(30).ToList();
+                desktopPath = Path.Combine(desktopPath, "StockMetricsTuesday.txt");
+            }
+
             if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
                 stockList = stockList.Skip(60).Take(30).ToList();
             if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
@@ -74,11 +84,8 @@ namespace StockApi
                 Thread.Sleep(800);
             }
 
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            desktopPath = Path.Combine(desktopPath, "StockMetrics.txt");
             if (Directory.Exists(desktopPath))
                 Directory.Delete(desktopPath);
-            
             File.WriteAllText(desktopPath, builder.ToString());
 
 
