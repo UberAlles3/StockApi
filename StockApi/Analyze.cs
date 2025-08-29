@@ -36,7 +36,7 @@ namespace StockApi
 
             // Long Term Price Trend
             decimal priceTrendMetric = 1M;
-            if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 1.9M)
+            if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 2M)
                 priceTrendMetric = 1.07M;
             else if (stockHistory.HistoricDataToday.Price > stockHistory.HistoricData3YearsAgo.Price * 1.6M)
                 priceTrendMetric = 1.05M;
