@@ -92,7 +92,7 @@ namespace StockApi
                         if (response.IsSuccessStatusCode)
                         {
                             json = await content.ReadAsStringAsync();
-                            QuoteRoot qr;
+                            QuoteRoot qr = null;
                             
                             try
                             {
@@ -100,8 +100,7 @@ namespace StockApi
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show($"JsonConvert.DeserializeObject {json}");
-                                throw ex;
+                                MessageBox.Show($"JsonConvert.DeserializeObject {json} {ex.Message}");
                             }
                             
                             return qr;
