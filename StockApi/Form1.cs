@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using Drake.Extensions;
 using System.IO;
 
+
 namespace StockApi
 {
     public partial class Form1 : Form
