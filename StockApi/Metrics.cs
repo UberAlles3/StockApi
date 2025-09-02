@@ -66,11 +66,20 @@ namespace StockApi
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
+            {
                 stockList = stockList.Skip(60).Take(30).ToList();
+                desktopPath = Path.Combine(desktopPath, "StockMetricsWednesday.txt");
+            }
+
             if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
                 return 0;
+
             if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
+            {
                 stockList = stockList.Skip(90).Take(60).ToList();
+                desktopPath = Path.Combine(desktopPath, "StockMetricsFriday_T-Z.txt");
+            }
+
             if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
                 return 0;
 
