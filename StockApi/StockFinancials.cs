@@ -174,7 +174,27 @@ namespace StockApi
                         CostOfRevenue4String.StringValue = numbers[3].Trim();
                 }
                 else
-                    CostOfRevenueTtmString.StringValue = CostOfRevenue2String.StringValue = CostOfRevenue4String.StringValue = "--";
+                {
+                    // Cost of Revenue History
+                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Expenses").Term;
+                    partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
+                    if (partial != "")
+                    {
+                        numbers = GetNumbersFromHtml(partial);
+                        //numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
+
+                        if (numbers.Count > 0)
+                            CostOfRevenueTtmString.StringValue = numbers[0].Trim();
+                        if (numbers.Count > 2)
+                            CostOfRevenue2String.StringValue = numbers[2].Trim();
+                        if (numbers.Count > 4)
+                            CostOfRevenue4String.StringValue = numbers[4].Trim();
+                        else if (numbers.Count > 3)
+                            CostOfRevenue4String.StringValue = numbers[3].Trim();
+                    }
+                    else
+                        CostOfRevenueTtmString.StringValue = CostOfRevenue2String.StringValue = CostOfRevenue4String.StringValue = "--";
+                }
 
                 // Operating Expenses
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Operating Expense").Term;
