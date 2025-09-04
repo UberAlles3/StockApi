@@ -99,7 +99,7 @@ namespace StockApi
 
                 // Dividend
                 searchTerm = SearchTerms.Find(x => x.Name == "Dividend").Term;
-                string dividend = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 3);
+                string dividend = GetValueFromHtmlBySearchTerm(_html, searchTerm, "0", 3);
                 if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
                 {
                     dividend = dividend.Substring(dividend.IndexOf("(") + 1);
@@ -108,7 +108,7 @@ namespace StockApi
                 else
                 {
                     searchTerm = SearchTerms.Find(x => x.Name == "Dividend2").Term;
-                    dividend = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 3);
+                    dividend = GetValueFromHtmlBySearchTerm(_html, searchTerm, "0", 3);
                 }
                 DividendString.StringValue = dividend;
 

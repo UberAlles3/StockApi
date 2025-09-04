@@ -147,6 +147,10 @@ namespace StockApi
             }
 
             loc2 = (parts[tagPosition] + "<").IndexOf("<");
+            if(loc2 == 0)
+            {
+                return defaultValue;
+            }
 
             string middle = parts[tagPosition].Substring(0, loc2);
             return middle;
