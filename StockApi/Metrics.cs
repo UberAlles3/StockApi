@@ -34,7 +34,8 @@ namespace StockApi
 
             try
             {
-                await new MarketData().GetMarketData("^GSPC", false);
+                //await new MarketData().GetMarketData("^GSPC", false);
+                YahooFinance.RenewIPAddress();
                 Thread.Sleep(2000); // wait 2 seconds
             }
             catch 
@@ -76,11 +77,17 @@ namespace StockApi
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
             {
-                stockList = stockList.Skip(90).Take(60).ToList();
-                desktopPath = Path.Combine(desktopPath, "StockMetricsFriday_T-Z.txt");
+                stockList = stockList.Skip(90).Take(30).ToList();
+                desktopPath = Path.Combine(desktopPath, "StockMetricsFriday_T-V.txt");
             }
 
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+            {
+                stockList = stockList.Skip(120).Take(30).ToList();
+                desktopPath = Path.Combine(desktopPath, "StockMetricsFriday_V-Z.txt");
+            }
+
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
                 return 0;
 
             string stockMetricString = "";

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -154,6 +155,18 @@ namespace StockApi
 
             string middle = parts[tagPosition].Substring(0, loc2);
             return middle;
+        }
+        public static void RenewIPAddress()
+        {
+            ProcessStartInfo psiRelease = new ProcessStartInfo("ipconfig", "/release");
+            psiRelease.CreateNoWindow = true;
+            psiRelease.UseShellExecute = false;
+            Process.Start(psiRelease)?.WaitForExit();
+
+            ProcessStartInfo psiRenew = new ProcessStartInfo("ipconfig", "/renew");
+            psiRenew.CreateNoWindow = true;
+            psiRenew.UseShellExecute = false;
+            Process.Start(psiRenew)?.WaitForExit();
         }
     }
 }
