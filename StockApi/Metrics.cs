@@ -32,23 +32,25 @@ namespace StockApi
             analyzeInputs.QuantityTraded = 1;
             analyzeInputs.MarketHealth = 5;
 
-            try
-            {
-                //await new MarketData().GetMarketData("^GSPC", false);
-                YahooFinance.RenewIPAddress();
-                Thread.Sleep(2000); // wait 2 seconds
-            }
-            catch 
-            {
-               // just a refresh of network connection
-            }
-
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
-
             if (networkUp == false)
             {
-                MessageBox.Show("Your network connection is unavailable.");
-                return 1;
+                try
+                {
+                    //await new MarketData().GetMarketData("^GSPC", false);
+                    YahooFinance.RenewIPAddress();
+                    Thread.Sleep(2000); // wait 2 seconds
+                }
+                catch
+                {
+                    networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+
+                    if (networkUp == false)
+                    {
+                        MessageBox.Show("Your network connection is unavailable.");
+                        return 1;
+                    }
+                }
             }
 
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);

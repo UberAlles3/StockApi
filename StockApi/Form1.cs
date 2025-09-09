@@ -836,8 +836,8 @@ namespace StockApi
         private void SetNextDailyExecutionTime()
         {
             DateTime now = DateTime.Now;
-            DateTime targetTime = new DateTime(now.Year, now.Month, now.Day, 7, 0, 0); // Example: 7:00 AM
-            //DateTime targetTime = DateTime.Now.AddSeconds(15); // Example: 8:00 AM
+            //DateTime targetTime = new DateTime(now.Year, now.Month, now.Day, 7, 0, 0); // Example: 7:00 AM
+            DateTime targetTime = DateTime.Now.AddSeconds(15); // Example: 8:00 AM
 
             if (now > targetTime)
             {
