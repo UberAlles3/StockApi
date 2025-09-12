@@ -21,7 +21,7 @@ namespace StockApi
         public OffHighs(List<string> tickers, DataTable positionsDataTable, DataTable tradesDataTable)
         {
             InitializeComponent();
-            _tickers = tickers;
+            _tickers = tickers.Where(x => x != "******").ToList();
             _positionsDataTable = positionsDataTable;
             _tradesDataTable = tradesDataTable;
         }
