@@ -37,6 +37,8 @@ namespace StockApi
         public int AverageSectorPE = 20;
         public ValuationEnum Valuation = ValuationEnum.FairValue;
         public Dictionary<string, int> _sectors = new Dictionary<string, int>() { { "Technology", 35 }, { "Energy", 15 }, { "Materials", 25 }, { "Industrials", 26 }, { "Utilities", 21 }, { "Healthcare", 20 }, { "Real Estate", 36 }, { "Financial Services", 16 }, { "Communication Services", 21 }, { "Consumer Defensive", 24 } };
+        public Exception LastException = null;
+        public string Error = "";
 
         public string CompanyName { get => companyName; set => companyName = value; }
 
@@ -59,6 +61,10 @@ namespace StockApi
 
         public async Task<bool> GetSummaryData(string ticker, bool verbose = true)
         {
+            Error = "";
+            LastException = null;
+            string searchTerm = "";
+
             Ticker = ticker;
 
             _html = await GetHtmlForTicker(_summaryUrl, Ticker);
@@ -83,7 +89,7 @@ namespace StockApi
             try
             {
                 // Price
-                string searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
+                searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
                 PriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 1);
 
                 if (verbose == false)
@@ -156,7 +162,7 @@ namespace StockApi
 
                 // Company Overview
                 searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
-                string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(_html, searchTerm, 4500);
+                string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(_html, searchTerm, 6000);
                 htmlSnippet = HttpUtility.HtmlDecode(htmlSnippet);
                 string[] parts = htmlSnippet.Split(">");
                 string longest = parts.OrderByDescending(s => s.Length).First();
@@ -181,8 +187,8 @@ namespace StockApi
             }
             catch (Exception x)
             {
-                MessageBox.Show("GetSummaryData() " + " " + ticker + "\n" + x.Source + x.Message + "\n" + _html.Substring(0, _html.Length / 10));
-                EarningsPerShareString.StringValue = "0";
+                LastException = x;
+                Error = "GetSummaryData() " + ticker + " " + searchTerm; 
             }
 
             //*******************

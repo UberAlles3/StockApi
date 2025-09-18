@@ -442,10 +442,23 @@ namespace StockApi
                 // Extract the individual data values from the html
                 _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
 
+                if (_stockSummary.LastException != null)
+                {
+                    txtTickerList.Text = _stockSummary.Error;
+                    continue;
+                }
+
                 if (_stockSummary.EarningsPerShareString.StringValue == "--")
                 {
                     Thread.Sleep(2000);
                     _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                    
+                    if (_stockSummary.LastException != null)
+                    {
+                        txtTickerList.Text = _stockSummary.Error;
+                        continue;
+                    }
+
                     if (_stockSummary.EarningsPerShareString.StringValue == "--")
                     {
                         Thread.Sleep(2000);

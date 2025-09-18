@@ -115,6 +115,7 @@ namespace StockApi
         public async Task<string> GetStockMetric(string ticker, Analyze.AnalyzeInputs analyzeInputs)
         {
             bool _tickerFound;
+            string stockMetricString;
 
             List<StockHistory.HistoricPriceData> historicDataList = new List<StockHistory.HistoricPriceData>();
 
@@ -123,7 +124,11 @@ namespace StockApi
             // Extract the individual data values from the html
             _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
 
-            if (_stockSummary.EarningsPerShareString.StringValue == "--")
+            if (_stockSummary.LastException != null)
+            {
+                return $"{_stockSummary.Ticker} Error {_stockSummary.Error}";
+            }
+            else if (_stockSummary.EarningsPerShareString.StringValue == "--")
             {
                 Thread.Sleep(2000);
                 _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
@@ -153,7 +158,7 @@ namespace StockApi
 
             decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, true);
 
-            string stockMetricString = $"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue},"
+            stockMetricString = $"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue},"
                                      + $" {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterestString.NumericValue}"
                                      + $", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}";
 
