@@ -97,7 +97,7 @@ namespace StockApi
 
                 // EPS
                 searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;
-                EarningsPerShareString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 4);
+                EarningsPerShareString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, "0.00", 4);
 
                 // Volatility
                 searchTerm = SearchTerms.Find(x => x.Name == "Volatility").Term;
@@ -167,20 +167,24 @@ namespace StockApi
                 string[] parts = htmlSnippet.Split(">");
                 string longest = parts.OrderByDescending(s => s.Length).First();
 
-                int sectorIndex = parts.Select((s, i) => new { i, s }).Where(x => x.s.Contains("Sector<")).Select(t => t.i).First();
-                sectorIndex -= 3;
-
-                string[] words = (parts[sectorIndex] + " |").Split(" ");
-                if (words.Length > 2)
-                    this.Sector = words[0] + " " + words[1];
-                else
-                    this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
-
-                // find average PE for Sector
-                if (_sectors.ContainsKey(Sector))
-                    AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;
-                else
+                try
+                {
                     AverageSectorPE = 20;
+                    int sectorIndex = parts.Select((s, i) => new { i, s }).Where(x => x.s.Contains("Sector<")).Select(t => t.i).First();
+                    sectorIndex -= 3;
+
+                    string[] words = (parts[sectorIndex] + " |").Split(" ");
+                    if (words.Length > 2)
+                        this.Sector = words[0] + " " + words[1];
+                    else
+                        this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
+
+                    // find average PE for Sector
+                    if (_sectors.ContainsKey(Sector))
+                        AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;
+                }
+                catch
+                { }
 
                 CompanyOverview = longest._TrimSuffix("</");
 

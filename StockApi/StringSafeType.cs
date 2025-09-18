@@ -35,7 +35,7 @@ namespace StockApi
                         IsDateTime = false;
 
                         temp = new string(value.Where(c => char.IsDigit(c) || "-.BbTtMmKk".Contains(c)).ToArray());
-                        if ("BbTtMmKk".Contains(temp.Last().ToString())) // Number is abbreviated. i.e. 3.71B or 4k
+                        if (temp.Length > 0 && "BbTtMmKk".Contains(temp.Last().ToString())) // Number is abbreviated. i.e. 3.71B or 4k
                         {
                             HasAbbreviation = true;
                             Abbreviation = temp.Last().ToString();
@@ -62,7 +62,7 @@ namespace StockApi
                         IsDateTime = false;
 
                         temp = new string(value.Where(c => char.IsDigit(c) || "-.BbTtMmKk".Contains(c)).ToArray());
-                        if ("BbTtMmKk".Contains(temp.Last().ToString())) // Number is abbreviated. i.e. 3.71B or 4k
+                        if (temp.Length > 0 && "BbTtMmKk".Contains(temp.Last().ToString())) // Number is abbreviated. i.e. 3.71B or 4k
                         {
                             HasAbbreviation = true;
                             Abbreviation = temp.Last().ToString();

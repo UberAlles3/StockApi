@@ -194,6 +194,10 @@ namespace StockApi
             }
 
             _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
+            if (_stockSummary.LastException != null)
+            {
+                txtTickerList.Text = "Error:" + Environment.NewLine + _stockSummary.Error;
+            }
 
             if (_tickerFound)
             {
