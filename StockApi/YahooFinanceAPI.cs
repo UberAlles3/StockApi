@@ -28,41 +28,50 @@ namespace StockApi
             //QuoteRoot quotes = await GetJsonAsync("intc", unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
             //quotes = await GetJsonAsync("vgslx", unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
 
-            foreach (string close in quotes.chart.result[0].indicators.quote[0].close)
+            if (quotes.chart.result[0].indicators.quote[0].close == null)
             {
-                listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(close) });
+                double x = quotes.chart.result[0].meta.regularMarketPrice;
+                long xx = quotes.chart.result[0].meta.regularMarketVolume;
+                listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(x), Volume = Convert.ToInt32(xx)});
             }
-
-            int i = 0;
-            foreach (int timestamp in quotes.chart.result[0].timestamp)
+            else
             {
-                DateTime quoteDate = unixEpoch.AddSeconds(Convert.ToInt32(timestamp));
-                
-                if(quoteDate.Date == DateTime.Now.Date)
+                foreach (string close in quotes.chart.result[0].indicators.quote[0].close)
                 {
-                    listQuotes[i].Price = Convert.ToDecimal(quotes.chart.result[0].meta.regularMarketPrice.ToString("0.000"));
+                    listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(close), QuoteDate = DateTime.Now});
                 }
 
-                //if (listQuotes[i].Price == 0)
-                //{
-                //    listQuotes[i].Price = 999;
-                //}
-
-                listQuotes[i++].QuoteDate = quoteDate.Date;
-            }
-
-            i = 0;
-            foreach (string volume in quotes.chart.result[0].indicators.quote[0].volume)
-            {
-                string temp = volume;
-
-                if (temp == null)
-                    temp = "0";
-
-                if (temp.Length > 9)
-                    temp = volume.Substring(0, volume.Length - 3);
+                int i = 0;
+                foreach (int timestamp in quotes.chart.result[0].timestamp)
+                {
+                    DateTime quoteDate = unixEpoch.AddSeconds(Convert.ToInt32(timestamp));
                 
-                listQuotes[i++].Volume = Convert.ToInt32(temp);
+                    if(quoteDate.Date == DateTime.Now.Date)
+                    {
+                        listQuotes[i].Price = Convert.ToDecimal(quotes.chart.result[0].meta.regularMarketPrice.ToString("0.000"));
+                    }
+
+                    //if (listQuotes[i].Price == 0)
+                    //{
+                    //    listQuotes[i].Price = 999;
+                    //}
+
+                    listQuotes[i++].QuoteDate = quoteDate.Date;
+                }
+
+                i = 0;
+                foreach (string volume in quotes.chart.result[0].indicators.quote[0].volume)
+                {
+                    string temp = volume;
+
+                    if (temp == null)
+                        temp = "0";
+
+                    if (temp.Length > 9)
+                        temp = volume.Substring(0, volume.Length - 3);
+
+                    listQuotes[i++].Volume = Convert.ToInt32(temp);
+                }
             }
 
             return listQuotes;
