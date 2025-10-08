@@ -45,11 +45,22 @@ namespace StockApi
         public StringSafeType<Decimal> OperatingExpenseTtmString = new StringSafeType<decimal>("--");
         ///  Operation Expense 2 Year
         public StringSafeType<Decimal> OperatingExpense2String = new StringSafeType<decimal>("--");
+        ///  Operation Expense 4 Year
+        public StringSafeType<Decimal> OperatingExpense4String = new StringSafeType<decimal>("--");
+
+        /// Basic EPS TTM
+        public StringSafeType<Decimal> BasicEpsTtmString = new StringSafeType<decimal>("--");
+        public Color BasicEpsTtmColor = Form1.TextForeColor;
+        ///  Basic EPS 2 Year
+        public StringSafeType<Decimal> BasicEps2String = new StringSafeType<decimal>("--");
+        public Color BasicEps2Color = Form1.TextForeColor;
+        ///  Basic EPS 4 Year
+        public StringSafeType<Decimal> BasicEps4String = new StringSafeType<decimal>("--");
+        public Color BasicEps4Color = Form1.TextForeColor;
+
         /// Profit TTM
         public StringSafeType<Decimal> ProfitTtmString = new StringSafeType<decimal>("--");
 
-        ///  Operation Expense 4 Year
-        public StringSafeType<Decimal> OperatingExpense4String = new StringSafeType<decimal>("--");
         /// Debt Equity
         public StringSafeType<Decimal> DebtEquityString = new StringSafeType<decimal>("--");
         public Color DebtEquityColor = Form1.TextForeColor;
@@ -227,6 +238,26 @@ namespace StockApi
                 if (Revenue4String.NumericValue > 0)
                     Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4String.NumericValue - OperatingExpense4String.NumericValue;
 
+                // Basic EPS
+                searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Basic EPS").Term;
+                partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
+                if (partial != "")
+                {
+                    numbers = GetNumbersFromHtml(partial);
+                    //numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
+
+                    if (numbers.Count > 0)
+                        BasicEpsTtmString.StringValue = numbers[0].Trim();
+                    if (numbers.Count > 2)
+                        BasicEps2String.StringValue = numbers[2].Trim();
+                    if (numbers.Count > 4)
+                        BasicEps4String.StringValue = numbers[4].Trim();
+                    else if (numbers.Count > 3)
+                        BasicEps4String.StringValue = numbers[3].Trim();
+                }
+                else
+                    BasicEpsTtmString.StringValue = BasicEps2String.StringValue = BasicEps4String.StringValue = "--";
+
 
                 Thread.Sleep(1000);
                 html = await GetHtmlForTicker(_statisticsUrl, Ticker);
@@ -291,6 +322,45 @@ namespace StockApi
                         Profit2YearsAgoColor = Color.Lime;
                     else
                         Profit2YearsAgoColor = Form1.TextForeColor;
+                }
+                
+                // Set Colors for Basic EPS labels (if EPS decreasing by 10% every 2 years, a problem
+                if (BasicEpsTtmString.NumericValue > 0) 
+                {   // TTM
+                    if (BasicEpsTtmString.NumericValue < BasicEps2String.NumericValue * .9M)
+                        BasicEpsTtmColor = Color.Red;
+                    else if (BasicEpsTtmString.NumericValue > (BasicEps2String.NumericValue * 1.11M))
+                        BasicEpsTtmColor = Color.Lime;
+                    else
+                        BasicEpsTtmColor = Form1.TextForeColor;
+                }
+                else
+                {
+                    if ((BasicEpsTtmString.NumericValue + 10) < (BasicEps2String.NumericValue + 10) * .96M)
+                        BasicEpsTtmColor = Color.Red;
+                    else if ((BasicEpsTtmString.NumericValue + 10) > (BasicEps2String.NumericValue + 10) * 1.04M)
+                        BasicEpsTtmColor = Color.Lime;
+                    else
+                        BasicEpsTtmColor = Form1.TextForeColor;
+                }
+                if (BasicEps2String.NumericValue > 0)
+                {   
+                    // 2 years ago
+                    if (BasicEps2String.NumericValue < (BasicEps4String.NumericValue * .9M))
+                        BasicEps2Color = Color.Red;
+                    else if (BasicEps2String.NumericValue > (BasicEps4String.NumericValue * 1.11M))
+                        BasicEps2Color = Color.Lime;
+                    else
+                        BasicEps2Color = Form1.TextForeColor;
+                }
+                else
+                {
+                    if ((BasicEps2String.NumericValue + 10) < (BasicEps4String.NumericValue + 10) * .96M)
+                        BasicEps2Color = Color.Red;
+                    else if ((BasicEps2String.NumericValue + 10) > (BasicEps4String.NumericValue + 10) * 1.04M)
+                        BasicEps2Color = Color.Lime;
+                    else
+                        BasicEps2Color = Form1.TextForeColor;
                 }
 
                 // Set Colors of Total Debt

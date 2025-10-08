@@ -67,6 +67,10 @@ namespace StockApi
             this.label63 = new System.Windows.Forms.Label();
             this.lnkCompanyOverview = new System.Windows.Forms.LinkLabel();
             this.panelFinancials = new System.Windows.Forms.Panel();
+            this.lblBasicEps4YearsAgo = new System.Windows.Forms.Label();
+            this.lblBasicEps2YearsAgo = new System.Windows.Forms.Label();
+            this.lblBasicEpsTTM = new System.Windows.Forms.Label();
+            this.lblBasicEps = new System.Windows.Forms.Label();
             this.lblOperProfit4YearsAgo = new System.Windows.Forms.Label();
             this.lblOperProfit2YearsAgo = new System.Windows.Forms.Label();
             this.lblOperProfitTTM = new System.Windows.Forms.Label();
@@ -635,6 +639,10 @@ namespace StockApi
             // panelFinancials
             // 
             this.panelFinancials.BackColor = System.Drawing.Color.Transparent;
+            this.panelFinancials.Controls.Add(this.lblBasicEps4YearsAgo);
+            this.panelFinancials.Controls.Add(this.lblBasicEps2YearsAgo);
+            this.panelFinancials.Controls.Add(this.lblBasicEpsTTM);
+            this.panelFinancials.Controls.Add(this.lblBasicEps);
             this.panelFinancials.Controls.Add(this.lblOperProfit4YearsAgo);
             this.panelFinancials.Controls.Add(this.lblOperProfit2YearsAgo);
             this.panelFinancials.Controls.Add(this.lblOperProfitTTM);
@@ -671,12 +679,59 @@ namespace StockApi
             this.panelFinancials.Size = new System.Drawing.Size(354, 281);
             this.panelFinancials.TabIndex = 43;
             // 
+            // lblBasicEps4YearsAgo
+            // 
+            this.lblBasicEps4YearsAgo.BackColor = System.Drawing.Color.Transparent;
+            this.lblBasicEps4YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBasicEps4YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblBasicEps4YearsAgo.Location = new System.Drawing.Point(263, 185);
+            this.lblBasicEps4YearsAgo.Name = "lblBasicEps4YearsAgo";
+            this.lblBasicEps4YearsAgo.Size = new System.Drawing.Size(78, 22);
+            this.lblBasicEps4YearsAgo.TabIndex = 75;
+            this.lblBasicEps4YearsAgo.Text = "0.00";
+            this.lblBasicEps4YearsAgo.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblBasicEps2YearsAgo
+            // 
+            this.lblBasicEps2YearsAgo.BackColor = System.Drawing.Color.Transparent;
+            this.lblBasicEps2YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBasicEps2YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblBasicEps2YearsAgo.Location = new System.Drawing.Point(175, 185);
+            this.lblBasicEps2YearsAgo.Name = "lblBasicEps2YearsAgo";
+            this.lblBasicEps2YearsAgo.Size = new System.Drawing.Size(78, 22);
+            this.lblBasicEps2YearsAgo.TabIndex = 74;
+            this.lblBasicEps2YearsAgo.Text = "0.00";
+            this.lblBasicEps2YearsAgo.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblBasicEpsTTM
+            // 
+            this.lblBasicEpsTTM.BackColor = System.Drawing.Color.Transparent;
+            this.lblBasicEpsTTM.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBasicEpsTTM.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblBasicEpsTTM.Location = new System.Drawing.Point(87, 185);
+            this.lblBasicEpsTTM.Name = "lblBasicEpsTTM";
+            this.lblBasicEpsTTM.Size = new System.Drawing.Size(78, 22);
+            this.lblBasicEpsTTM.TabIndex = 73;
+            this.lblBasicEpsTTM.Text = "0.00";
+            this.lblBasicEpsTTM.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblBasicEps
+            // 
+            this.lblBasicEps.BackColor = System.Drawing.Color.Transparent;
+            this.lblBasicEps.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblBasicEps.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblBasicEps.Location = new System.Drawing.Point(7, 185);
+            this.lblBasicEps.Name = "lblBasicEps";
+            this.lblBasicEps.Size = new System.Drawing.Size(96, 22);
+            this.lblBasicEps.TabIndex = 72;
+            this.lblBasicEps.Text = "Basic EPS";
+            // 
             // lblOperProfit4YearsAgo
             // 
             this.lblOperProfit4YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblOperProfit4YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblOperProfit4YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblOperProfit4YearsAgo.Location = new System.Drawing.Point(263, 144);
+            this.lblOperProfit4YearsAgo.Location = new System.Drawing.Point(263, 142);
             this.lblOperProfit4YearsAgo.Name = "lblOperProfit4YearsAgo";
             this.lblOperProfit4YearsAgo.Size = new System.Drawing.Size(78, 22);
             this.lblOperProfit4YearsAgo.TabIndex = 71;
@@ -688,7 +743,7 @@ namespace StockApi
             this.lblOperProfit2YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblOperProfit2YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblOperProfit2YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblOperProfit2YearsAgo.Location = new System.Drawing.Point(175, 144);
+            this.lblOperProfit2YearsAgo.Location = new System.Drawing.Point(175, 142);
             this.lblOperProfit2YearsAgo.Name = "lblOperProfit2YearsAgo";
             this.lblOperProfit2YearsAgo.Size = new System.Drawing.Size(78, 22);
             this.lblOperProfit2YearsAgo.TabIndex = 70;
@@ -700,7 +755,7 @@ namespace StockApi
             this.lblOperProfitTTM.BackColor = System.Drawing.Color.Transparent;
             this.lblOperProfitTTM.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblOperProfitTTM.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblOperProfitTTM.Location = new System.Drawing.Point(87, 144);
+            this.lblOperProfitTTM.Location = new System.Drawing.Point(87, 142);
             this.lblOperProfitTTM.Name = "lblOperProfitTTM";
             this.lblOperProfitTTM.Size = new System.Drawing.Size(78, 22);
             this.lblOperProfitTTM.TabIndex = 69;
@@ -712,7 +767,7 @@ namespace StockApi
             this.label74.BackColor = System.Drawing.Color.Transparent;
             this.label74.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label74.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label74.Location = new System.Drawing.Point(7, 144);
+            this.label74.Location = new System.Drawing.Point(7, 142);
             this.label74.Name = "label74";
             this.label74.Size = new System.Drawing.Size(96, 22);
             this.label74.TabIndex = 68;
@@ -723,7 +778,7 @@ namespace StockApi
             this.lblOperExp4YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblOperExp4YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblOperExp4YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblOperExp4YearsAgo.Location = new System.Drawing.Point(263, 125);
+            this.lblOperExp4YearsAgo.Location = new System.Drawing.Point(263, 123);
             this.lblOperExp4YearsAgo.Name = "lblOperExp4YearsAgo";
             this.lblOperExp4YearsAgo.Size = new System.Drawing.Size(78, 22);
             this.lblOperExp4YearsAgo.TabIndex = 67;
@@ -735,7 +790,7 @@ namespace StockApi
             this.lblOperExp2YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblOperExp2YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblOperExp2YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblOperExp2YearsAgo.Location = new System.Drawing.Point(175, 125);
+            this.lblOperExp2YearsAgo.Location = new System.Drawing.Point(175, 123);
             this.lblOperExp2YearsAgo.Name = "lblOperExp2YearsAgo";
             this.lblOperExp2YearsAgo.Size = new System.Drawing.Size(78, 22);
             this.lblOperExp2YearsAgo.TabIndex = 66;
@@ -747,7 +802,7 @@ namespace StockApi
             this.lblOperExpTTM.BackColor = System.Drawing.Color.Transparent;
             this.lblOperExpTTM.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblOperExpTTM.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblOperExpTTM.Location = new System.Drawing.Point(96, 125);
+            this.lblOperExpTTM.Location = new System.Drawing.Point(96, 123);
             this.lblOperExpTTM.Name = "lblOperExpTTM";
             this.lblOperExpTTM.Size = new System.Drawing.Size(69, 22);
             this.lblOperExpTTM.TabIndex = 65;
@@ -759,7 +814,7 @@ namespace StockApi
             this.label73.BackColor = System.Drawing.Color.Transparent;
             this.label73.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label73.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label73.Location = new System.Drawing.Point(7, 125);
+            this.label73.Location = new System.Drawing.Point(7, 123);
             this.label73.Name = "label73";
             this.label73.Size = new System.Drawing.Size(96, 22);
             this.label73.TabIndex = 64;
@@ -770,7 +825,7 @@ namespace StockApi
             this.lblFinDebtEquity.BackColor = System.Drawing.Color.Transparent;
             this.lblFinDebtEquity.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinDebtEquity.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinDebtEquity.Location = new System.Drawing.Point(98, 245);
+            this.lblFinDebtEquity.Location = new System.Drawing.Point(107, 255);
             this.lblFinDebtEquity.Name = "lblFinDebtEquity";
             this.lblFinDebtEquity.Size = new System.Drawing.Size(58, 22);
             this.lblFinDebtEquity.TabIndex = 62;
@@ -782,7 +837,7 @@ namespace StockApi
             this.label62.BackColor = System.Drawing.Color.Transparent;
             this.label62.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label62.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label62.Location = new System.Drawing.Point(9, 245);
+            this.label62.Location = new System.Drawing.Point(9, 255);
             this.label62.Name = "label62";
             this.label62.Size = new System.Drawing.Size(99, 22);
             this.label62.TabIndex = 61;
@@ -804,7 +859,7 @@ namespace StockApi
             this.lblFinTotalDebt.BackColor = System.Drawing.Color.Transparent;
             this.lblFinTotalDebt.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinTotalDebt.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinTotalDebt.Location = new System.Drawing.Point(98, 224);
+            this.lblFinTotalDebt.Location = new System.Drawing.Point(107, 235);
             this.lblFinTotalDebt.Name = "lblFinTotalDebt";
             this.lblFinTotalDebt.Size = new System.Drawing.Size(58, 22);
             this.lblFinTotalDebt.TabIndex = 59;
@@ -816,7 +871,7 @@ namespace StockApi
             this.label60.BackColor = System.Drawing.Color.Transparent;
             this.label60.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label60.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label60.Location = new System.Drawing.Point(9, 224);
+            this.label60.Location = new System.Drawing.Point(9, 235);
             this.label60.Name = "label60";
             this.label60.Size = new System.Drawing.Size(79, 22);
             this.label60.TabIndex = 58;
@@ -827,7 +882,7 @@ namespace StockApi
             this.lblFinTotalCash.BackColor = System.Drawing.Color.Transparent;
             this.lblFinTotalCash.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinTotalCash.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinTotalCash.Location = new System.Drawing.Point(98, 202);
+            this.lblFinTotalCash.Location = new System.Drawing.Point(107, 213);
             this.lblFinTotalCash.Name = "lblFinTotalCash";
             this.lblFinTotalCash.Size = new System.Drawing.Size(58, 22);
             this.lblFinTotalCash.TabIndex = 56;
@@ -839,7 +894,7 @@ namespace StockApi
             this.label54.BackColor = System.Drawing.Color.Transparent;
             this.label54.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label54.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label54.Location = new System.Drawing.Point(8, 205);
+            this.label54.Location = new System.Drawing.Point(8, 216);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(79, 22);
             this.label54.TabIndex = 55;
@@ -850,7 +905,7 @@ namespace StockApi
             this.lblFinCostRev4YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblFinCostRev4YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinCostRev4YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinCostRev4YearsAgo.Location = new System.Drawing.Point(263, 106);
+            this.lblFinCostRev4YearsAgo.Location = new System.Drawing.Point(263, 104);
             this.lblFinCostRev4YearsAgo.Name = "lblFinCostRev4YearsAgo";
             this.lblFinCostRev4YearsAgo.Size = new System.Drawing.Size(78, 22);
             this.lblFinCostRev4YearsAgo.TabIndex = 54;
@@ -862,7 +917,7 @@ namespace StockApi
             this.lblFinCostRev2YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblFinCostRev2YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinCostRev2YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinCostRev2YearsAgo.Location = new System.Drawing.Point(175, 106);
+            this.lblFinCostRev2YearsAgo.Location = new System.Drawing.Point(175, 104);
             this.lblFinCostRev2YearsAgo.Name = "lblFinCostRev2YearsAgo";
             this.lblFinCostRev2YearsAgo.Size = new System.Drawing.Size(78, 22);
             this.lblFinCostRev2YearsAgo.TabIndex = 53;
@@ -874,7 +929,7 @@ namespace StockApi
             this.lblFinCostRevTTM.BackColor = System.Drawing.Color.Transparent;
             this.lblFinCostRevTTM.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinCostRevTTM.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinCostRevTTM.Location = new System.Drawing.Point(93, 106);
+            this.lblFinCostRevTTM.Location = new System.Drawing.Point(93, 104);
             this.lblFinCostRevTTM.Name = "lblFinCostRevTTM";
             this.lblFinCostRevTTM.Size = new System.Drawing.Size(72, 22);
             this.lblFinCostRevTTM.TabIndex = 52;
@@ -886,7 +941,7 @@ namespace StockApi
             this.label57.BackColor = System.Drawing.Color.Transparent;
             this.label57.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label57.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label57.Location = new System.Drawing.Point(6, 106);
+            this.label57.Location = new System.Drawing.Point(6, 104);
             this.label57.Name = "label57";
             this.label57.Size = new System.Drawing.Size(94, 22);
             this.label57.TabIndex = 51;
@@ -897,7 +952,7 @@ namespace StockApi
             this.lblRevenueInMillions.BackColor = System.Drawing.Color.Transparent;
             this.lblRevenueInMillions.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
             this.lblRevenueInMillions.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblRevenueInMillions.Location = new System.Drawing.Point(101, 164);
+            this.lblRevenueInMillions.Location = new System.Drawing.Point(101, 162);
             this.lblRevenueInMillions.Name = "lblRevenueInMillions";
             this.lblRevenueInMillions.Size = new System.Drawing.Size(157, 22);
             this.lblRevenueInMillions.TabIndex = 50;
@@ -909,7 +964,7 @@ namespace StockApi
             this.label50.BackColor = System.Drawing.Color.Transparent;
             this.label50.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label50.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label50.Location = new System.Drawing.Point(206, 202);
+            this.label50.Location = new System.Drawing.Point(206, 213);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(79, 22);
             this.label50.TabIndex = 49;
@@ -919,7 +974,7 @@ namespace StockApi
             // 
             this.label48.BackColor = System.Drawing.Color.Transparent;
             this.label48.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label48.Location = new System.Drawing.Point(125, 53);
+            this.label48.Location = new System.Drawing.Point(125, 51);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(41, 22);
             this.label48.TabIndex = 42;
@@ -929,7 +984,7 @@ namespace StockApi
             // 
             this.lblFin4YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblFin4YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFin4YearsAgo.Location = new System.Drawing.Point(300, 53);
+            this.lblFin4YearsAgo.Location = new System.Drawing.Point(300, 51);
             this.lblFin4YearsAgo.Name = "lblFin4YearsAgo";
             this.lblFin4YearsAgo.Size = new System.Drawing.Size(41, 22);
             this.lblFin4YearsAgo.TabIndex = 43;
@@ -940,7 +995,7 @@ namespace StockApi
             this.lblFinRev4YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblFinRev4YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinRev4YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinRev4YearsAgo.Location = new System.Drawing.Point(263, 87);
+            this.lblFinRev4YearsAgo.Location = new System.Drawing.Point(263, 85);
             this.lblFinRev4YearsAgo.Name = "lblFinRev4YearsAgo";
             this.lblFinRev4YearsAgo.Size = new System.Drawing.Size(78, 22);
             this.lblFinRev4YearsAgo.TabIndex = 47;
@@ -952,7 +1007,7 @@ namespace StockApi
             this.lblFinRev2YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblFinRev2YearsAgo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinRev2YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinRev2YearsAgo.Location = new System.Drawing.Point(175, 87);
+            this.lblFinRev2YearsAgo.Location = new System.Drawing.Point(175, 85);
             this.lblFinRev2YearsAgo.Name = "lblFinRev2YearsAgo";
             this.lblFinRev2YearsAgo.Size = new System.Drawing.Size(78, 22);
             this.lblFinRev2YearsAgo.TabIndex = 46;
@@ -964,7 +1019,7 @@ namespace StockApi
             this.lblFinRevTTM.BackColor = System.Drawing.Color.Transparent;
             this.lblFinRevTTM.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblFinRevTTM.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFinRevTTM.Location = new System.Drawing.Point(87, 87);
+            this.lblFinRevTTM.Location = new System.Drawing.Point(87, 85);
             this.lblFinRevTTM.Name = "lblFinRevTTM";
             this.lblFinRevTTM.Size = new System.Drawing.Size(78, 22);
             this.lblFinRevTTM.TabIndex = 45;
@@ -975,7 +1030,7 @@ namespace StockApi
             // 
             this.lblFin2YearsAgo.BackColor = System.Drawing.Color.Transparent;
             this.lblFin2YearsAgo.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblFin2YearsAgo.Location = new System.Drawing.Point(213, 53);
+            this.lblFin2YearsAgo.Location = new System.Drawing.Point(213, 51);
             this.lblFin2YearsAgo.Name = "lblFin2YearsAgo";
             this.lblFin2YearsAgo.Size = new System.Drawing.Size(41, 22);
             this.lblFin2YearsAgo.TabIndex = 44;
@@ -986,7 +1041,7 @@ namespace StockApi
             this.label47.BackColor = System.Drawing.Color.Transparent;
             this.label47.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label47.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label47.Location = new System.Drawing.Point(6, 87);
+            this.label47.Location = new System.Drawing.Point(6, 85);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(60, 22);
             this.label47.TabIndex = 40;
@@ -997,7 +1052,7 @@ namespace StockApi
             this.lblShortInterest.BackColor = System.Drawing.Color.Transparent;
             this.lblShortInterest.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblShortInterest.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblShortInterest.Location = new System.Drawing.Point(281, 202);
+            this.lblShortInterest.Location = new System.Drawing.Point(282, 213);
             this.lblShortInterest.Name = "lblShortInterest";
             this.lblShortInterest.Size = new System.Drawing.Size(58, 22);
             this.lblShortInterest.TabIndex = 41;
@@ -1009,7 +1064,7 @@ namespace StockApi
             this.label49.AutoSize = true;
             this.label49.BackColor = System.Drawing.Color.Transparent;
             this.label49.ForeColor = System.Drawing.Color.DarkGray;
-            this.label49.Location = new System.Drawing.Point(99, 62);
+            this.label49.Location = new System.Drawing.Point(99, 60);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(247, 15);
             this.label49.TabIndex = 48;
@@ -2005,7 +2060,7 @@ namespace StockApi
             this.runDailyMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.runDailyMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.runDailyMetricsToolStripMenuItem.Name = "runDailyMetricsToolStripMenuItem";
-            this.runDailyMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runDailyMetricsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.runDailyMetricsToolStripMenuItem.Text = "&Run Daily Metrics";
             this.runDailyMetricsToolStripMenuItem.Click += new System.EventHandler(this.runDailyMetricsToolStripMenuItem_Click);
             // 
@@ -2618,6 +2673,10 @@ namespace StockApi
         private System.Windows.Forms.Timer MetricsTimer;
         private System.Windows.Forms.Button btnGetHtml;
         private System.Windows.Forms.ToolStripMenuItem runDailyMetricsToolStripMenuItem;
+        private System.Windows.Forms.Label lblBasicEps4YearsAgo;
+        private System.Windows.Forms.Label lblBasicEps2YearsAgo;
+        private System.Windows.Forms.Label lblBasicEpsTTM;
+        private System.Windows.Forms.Label lblBasicEps;
     }
 }
 

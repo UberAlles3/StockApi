@@ -249,6 +249,45 @@ namespace StockApi
                 cashDebtMetric = cashDebtMetric * .96M;
             output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".00")}");
 
+
+            /////////// Basic Earning per share growth
+            decimal basicEpsMetric = 1.0M;
+            decimal maxAbs = 0M;
+            decimal BasicEpsTtm = stockFinancials.BasicEpsTtmString.NumericValue;
+            decimal BasicEps2Year = stockFinancials.BasicEps2String.NumericValue;
+            decimal BasicEps4Year = stockFinancials.BasicEps4String.NumericValue;
+
+            if (BasicEpsTtm < 0 || BasicEps2Year < 0 || BasicEps4Year < 0)
+            {
+                decimal minEps = Math.Abs(Math.Min(Math.Min(BasicEpsTtm, BasicEps2Year), BasicEps4Year));
+
+                // make all numbers positive for comparisons
+                BasicEpsTtm = BasicEpsTtm + minEps + 1M;
+                BasicEps2Year = BasicEps2Year + minEps + 1M;
+                BasicEps4Year = BasicEps4Year + minEps + 1M;
+            }
+
+            // 2 years ago compared to 4 years ago
+            if (BasicEps2Year > BasicEps4Year * 1.5M)
+                basicEpsMetric = 1.02M;
+            else if (BasicEps2Year > BasicEps4Year * 1.2M)
+                basicEpsMetric = 1.015M;
+            else if (BasicEps2Year > BasicEps4Year * 1.1M)
+                basicEpsMetric = 1.01M;
+            if (BasicEps2Year < BasicEps4Year * .9M)
+                basicEpsMetric = .98M;
+
+            // This year compared to 4 years ago
+            if (BasicEpsTtm > BasicEps4Year * 1.5M)
+                basicEpsMetric += .02M;
+            else if (BasicEpsTtm > BasicEps4Year * 1.2M)
+                basicEpsMetric += .01M;
+            else if (BasicEpsTtm > BasicEps4Year * 1.1M)
+                basicEpsMetric += .005M;
+            if (BasicEpsTtm < BasicEps4Year * .9M)
+                basicEpsMetric -= .02M;
+            output.AppendLine($"Basic EPS Metric = {basicEpsMetric.ToString(".00")}");
+
             // Valuation based on PE and sector
             decimal valuationMetric = 1M;
             if (stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
@@ -259,11 +298,13 @@ namespace StockApi
 
             output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
 
+
+
             // Market
             decimal ecoMetric = 1 + ((analyzeInputs.MarketHealth - 5) / 50);
             output.AppendLine($"Market Metric = {ecoMetric.ToString(".00")}");
 
-            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * profitMetric * cashDebtMetric * valuationMetric * ecoMetric;
+            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * cashDebtMetric * valuationMetric * ecoMetric;
 
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";

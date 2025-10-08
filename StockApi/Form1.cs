@@ -763,6 +763,14 @@ namespace StockApi
             lblOperProfit4YearsAgo.Text = $"{_stockFinancials.Profit4YearsAgo:n0}";
             lblOperProfit4YearsAgo.ForeColor = _stockFinancials.Profit4YearsAgoColor;
 
+            // Basic EPS
+            lblBasicEpsTTM.Text = _stockFinancials.BasicEpsTtmString.StringValue;
+            lblBasicEpsTTM.ForeColor = _stockFinancials.BasicEpsTtmColor;
+            lblBasicEps2YearsAgo.Text = $"{_stockFinancials.BasicEps2String:n0}";
+            lblBasicEps2YearsAgo.ForeColor = _stockFinancials.BasicEps2Color;
+            lblBasicEps4YearsAgo.Text = $"{_stockFinancials.BasicEps4String:n0}";
+            lblBasicEps4YearsAgo.ForeColor = _stockFinancials.BasicEps4Color;
+
             // Total Cash
             lblFinTotalCash.Text = _stockFinancials.TotalCashString;
             // Total Debt
