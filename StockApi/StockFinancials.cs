@@ -43,10 +43,16 @@ namespace StockApi
         public StringSafeType<Decimal> CostOfRevenue4String = new StringSafeType<decimal>("--");
         /// Operating Expense TTM
         public StringSafeType<Decimal> OperatingExpenseTtmString = new StringSafeType<decimal>("--");
-        ///  Operation Expense 2 Year
+        /// Operation Expense 2 Year
         public StringSafeType<Decimal> OperatingExpense2String = new StringSafeType<decimal>("--");
-        ///  Operation Expense 4 Year
+        /// Operation Expense 4 Year
         public StringSafeType<Decimal> OperatingExpense4String = new StringSafeType<decimal>("--");
+        /// Net Income TTM
+        public StringSafeType<Decimal> NetIncomeTtmString = new StringSafeType<decimal>("--");
+        /// Net Income 2 Year
+        public StringSafeType<Decimal> NetIncome2String = new StringSafeType<decimal>("--");
+        /// Net Income 4 Year
+        public StringSafeType<Decimal> NetIncome4String = new StringSafeType<decimal>("--");
 
         /// Basic EPS TTM
         public StringSafeType<Decimal> BasicEpsTtmString = new StringSafeType<decimal>("--");
@@ -146,7 +152,7 @@ namespace StockApi
 
             try
             {
-                // Revenue History
+                //// Revenue History
                 string searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
                 string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
 
@@ -204,10 +210,29 @@ namespace StockApi
                             CostOfRevenue4String.StringValue = numbers[3].Trim();
                     }
                     else
+                    {
                         CostOfRevenueTtmString.StringValue = CostOfRevenue2String.StringValue = CostOfRevenue4String.StringValue = "--";
+                    }
                 }
 
-                // Operating Expenses
+                //// Net Income
+                searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Net Income Common").Term;
+                partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 800);
+                if (partial != "")
+                {
+                    numbers = GetNumbersFromHtml(partial);
+
+                    if (numbers.Count > 0)
+                        NetIncomeTtmString.StringValue = numbers[0].Trim();
+                    if (numbers.Count > 2)
+                        NetIncome2String.StringValue = numbers[2].Trim();
+                    if (numbers.Count > 4)
+                        NetIncome4String.StringValue = numbers[4].Trim();
+                    else if (numbers.Count > 3)
+                        NetIncome4String.StringValue = numbers[3].Trim();
+                }
+
+                //// Operating Expenses
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Operating Expense").Term;
                 partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
                 if (partial != "")
@@ -225,7 +250,11 @@ namespace StockApi
                         OperatingExpense4String.StringValue = numbers[3].Trim();
                 }
                 else
-                    OperatingExpenseTtmString.StringValue = OperatingExpense2String.StringValue = OperatingExpense4String.StringValue = "--";
+                {
+                    OperatingExpenseTtmString.StringValue = NetIncomeTtmString.StringValue;
+                    OperatingExpense2String.StringValue = NetIncome2String.StringValue;
+                    OperatingExpense4String.StringValue = NetIncome4String.StringValue;
+                }
 
                 if (RevenueTtmString.NumericValue > 0)
                 {
@@ -238,7 +267,7 @@ namespace StockApi
                 if (Revenue4String.NumericValue > 0)
                     Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4String.NumericValue - OperatingExpense4String.NumericValue;
 
-                // Basic EPS
+                //// Basic EPS
                 searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Basic EPS").Term;
                 partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
                 if (partial != "")
@@ -257,6 +286,7 @@ namespace StockApi
                 }
                 else
                     BasicEpsTtmString.StringValue = BasicEps2String.StringValue = BasicEps4String.StringValue = "--";
+
 
 
                 Thread.Sleep(1000);

@@ -197,6 +197,7 @@ namespace StockApi
                 }
             }
             output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".00")}");
+
             /////////// Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
             if(stockFinancials.Profit4YearsAgo < 0)
@@ -209,32 +210,36 @@ namespace StockApi
             else
             {
                 // 2 years ago compared to 4 years ago
-                if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.25M)
-                    profitMetric = 1.036M;
+                if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.3M)
+                    profitMetric = 1.02M;
                 else if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.12M)
-                    profitMetric = 1.020M;
+                    profitMetric = 1.012M;
                 else if (stockFinancials.Profit2YearsAgo > stockFinancials.Profit4YearsAgo * 1.04M)
-                    profitMetric = 1.008M;
-                if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99M)
+                    profitMetric = 1.006M;
+                else if (stockFinancials.Profit2YearsAgo < stockFinancials.Profit4YearsAgo * .99M)
                     profitMetric = .98M;
 
                 // This year compared to 4 years ago
                 if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.5M)
-                    profitMetric += .017M;
-                else if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.1M)
+                    profitMetric += .018M;
+                else if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit4YearsAgo * 1.2M)
                     profitMetric += .008M;
-                if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit4YearsAgo * .98M)
+                else if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit4YearsAgo * .98M)
                     profitMetric -= .01M;
             }
 
             // This year compared to 2 years ago
-            if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit2YearsAgo * 1.25M)
-                profitMetric += .022M;
+            if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit2YearsAgo * 1.4M)
+                profitMetric += .024M;
+            else if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit2YearsAgo * 1.2M)
+                profitMetric += .016M;
             else if (stockFinancials.ProfitTtmString.NumericValue > stockFinancials.Profit2YearsAgo * 1.1M)
-                profitMetric += .008M;
-            if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit2YearsAgo * .99M)
+                profitMetric += .011M;
+            else if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit2YearsAgo * .9M)
+                profitMetric -= .016M;
+            else if (stockFinancials.ProfitTtmString.NumericValue < stockFinancials.Profit2YearsAgo * .95M)
                 profitMetric -= .01M;
-            
+
             if (revenueMetric * profitMetric < .87M)
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}         * Financials are Bad *");
             else
@@ -268,24 +273,45 @@ namespace StockApi
             }
 
             // 2 years ago compared to 4 years ago
-            if (BasicEps2Year > BasicEps4Year * 1.5M)
-                basicEpsMetric = 1.02M;
-            else if (BasicEps2Year > BasicEps4Year * 1.2M)
-                basicEpsMetric = 1.015M;
-            else if (BasicEps2Year > BasicEps4Year * 1.1M)
-                basicEpsMetric = 1.01M;
-            if (BasicEps2Year < BasicEps4Year * .9M)
+            if (BasicEps2Year > BasicEps4Year * 1.6M)
+                basicEpsMetric = 1.018M;
+            else if (BasicEps2Year > BasicEps4Year * 1.3M)
+                basicEpsMetric = 1.013M;
+            else if (BasicEps2Year > BasicEps4Year * 1.15M)
+                basicEpsMetric = 1.008M;
+            else if (BasicEps2Year < BasicEps4Year * .75M)
                 basicEpsMetric = .98M;
+            else if (BasicEps2Year < BasicEps4Year * .9M)
+                basicEpsMetric = .99M;
+
+            // This year compared to 2 years ago
+            if (BasicEpsTtm > BasicEps2Year * 1.5M)
+                basicEpsMetric += .018M;
+            else if (BasicEpsTtm > BasicEps2Year * 1.2M)
+                basicEpsMetric += .012M;
+            else if (BasicEpsTtm > BasicEps2Year * 1.08M)
+                basicEpsMetric += .008M;
+            else if (BasicEpsTtm < BasicEps2Year * .83M)
+                basicEpsMetric -= .016M;
+            else if (BasicEpsTtm < BasicEps2Year * .92M)
+                basicEpsMetric -= .01M;
 
             // This year compared to 4 years ago
-            if (BasicEpsTtm > BasicEps4Year * 1.5M)
-                basicEpsMetric += .02M;
-            else if (BasicEpsTtm > BasicEps4Year * 1.2M)
-                basicEpsMetric += .01M;
+            if (BasicEpsTtm > BasicEps4Year * 1.7M)
+                basicEpsMetric += .020M;
+            else if (BasicEpsTtm > BasicEps4Year * 1.25M)
+                basicEpsMetric += .012M;
             else if (BasicEpsTtm > BasicEps4Year * 1.1M)
-                basicEpsMetric += .005M;
-            if (BasicEpsTtm < BasicEps4Year * .9M)
+                basicEpsMetric += .008M;
+            else if (BasicEpsTtm < BasicEps4Year * .7M)
+                basicEpsMetric -= .016M;
+            else if (BasicEpsTtm < BasicEps4Year * .9M)
+                basicEpsMetric -= .01M;
+
+            // All negative earnings, downgrade the earnings metric
+            if (stockFinancials.BasicEpsTtmString.NumericValue < 0 && stockFinancials.BasicEps2String.NumericValue < 0 && stockFinancials.BasicEps4String.NumericValue < 0 && basicEpsMetric > 1.02M)
                 basicEpsMetric -= .02M;
+
             output.AppendLine($"Basic EPS Metric = {basicEpsMetric.ToString(".00")}");
 
             // Valuation based on PE and sector
