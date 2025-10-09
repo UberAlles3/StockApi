@@ -358,6 +358,7 @@ namespace StockApi
         private void ResetFormControls()
         {
             btnGetOne.Enabled = true;
+            btnAnalyze.Enabled = true;
             picSpinner.Visible = false;
             Cursor.Current = Cursors.Default;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
@@ -519,6 +520,7 @@ namespace StockApi
             picWeekTrend.Image = picSidewaysTrend.Image;
 
             btnGetOne.Enabled = false;
+            btnAnalyze.Enabled = false;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
             picYearTrend.Visible = false;
             picMonthTrend.Visible = false;
