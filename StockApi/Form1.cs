@@ -193,6 +193,7 @@ namespace StockApi
                 Market_Nasdaq.CurrentLevel.StringValue = "0";
             }
 
+            _stockSummary = new StockSummary();
             _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
             if (_stockSummary.LastException != null)
             {
@@ -475,7 +476,11 @@ namespace StockApi
                     }
                 }
 
-                await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
+                _stockFinancials = new StockFinancials();
+                bool found = await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
+
+                // Calculated PE can only be figured after both summary and finacial data is combined
+                _stockSummary.SetCalculatedPE(_stockSummary, _stockFinancials);
 
                 // get 3 year ago price
                 historicDataList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockSummary, true, false, false);
@@ -575,6 +580,22 @@ namespace StockApi
                     lblNasdaqPercChange.Text = Market_Nasdaq.PercentageChange.ToString("0.0") + "%";
                     lblNasdaqChange.ForeColor = Market_Nasdaq.MarketColor;
                     lblNasdaqPercChange.ForeColor = Market_Nasdaq.MarketColor;
+
+                    // Calculated PE can only be figured after both summary and finacial data is combined
+                    _stockSummary.SetCalculatedPE(_stockSummary, _stockFinancials);
+                    lblCalculatedPE.Text = _stockSummary.CalculatedPEString.StringValue;
+
+                    if (_stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
+                    {
+                        lblValuation.ForeColor = Color.Red;
+                        lblValuation.Text = "Overvalued";
+                    }
+                    //if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Under valued
+                    if (_stockSummary.Valuation == StockSummary.ValuationEnum.UnderValued)
+                    {
+                        lblValuation.ForeColor = Color.Lime;
+                        lblValuation.Text = "Undervalued";
+                    }
 
                     panelMarkets.Visible = true;
 
@@ -736,7 +757,17 @@ namespace StockApi
             lblShortInterest.Text = "...";
 
             panelFinancials.Visible = false;
+            _stockFinancials = new StockFinancials();
             bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
+
+            if(!found) // stock doesn't have financials
+            {
+                _stockFinancials = new StockFinancials();
+            }
+
+            // fix EPS for stock that miss it in summary  
+            if (_stockSummary.EarningsPerShareString.StringValue == "--")
+                _stockSummary.EarningsPerShareString.StringValue = _stockFinancials.BasicEpsTtmString.StringValue;
 
             // Revenue
             lblFinRevTTM.Text = _stockFinancials.RevenueTtmString.StringValue;
@@ -784,50 +815,6 @@ namespace StockApi
             lblShortInterest.Text = _stockFinancials.ShortInterestString.StringValue + "%";
             lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
             panelFinancials.Visible = true;
-
-            // Forward PE coloring is complex. It takes into account
-            // 1. Average PE for the sector
-            // 2. How large the profits are. We can use current profit margin. >15% is a high profit margin. -15% is a bad profit margin.
-            // 3. How fast profits are growing/decreasing. (Current profit / Prior Profit)
-            decimal profitTTM = _stockFinancials.ProfitTtmString.NumericValue + (_stockFinancials.ProfitTtmString.NumericValue + _stockFinancials.Profit4YearsAgo) / 3;
-            decimal profit4Year = _stockFinancials.Profit4YearsAgo + (_stockFinancials.ProfitTtmString.NumericValue + _stockFinancials.Profit4YearsAgo) / 3;
-
-            if (profit4Year < 0)
-            {
-                profit4Year = 1;
-            }
-
-            decimal profitGrowth = 1;
-            if (profit4Year + profitTTM == 0)
-            {
-                profitGrowth = 1;
-            }
-            else
-            {
-                profitGrowth = profitTTM / ((profitTTM + profit4Year) / 3); // Profit growth .5 - 2.0
-            }
-
-            if (profitGrowth > 2) // set max
-                profitGrowth = 2;
-
-            // Combine profit growth and margin into a number
-            decimal marginFactor = 1 + (_stockSummary.ProfitMarginString.NumericValue / 100M);
-            _stockSummary.CalculatedPEString.StringValue = (_stockSummary.ForwardPEString.NumericValue / (marginFactor * profitGrowth)).ToString("0.00");
-            _stockSummary.Valuation = StockSummary.ValuationEnum.FairValue;
-            lblCalculatedPE.Text = _stockSummary.CalculatedPEString.StringValue;
-
-            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
-            {
-                lblValuation.ForeColor = Color.Red;
-                lblValuation.Text = "Overvalued";
-                _stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
-            }
-            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Under valued
-            {
-                lblValuation.ForeColor = Color.Lime;
-                lblValuation.Text = "Undervalued";
-                _stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
-            }
         }
 
         private async void btnGetAllHistory_Click(object sender, EventArgs e)

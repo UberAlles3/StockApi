@@ -21,6 +21,7 @@ namespace StockApi
         public decimal Profit4YearsAgo = 0;
         public Color Profit4YearsAgoColor = Form1.TextForeColor;
 
+        public decimal ProfitGrowth = 1;
 
         ////////////////////////////////////////////
         ///                Properties
@@ -157,7 +158,9 @@ namespace StockApi
                 string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
 
                 if (partial.Length < 100) // Some stocks like Vangaurd don't have financials, exit
+                {
                     return false; //=====>>>>>>>
+                }
 
                 List<string> numbers = GetNumbersFromHtml(partial);
 
@@ -416,6 +419,31 @@ namespace StockApi
                     ShortInterestColor = Color.Lime;
                 else
                     ShortInterestColor = Form1.TextForeColor;
+
+                // Forward PE coloring is complex. It takes into account
+                // 1. Average PE for the sector
+                // 2. How large the profits are. We can use current profit margin. >15% is a high profit margin. -15% is a bad profit margin.
+                // 3. How fast profits are growing/decreasing. (Current profit / Prior Profit)
+                decimal profitTTM = ProfitTtmString.NumericValue + (ProfitTtmString.NumericValue + Profit4YearsAgo) / 3;
+                decimal profit4Year = Profit4YearsAgo + (ProfitTtmString.NumericValue + Profit4YearsAgo) / 3;
+
+                if (profit4Year < 0)
+                {
+                    profit4Year = 1;
+                }
+
+                //decimal profitGrowth = 1;
+                if (profit4Year + profitTTM == 0)
+                {
+                    ProfitGrowth = 1;
+                }
+                else
+                {
+                    ProfitGrowth = profitTTM / ((profitTTM + profit4Year) / 3); // Profit growth .5 - 2.0
+                }
+
+                if (ProfitGrowth > 2) // set max
+                    ProfitGrowth = 2;
             }
             catch (Exception x)
             {

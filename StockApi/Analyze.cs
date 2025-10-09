@@ -257,7 +257,6 @@ namespace StockApi
 
             /////////// Basic Earning per share growth
             decimal basicEpsMetric = 1.0M;
-            decimal maxAbs = 0M;
             decimal BasicEpsTtm = stockFinancials.BasicEpsTtmString.NumericValue;
             decimal BasicEps2Year = stockFinancials.BasicEps2String.NumericValue;
             decimal BasicEps4Year = stockFinancials.BasicEps4String.NumericValue;
@@ -350,6 +349,7 @@ namespace StockApi
             totalMetric = Math.Round(totalMetric, 2);
             if (forMetricOnly == true)
             {
+                AnalysisMetricsOutputText = output.ToString();
                 return totalMetric; //========================>>>>>>>>>>>>>>>>>>>>  Get out
             }
 

@@ -11,8 +11,8 @@ namespace StockApi
     public class FpmAPI
     {
         static string _apiKey = "irXC95S3Hmlih4AtFtDkxj49w1OUpLZs";
-
         string requestUrl = $"https://financialmodelingprep.com/stable/quote?symbol=[ticker]&apikey={_apiKey}";
+        bool tooManyRequests = false; // free plan is 250 request a day
 
         private readonly HttpClient client = new HttpClient();
 
@@ -20,6 +20,9 @@ namespace StockApi
         {
             //string symbol = "^DJI"; // Example stock symbol
             MarketData marketData = new MarketData();
+
+            if (tooManyRequests == true)
+                return marketData;
 
             requestUrl = requestUrl.Replace("[ticker]", ticker);
 
@@ -41,8 +44,15 @@ namespace StockApi
             }
             catch (HttpRequestException e)
             {
-                if(showMessageBox)
-                    MessageBox.Show($"Request Error: {e.Message}");
+                if (e.Message.ToLower().Contains("too many requests"))
+                {
+                    tooManyRequests = true;
+                }
+                else
+                {
+                    if (showMessageBox)
+                        MessageBox.Show($"FPM API Request Error: {ticker}   {e.Message}");
+                }
             }
             catch (JsonException e)
             {

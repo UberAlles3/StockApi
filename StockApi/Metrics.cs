@@ -75,7 +75,10 @@ namespace StockApi
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
-                return 0;
+            {
+                stockList = stockList.Skip(4).Take(1).ToList();
+                desktopPath = Path.Combine(desktopPath, "Test.txt");
+            }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
             {
@@ -86,7 +89,7 @@ namespace StockApi
             if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
             {
                 stockList = stockList.Skip(120).Take(30).ToList();
-                desktopPath = Path.Combine(desktopPath, "StockMetricsFriday_V-Z.txt");
+                desktopPath = Path.Combine(desktopPath, "StockMetricsSaturday_V-Z.txt");
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
@@ -95,7 +98,6 @@ namespace StockApi
             string stockMetricString = "";
             foreach (string ticker in stockList)
             {
-
                 stockMetricString = await GetStockMetric(ticker, analyzeInputs);
                 builder.Append(stockMetricString);
                 Debug.Print(stockMetricString);
@@ -144,7 +146,11 @@ namespace StockApi
                 }
             }
 
-            await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
+            _stockFinancials = new StockFinancials();
+            bool found = await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
+
+            // Calculated PE can only be figured after both summary and finacial data is combined
+            _stockSummary.SetCalculatedPE(_stockSummary, _stockFinancials);
 
             // get 3 year ago price
             historicDataList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockSummary, true, false, false);
@@ -157,6 +163,10 @@ namespace StockApi
             decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
             decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, true);
+            if(ticker == "KIM" || ticker == "ACHR" || ticker == "AMGN")
+            {
+                Debug.WriteLine(_analyze.AnalysisMetricsOutputText);
+            }
 
             stockMetricString = $"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue},"
                                      + $" {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterestString.NumericValue}"

@@ -97,7 +97,7 @@ namespace StockApi
 
                 // EPS
                 searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;
-                EarningsPerShareString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, "0.00", 4);
+                EarningsPerShareString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, "--", 4);
 
                 // Volatility
                 searchTerm = SearchTerms.Find(x => x.Name == "Volatility").Term;
@@ -243,6 +243,23 @@ namespace StockApi
             }
 
             return true;
+        }
+        public void SetCalculatedPE(StockSummary _stockSummary, StockFinancials _stockFinancials)
+        {
+            // Combine profit growth and margin into a number
+            decimal marginFactor = 1 + (_stockSummary.ProfitMarginString.NumericValue / 100M);
+            _stockSummary.CalculatedPEString.StringValue = (_stockSummary.ForwardPEString.NumericValue / (marginFactor * _stockFinancials.ProfitGrowth)).ToString("0.00");
+            _stockSummary.Valuation = StockSummary.ValuationEnum.FairValue;
+
+            //if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
+            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
+            {
+                _stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
+            }
+            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Under valued
+            {
+                _stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
+            }
         }
     }
 }
