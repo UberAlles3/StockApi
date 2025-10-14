@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32930.78
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockApi", "StockApi\StockApi.csproj", "{649714B1-0677-4710-9C85-2BCC3F4EF9A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApi", "StockApi\StockApi.csproj", "{649714B1-0677-4710-9C85-2BCC3F4EF9A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQL_Interface", "SQL_Interface\SQL_Interface.csproj", "{8A1006D1-0DF9-4121-BAE4-151456322AFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{649714B1-0677-4710-9C85-2BCC3F4EF9A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{649714B1-0677-4710-9C85-2BCC3F4EF9A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{649714B1-0677-4710-9C85-2BCC3F4EF9A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A1006D1-0DF9-4121-BAE4-151456322AFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A1006D1-0DF9-4121-BAE4-151456322AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A1006D1-0DF9-4121-BAE4-151456322AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A1006D1-0DF9-4121-BAE4-151456322AFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

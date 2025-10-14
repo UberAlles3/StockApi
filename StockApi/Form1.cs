@@ -13,6 +13,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Drake.Extensions;
 using System.IO;
+using SQL_Interface;
 
 // testing 2022
 namespace StockApi
@@ -32,6 +33,8 @@ namespace StockApi
         public MarketData Market_SandP;
         public MarketData Market_Dow;
         public MarketData Market_Nasdaq;
+
+        public SqlInterface _sqlInterface = new SqlInterface();
 
         private static Analyze _analyze = new Analyze();
         public static DataTable TickerTradesDataTable = null;
@@ -81,6 +84,8 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            _sqlInterface.SaveStatements();
+
             ////// Testing section
             //FpmAPI fpmAPI = new FpmAPI();
             //fpmAPI.Test();
