@@ -1,5 +1,5 @@
 ﻿using ServiceStack.OrmLite;
-using SQL_Interface.SQL_Models;
+using OrmLite.SQL_Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,8 +7,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 
-namespace SQL_Interface
-{
+namespace OrmLite
+{ 
     public class SqlInterface
     {
         public static OrmLiteConnectionFactory FinancialStatementFactory()

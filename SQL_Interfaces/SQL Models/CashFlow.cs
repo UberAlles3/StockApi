@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace StockApi.SQL_Models
+namespace SQL_Interfaces.SQL_Models
 {
     public class CashFlow : StatementBase
     {
