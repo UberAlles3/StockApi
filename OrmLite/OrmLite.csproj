@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ServiceStack.OrmLite.SqlServer.Data" Version="8.8.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.10" />
-    <PackageReference Include="System.Security.Permissions" Version="9.0.10" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.2" />
+    <PackageReference Include="System.Security.Permissions" Version="6.0.1" />
   </ItemGroup>
-
 </Project>
