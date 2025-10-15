@@ -20,26 +20,22 @@ namespace OrmLite
             return factory;
         }
 
-        public void SaveStatements()
+        public void SaveCashFlow()
         {
-            Debug.WriteLine("SaveStatements()");
+            Debug.WriteLine("SaveCashFlow()");
 
-            var factory = SqlInterface.FinancialStatementFactory();
+            var factory = FinancialStatementFactory();
 
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<CashFlow>();
 
-                //foreach (string key in _statementCache.Keys)
-                //{
-                //    db.Delete<IncomeStatement>(statement => statement.HashKey == _statementCache[key].HashKey);
-                //    db.Delete<BalanceSheet>(statement => statement.HashKey == _statementCache[key].HashKey);
-                //    db.Delete<CashFlow>(statement => statement.HashKey == _statementCache[key].HashKey);
-                //}
+                db.Delete<CashFlow>(x => x.StartDate > DateTime.Now.AddYears(-5));
 
                 //foreach (string key in _statementCache.Keys)
                 //{
-                //    db.Insert<IncomeStatement>(_statementCache[key].IncomeStatement);
+                CashFlow cashFlow = new CashFlow() { StartDate = DateTime.Now.Date, EndDate = DateTime.Now.Date, EndCashPosition = 111, FreeCashFlow = 222.222, Ticker = "AAPL", OperatingCashFlow = 555 };      
+                db.Insert<CashFlow>(cashFlow);
                 //    db.Insert<BalanceSheet>(_statementCache[key].BalanceSheet);
                 //    db.Insert<CashFlow>(_statementCache[key].CashFlow);
                 //}

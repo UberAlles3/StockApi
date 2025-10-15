@@ -84,7 +84,7 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            _sqlInterface.SaveStatements();
+            _sqlInterface.SaveCashFlow();
 
             ////// Testing section
             //FpmAPI fpmAPI = new FpmAPI();
