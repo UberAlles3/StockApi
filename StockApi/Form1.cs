@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using Drake.Extensions;
 using System.IO;
 using SqlLayer;
+using StockApi.Downloads;
 
 // testing 2022
 namespace StockApi
@@ -26,7 +27,9 @@ namespace StockApi
         private static bool _tickerFound = false;
         private static StockSummary _stockSummary = new StockSummary();
         private static StockIncomeStatement _stockFinancials = new StockIncomeStatement();
+//        private static StockStatistics _stockStatistics = new StockStatistics();
         private static StockHistory _stockHistory = new StockHistory();
+        private static StockDownloads _stockDownloads = new StockDownloads("");
 
         // Markets
         MarketData _marketData;
@@ -197,8 +200,11 @@ namespace StockApi
                 Market_Nasdaq.CurrentLevel.StringValue = "0";
             }
 
+            _stockDownloads = new StockDownloads(txtStockTicker.Text);
             _stockSummary = new StockSummary();
             _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
+            
+            
             if (_stockSummary.LastException != null)
             {
                 txtTickerList.Text = "Error:" + Environment.NewLine + _stockSummary.Error;
@@ -214,7 +220,12 @@ namespace StockApi
 
                 try
                 {
+                    bool found = await _stockDownloads.GetStockStatistics();
+                    if (!found) // stock doesn't have financials
+                        _stockDownloads.stockStatistics = new StockStatistics(); // initializes all properties
+
                     GetFinancials();
+                    panelFinancials.Visible = true;
 
                     // filter on stock ticker then order by date descending
                     tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
@@ -502,9 +513,9 @@ namespace StockApi
                 txtSharesTraded.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
                 analyzeInputs.MarketHealth = 5;
-                decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, true);
+                decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, _stockDownloads.stockStatistics, analyzeInputs, true);
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterestString.NumericValue}");
+                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
                 builder.Append($", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
                 Thread.Sleep(800);
             }
@@ -719,6 +730,22 @@ namespace StockApi
                         txtSharesTraded.Text = "1";
                         txtSharesTradePrice.Text = _stockSummary.PriceString.NumericValue.ToString("0.00");
                     }
+
+                    //////////////////////////////////////////////////////////////////////////////////////
+                    ///                           Statistics values
+                    // Total Cash
+                    lblFinTotalCash.Text = _stockDownloads.stockStatistics.TotalCashString;
+                    // Total Debt
+                    lblFinTotalDebt.Text = _stockDownloads.stockStatistics.TotalDebtString;
+                    lblFinTotalDebt.ForeColor = _stockDownloads.stockStatistics.TotalDebtColor;
+                    // Debt Equity Ratio
+                    lblFinDebtEquity.Text = _stockDownloads.stockStatistics.DebtEquityString.StringValue;
+                    lblFinDebtEquity.ForeColor = _stockDownloads.stockStatistics.DebtEquityColor;
+
+                    // Short Interest
+                    lblShortInterest.Text = _stockDownloads.stockStatistics.ShortInterestString.StringValue + "%";
+                    lblShortInterest.ForeColor = _stockDownloads.stockStatistics.ShortInterestColor;
+
                     panel1.Visible = panel2.Visible = panel3.Visible = true;
                 } // Ticker found.
                 else // Ticker not found.
@@ -739,7 +766,7 @@ namespace StockApi
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             SetUpAnalyzeInputs(analyzeInputs);
             analyzeInputs.MarketHealth = trackBar1.Value;
-            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, false);
+            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, _stockDownloads.stockStatistics, analyzeInputs, false);
 
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
 
@@ -807,21 +834,34 @@ namespace StockApi
             lblBasicEps2YearsAgo.ForeColor = _stockFinancials.BasicEps2Color;
             lblBasicEps4YearsAgo.Text = $"{_stockFinancials.BasicEps4String:n0}";
             lblBasicEps4YearsAgo.ForeColor = _stockFinancials.BasicEps4Color;
-
-            // Total Cash
-            lblFinTotalCash.Text = _stockFinancials.TotalCashString;
-            // Total Debt
-            lblFinTotalDebt.Text = _stockFinancials.TotalDebtString;
-            lblFinTotalDebt.ForeColor = _stockFinancials.TotalDebtColor;
-            // Debt Equity Ratio
-            lblFinDebtEquity.Text = _stockFinancials.DebtEquityString.StringValue;
-            lblFinDebtEquity.ForeColor = _stockFinancials.DebtEquityColor;
-
-            // Short Interest
-            lblShortInterest.Text = _stockFinancials.ShortInterestString.StringValue + "%";
-            lblShortInterest.ForeColor = _stockFinancials.ShortInterestColor;
-            panelFinancials.Visible = true;
         }
+
+        //private async void GetStatistics()
+        //{
+        //    lblShortInterest.Text = "...";
+        //    panelFinancials.Visible = false;
+
+        //    _stockDownloads.stockStatistics = new StockStatistics();
+        //    bool found = await _stockDownloads.stockStatistics.GetStatisticData(txtStockTicker.Text);
+
+        //    if (!found) // stock doesn't have financials
+        //    {
+        //        _stockDownloads.stockStatistics = new StockStatistics();
+        //    }
+
+        //    // Total Cash
+        //    lblFinTotalCash.Text = _stockDownloads.stockStatistics.TotalCashString;
+        //    // Total Debt
+        //    lblFinTotalDebt.Text = _stockDownloads.stockStatistics.TotalDebtString;
+        //    lblFinTotalDebt.ForeColor = _stockDownloads.stockStatistics.TotalDebtColor;
+        //    // Debt Equity Ratio
+        //    lblFinDebtEquity.Text = _stockDownloads.stockStatistics.DebtEquityString.StringValue;
+        //    lblFinDebtEquity.ForeColor = _stockDownloads.stockStatistics.DebtEquityColor;
+
+        //    // Short Interest
+        //    lblShortInterest.Text = _stockDownloads.stockStatistics.ShortInterestString.StringValue + "%";
+        //    lblShortInterest.ForeColor = _stockDownloads.stockStatistics.ShortInterestColor;
+        //}
 
         private async void btnGetAllHistory_Click(object sender, EventArgs e)
         {

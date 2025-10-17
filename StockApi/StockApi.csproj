@@ -21,7 +21,6 @@
   <ItemGroup>
     <None Include="CommonClasses.cs" />
     <None Include="FinnhubAPI_NotUsed.cs" />
-    <None Include="StockHistoryOldScreenScrape.cs" />
     <None Include="TwelveDataAPI.cs" />
     <None Include="WebView.cs" />
     <None Include="WebView.Designer.cs" />

@@ -18,6 +18,7 @@ namespace StockApi
     {
         private StockSummary _stockSummary = new StockSummary();
         private StockIncomeStatement _stockFinancials = new StockIncomeStatement();
+        private StockStatistics _stockStatistics = new StockStatistics();
         private StockHistory _stockHistory = new StockHistory();
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
@@ -162,14 +163,14 @@ namespace StockApi
 
             decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
-            decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, analyzeInputs, true);
+            decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, _stockStatistics, analyzeInputs, true);
             if(ticker == "KIM" || ticker == "ACHR" || ticker == "AMGN")
             {
                 Debug.WriteLine(_analyze.AnalysisMetricsOutputText);
             }
 
             stockMetricString = $"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue},"
-                                     + $" {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockFinancials.ShortInterestString.NumericValue}"
+                                     + $" {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockStatistics.ShortInterestString.NumericValue}"
                                      + $", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}";
 
             return stockMetricString;

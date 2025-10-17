@@ -23,7 +23,7 @@ namespace StockApi
         public decimal SellPrice = 0;
         public string AnalysisMetricsOutputText;
 
-        public decimal AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, StockIncomeStatement stockFinancials, AnalyzeInputs analyzeInputs, bool forMetricOnly)
+        public decimal AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, StockIncomeStatement stockFinancials, StockStatistics stockStatistics, AnalyzeInputs analyzeInputs, bool forMetricOnly)
         {
             _buyless = false;
             StringBuilder output = new StringBuilder();
@@ -246,11 +246,11 @@ namespace StockApi
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}");
 
             decimal cashDebtMetric = 1M;
-            if (stockFinancials.TotalDebt > stockFinancials.TotalCash * 5) // lots of debt compared to cash
+            if (stockStatistics.TotalDebt > stockStatistics.TotalCash * 5) // lots of debt compared to cash
                 cashDebtMetric = .96M;
-            else if (stockFinancials.TotalCash > stockFinancials.TotalDebt * 2) // lots of cash compared to debt
+            else if (stockStatistics.TotalCash > stockStatistics.TotalDebt * 2) // lots of cash compared to debt
                 cashDebtMetric = 1.03M;
-            if (stockFinancials.DebtEquityString.NumericValue > 120) // Over 120% D/E is bad
+            if (stockStatistics.DebtEquityString.NumericValue > 120) // Over 120% D/E is bad
                 cashDebtMetric = cashDebtMetric * .96M;
             output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".00")}");
 

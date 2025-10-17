@@ -156,6 +156,11 @@ namespace StockApi
             string middle = parts[tagPosition].Substring(0, loc2);
             return middle;
         }
+        public bool NotNumber(string value)
+        {
+            return value == YahooFinance.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;
+        }
+
         public static void RenewIPAddress()
         {
             ProcessStartInfo psiRelease = new ProcessStartInfo("ipconfig", "/release");
