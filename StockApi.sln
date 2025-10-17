@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.32930.78
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApi", "StockApi\StockApi.csproj", "{649714B1-0677-4710-9C85-2BCC3F4EF9A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmLite", "OrmLite\OrmLite.csproj", "{A659697A-AD3B-4C4D-A334-E6E17844B948}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlLayer", "OrmLite\SqlLayer.csproj", "{A659697A-AD3B-4C4D-A334-E6E17844B948}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

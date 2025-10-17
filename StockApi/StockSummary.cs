@@ -244,7 +244,7 @@ namespace StockApi
 
             return true;
         }
-        public void SetCalculatedPE(StockSummary _stockSummary, StockFinancials _stockFinancials)
+        public void SetCalculatedPE(StockSummary _stockSummary, StockIncomeStatement _stockFinancials)
         {
             // Combine profit growth and margin into a number
             decimal marginFactor = 1 + (_stockSummary.ProfitMarginString.NumericValue / 100M);

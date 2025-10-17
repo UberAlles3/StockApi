@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace StockApi
 {
-    public class StockFinancials : YahooFinance
+    public class StockIncomeStatement : YahooFinance
     {
         private static readonly string _statisticsUrl = "https://finance.yahoo.com/quote/???/key-statistics/";
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";

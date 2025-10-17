@@ -23,7 +23,7 @@ namespace StockApi
         public decimal SellPrice = 0;
         public string AnalysisMetricsOutputText;
 
-        public decimal AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, StockFinancials stockFinancials, AnalyzeInputs analyzeInputs, bool forMetricOnly)
+        public decimal AnalyzeStockData(StockSummary stockSummary, StockHistory stockHistory, StockIncomeStatement stockFinancials, AnalyzeInputs analyzeInputs, bool forMetricOnly)
         {
             _buyless = false;
             StringBuilder output = new StringBuilder();

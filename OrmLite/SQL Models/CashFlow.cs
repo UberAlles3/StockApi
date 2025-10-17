@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Text;
 using ServiceStack.DataAnnotations;
 
-namespace OrmLite.SQL_Models
+namespace SqlLayer.Models
 {
     public class CashFlow 
     {
+        public CashFlow() { }
+
         [AutoIncrement]
         public int Id { get; set; }
         
         public string Ticker { get; set; }
         
-        public DateTime StartDate { get; set; }
+        public int Year { get; set; }
    
-        public DateTime EndDate { get; set; }
-
         public double FreeCashFlow { get; set; }
 
         public double OperatingCashFlow { get; set; }
 
         public double EndCashPosition { get; set; }
 
-        public CashFlow() { }
+        public DateTime UpdateDate { get; set; }
     }
 }

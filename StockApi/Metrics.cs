@@ -17,7 +17,7 @@ namespace StockApi
     public class Metrics
     {
         private StockSummary _stockSummary = new StockSummary();
-        private StockFinancials _stockFinancials = new StockFinancials();
+        private StockIncomeStatement _stockFinancials = new StockIncomeStatement();
         private StockHistory _stockHistory = new StockHistory();
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
@@ -146,7 +146,7 @@ namespace StockApi
                 }
             }
 
-            _stockFinancials = new StockFinancials();
+            _stockFinancials = new StockIncomeStatement();
             bool found = await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
 
             // Calculated PE can only be figured after both summary and finacial data is combined

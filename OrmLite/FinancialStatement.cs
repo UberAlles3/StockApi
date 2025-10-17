@@ -5,9 +5,9 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 using ServiceStack.OrmLite;
+using SqlLayer.Models;
 
-
-namespace OrmLite.SQL_Models
+namespace SqlLayer
 {
     public class FinancialStatement
     {
@@ -79,9 +79,9 @@ namespace OrmLite.SQL_Models
             this.CashFlow = new CashFlow();
         }
 
-        public void SaveCashFlow()
+        public void SaveFinancials()
         {
-            Debug.WriteLine("SaveCashFlow()");
+            Debug.WriteLine("SaveFinancials()");
 
             var factory = FinancialStatementFactory();
 
@@ -89,11 +89,11 @@ namespace OrmLite.SQL_Models
             {
                 db.CreateTableIfNotExists<CashFlow>();
 
-                db.Delete<CashFlow>(x => x.StartDate > DateTime.Now.AddYears(-5));
+                db.Delete<CashFlow>(x => x.Year > DateTime.Now.AddYears(-5).Year);
 
                 //foreach (string key in _statementCache.Keys)
                 //{
-                CashFlow cashFlow = new CashFlow() { StartDate = DateTime.Now.Date, EndDate = DateTime.Now.Date, EndCashPosition = 111, FreeCashFlow = 222.222, Ticker = "AAPL", OperatingCashFlow = 555 };
+                CashFlow cashFlow = new CashFlow() { Year = DateTime.Now.Year, EndCashPosition = 111, FreeCashFlow = 222.222, Ticker = "AAPL", OperatingCashFlow = 555, UpdateDate = DateTime.Now.Date};
                 db.Insert<CashFlow>(cashFlow);
                 //    db.Insert<BalanceSheet>(_statementCache[key].BalanceSheet);
                 //    db.Insert<CashFlow>(_statementCache[key].CashFlow);

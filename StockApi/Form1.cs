@@ -13,7 +13,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Drake.Extensions;
 using System.IO;
-using OrmLite;
+using SqlLayer;
 
 // testing 2022
 namespace StockApi
@@ -25,7 +25,7 @@ namespace StockApi
         List<Setting> _settings = new List<Setting>();
         private static bool _tickerFound = false;
         private static StockSummary _stockSummary = new StockSummary();
-        private static StockFinancials _stockFinancials = new StockFinancials();
+        private static StockIncomeStatement _stockFinancials = new StockIncomeStatement();
         private static StockHistory _stockHistory = new StockHistory();
 
         // Markets
@@ -34,8 +34,7 @@ namespace StockApi
         public MarketData Market_Dow;
         public MarketData Market_Nasdaq;
 
-        public SqlInterface _sqlInterface = new SqlInterface();
-
+        public FinancialStatement _finacialStatement = new FinancialStatement();
         private static Analyze _analyze = new Analyze();
         public static DataTable TickerTradesDataTable = null;
 
@@ -84,7 +83,7 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            _sqlInterface.SaveCashFlow();
+            //_finacialStatement.SaveFinancials();
 
             ////// Testing section
             //FpmAPI fpmAPI = new FpmAPI();
@@ -482,7 +481,7 @@ namespace StockApi
                     }
                 }
 
-                _stockFinancials = new StockFinancials();
+                _stockFinancials = new StockIncomeStatement();
                 bool found = await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
 
                 // Calculated PE can only be figured after both summary and finacial data is combined
@@ -764,12 +763,12 @@ namespace StockApi
             lblShortInterest.Text = "...";
 
             panelFinancials.Visible = false;
-            _stockFinancials = new StockFinancials();
+            _stockFinancials = new StockIncomeStatement();
             bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
 
             if(!found) // stock doesn't have financials
             {
-                _stockFinancials = new StockFinancials();
+                _stockFinancials = new StockIncomeStatement();
             }
 
             // fix EPS for stock that miss it in summary  

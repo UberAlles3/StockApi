@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+    <AssemblyName>SqlLayer</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
