@@ -25,7 +25,7 @@ namespace StockApi
         
         List<Setting> _settings = new List<Setting>();
         private static bool _tickerFound = false;
-        private static StockSummary _stockSummary = new StockSummary();
+        //private static StockSummary _stockSummary = new StockSummary();
         //private static StockIncomeStatement _stockIncomeStatment = new StockIncomeStatement();
         //private static StockStatistics _stockStatistics = new StockStatistics();
         private static StockHistory _stockHistory = new StockHistory();
@@ -200,12 +200,13 @@ namespace StockApi
             }
 
             _stockDownloads = new StockDownloads(txtStockTicker.Text);
-            _stockSummary = new StockSummary();
-            _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
             
-            if (_stockSummary.LastException != null)
+            _tickerFound = await _stockDownloads.GetSummary();
+            
+
+            if (_stockDownloads.stockSummary.LastException != null)
             {
-                txtTickerList.Text = "Error:" + Environment.NewLine + _stockSummary.Error;
+                txtTickerList.Text = "Error:" + Environment.NewLine + _stockDownloads.stockSummary.Error;
             }
 
             if (_tickerFound)
@@ -227,12 +228,12 @@ namespace StockApi
                     tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
 
                     // get 3 year ago price
-                    historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, false, false);
+                    historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary, true, false, false);
 
                     if (historicDisplayList.Count > 0)
                         _stockHistory.HistoricData3YearsAgo = historicDisplayList.Last();
                     else
-                        _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue };
+                        _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
                 }
                 catch (Exception ex)
                 {
@@ -314,7 +315,7 @@ namespace StockApi
 
             try
             {
-                File.WriteAllText(filePath, _stockSummary._html);
+                File.WriteAllText(filePath, _stockDownloads.stockSummary._html);
             }
             catch (Exception ex)
             {
@@ -451,67 +452,67 @@ namespace StockApi
             //builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend, 3YearPrice, 3YearPriceChange{Environment.NewLine}");
             foreach (string ticker in stockList)
             {
-                _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
+                _stockDownloads.stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
 
                 txtTickerList.Text += $"{ticker}" + Environment.NewLine;
 
                 // Extract the individual data values from the html
-                _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                _tickerFound = await _stockDownloads.stockSummary.GetSummaryData(_stockDownloads.stockSummary.Ticker);
 
-                if (_stockSummary.LastException != null)
+                if (_stockDownloads.stockSummary.LastException != null)
                 {
-                    txtTickerList.Text = _stockSummary.Error;
+                    txtTickerList.Text = _stockDownloads.stockSummary.Error;
                     continue;
                 }
 
-                if (_stockSummary.EarningsPerShareString.StringValue == "--")
+                if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
                 {
                     Thread.Sleep(2000);
-                    _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                    _tickerFound = await _stockDownloads.stockSummary.GetSummaryData(_stockDownloads.stockSummary.Ticker);
                     
-                    if (_stockSummary.LastException != null)
+                    if (_stockDownloads.stockSummary.LastException != null)
                     {
-                        txtTickerList.Text = _stockSummary.Error;
+                        txtTickerList.Text = _stockDownloads.stockSummary.Error;
                         continue;
                     }
 
-                    if (_stockSummary.EarningsPerShareString.StringValue == "--")
+                    if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
                     {
                         Thread.Sleep(2000);
-                        _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
-                        if (_stockSummary.EarningsPerShareString.StringValue == "--")
+                        _tickerFound = await _stockDownloads.stockSummary.GetSummaryData(_stockDownloads.stockSummary.Ticker);
+                        if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
                         {
                             Thread.Sleep(2000);
-                            _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                            _tickerFound = await _stockDownloads.stockSummary.GetSummaryData(_stockDownloads.stockSummary.Ticker);
                         }
                     }
                 }
 
                 _stockDownloads.stockIncomeStatement = new StockIncomeStatement();
-                bool found = await _stockDownloads.stockIncomeStatement.GetIncomeStatementData(_stockSummary.Ticker);
+                bool found = await _stockDownloads.stockIncomeStatement.GetIncomeStatementData(_stockDownloads.stockSummary.Ticker);
 
                 // Calculated PE can only be figured after both summary and finacial data is combined
-                _stockSummary.SetCalculatedPE(_stockSummary, _stockDownloads.stockIncomeStatement);
+                _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads.stockSummary, _stockDownloads.stockIncomeStatement);
 
                 // get 3 year ago price
-                historicDataList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockSummary, true, false, false);
+                historicDataList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockDownloads.stockSummary, true, false, false);
 
                 if (historicDataList.Count > 0)
                     _stockHistory.HistoricData3YearsAgo = historicDataList.Last();
                 else
-                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue };
+                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
 
-                decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
+                decimal percent_diff = _stockDownloads.stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
 
                 Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
                 txtSharesOwned.Text = "1";
                 txtSharesTraded.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
                 analyzeInputs.MarketHealth = 5;
-                decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, true);
+                decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads.stockSummary, _stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, true);
 
-                builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
-                builder.Append($", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
+                builder.Append($"{_stockDownloads.stockSummary.Ticker}, {_stockDownloads.stockSummary.VolatilityString.NumericValue}, {_stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {_stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue}, {_stockDownloads.stockSummary.PriceBookString.NumericValue}, {_stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {_stockDownloads.stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
+                builder.Append($", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockDownloads.stockSummary.YearsRangeLow.NumericValue},{_stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
                 Thread.Sleep(800);
             }
             txtTickerList.Text = builder.ToString();
@@ -519,7 +520,7 @@ namespace StockApi
 
         private void PreSummaryWebCall()
         {
-            _stockSummary = new StockSummary(); // set values to zero
+            _stockDownloads.stockSummary = new StockSummary(); // set values to zero
             btnGetAllHistory.Visible = true;
             txtAnalysisOutput.Text = "";
             lblValuation.Text = "";
@@ -549,30 +550,30 @@ namespace StockApi
             ResetFormControls();
             try
             {
-                lblCompanyNameAndTicker.Text = _stockSummary.CompanyName;
+                lblCompanyNameAndTicker.Text = _stockDownloads.stockSummary.CompanyName;
                 if (_tickerFound)
                 {
                     errorPlace = "Setting labels #1";
-                    lblPrice.Text = _stockSummary.PriceString.NumericValue.ToString("####.00");
-                    lblVolatility.Text = _stockSummary.VolatilityString.StringValue;
-                    lblEPS.Text = _stockSummary.EarningsPerShareString.NumericValue.ToString("####.00");
-                    lblEPS.ForeColor = _stockSummary.EPSColor;
-                    lblPriceBook.Text = _stockSummary.PriceBookString.NumericValue.ToString();
-                    lblPriceBook.ForeColor = _stockSummary.PriceBookColor;
-                    lblDividend.Text = _stockSummary.DividendString.NumericValue.ToString() + "%";
-                    lblDividend.ForeColor = _stockSummary.DividendColor;
-                    lblProfitMargin.Text = _stockSummary.ProfitMarginString.StringValue.ToString() + "%";
-                    lblProfitMargin.ForeColor = _stockSummary.ProfitMarginColor;
-                    lblOneYearTarget.Text = _stockSummary.OneYearTargetPriceString.StringValue;
-                    lblOneYearTarget.ForeColor = _stockSummary.OneYearTargetColor;
-                    lbl52WeekLow.Text = _stockSummary.YearsRangeLow.StringValue;
-                    lbl52WeekHigh.Text = _stockSummary.YearsRangeHigh.StringValue;
-                    lblForwardPE.Text = _stockSummary.ForwardPEString.NumericValue.ToString();
-                    lblForwardPE.ForeColor = _stockSummary.ForwardPEColor;
-                    lblEarningsDate.Text = _stockSummary.EarningsDateString.DateTimeValue.ToString();
-                    lblEarningsDate.ForeColor = _stockSummary.EarningsDateColor;
-                    lblSector.Text = _stockSummary.Sector;
-                    lblAvgSectorPE.Text = _stockSummary.AverageSectorPE.ToString();
+                    lblPrice.Text = _stockDownloads.stockSummary.PriceString.NumericValue.ToString("####.00");
+                    lblVolatility.Text = _stockDownloads.stockSummary.VolatilityString.StringValue;
+                    lblEPS.Text = _stockDownloads.stockSummary.EarningsPerShareString.NumericValue.ToString("####.00");
+                    lblEPS.ForeColor = _stockDownloads.stockSummary.EPSColor;
+                    lblPriceBook.Text = _stockDownloads.stockSummary.PriceBookString.NumericValue.ToString();
+                    lblPriceBook.ForeColor = _stockDownloads.stockSummary.PriceBookColor;
+                    lblDividend.Text = _stockDownloads.stockSummary.DividendString.NumericValue.ToString() + "%";
+                    lblDividend.ForeColor = _stockDownloads.stockSummary.DividendColor;
+                    lblProfitMargin.Text = _stockDownloads.stockSummary.ProfitMarginString.StringValue.ToString() + "%";
+                    lblProfitMargin.ForeColor = _stockDownloads.stockSummary.ProfitMarginColor;
+                    lblOneYearTarget.Text = _stockDownloads.stockSummary.OneYearTargetPriceString.StringValue;
+                    lblOneYearTarget.ForeColor = _stockDownloads.stockSummary.OneYearTargetColor;
+                    lbl52WeekLow.Text = _stockDownloads.stockSummary.YearsRangeLow.StringValue;
+                    lbl52WeekHigh.Text = _stockDownloads.stockSummary.YearsRangeHigh.StringValue;
+                    lblForwardPE.Text = _stockDownloads.stockSummary.ForwardPEString.NumericValue.ToString();
+                    lblForwardPE.ForeColor = _stockDownloads.stockSummary.ForwardPEColor;
+                    lblEarningsDate.Text = _stockDownloads.stockSummary.EarningsDateString.DateTimeValue.ToString();
+                    lblEarningsDate.ForeColor = _stockDownloads.stockSummary.EarningsDateColor;
+                    lblSector.Text = _stockDownloads.stockSummary.Sector;
+                    lblAvgSectorPE.Text = _stockDownloads.stockSummary.AverageSectorPE.ToString();
                     lblBuyQuantity.Text = "0";
                     lblBuyPrice.Text = "0.00";
                     lblSellQuantity.Text = "0";
@@ -598,16 +599,16 @@ namespace StockApi
                     lblNasdaqPercChange.ForeColor = Market_Nasdaq.MarketColor;
 
                     // Calculated PE can only be figured after both summary and finacial data is combined
-                    _stockSummary.SetCalculatedPE(_stockSummary, _stockDownloads.stockIncomeStatement);
-                    lblCalculatedPE.Text = _stockSummary.CalculatedPEString.StringValue;
+                    _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads.stockSummary, _stockDownloads.stockIncomeStatement);
+                    lblCalculatedPE.Text = _stockDownloads.stockSummary.CalculatedPEString.StringValue;
 
-                    if (_stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
+                    if (_stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
                     {
                         lblValuation.ForeColor = Color.Red;
                         lblValuation.Text = "Overvalued";
                     }
-                    //if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Under valued
-                    if (_stockSummary.Valuation == StockSummary.ValuationEnum.UnderValued)
+                    //if (_stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && _stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)_stockDownloads.stockSummary.AverageSectorPE * .8M) // Under valued
+                    if (_stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.UnderValued)
                     {
                         lblValuation.ForeColor = Color.Lime;
                         lblValuation.Text = "Undervalued";
@@ -618,13 +619,13 @@ namespace StockApi
 
 
                     ///////////  52 week range
-                    if (_stockSummary.YearsRangeHigh.NumericValue > 0)
+                    if (_stockDownloads.stockSummary.YearsRangeHigh.NumericValue > 0)
                     {
                         errorPlace = "52 week range";
                         lbl52WeekArrow.Visible = true;
                         int w52 = lbl52WeekHighArrow.Left - lbl52WeekLowArrow.Left; // distance between controls 
-                        decimal range52 = _stockSummary.YearsRangeHigh.NumericValue - _stockSummary.YearsRangeLow.NumericValue; // total price range
-                        decimal perc52 = (_stockSummary.PriceString.NumericValue - _stockSummary.YearsRangeLow.NumericValue) / range52; // percent above low
+                        decimal range52 = _stockDownloads.stockSummary.YearsRangeHigh.NumericValue - _stockDownloads.stockSummary.YearsRangeLow.NumericValue; // total price range
+                        decimal perc52 = (_stockDownloads.stockSummary.PriceString.NumericValue - _stockDownloads.stockSummary.YearsRangeLow.NumericValue) / range52; // percent above low
                         lbl52WeekArrow.Left = lbl52WeekLowArrow.Left + (int)(perc52 * w52) - 4; // set left of arrow current price
                     }
                     else
@@ -729,15 +730,15 @@ namespace StockApi
                     {
                         txtSharesOwned.Text = "1";
                         txtSharesTraded.Text = "1";
-                        txtSharesTradePrice.Text = _stockSummary.PriceString.NumericValue.ToString("0.00");
+                        txtSharesTradePrice.Text = _stockDownloads.stockSummary.PriceString.NumericValue.ToString("0.00");
                     }
 
 
                     //////////////////////////////////////////////////////////////////////////////
                     ///                            Income Statement
                     // fix EPS for stock that miss it in summary  
-                    if (_stockSummary.EarningsPerShareString.StringValue == "--")
-                        _stockSummary.EarningsPerShareString.StringValue = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.StringValue;
+                    if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
+                        _stockDownloads.stockSummary.EarningsPerShareString.StringValue = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.StringValue;
 
                     // Revenue
                     lblFinRevTTM.Text = _stockDownloads.stockIncomeStatement.RevenueTtmString.StringValue;
@@ -810,7 +811,7 @@ namespace StockApi
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             SetUpAnalyzeInputs(analyzeInputs);
             analyzeInputs.MarketHealth = trackBar1.Value;
-            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, false);
+            _analyze.AnalyzeStockData(_stockDownloads.stockSummary, _stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, false);
 
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
 
@@ -861,7 +862,7 @@ namespace StockApi
             UseWaitCursor = true;
             Application.DoEvents();
             btnGetAllHistory.Visible = false;
-            List<StockHistory.HistoricPriceData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockSummary, true, true, true);
+            List<StockHistory.HistoricPriceData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary, true, true, true);
             BindListToHistoricPriceGrid(historicDisplayList);
             // Trends
             _stockHistory.SetTrends();
@@ -871,7 +872,7 @@ namespace StockApi
 
         private void lnkCompanyOverview_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show(_stockSummary.CompanyOverview, "Company Overview", MessageBoxButtons.OK);
+            MessageBox.Show(_stockDownloads.stockSummary.CompanyOverview, "Company Overview", MessageBoxButtons.OK);
         }
 
 
@@ -1012,7 +1013,7 @@ namespace StockApi
 
         private async void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Performance performance = new Performance(_stockSummary);
+            Performance performance = new Performance(_stockDownloads.stockSummary);
             if(Market_Dow == null)
             {
                 Market_Dow = await _marketData.GetMarketData("^DJI", true);
@@ -1022,14 +1023,14 @@ namespace StockApi
         }
         private void latestSellsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Performance performance = new Performance(_stockSummary);
+            Performance performance = new Performance(_stockDownloads.stockSummary);
             List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(PositionsDataTable, TradesDataTable);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Sell Performance", 0);
         }
 
         private async void liquidationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Performance performance = new Performance(_stockSummary);
+            Performance performance = new Performance(_stockDownloads.stockSummary);
             List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(TradesDataTable);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Liquidation Performance", 1);
         }

@@ -24,6 +24,14 @@ namespace StockApi.Downloads
             return 0;
         }
 
+        public async Task<bool> GetSummary()
+        {
+            stockSummary = new StockSummary();
+            bool found = await stockSummary.GetSummaryData(_ticker);
+
+            return found;
+        }
+
         public async Task<bool> GetStatistics()
         {
             stockStatistics = new StockStatistics(); // initializes all properties
