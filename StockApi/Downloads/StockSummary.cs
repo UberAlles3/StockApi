@@ -59,7 +59,7 @@ namespace StockApi
         ///                Methods
         ////////////////////////////////////////////
 
-        public async Task<bool> GetSummaryData(string ticker, bool verbose = true)
+        public override async Task<bool> GetStockData(string ticker)
         {
             Error = "";
             LastException = null;
@@ -84,9 +84,6 @@ namespace StockApi
                 // Price
                 searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
                 PriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 1);
-
-                if (verbose == false)
-                    return true;
 
                 // EPS
                 searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;

@@ -16,7 +16,6 @@ using System.IO;
 using SqlLayer;
 using StockApi.Downloads;
 
-// testing 2022
 namespace StockApi
 {
     public partial class Form1 : Form
@@ -28,7 +27,7 @@ namespace StockApi
         //private static StockSummary _stockSummary = new StockSummary();
         //private static StockIncomeStatement _stockIncomeStatment = new StockIncomeStatement();
         //private static StockStatistics _stockStatistics = new StockStatistics();
-        private static StockHistory _stockHistory = new StockHistory();
+        //private static StockHistory _stockHistory = new StockHistory();
         private static StockDownloads _stockDownloads = new StockDownloads("");
 
         // Markets
@@ -199,10 +198,20 @@ namespace StockApi
                 Market_Nasdaq.CurrentLevel.StringValue = "0";
             }
 
+            ////////////////////////////////////////////////////////
+            ///  Get all the stock's data from yahoo finance website
+            ////////////////////////////////////////////////////////
             _stockDownloads = new StockDownloads(txtStockTicker.Text);
-            
-            _tickerFound = await _stockDownloads.GetSummary();
-            
+            try
+            {
+                _tickerFound = await _stockDownloads.GetAllStockData();
+            }
+            catch (Exception ex)
+            {
+                ResetFormControls();
+                MessageBox.Show($"Error in getting all data from internet.\n{ex.Message}\n{ex.StackTrace}\n{ex.InnerException}\n");
+                return;
+            }
 
             if (_stockDownloads.stockSummary.LastException != null)
             {
@@ -211,42 +220,17 @@ namespace StockApi
 
             if (_tickerFound)
             {
-                bool found = false;
                 TickerTradesDataTable = new DataTable();
                 int DateColumn = 0;
                 DateTime outDate = DateTime.Now;
-                List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
                 EnumerableRowCollection<DataRow> tickerTrades;
 
-                try
-                {
-                    found = await _stockDownloads.GetStatistics();
-                    found = await _stockDownloads.GetIncomeStatement();
-
-                    // filter on stock ticker then order by date descending
-                    tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
-                    tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
-
-                    // get 3 year ago price
-                    historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary, true, false, false);
-
-                    if (historicDisplayList.Count > 0)
-                        _stockHistory.HistoricData3YearsAgo = historicDisplayList.Last();
-                    else
-                        _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
-                }
-                catch (Exception ex)
-                {
-                    ResetFormControls();
-
-                    MessageBox.Show("Error somewhere in GetFinancials() or GetPriceHistoryForTodayWeekMonthYear()"+ Environment.NewLine 
-                                                                                                                + ex.Message + Environment.NewLine 
-                                                                                                                + ex.StackTrace + Environment.NewLine + ex.InnerException);
-                    return;
-                }
+                // filter on stock ticker then order by date descending
+                tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
+                tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
 
                 // bind data list to grid control
-                BindListToHistoricPriceGrid(historicDisplayList);
+                BindListToHistoricPriceGrid(_stockDownloads.stockHistory.HistoricDisplayList);
 
                 if (tradesDataTable.Rows.Count > 0 && tickerTrades.Count() > 0)
                 {
@@ -301,7 +285,7 @@ namespace StockApi
                 }
 
                 // Trends
-                _stockHistory.SetTrends();
+                _stockDownloads.stockHistory.SetTrends();
                 SetTrendImages();
             }
 
@@ -377,35 +361,35 @@ namespace StockApi
 
         private void SetTrendImages()
         {
-            if (_stockHistory.ThreeYearTrend != StockHistory.TrendEnum.Unknown)
+            if (_stockDownloads.stockHistory.ThreeYearTrend != StockHistory.TrendEnum.Unknown)
             {
                 pic3YearTrend.Visible = true;
-                pic3YearTrend.Image = _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                pic3YearTrend.Image = _stockDownloads.stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockDownloads.stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
             }
             else
                 pic3YearTrend.Visible = false;
 
-            if (_stockHistory.YearTrend != StockHistory.TrendEnum.Unknown)
+            if (_stockDownloads.stockHistory.YearTrend != StockHistory.TrendEnum.Unknown)
             {
                 picYearTrend.Visible = true;
-                picYearTrend.Image = _stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                picYearTrend.Image = _stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
             }
             else
                 picYearTrend.Visible = false;
 
 
-            if (_stockHistory.MonthTrend != StockHistory.TrendEnum.Unknown)
+            if (_stockDownloads.stockHistory.MonthTrend != StockHistory.TrendEnum.Unknown)
             {
                 picMonthTrend.Visible = true;
-                picMonthTrend.Image = _stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                picMonthTrend.Image = _stockDownloads.stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockDownloads.stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
             }
             else
                 picMonthTrend.Visible = false;
 
-            if (_stockHistory.WeekTrend != StockHistory.TrendEnum.Unknown)
+            if (_stockDownloads.stockHistory.WeekTrend != StockHistory.TrendEnum.Unknown)
             {
                 picWeekTrend.Visible = true;
-                picWeekTrend.Image = _stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
+                picWeekTrend.Image = _stockDownloads.stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockDownloads.stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
             }
             else
                 picWeekTrend.Visible = false;
@@ -457,7 +441,7 @@ namespace StockApi
                 txtTickerList.Text += $"{ticker}" + Environment.NewLine;
 
                 // Extract the individual data values from the html
-                _tickerFound = await _stockDownloads.stockSummary.GetSummaryData(_stockDownloads.stockSummary.Ticker);
+                _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
 
                 if (_stockDownloads.stockSummary.LastException != null)
                 {
@@ -468,7 +452,7 @@ namespace StockApi
                 if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
                 {
                     Thread.Sleep(2000);
-                    _tickerFound = await _stockDownloads.stockSummary.GetSummaryData(_stockDownloads.stockSummary.Ticker);
+                    _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
                     
                     if (_stockDownloads.stockSummary.LastException != null)
                     {
@@ -479,11 +463,11 @@ namespace StockApi
                     if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
                     {
                         Thread.Sleep(2000);
-                        _tickerFound = await _stockDownloads.stockSummary.GetSummaryData(_stockDownloads.stockSummary.Ticker);
+                        _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
                         if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
                         {
                             Thread.Sleep(2000);
-                            _tickerFound = await _stockDownloads.stockSummary.GetSummaryData(_stockDownloads.stockSummary.Ticker);
+                            _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
                         }
                     }
                 }
@@ -495,24 +479,24 @@ namespace StockApi
                 _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads.stockSummary, _stockDownloads.stockIncomeStatement);
 
                 // get 3 year ago price
-                historicDataList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockDownloads.stockSummary, true, false, false);
+                historicDataList = await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockDownloads.stockSummary, true, false, false);
 
                 if (historicDataList.Count > 0)
-                    _stockHistory.HistoricData3YearsAgo = historicDataList.Last();
+                    _stockDownloads.stockHistory.HistoricData3YearsAgo = historicDataList.Last();
                 else
-                    _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
+                    _stockDownloads.stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
 
-                decimal percent_diff = _stockDownloads.stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
+                decimal percent_diff = _stockDownloads.stockSummary.PriceString.NumericValue / _stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
 
                 Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
                 txtSharesOwned.Text = "1";
                 txtSharesTraded.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
                 analyzeInputs.MarketHealth = 5;
-                decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads.stockSummary, _stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, true);
+                decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads.stockSummary, _stockDownloads.stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, true);
 
                 builder.Append($"{_stockDownloads.stockSummary.Ticker}, {_stockDownloads.stockSummary.VolatilityString.NumericValue}, {_stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {_stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue}, {_stockDownloads.stockSummary.PriceBookString.NumericValue}, {_stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {_stockDownloads.stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
-                builder.Append($", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockDownloads.stockSummary.YearsRangeLow.NumericValue},{_stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
+                builder.Append($", {_stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockDownloads.stockSummary.YearsRangeLow.NumericValue},{_stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
                 Thread.Sleep(800);
             }
             txtTickerList.Text = builder.ToString();
@@ -811,7 +795,7 @@ namespace StockApi
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             SetUpAnalyzeInputs(analyzeInputs);
             analyzeInputs.MarketHealth = trackBar1.Value;
-            _analyze.AnalyzeStockData(_stockDownloads.stockSummary, _stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, false);
+            _analyze.AnalyzeStockData(_stockDownloads.stockSummary, _stockDownloads.stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, false);
 
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
 
@@ -862,10 +846,10 @@ namespace StockApi
             UseWaitCursor = true;
             Application.DoEvents();
             btnGetAllHistory.Visible = false;
-            List<StockHistory.HistoricPriceData> historicDisplayList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary, true, true, true);
+            List<StockHistory.HistoricPriceData> historicDisplayList = await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary, true, true, true);
             BindListToHistoricPriceGrid(historicDisplayList);
             // Trends
-            _stockHistory.SetTrends();
+            _stockDownloads.stockHistory.SetTrends();
             SetTrendImages();
             UseWaitCursor = false;
         }

@@ -125,7 +125,7 @@ namespace StockApi
             _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
 
             // Extract the individual data values from the html
-            _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+            _tickerFound = await _stockSummary.GetStockData(_stockSummary.Ticker);
 
             if (_stockSummary.LastException != null)
             {
@@ -134,15 +134,15 @@ namespace StockApi
             else if (_stockSummary.EarningsPerShareString.StringValue == "--")
             {
                 Thread.Sleep(2000);
-                _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                _tickerFound = await _stockSummary.GetStockData(_stockSummary.Ticker);
                 if (_stockSummary.EarningsPerShareString.StringValue == "--")
                 {
                     Thread.Sleep(2000);
-                    _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                    _tickerFound = await _stockSummary.GetStockData(_stockSummary.Ticker);
                     if (_stockSummary.EarningsPerShareString.StringValue == "--")
                     {
                         Thread.Sleep(2000);
-                        _tickerFound = await _stockSummary.GetSummaryData(_stockSummary.Ticker);
+                        _tickerFound = await _stockSummary.GetStockData(_stockSummary.Ticker);
                     }
                 }
             }

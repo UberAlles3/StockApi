@@ -28,6 +28,11 @@ namespace StockApi
                 SearchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
         }
 
+        public virtual Task<bool> GetStockData(string ticker)
+        {
+            return Task.FromResult(true);
+        }
+
         protected async Task<string> GetHtmlForTicker(string url, string ticker)
         {
             Ticker = ticker;

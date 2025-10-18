@@ -32,6 +32,8 @@ namespace StockApi
         public TrendEnum MonthTrend = TrendEnum.Sideways;
         public TrendEnum YearTrend = TrendEnum.Sideways;
         public TrendEnum ThreeYearTrend = TrendEnum.Sideways;
+        public List<StockHistory.HistoricPriceData> HistoricDisplayList = new List<StockHistory.HistoricPriceData>();
+
 
         public StockHistory()
         {

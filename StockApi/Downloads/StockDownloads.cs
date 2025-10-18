@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,15 +20,25 @@ namespace StockApi.Downloads
             _ticker = ticker;
         }
 
-        public int DownloadAll()
+        public async Task<bool> GetAllStockData()
         {
-            return 0;
+            bool found = true;
+
+            found = await GetSummary();
+            if(found)
+            {
+                await GetStatistics();
+                await GetIncomeStatement();
+                await GetHistory();
+            }
+
+            return found;
         }
 
         public async Task<bool> GetSummary()
         {
             stockSummary = new StockSummary();
-            bool found = await stockSummary.GetSummaryData(_ticker);
+            bool found = await stockSummary.GetStockData(_ticker);
 
             return found;
         }
@@ -46,6 +57,21 @@ namespace StockApi.Downloads
             bool found = await stockIncomeStatement.GetIncomeStatementData(_ticker);
 
             return found;
+        }
+
+        public async Task<bool> GetHistory()
+        {
+            stockHistory = new StockHistory(); // initializes all properties
+
+            // get 3 year ago price
+            stockHistory.HistoricDisplayList = await stockHistory.GetPriceHistoryForTodayWeekMonthYear(_ticker, stockSummary, true, false, false);
+
+            if (stockHistory.HistoricDisplayList.Count > 0)
+                stockHistory.HistoricData3YearsAgo = stockHistory.HistoricDisplayList.Last();
+            else
+                stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = stockSummary.Ticker, Price = stockSummary.PriceString.NumericValue };
+
+            return true;
         }
 
 
