@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -27,16 +28,30 @@ namespace StockApi
                 SearchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
         }
 
+        protected async Task<string> GetHtmlForTicker(string url, string ticker)
+        {
+            Ticker = ticker;
+            string formattedUrl = url.Replace("???", Ticker);
+            string html = "";
+
+            html = await GetHtml(formattedUrl);
+
+            if (html.Length < 3400) // retry
+            {
+                Thread.Sleep(1000);
+                html = await GetHtml(formattedUrl);
+                Thread.Sleep(1000);
+            }
+
+            return html;
+        }
+
         protected static async Task<string> GetHtml(string url)
         {
             string html;
 
             HttpClient cl = new HttpClient();
-            string browserVer = "";
-            //if (DateTime.Now.Second > 30)
-            //    browserVer = "Chrome/111.0.0.0";
-            //else
-            browserVer = "Mozilla/5.0 (compatible)";
+            string browserVer = "Mozilla/5.0 (compatible)";
 
             cl.DefaultRequestHeaders.UserAgent.ParseAdd($"{browserVer}");
             cl.DefaultRequestHeaders.Accept.ParseAdd("text/html");
@@ -58,13 +73,6 @@ namespace StockApi
             //    wb.Dispose();
             //}
             //return html;
-        }
-
-        protected async Task<string> GetHtmlForTicker(string url, string ticker)
-        {
-            Ticker = ticker;
-            string formattedUrl = url.Replace("???", Ticker);
-            return await GetHtml(formattedUrl);
         }
 
         ////////////////////////////

@@ -148,7 +148,7 @@ namespace StockApi
             }
 
             _stockFinancials = new StockIncomeStatement();
-            bool found = await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
+            bool found = await _stockFinancials.GetIncomeStatementData(_stockSummary.Ticker);
 
             // Calculated PE can only be figured after both summary and finacial data is combined
             _stockSummary.SetCalculatedPE(_stockSummary, _stockFinancials);

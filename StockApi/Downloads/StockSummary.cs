@@ -69,13 +69,6 @@ namespace StockApi
 
             _html = await GetHtmlForTicker(_summaryUrl, Ticker);
 
-            if (_html.Length < 3400) // try again
-            {
-                Thread.Sleep(1000);
-                _html = await GetHtmlForTicker(_summaryUrl, Ticker);
-                Thread.Sleep(1000);
-            }
-
             CompanyName = GetDataByTagName(_html, "title", Ticker);
             CompanyName = CompanyName.Substring(0, CompanyName.IndexOf(")") + 1);
             CompanyName = HttpUtility.HtmlDecode(CompanyName);

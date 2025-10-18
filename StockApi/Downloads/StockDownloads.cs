@@ -24,13 +24,21 @@ namespace StockApi.Downloads
             return 0;
         }
 
-        public async Task<bool> GetStockStatistics()
+        public async Task<bool> GetStatistics()
         {
+            stockStatistics = new StockStatistics(); // initializes all properties
             bool found = await stockStatistics.GetStatisticData(_ticker);
 
             return found;
         }
 
+        public async Task<bool> GetIncomeStatement()
+        {
+            stockIncomeStatement = new StockIncomeStatement(); // initializes all properties
+            bool found = await stockIncomeStatement.GetIncomeStatementData(_ticker);
+
+            return found;
+        }
 
 
 

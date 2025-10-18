@@ -71,7 +71,7 @@ namespace StockApi
         ///                Methods
         ////////////////////////////////////////////
 
-        public async Task<bool> GetFinancialData(string ticker)
+        public async Task<bool> GetIncomeStatementData(string ticker)
         {
             Ticker = ticker;
             string html;
@@ -323,7 +323,7 @@ namespace StockApi
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Source + x.Message + "\n" + "GetFinancialData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
+                MessageBox.Show(x.Source + x.Message + "\n" + "GetIncomeStatementData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
             }
 
             return true;

@@ -26,8 +26,8 @@ namespace StockApi
         List<Setting> _settings = new List<Setting>();
         private static bool _tickerFound = false;
         private static StockSummary _stockSummary = new StockSummary();
-        private static StockIncomeStatement _stockFinancials = new StockIncomeStatement();
-//        private static StockStatistics _stockStatistics = new StockStatistics();
+        //private static StockIncomeStatement _stockIncomeStatment = new StockIncomeStatement();
+        //private static StockStatistics _stockStatistics = new StockStatistics();
         private static StockHistory _stockHistory = new StockHistory();
         private static StockDownloads _stockDownloads = new StockDownloads("");
 
@@ -140,10 +140,9 @@ namespace StockApi
         private async void btnGetOne_click(object sender, EventArgs e)
         {
 
-         ////////// TODO take out
+            ////////// TODO take out
             //Metrics metrics = new Metrics();
             //int x = await metrics.DailyGetMetrics(PositionsDataTable);
-
 
             //Finnhub can not get historic quotes, so not used 
             //FinnhubAPI finnhubAPI = new FinnhubAPI();
@@ -204,7 +203,6 @@ namespace StockApi
             _stockSummary = new StockSummary();
             _tickerFound = await _stockSummary.GetSummaryData(txtStockTicker.Text);
             
-            
             if (_stockSummary.LastException != null)
             {
                 txtTickerList.Text = "Error:" + Environment.NewLine + _stockSummary.Error;
@@ -212,6 +210,7 @@ namespace StockApi
 
             if (_tickerFound)
             {
+                bool found = false;
                 TickerTradesDataTable = new DataTable();
                 int DateColumn = 0;
                 DateTime outDate = DateTime.Now;
@@ -220,12 +219,8 @@ namespace StockApi
 
                 try
                 {
-                    bool found = await _stockDownloads.GetStockStatistics();
-                    if (!found) // stock doesn't have financials
-                        _stockDownloads.stockStatistics = new StockStatistics(); // initializes all properties
-
-                    GetFinancials();
-                    panelFinancials.Visible = true;
+                    found = await _stockDownloads.GetStatistics();
+                    found = await _stockDownloads.GetIncomeStatement();
 
                     // filter on stock ticker then order by date descending
                     tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
@@ -492,11 +487,11 @@ namespace StockApi
                     }
                 }
 
-                _stockFinancials = new StockIncomeStatement();
-                bool found = await _stockFinancials.GetFinancialData(_stockSummary.Ticker);
+                _stockDownloads.stockIncomeStatement = new StockIncomeStatement();
+                bool found = await _stockDownloads.stockIncomeStatement.GetIncomeStatementData(_stockSummary.Ticker);
 
                 // Calculated PE can only be figured after both summary and finacial data is combined
-                _stockSummary.SetCalculatedPE(_stockSummary, _stockFinancials);
+                _stockSummary.SetCalculatedPE(_stockSummary, _stockDownloads.stockIncomeStatement);
 
                 // get 3 year ago price
                 historicDataList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockSummary, true, false, false);
@@ -513,7 +508,7 @@ namespace StockApi
                 txtSharesTraded.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
                 analyzeInputs.MarketHealth = 5;
-                decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, _stockDownloads.stockStatistics, analyzeInputs, true);
+                decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, true);
 
                 builder.Append($"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue}, {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
                 builder.Append($", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
@@ -541,6 +536,10 @@ namespace StockApi
             picMonthTrend.Visible = false;
             picWeekTrend.Visible = false;
             picSpinner.Visible = true;
+            panelFinancials.Visible = false;
+
+            lblShortInterest.Text = "...";
+
             Cursor.Current = Cursors.WaitCursor;
         }
 
@@ -599,7 +598,7 @@ namespace StockApi
                     lblNasdaqPercChange.ForeColor = Market_Nasdaq.MarketColor;
 
                     // Calculated PE can only be figured after both summary and finacial data is combined
-                    _stockSummary.SetCalculatedPE(_stockSummary, _stockFinancials);
+                    _stockSummary.SetCalculatedPE(_stockSummary, _stockDownloads.stockIncomeStatement);
                     lblCalculatedPE.Text = _stockSummary.CalculatedPEString.StringValue;
 
                     if (_stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
@@ -615,6 +614,8 @@ namespace StockApi
                     }
 
                     panelMarkets.Visible = true;
+                    panelFinancials.Visible = true;
+
 
                     ///////////  52 week range
                     if (_stockSummary.YearsRangeHigh.NumericValue > 0)
@@ -731,6 +732,46 @@ namespace StockApi
                         txtSharesTradePrice.Text = _stockSummary.PriceString.NumericValue.ToString("0.00");
                     }
 
+
+                    //////////////////////////////////////////////////////////////////////////////
+                    ///                            Income Statement
+                    // fix EPS for stock that miss it in summary  
+                    if (_stockSummary.EarningsPerShareString.StringValue == "--")
+                        _stockSummary.EarningsPerShareString.StringValue = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.StringValue;
+
+                    // Revenue
+                    lblFinRevTTM.Text = _stockDownloads.stockIncomeStatement.RevenueTtmString.StringValue;
+                    lblFinRevTTM.ForeColor = _stockDownloads.stockIncomeStatement.RevenueTtmColor;
+                    lblFinRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue2String.StringValue;
+                    lblFinRev2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Revenue2Color;
+                    lblFinRev4YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue4String.StringValue;
+
+                    // Cost of Revenue
+                    lblFinCostRevTTM.Text = _stockDownloads.stockIncomeStatement.CostOfRevenueTtmString.StringValue;
+                    lblFinCostRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.CostOfRevenue2String.StringValue;
+                    lblFinCostRev4YearsAgo.Text = _stockDownloads.stockIncomeStatement.CostOfRevenue4String.StringValue;
+
+                    // Operating Expense
+                    lblOperExpTTM.Text = _stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.StringValue;
+                    lblOperExp2YearsAgo.Text = _stockDownloads.stockIncomeStatement.OperatingExpense2String.StringValue;
+                    lblOperExp4YearsAgo.Text = _stockDownloads.stockIncomeStatement.OperatingExpense4String.StringValue;
+
+                    // Operating Profit / Loss
+                    lblOperProfitTTM.Text = _stockDownloads.stockIncomeStatement.ProfitTtmString.StringValue;
+                    lblOperProfitTTM.ForeColor = _stockDownloads.stockIncomeStatement.ProfitTtmColor;
+                    lblOperProfit2YearsAgo.Text = $"{_stockDownloads.stockIncomeStatement.Profit2YearsAgo:n0}";
+                    lblOperProfit2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Profit2YearsAgoColor;
+                    lblOperProfit4YearsAgo.Text = $"{_stockDownloads.stockIncomeStatement.Profit4YearsAgo:n0}";
+                    lblOperProfit4YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Profit4YearsAgoColor;
+
+                    // Basic EPS
+                    lblBasicEpsTTM.Text = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.StringValue;
+                    lblBasicEpsTTM.ForeColor = _stockDownloads.stockIncomeStatement.BasicEpsTtmColor;
+                    lblBasicEps2YearsAgo.Text = $"{_stockDownloads.stockIncomeStatement.BasicEps2String:n0}";
+                    lblBasicEps2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.BasicEps2Color;
+                    lblBasicEps4YearsAgo.Text = $"{_stockDownloads.stockIncomeStatement.BasicEps4String:n0}";
+                    lblBasicEps4YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.BasicEps4Color;
+
                     //////////////////////////////////////////////////////////////////////////////////////
                     ///                           Statistics values
                     // Total Cash
@@ -745,6 +786,9 @@ namespace StockApi
                     // Short Interest
                     lblShortInterest.Text = _stockDownloads.stockStatistics.ShortInterestString.StringValue + "%";
                     lblShortInterest.ForeColor = _stockDownloads.stockStatistics.ShortInterestColor;
+
+
+
 
                     panel1.Visible = panel2.Visible = panel3.Visible = true;
                 } // Ticker found.
@@ -766,7 +810,7 @@ namespace StockApi
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             SetUpAnalyzeInputs(analyzeInputs);
             analyzeInputs.MarketHealth = trackBar1.Value;
-            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, _stockDownloads.stockStatistics, analyzeInputs, false);
+            _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, false);
 
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
 
@@ -783,57 +827,6 @@ namespace StockApi
             analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
-        }
-
-        private async void GetFinancials()
-        {
-            lblShortInterest.Text = "...";
-
-            panelFinancials.Visible = false;
-            _stockFinancials = new StockIncomeStatement();
-            bool found = await _stockFinancials.GetFinancialData(txtStockTicker.Text);
-
-            if(!found) // stock doesn't have financials
-            {
-                _stockFinancials = new StockIncomeStatement();
-            }
-
-            // fix EPS for stock that miss it in summary  
-            if (_stockSummary.EarningsPerShareString.StringValue == "--")
-                _stockSummary.EarningsPerShareString.StringValue = _stockFinancials.BasicEpsTtmString.StringValue;
-
-            // Revenue
-            lblFinRevTTM.Text = _stockFinancials.RevenueTtmString.StringValue;
-            lblFinRevTTM.ForeColor = _stockFinancials.RevenueTtmColor;
-            lblFinRev2YearsAgo.Text = _stockFinancials.Revenue2String.StringValue;
-            lblFinRev2YearsAgo.ForeColor = _stockFinancials.Revenue2Color;
-            lblFinRev4YearsAgo.Text = _stockFinancials.Revenue4String.StringValue;
-
-            // Cost of Revenue
-            lblFinCostRevTTM.Text = _stockFinancials.CostOfRevenueTtmString.StringValue;
-            lblFinCostRev2YearsAgo.Text = _stockFinancials.CostOfRevenue2String.StringValue;
-            lblFinCostRev4YearsAgo.Text = _stockFinancials.CostOfRevenue4String.StringValue;
-
-            // Operating Expense
-            lblOperExpTTM.Text = _stockFinancials.OperatingExpenseTtmString.StringValue;
-            lblOperExp2YearsAgo.Text = _stockFinancials.OperatingExpense2String.StringValue;
-            lblOperExp4YearsAgo.Text = _stockFinancials.OperatingExpense4String.StringValue;
-
-            // Operating Profit / Loss
-            lblOperProfitTTM.Text = _stockFinancials.ProfitTtmString.StringValue;
-            lblOperProfitTTM.ForeColor = _stockFinancials.ProfitTtmColor;
-            lblOperProfit2YearsAgo.Text = $"{_stockFinancials.Profit2YearsAgo:n0}";
-            lblOperProfit2YearsAgo.ForeColor = _stockFinancials.Profit2YearsAgoColor;
-            lblOperProfit4YearsAgo.Text = $"{_stockFinancials.Profit4YearsAgo:n0}";
-            lblOperProfit4YearsAgo.ForeColor = _stockFinancials.Profit4YearsAgoColor;
-
-            // Basic EPS
-            lblBasicEpsTTM.Text = _stockFinancials.BasicEpsTtmString.StringValue;
-            lblBasicEpsTTM.ForeColor = _stockFinancials.BasicEpsTtmColor;
-            lblBasicEps2YearsAgo.Text = $"{_stockFinancials.BasicEps2String:n0}";
-            lblBasicEps2YearsAgo.ForeColor = _stockFinancials.BasicEps2Color;
-            lblBasicEps4YearsAgo.Text = $"{_stockFinancials.BasicEps4String:n0}";
-            lblBasicEps4YearsAgo.ForeColor = _stockFinancials.BasicEps4Color;
         }
 
         //private async void GetStatistics()
