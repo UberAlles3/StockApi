@@ -93,7 +93,6 @@ namespace StockApi
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
  
-            label37.BackColor = label38.BackColor = trackBar1.BackColor;
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             panel1.Visible = false;
             panel2.BackColor = panel1.BackColor;
@@ -162,8 +161,6 @@ namespace StockApi
             DataTable tradesDataTable = TradesDataTable;
             // Trades
             tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
-
-            trackBar1.Value = 5; // User can set this on their own
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
@@ -701,7 +698,6 @@ namespace StockApi
                         txtSharesTradePrice.Text = _stockDownloads.stockSummary.PriceString.NumericValue.ToString("0.00");
                     }
 
-
                     //////////////////////////////////////////////////////////////////////////////
                     ///                            Income Statement
                     // fix EPS for stock that miss it in summary  
@@ -756,9 +752,6 @@ namespace StockApi
                     lblShortInterest.Text = _stockDownloads.stockStatistics.ShortInterestString.StringValue + "%";
                     lblShortInterest.ForeColor = _stockDownloads.stockStatistics.ShortInterestColor;
 
-
-
-
                     panel1.Visible = panel2.Visible = panel3.Visible = true;
                 } // Ticker found.
                 else // Ticker not found.
@@ -778,11 +771,9 @@ namespace StockApi
         {
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             SetUpAnalyzeInputs(analyzeInputs);
-            analyzeInputs.MarketHealth = trackBar1.Value;
             _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, false);
 
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
-
             lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
             lblBuyPrice.Text = _analyze.BuyPrice.ToString();
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
@@ -798,34 +789,7 @@ namespace StockApi
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
         }
 
-        //private async void GetStatistics()
-        //{
-        //    lblShortInterest.Text = "...";
-        //    panelFinancials.Visible = false;
-
-        //    _stockDownloads.stockStatistics = new StockStatistics();
-        //    bool found = await _stockDownloads.stockStatistics.GetStatisticData(txtStockTicker.Text);
-
-        //    if (!found) // stock doesn't have financials
-        //    {
-        //        _stockDownloads.stockStatistics = new StockStatistics();
-        //    }
-
-        //    // Total Cash
-        //    lblFinTotalCash.Text = _stockDownloads.stockStatistics.TotalCashString;
-        //    // Total Debt
-        //    lblFinTotalDebt.Text = _stockDownloads.stockStatistics.TotalDebtString;
-        //    lblFinTotalDebt.ForeColor = _stockDownloads.stockStatistics.TotalDebtColor;
-        //    // Debt Equity Ratio
-        //    lblFinDebtEquity.Text = _stockDownloads.stockStatistics.DebtEquityString.StringValue;
-        //    lblFinDebtEquity.ForeColor = _stockDownloads.stockStatistics.DebtEquityColor;
-
-        //    // Short Interest
-        //    lblShortInterest.Text = _stockDownloads.stockStatistics.ShortInterestString.StringValue + "%";
-        //    lblShortInterest.ForeColor = _stockDownloads.stockStatistics.ShortInterestColor;
-        //}
-
-        private async void btnGetAllHistory_Click(object sender, EventArgs e)
+         private async void btnGetAllHistory_Click(object sender, EventArgs e)
         {
             UseWaitCursor = true;
             Application.DoEvents();
@@ -841,7 +805,6 @@ namespace StockApi
         {
             MessageBox.Show(_stockDownloads.stockSummary.CompanyOverview, "Company Overview", MessageBoxButtons.OK);
         }
-
 
         //////////////////////////////
         //      Metrics Timer
