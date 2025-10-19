@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StockApi.Downloads
 {
-    class StockDownloads
+    public class StockDownloads
     {
         public StockSummary stockSummary = new StockSummary();
         public StockHistory stockHistory = new StockHistory();

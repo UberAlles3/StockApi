@@ -1,4 +1,5 @@
 ﻿using Drake.Extensions;
+using StockApi.Downloads;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -234,21 +235,21 @@ namespace StockApi
 
             return true;
         }
-        public void SetCalculatedPE(StockSummary _stockSummary, StockIncomeStatement _stockFinancials)
+        public void SetCalculatedPE(StockDownloads stockDownloads)
         {
             // Combine profit growth and margin into a number
-            decimal marginFactor = 1 + (_stockSummary.ProfitMarginString.NumericValue / 100M);
-            _stockSummary.CalculatedPEString.StringValue = (_stockSummary.ForwardPEString.NumericValue / (marginFactor * _stockFinancials.ProfitGrowth)).ToString("0.00");
-            _stockSummary.Valuation = StockSummary.ValuationEnum.FairValue;
+            decimal marginFactor = 1 + (stockDownloads.stockSummary.ProfitMarginString.NumericValue / 100M);
+            stockDownloads.stockSummary.CalculatedPEString.StringValue = (stockDownloads.stockSummary.ForwardPEString.NumericValue / (marginFactor * stockDownloads.stockIncomeStatement.ProfitGrowth)).ToString("0.00");
+            stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.FairValue;
 
             //if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
-            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
+            if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.3M) // Over valued
             {
-                _stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
+                stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
             }
-            if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue < (decimal)_stockSummary.AverageSectorPE * .8M) // Under valued
+            if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .8M) // Under valued
             {
-                _stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
+                stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
             }
         }
     }

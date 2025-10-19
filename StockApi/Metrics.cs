@@ -132,7 +132,7 @@ namespace StockApi
 
 
             // Calculated PE can only be figured after both summary and finacial data is combined
-            stockDownloads.stockSummary.SetCalculatedPE(stockDownloads.stockSummary, stockDownloads.stockIncomeStatement);
+            stockDownloads.stockSummary.SetCalculatedPE(stockDownloads);
 
             if (stockDownloads.stockHistory.HistoricDisplayList.Count > 0)
                 stockDownloads.stockHistory.HistoricData3YearsAgo = stockDownloads.stockHistory.HistoricDisplayList.Last();

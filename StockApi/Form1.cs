@@ -24,10 +24,6 @@ namespace StockApi
         
         List<Setting> _settings = new List<Setting>();
         private static bool _tickerFound = false;
-        //private static StockSummary _stockSummary = new StockSummary();
-        //private static StockIncomeStatement _stockIncomeStatment = new StockIncomeStatement();
-        //private static StockStatistics _stockStatistics = new StockStatistics();
-        //private static StockHistory _stockHistory = new StockHistory();
         private static StockDownloads _stockDownloads = new StockDownloads("");
 
         // Markets
@@ -471,7 +467,7 @@ namespace StockApi
                 bool found = await _stockDownloads.stockIncomeStatement.GetStockData(ticker);
 
                 // Calculated PE can only be figured after both summary and finacial data is combined
-                _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads.stockSummary, _stockDownloads.stockIncomeStatement);
+                _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads);
 
                 // get 3 year ago price
                 await _stockDownloads.stockHistory.GetPriceHistoryFor3Year(ticker, _stockDownloads.stockSummary);
@@ -578,7 +574,7 @@ namespace StockApi
                     lblNasdaqPercChange.ForeColor = Market_Nasdaq.MarketColor;
 
                     // Calculated PE can only be figured after both summary and finacial data is combined
-                    _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads.stockSummary, _stockDownloads.stockIncomeStatement);
+                    _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads);
                     lblCalculatedPE.Text = _stockDownloads.stockSummary.CalculatedPEString.StringValue;
 
                     if (_stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
