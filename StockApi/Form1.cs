@@ -939,6 +939,8 @@ namespace StockApi
             runDailyMetricsToolStripMenuItem.Text = saveText;
             runDailyMetricsToolStripMenuItem.Enabled = true;
             runDailyMetricsToolStripMenuItem.ForeColor = Color.White;
+
+
         }
 
         private async void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
