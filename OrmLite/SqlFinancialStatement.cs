@@ -9,7 +9,7 @@ using SqlLayer.Models;
 
 namespace SqlLayer
 {
-    public class FinancialStatement
+    public class SqlFinancialStatement
     {
         /// <summary>
         /// Get the database connection
@@ -73,7 +73,7 @@ namespace SqlLayer
 
         #endregion
 
-        public FinancialStatement()
+        public SqlFinancialStatement()
         {
             //this.IncomeStatement = new IncomeStatement();
             this.CashFlow = new CashFlow();

@@ -77,7 +77,7 @@ namespace StockApi
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
-        public async Task<bool> GetStatisticData(string ticker)
+        public override async Task<bool> GetStockData(string ticker)
         {
             Ticker = ticker;
             string html = "";

@@ -36,7 +36,7 @@ namespace StockApi
         public MarketData Market_Dow;
         public MarketData Market_Nasdaq;
 
-        public FinancialStatement _finacialStatement = new FinancialStatement();
+        public SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
         private static Analyze _analyze = new Analyze();
         public static DataTable TickerTradesDataTable = null;
 
@@ -283,10 +283,6 @@ namespace StockApi
 
                     dataGridView2.Refresh();
                 }
-
-                // Trends
-                _stockDownloads.stockHistory.SetTrends();
-                SetTrendImages();
             }
 
             PostSummaryWebCall(); // displays the data returned
@@ -359,7 +355,7 @@ namespace StockApi
             panel1.Visible = panel2.Visible = panel3.Visible = false;
         }
 
-        private void SetTrendImages()
+        private void SetHistoricPriceTrendImages()
         {
             if (_stockDownloads.stockHistory.ThreeYearTrend != StockHistory.TrendEnum.Unknown)
             {
@@ -419,7 +415,6 @@ namespace StockApi
         {
             StringBuilder builder = new StringBuilder();
             List<string> stockList = new List<string>();
-            List<StockHistory.HistoricPriceData> historicDataList = new List<StockHistory.HistoricPriceData>();
 
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
 
@@ -473,16 +468,16 @@ namespace StockApi
                 }
 
                 _stockDownloads.stockIncomeStatement = new StockIncomeStatement();
-                bool found = await _stockDownloads.stockIncomeStatement.GetIncomeStatementData(_stockDownloads.stockSummary.Ticker);
+                bool found = await _stockDownloads.stockIncomeStatement.GetStockData(ticker);
 
                 // Calculated PE can only be figured after both summary and finacial data is combined
                 _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads.stockSummary, _stockDownloads.stockIncomeStatement);
 
                 // get 3 year ago price
-                historicDataList = await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockDownloads.stockSummary, true, false, false);
+                await _stockDownloads.stockHistory.GetPriceHistoryFor3Year(ticker, _stockDownloads.stockSummary);
 
-                if (historicDataList.Count > 0)
-                    _stockDownloads.stockHistory.HistoricData3YearsAgo = historicDataList.Last();
+                if (_stockDownloads.stockHistory.HistoricDisplayList.Count > 0)
+                    _stockDownloads.stockHistory.HistoricData3YearsAgo = _stockDownloads.stockHistory.HistoricDisplayList.Last();
                 else
                     _stockDownloads.stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
 
@@ -616,6 +611,9 @@ namespace StockApi
                     {
                         lbl52WeekArrow.Visible = false;
                     }
+
+                    // Historic Price Trends
+                    SetHistoricPriceTrendImages();
 
                     //////////  Ticker Trades
                     if (TickerTradesDataTable != null && TickerTradesDataTable.Rows.Count > 0)
@@ -846,11 +844,10 @@ namespace StockApi
             UseWaitCursor = true;
             Application.DoEvents();
             btnGetAllHistory.Visible = false;
-            List<StockHistory.HistoricPriceData> historicDisplayList = await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary, true, true, true);
-            BindListToHistoricPriceGrid(historicDisplayList);
+            await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary);
+            BindListToHistoricPriceGrid(_stockDownloads.stockHistory.HistoricDisplayList);
             // Trends
-            _stockDownloads.stockHistory.SetTrends();
-            SetTrendImages();
+            SetHistoricPriceTrendImages();
             UseWaitCursor = false;
         }
 

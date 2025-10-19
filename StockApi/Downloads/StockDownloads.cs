@@ -46,7 +46,7 @@ namespace StockApi.Downloads
         public async Task<bool> GetStatistics()
         {
             stockStatistics = new StockStatistics(); // initializes all properties
-            bool found = await stockStatistics.GetStatisticData(_ticker);
+            bool found = await stockStatistics.GetStockData(_ticker);
 
             return found;
         }
@@ -54,7 +54,7 @@ namespace StockApi.Downloads
         public async Task<bool> GetIncomeStatement()
         {
             stockIncomeStatement = new StockIncomeStatement(); // initializes all properties
-            bool found = await stockIncomeStatement.GetIncomeStatementData(_ticker);
+            bool found = await stockIncomeStatement.GetStockData(_ticker);
 
             return found;
         }
@@ -64,12 +64,14 @@ namespace StockApi.Downloads
             stockHistory = new StockHistory(); // initializes all properties
 
             // get 3 year ago price
-            stockHistory.HistoricDisplayList = await stockHistory.GetPriceHistoryForTodayWeekMonthYear(_ticker, stockSummary, true, false, false);
+            stockHistory.HistoricDisplayList = await stockHistory.GetPriceHistoryFor3Year(_ticker, stockSummary);
 
             if (stockHistory.HistoricDisplayList.Count > 0)
                 stockHistory.HistoricData3YearsAgo = stockHistory.HistoricDisplayList.Last();
             else
                 stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = stockSummary.Ticker, Price = stockSummary.PriceString.NumericValue };
+
+            stockHistory.SetTrends();
 
             return true;
         }

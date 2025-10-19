@@ -32,7 +32,7 @@ namespace StockApi
         public TrendEnum MonthTrend = TrendEnum.Sideways;
         public TrendEnum YearTrend = TrendEnum.Sideways;
         public TrendEnum ThreeYearTrend = TrendEnum.Sideways;
-        public List<StockHistory.HistoricPriceData> HistoricDisplayList = new List<StockHistory.HistoricPriceData>();
+        public List<HistoricPriceData> HistoricDisplayList = new List<StockHistory.HistoricPriceData>();
 
 
         public StockHistory()
@@ -62,108 +62,114 @@ namespace StockApi
             }
         }
 
-        public async Task<List<StockHistory.HistoricPriceData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary, bool get3Year, bool get1Year, bool getMonthAndWeek)
+        public async Task<List<StockHistory.HistoricPriceData>> GetPriceHistoryFor3Year(string ticker, StockSummary summary)
         {
+            /////// Get price history from 3 years ago
+            List<StockQuote> quoteList = new List<StockQuote>();
+            try
+            {
+                // Some stocks didn't exist 3 years ago
+                quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4, "1d");
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Data doesn't exist for startDate"))
+                {
+                    // try a year ago
+                    quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
+                }
+                else
+                    MessageBox.Show(ex.Message);
+            }
+
+            if (quoteList.Count > 0)
+            {
+                StockQuote stockQuote = quoteList.Last();
+                HistoricData3YearsAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "3Y");
+            }
+
+            if (summary.YearsRangeLow.StringValue == summary.YearsRangeHigh.StringValue) // Mutual fund range was faked
+            {
+                if (HistoricData3YearsAgo.Price < summary.PriceString.NumericValue) // going up
+                    summary.YearsRangeLow.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
+                else
+                {
+                    summary.YearsRangeLow.NumericValue = summary.PriceString.NumericValue * .95M;
+                    summary.YearsRangeHigh.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
+                }
+            }
+
+            HistoricDisplayList = new List<HistoricPriceData>();
+            HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.PriceString.NumericValue, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = "N/A" };
+            HistoricDisplayList.Add(HistoricDataToday);
+            HistoricDisplayList.Add(HistoricData3YearsAgo);
+
+            // Set historic price trends
+            SetTrends();
+
+            return HistoricDisplayList;
+        }
+
+        public async Task<List<StockHistory.HistoricPriceData>> GetPriceHistoryForTodayWeekMonthYear(string ticker, StockSummary summary)
+        {
+            List<StockQuote> quoteList = new List<StockQuote>();
             /////// Get price history, today, week ago, month ago to determine short trend
             DateTime findDate;
 
             HistoricDataWeekAgo = null;
             HistoricDataMonthAgo = null;
             HistoricDataYearAgo = null;
-            if (getMonthAndWeek)
+            quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), 34, "1d");
+
+            if (quoteList.Count > 0)
             {
-                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), 34, "1d");
+                // Today will be the last in the list
+                StockQuote stockQuote = quoteList.Last();
+                HistoricDataToday = HistoricPriceData.MapFromApiStockQuote(stockQuote, "D");
 
-                if (quoteList.Count > 0)
+                // Last Week
+                findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
+                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1));
+                if (stockQuote != null)
                 {
-                    // Today will be the last in the list
-                    StockQuote stockQuote = quoteList.Last();
-                    HistoricDataToday = HistoricPriceData.MapFromApiStockQuote(stockQuote, "D");
-
-                    // Last Week
-                    findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
-                    stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1));
-                    if (stockQuote != null)
-                    {
-                        HistoricDataWeekAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "W");
-                    }
-
-                    //// Last Month (really 31 days ago)
-                    findDate = GetMondayIfWeekend(DateTime.Now.AddMonths(-1).Date);
-                    stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(2));
-                    if (stockQuote != null)
-                    {
-                        HistoricDataMonthAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "M");
-                    }
+                    HistoricDataWeekAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "W");
                 }
-            }
-            else
-            {
-                HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.PriceString.NumericValue, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = "N/A" };
-            }
 
-            /////// Get price history for a year ago to determine long trend
-            if (get1Year)
-            {
-                List<StockQuote> quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
+                //// Last Month (really 31 days ago)
+                findDate = GetMondayIfWeekend(DateTime.Now.AddMonths(-1).Date);
+                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(2));
+                if (stockQuote != null)
+                {
+                    HistoricDataMonthAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "M");
+                }
+
+                /////// Get price history for a year ago to determine long trend
+                quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
 
                 if (quoteList.Count > 0)
                 {
-                    StockQuote stockQuote = quoteList.Last();
+                    stockQuote = quoteList.Last();
                     HistoricDataYearAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "Y");
                 }
             }
 
+            HistoricDisplayList = new List<HistoricPriceData>();
 
-            /////// Get price history for 3 years ago to determine long trend
-            if (get3Year)
-            {
-                List<StockQuote> quoteList = new List<StockQuote>();
-                try
-                {
-                    quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4, "1d");
-                }
-                catch (Exception ex)
-                {
-                    if(ex.Message.Contains("Data doesn't exist for startDate"))
-                    {
-                        quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
-                    }
-                    else
-                        MessageBox.Show(ex.Message);
-                }
-
-                if (quoteList.Count > 0)
-                {
-                    StockQuote stockQuote = quoteList.Last();
-                    HistoricData3YearsAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "3Y");
-                }
-
-                if(summary.YearsRangeLow.StringValue == summary.YearsRangeHigh.StringValue) // Mutual fund range was faked
-                {
-                    if (HistoricData3YearsAgo.Price < summary.PriceString.NumericValue) // going up
-                        summary.YearsRangeLow.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
-                    else
-                    {
-                        summary.YearsRangeLow.NumericValue = summary.PriceString.NumericValue * .95M;
-                        summary.YearsRangeHigh.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
-                    }
-                }
-            }
-
-            List<StockHistory.HistoricPriceData> historicDisplayList = new List<StockHistory.HistoricPriceData>();
             if (HistoricDataToday != null)
-                historicDisplayList.Add(HistoricDataToday);
+                HistoricDisplayList.Add(HistoricDataToday);
             if (HistoricDataWeekAgo != null)
-                historicDisplayList.Add(HistoricDataWeekAgo);
+                HistoricDisplayList.Add(HistoricDataWeekAgo);
             if (HistoricDataMonthAgo != null)
-                historicDisplayList.Add(HistoricDataMonthAgo);
+                HistoricDisplayList.Add(HistoricDataMonthAgo);
             if (HistoricDataYearAgo != null)
-                historicDisplayList.Add(HistoricDataYearAgo);
+                HistoricDisplayList.Add(HistoricDataYearAgo);
             if (HistoricData3YearsAgo != null)
-                historicDisplayList.Add(HistoricData3YearsAgo);
+                HistoricDisplayList.Add(HistoricData3YearsAgo);
 
-            return historicDisplayList;
+            // Set historic price trends
+            SetTrends();
+
+            return HistoricDisplayList;
         }
 
         private static DateTime GetMondayIfWeekend(DateTime theDate)

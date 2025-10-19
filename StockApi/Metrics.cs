@@ -148,15 +148,15 @@ namespace StockApi
             }
 
             _stockFinancials = new StockIncomeStatement();
-            bool found = await _stockFinancials.GetIncomeStatementData(_stockSummary.Ticker);
+            bool found = await _stockFinancials.GetStockData(ticker);
 
             // Calculated PE can only be figured after both summary and finacial data is combined
             _stockSummary.SetCalculatedPE(_stockSummary, _stockFinancials);
 
             // get 3 year ago price
-            historicDataList = await _stockHistory.GetPriceHistoryForTodayWeekMonthYear(ticker, _stockSummary, true, false, false);
+            await _stockHistory.GetPriceHistoryFor3Year(ticker, _stockSummary);
 
-            if (historicDataList.Count > 0)
+            if (_stockHistory.HistoricDisplayList.Count > 0)
                 _stockHistory.HistoricData3YearsAgo = historicDataList.Last();
             else
                 _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue };
