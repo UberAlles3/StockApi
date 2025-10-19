@@ -5,6 +5,7 @@ using ServiceStack.DataAnnotations;
 
 namespace SqlLayer.SQL_Models
 {
+    [Alias("IncomeStatement")]
     public class SqlIncomeStatement
     {
         public SqlIncomeStatement() { }

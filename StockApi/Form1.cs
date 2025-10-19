@@ -16,6 +16,7 @@ using Drake.Extensions;
 using System.IO;
 using SqlLayer;
 using StockApi.Downloads;
+using SqlLayer.SQL_Models;
 
 namespace StockApi
 {
@@ -82,8 +83,6 @@ namespace StockApi
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //_finacialStatement.SaveFinancials();
-
             ////// Testing section
             //FpmAPI fpmAPI = new FpmAPI();
             //fpmAPI.Test();
@@ -188,6 +187,9 @@ namespace StockApi
             try
             {
                 _tickerFound = await _stockDownloads.GetAllStockData();
+                // Save to SQL Server
+                List<SqlIncomeStatement> ListSis = StockIncomeStatement.MapFrom(_stockDownloads.stockIncomeStatement);
+                _finacialStatement.SaveIncomeStatements(ListSis);
             }
             catch (Exception ex)
             {

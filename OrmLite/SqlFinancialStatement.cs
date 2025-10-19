@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text;
 using ServiceStack.OrmLite;
 using SqlLayer.Models;
+using SqlLayer.SQL_Models;
 
 namespace SqlLayer
 {
@@ -21,9 +22,9 @@ namespace SqlLayer
             OrmLiteConnectionFactory factory = new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
             return factory;
         }
-        public SqlCashFlow CashFlow { get; set; }
+        public SqlCashFlow SqlCashFlow { get; set; }
+        public SqlIncomeStatement SqlIncomeStatement { get; set; }
         //public BalanceSheet BalanceSheet { get; set; }
-        //public IncomeStatement IncomeStatement { get; set; }
 
         #region Pass-Through Properties
         //TODO
@@ -76,7 +77,7 @@ namespace SqlLayer
         public SqlFinancialStatement()
         {
             //this.IncomeStatement = new IncomeStatement();
-            this.CashFlow = new SqlCashFlow();
+            this.SqlCashFlow = new SqlCashFlow();
         }
 
         public void SaveFinancials()
@@ -98,6 +99,25 @@ namespace SqlLayer
                 //    db.Insert<BalanceSheet>(_statementCache[key].BalanceSheet);
                 //    db.Insert<CashFlow>(_statementCache[key].CashFlow);
                 //}
+            }
+        }
+
+        public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
+        {
+            Debug.WriteLine("SaveIncomeStatements()");
+
+            var factory = FinancialStatementFactory();
+
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlIncomeStatement>();
+
+                db.Delete<SqlIncomeStatement>(x => x.Year > DateTime.Now.AddYears(-5).Year);
+
+                foreach (SqlIncomeStatement sis in sqlIncomeStatements)
+                {
+                  db.Insert<SqlIncomeStatement>(sis);
+                }
             }
         }
     }
