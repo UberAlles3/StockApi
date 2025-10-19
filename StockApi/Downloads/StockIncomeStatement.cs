@@ -1,4 +1,5 @@
 ﻿using Drake.Extensions;
+using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -327,6 +328,52 @@ namespace StockApi
             }
 
             return true;
+        }
+
+        public static List<SqlIncomeStatement> MapFrom(StockIncomeStatement source)
+        {
+            List<SqlIncomeStatement> sqlIncomeStatements = new List<SqlIncomeStatement>();
+
+            // TTM
+            sqlIncomeStatements.Add(new SqlIncomeStatement()
+            {
+                Ticker = source.Ticker,
+                Year = DateTime.Now.Year,
+                Revenue = (double)source.RevenueTtmString.NumericValue,
+                CostOfRevenue = (double)source.CostOfRevenueTtmString.NumericValue,
+                OperatingExpense = (double)source.OperatingExpenseTtmString.NumericValue,
+                NetIncome = (double)source.NetIncomeTtmString.NumericValue,
+                BasicEPS = (double)source.BasicEpsTtmString.NumericValue,
+                UpdateDate = DateTime.Now.Date
+            });
+
+            // 2 years ago
+            sqlIncomeStatements.Add(new SqlIncomeStatement()
+            {
+                Ticker = source.Ticker,
+                Year = DateTime.Now.AddYears(-2).Year,
+                Revenue = (double)source.Revenue2String.NumericValue,
+                CostOfRevenue = (double)source.CostOfRevenue2String.NumericValue,
+                OperatingExpense = (double)source.OperatingExpense2String.NumericValue,
+                NetIncome = (double)source.NetIncome2String.NumericValue,
+                BasicEPS = (double)source.BasicEps2String.NumericValue,
+                UpdateDate = DateTime.Now.Date
+            });
+
+            // 4 years ago
+            sqlIncomeStatements.Add(new SqlIncomeStatement()
+            {
+                Ticker = source.Ticker,
+                Year = DateTime.Now.AddYears(-4).Year,
+                Revenue = (double)source.Revenue4String.NumericValue,
+                CostOfRevenue = (double)source.CostOfRevenue4String.NumericValue,
+                OperatingExpense = (double)source.OperatingExpense4String.NumericValue,
+                NetIncome = (double)source.NetIncome4String.NumericValue,
+                BasicEPS = (double)source.BasicEps4String.NumericValue,
+                UpdateDate = DateTime.Now.Date
+            });
+
+            return sqlIncomeStatements;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace SqlLayer
             OrmLiteConnectionFactory factory = new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
             return factory;
         }
-        public CashFlow CashFlow { get; set; }
+        public SqlCashFlow CashFlow { get; set; }
         //public BalanceSheet BalanceSheet { get; set; }
         //public IncomeStatement IncomeStatement { get; set; }
 
@@ -76,7 +76,7 @@ namespace SqlLayer
         public SqlFinancialStatement()
         {
             //this.IncomeStatement = new IncomeStatement();
-            this.CashFlow = new CashFlow();
+            this.CashFlow = new SqlCashFlow();
         }
 
         public void SaveFinancials()
@@ -87,14 +87,14 @@ namespace SqlLayer
 
             using (IDbConnection db = factory.OpenDbConnection())
             {
-                db.CreateTableIfNotExists<CashFlow>();
+                db.CreateTableIfNotExists<SqlCashFlow>();
 
-                db.Delete<CashFlow>(x => x.Year > DateTime.Now.AddYears(-5).Year);
+                db.Delete<SqlCashFlow>(x => x.Year > DateTime.Now.AddYears(-5).Year);
 
                 //foreach (string key in _statementCache.Keys)
                 //{
-                CashFlow cashFlow = new CashFlow() { Year = DateTime.Now.Year, EndCashPosition = 111, FreeCashFlow = 222.222, Ticker = "AAPL", OperatingCashFlow = 555, UpdateDate = DateTime.Now.Date};
-                db.Insert<CashFlow>(cashFlow);
+                SqlCashFlow cashFlow = new SqlCashFlow() { Year = DateTime.Now.Year, EndCashPosition = 111, FreeCashFlow = 222.222, Ticker = "AAPL", OperatingCashFlow = 555, UpdateDate = DateTime.Now.Date};
+                db.Insert<SqlCashFlow>(cashFlow);
                 //    db.Insert<BalanceSheet>(_statementCache[key].BalanceSheet);
                 //    db.Insert<CashFlow>(_statementCache[key].CashFlow);
                 //}

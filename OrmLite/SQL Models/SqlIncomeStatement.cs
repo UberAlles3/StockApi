@@ -5,9 +5,9 @@ using ServiceStack.DataAnnotations;
 
 namespace SqlLayer.SQL_Models
 {
-    public class IncomeStatement
+    public class SqlIncomeStatement
     {
-        public IncomeStatement() { }
+        public SqlIncomeStatement() { }
 
         [AutoIncrement]
         public int Id { get; set; }

@@ -5,9 +5,9 @@ using ServiceStack.DataAnnotations;
 
 namespace SqlLayer.Models
 {
-    public class CashFlow 
+    public class SqlCashFlow 
     {
-        public CashFlow() { }
+        public SqlCashFlow() { }
 
         [AutoIncrement]
         public int Id { get; set; }
