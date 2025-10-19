@@ -484,7 +484,7 @@ namespace StockApi
                 txtSharesTraded.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
                 analyzeInputs.MarketHealth = 5;
-                decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads.stockSummary, _stockDownloads.stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, true);
+                decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, true);
 
                 builder.Append($"{_stockDownloads.stockSummary.Ticker}, {_stockDownloads.stockSummary.VolatilityString.NumericValue}, {_stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {_stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue}, {_stockDownloads.stockSummary.PriceBookString.NumericValue}, {_stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {_stockDownloads.stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
                 builder.Append($", {_stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockDownloads.stockSummary.YearsRangeLow.NumericValue},{_stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
@@ -789,7 +789,7 @@ namespace StockApi
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             SetUpAnalyzeInputs(analyzeInputs);
             analyzeInputs.MarketHealth = trackBar1.Value;
-            _analyze.AnalyzeStockData(_stockDownloads.stockSummary, _stockDownloads.stockHistory, _stockDownloads.stockIncomeStatement, _stockDownloads.stockStatistics, analyzeInputs, false);
+            _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, false);
 
             txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
 

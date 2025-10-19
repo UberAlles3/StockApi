@@ -141,7 +141,7 @@ namespace StockApi
 
             decimal percent_diff = stockDownloads.stockSummary.PriceString.NumericValue / stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
 
-            decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads.stockSummary, stockDownloads.stockHistory, stockDownloads.stockIncomeStatement, stockDownloads.stockStatistics, analyzeInputs, true);
+            decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads, analyzeInputs, true);
             if(ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMGN")
             {
                 Debug.WriteLine(_analyze.AnalysisMetricsOutputText);
