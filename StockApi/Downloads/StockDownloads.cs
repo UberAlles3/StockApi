@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StockApi.Downloads
@@ -39,7 +40,11 @@ namespace StockApi.Downloads
         {
             stockSummary = new StockSummary();
             bool found = await stockSummary.GetStockData(_ticker);
-
+            if (stockSummary.EarningsPerShareString.StringValue == "--")
+            {
+                Thread.Sleep(2000);
+                found = await stockSummary.GetStockData(_ticker);
+            }
             return found;
         }
 

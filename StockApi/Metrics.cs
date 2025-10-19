@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
+using StockApi.Downloads;
 
 namespace StockApi
 {
@@ -16,10 +17,10 @@ namespace StockApi
     /// </summary>
     public class Metrics
     {
-        private StockSummary _stockSummary = new StockSummary();
-        private StockIncomeStatement _stockFinancials = new StockIncomeStatement();
-        private StockStatistics _stockStatistics = new StockStatistics();
-        private StockHistory _stockHistory = new StockHistory();
+        //private StockSummary _stockSummary = new StockSummary();
+        //private StockIncomeStatement _stockFinancials = new StockIncomeStatement();
+        //private StockStatistics _stockStatistics = new StockStatistics();
+        //private StockHistory _stockHistory = new StockHistory();
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
 
@@ -89,7 +90,8 @@ namespace StockApi
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
             {
-                stockList = stockList.Skip(120).Take(30).ToList();
+                stockList = stockList.Skip(0).Take(3).ToList();
+                // TODO stockList = stockList.Skip(120).Take(30).ToList();
                 desktopPath = Path.Combine(desktopPath, "StockMetricsSaturday_V-Z.txt");
             }
 
@@ -119,59 +121,35 @@ namespace StockApi
         {
             bool _tickerFound;
             string stockMetricString;
+            StockDownloads stockDownloads = new StockDownloads(ticker);
 
-            List<StockHistory.HistoricPriceData> historicDataList = new List<StockHistory.HistoricPriceData>();
+            _tickerFound = await stockDownloads.GetAllStockData();
 
-            _stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
-
-            // Extract the individual data values from the html
-            _tickerFound = await _stockSummary.GetStockData(_stockSummary.Ticker);
-
-            if (_stockSummary.LastException != null)
+            if (stockDownloads.stockSummary.LastException != null)
             {
-                return $"{_stockSummary.Ticker} Error {_stockSummary.Error}";
-            }
-            else if (_stockSummary.EarningsPerShareString.StringValue == "--")
-            {
-                Thread.Sleep(2000);
-                _tickerFound = await _stockSummary.GetStockData(_stockSummary.Ticker);
-                if (_stockSummary.EarningsPerShareString.StringValue == "--")
-                {
-                    Thread.Sleep(2000);
-                    _tickerFound = await _stockSummary.GetStockData(_stockSummary.Ticker);
-                    if (_stockSummary.EarningsPerShareString.StringValue == "--")
-                    {
-                        Thread.Sleep(2000);
-                        _tickerFound = await _stockSummary.GetStockData(_stockSummary.Ticker);
-                    }
-                }
+                return $"{ticker} Error {stockDownloads.stockSummary.Error}";
             }
 
-            _stockFinancials = new StockIncomeStatement();
-            bool found = await _stockFinancials.GetStockData(ticker);
 
             // Calculated PE can only be figured after both summary and finacial data is combined
-            _stockSummary.SetCalculatedPE(_stockSummary, _stockFinancials);
+            stockDownloads.stockSummary.SetCalculatedPE(stockDownloads.stockSummary, stockDownloads.stockIncomeStatement);
 
-            // get 3 year ago price
-            await _stockHistory.GetPriceHistoryFor3Year(ticker, _stockSummary);
-
-            if (_stockHistory.HistoricDisplayList.Count > 0)
-                _stockHistory.HistoricData3YearsAgo = historicDataList.Last();
+            if (stockDownloads.stockHistory.HistoricDisplayList.Count > 0)
+                stockDownloads.stockHistory.HistoricData3YearsAgo = stockDownloads.stockHistory.HistoricDisplayList.Last();
             else
-                _stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockSummary.Ticker, Price = _stockSummary.PriceString.NumericValue };
+                stockDownloads.stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = stockDownloads.stockSummary.Ticker, Price = stockDownloads.stockSummary.PriceString.NumericValue };
 
-            decimal percent_diff = _stockSummary.PriceString.NumericValue / _stockHistory.HistoricData3YearsAgo.Price - 1M;
+            decimal percent_diff = stockDownloads.stockSummary.PriceString.NumericValue / stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
 
-            decimal totalMetric = _analyze.AnalyzeStockData(_stockSummary, _stockHistory, _stockFinancials, _stockStatistics, analyzeInputs, true);
-            if(ticker == "KIM" || ticker == "ACHR" || ticker == "AMGN")
+            decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads.stockSummary, stockDownloads.stockHistory, stockDownloads.stockIncomeStatement, stockDownloads.stockStatistics, analyzeInputs, true);
+            if(ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMGN")
             {
                 Debug.WriteLine(_analyze.AnalysisMetricsOutputText);
             }
 
-            stockMetricString = $"{_stockSummary.Ticker}, {_stockSummary.VolatilityString.NumericValue}, {_stockSummary.EarningsPerShareString.NumericValue}, {_stockSummary.OneYearTargetPriceString.NumericValue},"
-                                     + $" {_stockSummary.PriceBookString.NumericValue}, {_stockSummary.ProfitMarginString.NumericValue}, {_stockSummary.DividendString.NumericValue}, {_stockStatistics.ShortInterestString.NumericValue}"
-                                     + $", {_stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockSummary.YearsRangeLow.NumericValue},{_stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}";
+            stockMetricString = $"{stockDownloads.stockSummary.Ticker}, {stockDownloads.stockSummary.VolatilityString.NumericValue}, {stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue},"
+                                     + $" {stockDownloads.stockSummary.PriceBookString.NumericValue}, {stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {stockDownloads.stockSummary.DividendString.NumericValue}, {stockDownloads.stockStatistics.ShortInterestString.NumericValue}"
+                                     + $", {stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{stockDownloads.stockSummary.YearsRangeLow.NumericValue},{stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}";
 
             return stockMetricString;
         }
