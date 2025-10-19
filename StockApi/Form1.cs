@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -135,7 +136,7 @@ namespace StockApi
         private async void btnGetOne_click(object sender, EventArgs e)
         {
 
-            ////////// TODO take out
+            //////////
             //Metrics metrics = new Metrics();
             //int x = await metrics.DailyGetMetrics(PositionsDataTable);
 
@@ -143,8 +144,7 @@ namespace StockApi
             //FinnhubAPI finnhubAPI = new FinnhubAPI();
             //MarketData marketData = await finnhubAPI.GetQuote("INTC", DateTime.Now.AddDays(-3), 1);
 
-            bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
-
+            bool networkUp = NetworkInterface.GetIsNetworkAvailable();
             if(networkUp == false)
             {
                 MessageBox.Show("Your network connection is unavailable.");
@@ -163,17 +163,7 @@ namespace StockApi
             // Trades
             tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
 
-            /////////// Set Bullish / Bearish scale
-            // Get DOW level from 2 months ago
-            var tickerTradesList = tradesDataTable.AsEnumerable().Where(x => DateTime.ParseExact(x[0].ToString(), "M/d/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-60) && x[1].ToString().Trim() != "").ToList();
-            // get first and last row's DOW
-            //float oneMonthAgoDOW = Convert.ToInt32(tickerTradesList.First().ItemArray[1].ToString());
-            //float currentDOW = Convert.ToInt32(tickerTradesList.Last().ItemArray[1].ToString());
-            //float perc = (currentDOW - oneMonthAgoDOW) / oneMonthAgoDOW * 10;
-            //if (perc < -5) perc = -5;
-            //if (perc > 5) perc = 5;
-
-            trackBar1.Value = 5; // Not used, User can set this on their own//// + Convert.ToInt32(perc);
+            trackBar1.Value = 5; // User can set this on their own
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
