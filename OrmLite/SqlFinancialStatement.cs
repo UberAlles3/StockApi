@@ -5,7 +5,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 using ServiceStack.OrmLite;
-using SqlLayer.Models;
 using SqlLayer.SQL_Models;
 
 namespace SqlLayer
@@ -119,6 +118,23 @@ namespace SqlLayer
                   db.Insert<SqlIncomeStatement>(sis);
                 }
             }
+        }
+
+        public List<SqlIncomeStatement> GetIncomeStatements(string ticker)
+        {
+            List<SqlIncomeStatement> sqlIncomeStatementsList;
+
+
+            Debug.WriteLine("SaveIncomeStatements()");
+
+            var factory = FinancialStatementFactory();
+
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                sqlIncomeStatementsList = db.Select<SqlIncomeStatement>(x => x.Year > DateTime.Now.Year - 5);
+            }
+
+            return sqlIncomeStatementsList;
         }
     }
 }

@@ -324,13 +324,9 @@ namespace StockApi
 
             output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
 
+            //// Calculate total metric
+            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * cashDebtMetric * valuationMetric;
 
-
-            // Market
-            decimal ecoMetric = 1 + ((analyzeInputs.MarketHealth - 5) / 50);
-            output.AppendLine($"Market Metric = {ecoMetric.ToString(".00")}");
-
-            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * cashDebtMetric * valuationMetric * ecoMetric;
 
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
@@ -509,7 +505,6 @@ namespace StockApi
             public int QuantityTraded;
             public decimal SharesTradedPrice;
             public decimal MovementTargetPercent;
-            public decimal MarketHealth;
         }
     }
 }

@@ -472,7 +472,6 @@ namespace StockApi
                 txtSharesOwned.Text = "1";
                 txtSharesTraded.Text = "1";
                 SetUpAnalyzeInputs(analyzeInputs);
-                analyzeInputs.MarketHealth = 5;
                 decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, true);
 
                 builder.Append($"{_stockDownloads.stockSummary.Ticker}, {_stockDownloads.stockSummary.VolatilityString.NumericValue}, {_stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {_stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue}, {_stockDownloads.stockSummary.PriceBookString.NumericValue}, {_stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {_stockDownloads.stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
@@ -707,7 +706,7 @@ namespace StockApi
                         _stockDownloads.stockSummary.EarningsPerShareString.StringValue = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.StringValue;
 
                     // Revenue
-                    lblFinRevTTM.Text = _stockDownloads.stockIncomeStatement.RevenueTtmString.StringValue;
+                    lblFinRevTTM.Text = $"{_stockDownloads.stockIncomeStatement.RevenueTtmString:n0}";
                     lblFinRevTTM.ForeColor = _stockDownloads.stockIncomeStatement.RevenueTtmColor;
                     lblFinRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue2String.StringValue;
                     lblFinRev2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Revenue2Color;

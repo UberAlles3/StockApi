@@ -12,11 +12,13 @@ namespace StockApi
         public string Abbreviation = "";
         public string StringIfNotNumeric = null; // string to return if string fails numeric.
         public string ExpandedString = "";
+        public string Format = "";
 
-        public StringSafeType(string stringIfNotNumeric)
+        public StringSafeType(string stringIfNotNumeric, string format = "")
         {
             _stringValue = stringIfNotNumeric;
             StringIfNotNumeric = stringIfNotNumeric;
+            Format = format;
         }
 
         private string _stringValue;
@@ -116,7 +118,22 @@ namespace StockApi
             set
             {
                 _numericValue = value;
-                _stringValue = value.ToString();
+                if (Format != "")
+                {
+                    switch (Type.GetTypeCode(typeof(T)))
+                    {
+                        case TypeCode.Int32:
+                            _stringValue = Convert.ToInt32(value).ToString(Format);
+                            break;
+                        case TypeCode.Decimal:
+                            _stringValue = Convert.ToDecimal(value).ToString(Format);
+                            break;
+                    }
+                }
+                else
+                    _stringValue = value.ToString();
+                
+                IsNumeric = true;
             }
         }
 
@@ -128,6 +145,7 @@ namespace StockApi
             {
                 _datetimeValue = value;
                 _stringValue = value.ToString();
+                IsDateTime = true;
             }
         }
 

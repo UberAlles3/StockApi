@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ServiceStack.DataAnnotations;
 
-namespace SqlLayer.Models
+namespace SqlLayer.SQL_Models
 {
     public class SqlCashFlow 
     {

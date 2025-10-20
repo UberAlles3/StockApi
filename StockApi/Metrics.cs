@@ -32,7 +32,6 @@ namespace StockApi
             Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
             analyzeInputs.SharesOwned = 1;
             analyzeInputs.QuantityTraded = 1;
-            analyzeInputs.MarketHealth = 5;
 
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
             if (networkUp == false)
