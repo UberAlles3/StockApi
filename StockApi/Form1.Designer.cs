@@ -215,6 +215,7 @@ namespace StockApi
             this.lblDOW30Change = new System.Windows.Forms.Label();
             this.label75 = new System.Windows.Forms.Label();
             this.MetricsTimer = new System.Windows.Forms.Timer(this.components);
+            this.lblMessages = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
@@ -2013,7 +2014,7 @@ namespace StockApi
             this.runDailyMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.runDailyMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.runDailyMetricsToolStripMenuItem.Name = "runDailyMetricsToolStripMenuItem";
-            this.runDailyMetricsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.runDailyMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.runDailyMetricsToolStripMenuItem.Text = "&Run Daily Metrics";
             this.runDailyMetricsToolStripMenuItem.Click += new System.EventHandler(this.runDailyMetricsToolStripMenuItem_Click);
             // 
@@ -2261,7 +2262,7 @@ namespace StockApi
             this.panelMarkets.Controls.Add(this.label70);
             this.panelMarkets.Location = new System.Drawing.Point(4, 529);
             this.panelMarkets.Name = "panelMarkets";
-            this.panelMarkets.Size = new System.Drawing.Size(237, 105);
+            this.panelMarkets.Size = new System.Drawing.Size(237, 87);
             this.panelMarkets.TabIndex = 44;
             // 
             // lblNasdaqPercChange
@@ -2374,6 +2375,17 @@ namespace StockApi
             // 
             this.MetricsTimer.Interval = 10000;
             // 
+            // lblMessages
+            // 
+            this.lblMessages.BackColor = System.Drawing.Color.Transparent;
+            this.lblMessages.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblMessages.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.lblMessages.Location = new System.Drawing.Point(12, 672);
+            this.lblMessages.Name = "lblMessages";
+            this.lblMessages.Size = new System.Drawing.Size(276, 22);
+            this.lblMessages.TabIndex = 45;
+            this.lblMessages.Text = "Messages";
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -2383,6 +2395,7 @@ namespace StockApi
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1444, 691);
+            this.Controls.Add(this.lblMessages);
             this.Controls.Add(this.panelMarkets);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.webView21);
@@ -2621,6 +2634,7 @@ namespace StockApi
         private System.Windows.Forms.Label lblBasicEps2YearsAgo;
         private System.Windows.Forms.Label lblBasicEpsTTM;
         private System.Windows.Forms.Label lblBasicEps;
+        private System.Windows.Forms.Label lblMessages;
     }
 }
 

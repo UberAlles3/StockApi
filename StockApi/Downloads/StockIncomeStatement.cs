@@ -57,15 +57,18 @@ namespace StockApi
         public StringSafeType<Decimal> NetIncome4String = new StringSafeType<decimal>("--", "N0");
 
         /// Basic EPS TTM
-        public StringSafeType<Decimal> BasicEpsTtmString = new StringSafeType<decimal>("--", "N0");
+        public StringSafeType<Decimal> BasicEpsTtmString = new StringSafeType<decimal>("--");
         public Color BasicEpsTtmColor = Form1.TextForeColor;
         ///  Basic EPS 2 Year
-        public StringSafeType<Decimal> BasicEps2String = new StringSafeType<decimal>("--", "N0");
+        public StringSafeType<Decimal> BasicEps2String = new StringSafeType<decimal>("--");
         public Color BasicEps2Color = Form1.TextForeColor;
         ///  Basic EPS 4 Year
-        public StringSafeType<Decimal> BasicEps4String = new StringSafeType<decimal>("--", "N0");
+        public StringSafeType<Decimal> BasicEps4String = new StringSafeType<decimal>("--");
         public Color BasicEps4Color = Form1.TextForeColor;
 
+        
+        //// TODO Convert all of the Profit values to StringSafeType?
+        
         /// Profit TTM
         public StringSafeType<Decimal> ProfitTtmString = new StringSafeType<decimal>("--", "N0");
 

@@ -107,6 +107,7 @@ namespace StockApi
             picDownTrend.Visible = false;
 
             lblCompanyNameAndTicker.Text = txtSharesTraded.Text = "";
+            lblMessages.Text = "";
 
             // temporary for testing
             txtStockTicker.Text = "AAPL";
@@ -929,6 +930,8 @@ namespace StockApi
         private async void runDailyMetricsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string saveText = runDailyMetricsToolStripMenuItem.Text;
+
+            lblMessages.Text = "Running metrics for today...";
             runDailyMetricsToolStripMenuItem.Text = "Running...";
             runDailyMetricsToolStripMenuItem.Enabled = false;
             runDailyMetricsToolStripMenuItem.ForeColor = Color.LightBlue;
@@ -938,8 +941,7 @@ namespace StockApi
             runDailyMetricsToolStripMenuItem.Text = saveText;
             runDailyMetricsToolStripMenuItem.Enabled = true;
             runDailyMetricsToolStripMenuItem.ForeColor = Color.White;
-
-
+            lblMessages.Text = "";
         }
 
         private async void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
