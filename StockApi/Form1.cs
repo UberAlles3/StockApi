@@ -1,22 +1,20 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Drake.Extensions;
-using System.IO;
 using SqlLayer;
 using StockApi.Downloads;
 using SqlLayer.SQL_Models;
+using System.IO;
+using Drake.Extensions;
 
 namespace StockApi
 {
