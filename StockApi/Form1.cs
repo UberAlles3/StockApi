@@ -720,9 +720,9 @@ namespace StockApi
                     // Operating Profit / Loss
                     lblOperProfitTTM.Text = _stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue.ToString("N0");
                     lblOperProfitTTM.ForeColor = _stockDownloads.stockIncomeStatement.ProfitTtmColor;
-                    lblOperProfit2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Profit2YearsAgo.ToString("N0");
+                    lblOperProfit2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Profit2YearsAgo.ToString("N0");  //TODO change to SafeString
                     lblOperProfit2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Profit2YearsAgoColor;
-                    lblOperProfit4YearsAgo.Text = _stockDownloads.stockIncomeStatement.Profit4YearsAgo.ToString("N0");
+                    lblOperProfit4YearsAgo.Text = _stockDownloads.stockIncomeStatement.Profit4YearsAgo.ToString("N0");  //TODO change to SafeString
                     lblOperProfit4YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Profit4YearsAgoColor;
 
                     // Basic EPS
