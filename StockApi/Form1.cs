@@ -32,7 +32,6 @@ namespace StockApi
         public MarketData Market_Dow;
         public MarketData Market_Nasdaq;
 
-        public SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
         private static Analyze _analyze = new Analyze();
         public static DataTable TickerTradesDataTable = null;
 
@@ -186,9 +185,6 @@ namespace StockApi
             try
             {
                 _tickerFound = await _stockDownloads.GetAllStockData();
-                // Save to SQL Server
-                List<SqlIncomeStatement> ListSis = StockIncomeStatement.MapFrom(_stockDownloads.stockIncomeStatement);
-                _finacialStatement.SaveIncomeStatements(ListSis);
             }
             catch (Exception ex)
             {
@@ -722,19 +718,19 @@ namespace StockApi
                     lblOperExp4YearsAgo.Text = _stockDownloads.stockIncomeStatement.OperatingExpense4String.StringValue;
 
                     // Operating Profit / Loss
-                    lblOperProfitTTM.Text = _stockDownloads.stockIncomeStatement.ProfitTtmString.StringValue;
+                    lblOperProfitTTM.Text = _stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue.ToString("N0");
                     lblOperProfitTTM.ForeColor = _stockDownloads.stockIncomeStatement.ProfitTtmColor;
-                    lblOperProfit2YearsAgo.Text = $"{_stockDownloads.stockIncomeStatement.Profit2YearsAgo:n0}";
+                    lblOperProfit2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Profit2YearsAgo.ToString("N0");
                     lblOperProfit2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Profit2YearsAgoColor;
-                    lblOperProfit4YearsAgo.Text = $"{_stockDownloads.stockIncomeStatement.Profit4YearsAgo:n0}";
+                    lblOperProfit4YearsAgo.Text = _stockDownloads.stockIncomeStatement.Profit4YearsAgo.ToString("N0");
                     lblOperProfit4YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Profit4YearsAgoColor;
 
                     // Basic EPS
-                    lblBasicEpsTTM.Text = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.StringValue;
+                    lblBasicEpsTTM.Text = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue.ToString("0.00"); 
                     lblBasicEpsTTM.ForeColor = _stockDownloads.stockIncomeStatement.BasicEpsTtmColor;
-                    lblBasicEps2YearsAgo.Text = $"{_stockDownloads.stockIncomeStatement.BasicEps2String:n0}";
+                    lblBasicEps2YearsAgo.Text = _stockDownloads.stockIncomeStatement.BasicEps2String.NumericValue.ToString("0.00");
                     lblBasicEps2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.BasicEps2Color;
-                    lblBasicEps4YearsAgo.Text = $"{_stockDownloads.stockIncomeStatement.BasicEps4String:n0}";
+                    lblBasicEps4YearsAgo.Text = _stockDownloads.stockIncomeStatement.BasicEps4String.NumericValue.ToString("0.00");
                     lblBasicEps4YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.BasicEps4Color;
 
                     //////////////////////////////////////////////////////////////////////////////////////

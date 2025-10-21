@@ -104,14 +104,17 @@ namespace SqlLayer
         public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
         {
             Debug.WriteLine("SaveIncomeStatements()");
+            string ticker;
+
+            if (sqlIncomeStatements.Count == 0)
+                return;
 
             var factory = FinancialStatementFactory();
-
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlIncomeStatement>();
 
-                db.Delete<SqlIncomeStatement>(x => x.Year > DateTime.Now.AddYears(-5).Year);
+                db.Delete<SqlIncomeStatement>(x => x.Ticker == sqlIncomeStatements[0].Ticker && x.Year > DateTime.Now.AddYears(-5).Year);
 
                 foreach (SqlIncomeStatement sis in sqlIncomeStatements)
                 {
@@ -125,13 +128,13 @@ namespace SqlLayer
             List<SqlIncomeStatement> sqlIncomeStatementsList;
 
 
-            Debug.WriteLine("SaveIncomeStatements()");
+            Debug.WriteLine("GetIncomeStatements()");
 
             var factory = FinancialStatementFactory();
 
             using (IDbConnection db = factory.OpenDbConnection())
             {
-                sqlIncomeStatementsList = db.Select<SqlIncomeStatement>(x => x.Year > DateTime.Now.Year - 5);
+                sqlIncomeStatementsList = db.Select<SqlIncomeStatement>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
             }
 
             return sqlIncomeStatementsList;

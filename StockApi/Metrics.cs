@@ -59,7 +59,13 @@ namespace StockApi
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
             if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
             {
-                stockList = stockList.Skip(0).Take(2).ToList();
+                // TODO
+
+
+                stockList = stockList.Skip(0).Take(4).ToList();
+
+
+               
                 //stockList = stockList.Skip(0).Take(30).ToList();
                 desktopPath = Path.Combine(desktopPath, "StockMetricsMonday.txt");
             }
@@ -141,7 +147,7 @@ namespace StockApi
             decimal percent_diff = stockDownloads.stockSummary.PriceString.NumericValue / stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
 
             decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads, analyzeInputs, true);
-            if(ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMGN")
+            if(ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMZN")
             {
                 Debug.WriteLine(_analyze.AnalysisMetricsOutputText);
             }

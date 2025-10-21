@@ -86,8 +86,6 @@ namespace StockApi
             bool hasSqlData = CheckSqlForRecentData();
             if (!hasSqlData)
             {
-
-
                 html = await GetHtmlForTicker(_financialsUrl, Ticker);
                 if (html.Length < 4000) // try again
                 {
@@ -198,9 +196,9 @@ namespace StockApi
                     }
                     else
                     {
-                        OperatingExpenseTtmString.StringValue = NetIncomeTtmString.StringValue;
-                        OperatingExpense2String.StringValue = NetIncome2String.StringValue;
-                        OperatingExpense4String.StringValue = NetIncome4String.StringValue;
+                        CostOfRevenueTtmString.NumericValue = RevenueTtmString.NumericValue - NetIncomeTtmString.NumericValue;
+                        CostOfRevenue2String.NumericValue = Revenue2String.NumericValue - NetIncome2String.NumericValue;
+                        CostOfRevenue4String.NumericValue = Revenue4String.NumericValue - NetIncome4String.NumericValue;
                     }
 
                     //// Basic EPS
@@ -222,6 +220,12 @@ namespace StockApi
                     }
                     else
                         BasicEpsTtmString.StringValue = BasicEps2String.StringValue = BasicEps4String.StringValue = "--";
+
+                    ///////////////////////////////////
+                    ///      Save to SQL Server
+                    List<SqlIncomeStatement> ListSis = MapFrom(this);
+                    SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                    _finacialStatement.SaveIncomeStatements(ListSis);
                 }
                 catch (Exception x)
                 {
