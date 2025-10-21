@@ -19,48 +19,38 @@ namespace StockApi
         ////////////////////////////////////////////
         ///                Properties
         ////////////////////////////////////////////
-        /// RevenueTTM
+        /// Revenue
         public StringSafeType<Decimal> RevenueTtmString = new StringSafeType<decimal>("--", "N0");
         public Color RevenueTtmColor = Form1.TextForeColor;
-        /// Revenue2
         public StringSafeType<Decimal> Revenue2String = new StringSafeType<decimal>("--", "N0");
         public Color Revenue2Color = Form1.TextForeColor;
-        /// Revenue4
         public StringSafeType<Decimal> Revenue4String = new StringSafeType<decimal>("--", "N0");
         public Color Revenue4Color = Form1.TextForeColor;
-        /// Cost of RevenueTTM
+
+        /// Cost of Revenue
         public StringSafeType<Decimal> CostOfRevenueTtmString = new StringSafeType<decimal>("--", "N0");
-        /// Cost of Revenue2
         public StringSafeType<Decimal> CostOfRevenue2String = new StringSafeType<decimal>("--", "N0");
-        /// Cost of Revenue4
         public StringSafeType<Decimal> CostOfRevenue4String = new StringSafeType<decimal>("--", "N0");
-        /// Operating Expense TTM
+
+        /// Operating Expense
         public StringSafeType<Decimal> OperatingExpenseTtmString = new StringSafeType<decimal>("--", "N0");
-        /// Operation Expense 2 Year
         public StringSafeType<Decimal> OperatingExpense2String = new StringSafeType<decimal>("--", "N0");
-        /// Operation Expense 4 Year
         public StringSafeType<Decimal> OperatingExpense4String = new StringSafeType<decimal>("--", "N0");
-        /// Net Income TTM
+        
+        /// Net Income
         public StringSafeType<Decimal> NetIncomeTtmString = new StringSafeType<decimal>("--", "N0");
-        /// Net Income 2 Year
         public StringSafeType<Decimal> NetIncome2String = new StringSafeType<decimal>("--", "N0");
-        /// Net Income 4 Year
         public StringSafeType<Decimal> NetIncome4String = new StringSafeType<decimal>("--", "N0");
 
-        /// Basic EPS TTM
+        /// Basic EPS
         public StringSafeType<Decimal> BasicEpsTtmString = new StringSafeType<decimal>("--");
         public Color BasicEpsTtmColor = Form1.TextForeColor;
-        ///  Basic EPS 2 Year
         public StringSafeType<Decimal> BasicEps2String = new StringSafeType<decimal>("--");
         public Color BasicEps2Color = Form1.TextForeColor;
-        ///  Basic EPS 4 Year
         public StringSafeType<Decimal> BasicEps4String = new StringSafeType<decimal>("--");
         public Color BasicEps4Color = Form1.TextForeColor;
 
-        
-        //// TODO Convert all of the Profit values to StringSafeType?
-        
-        /// Profit TTM
+        /// Profit 
         public StringSafeType<Decimal> ProfitTtmString = new StringSafeType<decimal>("--", "N0");
         public Color ProfitTtmColor = Form1.TextForeColor;
         public StringSafeType<Decimal> Profit2String = new StringSafeType<decimal>("--", "N0");
@@ -71,7 +61,6 @@ namespace StockApi
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
-
         public override async Task<bool> GetStockData(string ticker)
         {
             Ticker = ticker;
