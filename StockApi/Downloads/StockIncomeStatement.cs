@@ -14,20 +14,11 @@ namespace StockApi
     public class StockIncomeStatement : YahooFinance
     {
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
-
-//        public decimal ProfitTTM = 0;
-        public Color ProfitTtmColor = Form1.TextForeColor;
-        public decimal Profit2YearsAgo = 0;
-        public Color Profit2YearsAgoColor = Form1.TextForeColor;
-        public decimal Profit4YearsAgo = 0;
-        public Color Profit4YearsAgoColor = Form1.TextForeColor;
-
         public decimal ProfitGrowth = 1;
 
         ////////////////////////////////////////////
         ///                Properties
         ////////////////////////////////////////////
-
         /// RevenueTTM
         public StringSafeType<Decimal> RevenueTtmString = new StringSafeType<decimal>("--", "N0");
         public Color RevenueTtmColor = Form1.TextForeColor;
@@ -71,6 +62,11 @@ namespace StockApi
         
         /// Profit TTM
         public StringSafeType<Decimal> ProfitTtmString = new StringSafeType<decimal>("--", "N0");
+        public Color ProfitTtmColor = Form1.TextForeColor;
+        public StringSafeType<Decimal> Profit2String = new StringSafeType<decimal>("--", "N0");
+        public Color Profit2YearsAgoColor = Form1.TextForeColor;
+        public StringSafeType<Decimal> Profit4String = new StringSafeType<decimal>("--", "N0");
+        public Color Profit4YearsAgoColor = Form1.TextForeColor;
 
         ////////////////////////////////////////////
         ///                Methods
@@ -241,9 +237,9 @@ namespace StockApi
             }
 
             if (Revenue2String.NumericValue > 0)
-                Profit2YearsAgo = Revenue2String.NumericValue - CostOfRevenue2String.NumericValue - OperatingExpense2String.NumericValue;
+                Profit2String.NumericValue = Revenue2String.NumericValue - CostOfRevenue2String.NumericValue - OperatingExpense2String.NumericValue;
             if (Revenue4String.NumericValue > 0)
-                Profit4YearsAgo = Revenue4String.NumericValue - CostOfRevenue4String.NumericValue - OperatingExpense4String.NumericValue;
+                Profit4String.NumericValue = Revenue4String.NumericValue - CostOfRevenue4String.NumericValue - OperatingExpense4String.NumericValue;
 
             ///////////////////////////////////////////////////
             //                   Set Colors
@@ -265,16 +261,16 @@ namespace StockApi
             // Set Colors for Profits labels (if profit decreasing by 10% every 2 years, a problem
             if (RevenueTtmString.NumericValue > 0) // && CostOfRevenueTtmString.NumericValue > 0 && CostOfRevenue4String.NumericValue > 0 <-- Why was this in there?
             {
-                if (ProfitTtmString.NumericValue < Profit2YearsAgo * .9M)
+                if (ProfitTtmString.NumericValue < Profit2String.NumericValue * .9M)
                     ProfitTtmColor = Color.Red;
-                else if (ProfitTtmString.NumericValue > (Profit2YearsAgo * 1.11M))
+                else if (ProfitTtmString.NumericValue > (Profit2String.NumericValue * 1.11M))
                     ProfitTtmColor = Color.Lime;
                 else
                     ProfitTtmColor = Form1.TextForeColor;
 
-                if (Profit2YearsAgo < (Profit4YearsAgo * .9M))
+                if (Profit2String.NumericValue < (Profit4String.NumericValue * .9M))
                     Profit2YearsAgoColor = Color.Red;
-                else if (Profit2YearsAgo > (Profit4YearsAgo * 1.11M))
+                else if (Profit2String.NumericValue > (Profit4String.NumericValue * 1.11M))
                     Profit2YearsAgoColor = Color.Lime;
                 else
                     Profit2YearsAgoColor = Form1.TextForeColor;
@@ -323,8 +319,8 @@ namespace StockApi
             // 1. Average PE for the sector
             // 2. How large the profits are. We can use current profit margin. >15% is a high profit margin. -15% is a bad profit margin.
             // 3. How fast profits are growing/decreasing. (Current profit / Prior Profit)
-            decimal profitTTM = ProfitTtmString.NumericValue + (ProfitTtmString.NumericValue + Profit4YearsAgo) / 3;
-            decimal profit4Year = Profit4YearsAgo + (ProfitTtmString.NumericValue + Profit4YearsAgo) / 3;
+            decimal profitTTM = ProfitTtmString.NumericValue + (ProfitTtmString.NumericValue + Profit4String.NumericValue) / 3;
+            decimal profit4Year = Profit4String.NumericValue + (ProfitTtmString.NumericValue + Profit4String.NumericValue) / 3;
 
             if (profit4Year < 0)
             {

@@ -201,9 +201,9 @@ namespace StockApi
 
             /////////// Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
-            if(stockDownloads.stockIncomeStatement.Profit4YearsAgo < 0)
+            if(stockDownloads.stockIncomeStatement.Profit4String.NumericValue < 0)
             {
-                if(stockDownloads.stockIncomeStatement.Profit2YearsAgo > 0)
+                if(stockDownloads.stockIncomeStatement.Profit2String.NumericValue > 0)
                     profitMetric = 1.038M;
                 if(stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > 0)
                     profitMetric += .018M;
@@ -211,34 +211,34 @@ namespace StockApi
             else
             {
                 // 2 years ago compared to 4 years ago
-                if (stockDownloads.stockIncomeStatement.Profit2YearsAgo > stockDownloads.stockIncomeStatement.Profit4YearsAgo * 1.3M)
+                if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.3M)
                     profitMetric = 1.02M;
-                else if (stockDownloads.stockIncomeStatement.Profit2YearsAgo > stockDownloads.stockIncomeStatement.Profit4YearsAgo * 1.12M)
+                else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.12M)
                     profitMetric = 1.012M;
-                else if (stockDownloads.stockIncomeStatement.Profit2YearsAgo > stockDownloads.stockIncomeStatement.Profit4YearsAgo * 1.04M)
+                else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.04M)
                     profitMetric = 1.006M;
-                else if (stockDownloads.stockIncomeStatement.Profit2YearsAgo < stockDownloads.stockIncomeStatement.Profit4YearsAgo * .99M)
+                else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue < stockDownloads.stockIncomeStatement.Profit4String.NumericValue * .99M)
                     profitMetric = .98M;
 
                 // This year compared to 4 years ago
-                if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4YearsAgo * 1.5M)
+                if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.5M)
                     profitMetric += .018M;
-                else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4YearsAgo * 1.2M)
+                else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.2M)
                     profitMetric += .008M;
-                else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit4YearsAgo * .98M)
+                else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit4String.NumericValue * .98M)
                     profitMetric -= .01M;
             }
 
             // This year compared to 2 years ago
-            if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2YearsAgo * 1.4M)
+            if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.4M)
                 profitMetric += .024M;
-            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2YearsAgo * 1.2M)
+            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.2M)
                 profitMetric += .016M;
-            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2YearsAgo * 1.1M)
+            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.1M)
                 profitMetric += .011M;
-            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2YearsAgo * .9M)
+            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2String.NumericValue * .9M)
                 profitMetric -= .016M;
-            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2YearsAgo * .95M)
+            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2String.NumericValue * .95M)
                 profitMetric -= .01M;
 
             if (revenueMetric * profitMetric < .87M)
