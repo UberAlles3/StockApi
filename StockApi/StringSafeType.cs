@@ -154,19 +154,19 @@ namespace StockApi
             string temp = "";
             decimal number = 0;
 
-            if (value.IndexOf("B") > 0 || value.IndexOf("T") > 0)
+            if (value.ToUpper().IndexOf("B") > 0 || value.ToUpper().IndexOf("T") > 0)
             {
-                temp = value.Replace("B", "").Replace("T", "");
+                temp = value.Replace("B", "").Replace("b", "").Replace("T", "").Replace("t", "");
                 number = Convert.ToDecimal(temp) * 1000000000;
             }
-            else if (value.IndexOf("M") > 0)
+            else if (value.ToUpper().IndexOf("M") > 0)
             {
-                temp = value.Replace("M", "");
+                temp = value.Replace("M", "").Replace("m", "");
                 number = Convert.ToDecimal(temp) * 1000000;
             }
-            else if (value.IndexOf("k") > 0)
+            else if (value.ToUpper().IndexOf("K") > 0)
             {
-                temp = value.Replace("k", "");
+                temp = value.Replace("K", "").Replace("k", "");
                 number = Convert.ToDecimal(temp) * 1000;
             }
             else
