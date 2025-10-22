@@ -23,88 +23,40 @@ namespace SqlLayer
         }
         public SqlCashFlow SqlCashFlow { get; set; }
         public SqlIncomeStatement SqlIncomeStatement { get; set; }
-        //public BalanceSheet BalanceSheet { get; set; }
+        public SqlStatistic SqlStatistics { get; set; }
 
-        #region Pass-Through Properties
-        //TODO
-
-
-        //public string Ticker
-        //{
-        //    get
-        //    {
-        //        return this.BalanceSheet.Ticker;
-        //    }
-        //    set
-        //    {
-        //        this.BalanceSheet.Ticker = value;
-        //        this.IncomeStatement.Ticker = value;
-        //        this.CashFlow.Ticker = value;
-        //    }
-        //}
-
-        //public DateTime StartDate
-        //{
-        //    get
-        //    {
-        //        return this.BalanceSheet.StartDate;
-        //    }
-        //    set
-        //    {
-        //        this.BalanceSheet.StartDate = value;
-        //        this.IncomeStatement.StartDate = value;
-        //        this.CashFlow.StartDate = value;
-        //    }
-        //}
-
-        //public DateTime EndDate
-        //{
-        //    get
-        //    {
-        //        return this.BalanceSheet.EndDate;
-        //    }
-        //    set
-        //    {
-        //        this.BalanceSheet.EndDate = value;
-        //        this.IncomeStatement.EndDate = value;
-        //        this.CashFlow.EndDate = value;
-        //    }
-        //}
-
-        #endregion
-
+ 
         public SqlFinancialStatement()
         {
             //this.IncomeStatement = new IncomeStatement();
             this.SqlCashFlow = new SqlCashFlow();
         }
 
-        public void SaveFinancials()
-        {
-            Debug.WriteLine("SaveFinancials()");
+        //public void SaveFinancials()
+        //{
+        //    Debug.WriteLine("SaveFinancials()");
 
-            var factory = FinancialStatementFactory();
+        //    var factory = FinancialStatementFactory();
 
-            using (IDbConnection db = factory.OpenDbConnection())
-            {
-                db.CreateTableIfNotExists<SqlCashFlow>();
+        //    using (IDbConnection db = factory.OpenDbConnection())
+        //    {
+        //        db.CreateTableIfNotExists<SqlCashFlow>();
 
-                db.Delete<SqlCashFlow>(x => x.Year > DateTime.Now.AddYears(-5).Year);
+        //        db.Delete<SqlCashFlow>(x => x.Year > DateTime.Now.AddYears(-5).Year);
 
-                //foreach (string key in _statementCache.Keys)
-                //{
-                SqlCashFlow cashFlow = new SqlCashFlow() { Year = DateTime.Now.Year, EndCashPosition = 111, FreeCashFlow = 222.222, Ticker = "AAPL", OperatingCashFlow = 555, UpdateDate = DateTime.Now.Date};
-                db.Insert<SqlCashFlow>(cashFlow);
-                //    db.Insert<BalanceSheet>(_statementCache[key].BalanceSheet);
-                //    db.Insert<CashFlow>(_statementCache[key].CashFlow);
-                //}
-            }
-        }
+        //        //foreach (string key in _statementCache.Keys)
+        //        //{
+        //        SqlCashFlow cashFlow = new SqlCashFlow() { Year = DateTime.Now.Year, EndCashPosition = 111, FreeCashFlow = 222.222, Ticker = "AAPL", OperatingCashFlow = 555, UpdateDate = DateTime.Now.Date};
+        //        db.Insert<SqlCashFlow>(cashFlow);
+        //        //    db.Insert<BalanceSheet>(_statementCache[key].BalanceSheet);
+        //        //    db.Insert<CashFlow>(_statementCache[key].CashFlow);
+        //        //}
+        //    }
+        //}
 
         public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
         {
             Debug.WriteLine("SaveIncomeStatements()");
-            string ticker;
 
             if (sqlIncomeStatements.Count == 0)
                 return;
@@ -113,7 +65,6 @@ namespace SqlLayer
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlIncomeStatement>();
-
                 db.Delete<SqlIncomeStatement>(x => x.Ticker == sqlIncomeStatements[0].Ticker && x.Year > DateTime.Now.AddYears(-5).Year);
 
                 foreach (SqlIncomeStatement sis in sqlIncomeStatements)
@@ -134,10 +85,47 @@ namespace SqlLayer
 
             using (IDbConnection db = factory.OpenDbConnection())
             {
+                db.CreateTableIfNotExists<SqlStatistic>();
                 sqlIncomeStatementsList = db.Select<SqlIncomeStatement>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
             }
 
             return sqlIncomeStatementsList;
+        }
+
+        public void SaveStatistics(SqlStatistic sqlStatistic)
+        {
+            Debug.WriteLine("SaveStatistics()");
+
+            if (sqlStatistic == null)
+                return;
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlStatistic>();
+
+                db.Delete<SqlStatistic>(x => x.Ticker == sqlStatistic.Ticker);
+
+                db.CreateTableIfNotExists<SqlStatistic>();
+                db.Insert<SqlStatistic>(sqlStatistic);
+            }
+        }
+
+        public List<SqlStatistic> GetStatistics(string ticker)
+        {
+            List<SqlStatistic> sqlStatisticsList;
+
+            Debug.WriteLine("GetStatistics()");
+
+            var factory = FinancialStatementFactory();
+
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlStatistic>();
+                sqlStatisticsList = db.Select<SqlStatistic>(x => x.Ticker == ticker);
+            }
+
+            return sqlStatisticsList;
         }
     }
 }

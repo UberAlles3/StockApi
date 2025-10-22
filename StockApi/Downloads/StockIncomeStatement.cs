@@ -3,6 +3,7 @@ using SqlLayer;
 using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -67,7 +68,6 @@ namespace StockApi
             string html;
             string searchTerm;
 
-
             bool hasSqlData = CheckSqlForRecentData();
             if (!hasSqlData)
             {
@@ -80,6 +80,8 @@ namespace StockApi
 
                 try
                 {
+                    Debug.WriteLine("GetStockIncomeStatement()");
+
                     //// Revenue History
                     searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
                     string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);

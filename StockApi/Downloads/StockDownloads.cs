@@ -40,11 +40,6 @@ namespace StockApi.Downloads
         {
             stockSummary = new StockSummary();
             bool found = await stockSummary.GetStockData(_ticker);
-            if (stockSummary.EarningsPerShareString.StringValue == "--")
-            {
-                Thread.Sleep(2000);
-                found = await stockSummary.GetStockData(_ticker);
-            }
             return found;
         }
 

@@ -3,6 +3,7 @@ using StockApi.Downloads;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -82,6 +83,8 @@ namespace StockApi
 
             try
             {
+                Debug.WriteLine("GetStockSummary()");
+
                 // Price
                 searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
                 PriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 1);
@@ -127,6 +130,7 @@ namespace StockApi
                 else
                     ProfitMarginString.StringValue = YahooFinance.NotApplicable;
 
+                Debug.WriteLine("GetStockSummary() 52 week range");
                 // 52 Week Range
                 searchTerm = SearchTerms.Find(x => x.Name == "52 Week Range").Term;
                 string range = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 4);
@@ -151,6 +155,7 @@ namespace StockApi
                 searchTerm = SearchTerms.Find(x => x.Name == "Earnings Date").Term;
                 EarningsDateString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 3);
 
+                Debug.WriteLine("GetStockSummary() Company Overview");
                 // Company Overview
                 searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
                 string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(_html, searchTerm, 6000);
@@ -161,21 +166,27 @@ namespace StockApi
                 try
                 {
                     AverageSectorPE = 20;
-                    int sectorIndex = parts.Select((s, i) => new { i, s }).Where(x => x.s.Contains("Sector<")).Select(t => t.i).First();
-                    sectorIndex -= 3;
 
-                    string[] words = (parts[sectorIndex] + " |").Split(" ");
-                    if (words.Length > 2)
-                        this.Sector = words[0] + " " + words[1];
-                    else
-                        this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
+                    int secFound = parts.Where(x => x.Contains("Sector<")).Count();
 
-                    // find average PE for Sector
-                    if (_sectors.ContainsKey(Sector))
-                        AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;
+                    if(secFound > 0)
+                    {
+                        int sectorIndex = parts.Select((s, i) => new { i, s }).Where(x => x.s.Contains("Sector<")).Select(t => t.i).First();
+                        sectorIndex -= 3;
+
+                        string[] words = (parts[sectorIndex] + " |").Split(" ");
+                        if (words.Length > 2)
+                            this.Sector = words[0] + " " + words[1];
+                        else
+                            this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
+                        // find average PE for Sector
+                        if (_sectors.ContainsKey(Sector))
+                            AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;
+                    }
                 }
-                catch
-                { }
+                catch (Exception x)
+                {
+                }
 
                 CompanyOverview = longest._TrimSuffix("</");
 
@@ -183,7 +194,8 @@ namespace StockApi
             catch (Exception x)
             {
                 LastException = x;
-                Error = "GetSummaryData() " + ticker + " " + searchTerm; 
+                Error = "GetSummaryData() " + ticker + " " + searchTerm;
+                Debug.WriteLine("Error!");
             }
 
             //*******************

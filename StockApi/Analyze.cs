@@ -322,11 +322,8 @@ namespace StockApi
                 valuationMetric = 1.02M;
             output.AppendLine($"Valuation = {valuationMetric.ToString(".00")}");
 
-            output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
-
             //// Calculate total metric
             decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * cashDebtMetric * valuationMetric;
-
 
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
@@ -355,6 +352,7 @@ namespace StockApi
             ///////////////////////////////////////////////////////////
             ///                     BUY and SELL
             ///////////// Setting Price Movement Multipliers
+            output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
 
             // Adjust based on series of buys or sells
             totalMetric = totalMetric * buySellMetric;
