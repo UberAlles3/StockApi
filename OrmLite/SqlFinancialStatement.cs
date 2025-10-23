@@ -67,9 +67,9 @@ namespace SqlLayer
                 db.CreateTableIfNotExists<SqlIncomeStatement>();
                 db.Delete<SqlIncomeStatement>(x => x.Ticker == sqlIncomeStatements[0].Ticker && x.Year > DateTime.Now.AddYears(-5).Year);
 
-                foreach (SqlIncomeStatement sis in sqlIncomeStatements)
+                foreach (SqlIncomeStatement row in sqlIncomeStatements)
                 {
-                  db.Insert<SqlIncomeStatement>(sis);
+                  db.Insert<SqlIncomeStatement>(row);
                 }
             }
         }
@@ -77,7 +77,6 @@ namespace SqlLayer
         public List<SqlIncomeStatement> GetIncomeStatements(string ticker)
         {
             List<SqlIncomeStatement> sqlIncomeStatementsList;
-
 
             Debug.WriteLine("GetIncomeStatements()");
 
@@ -126,6 +125,43 @@ namespace SqlLayer
             }
 
             return sqlStatisticsList;
+        }
+
+        public void SavePriceHistories(List<SqlPriceHistory> sqlPriceHistories)
+        {
+            Debug.WriteLine("SavePriceHistories()");
+
+            if (sqlPriceHistories.Count == 0)
+                return;
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlPriceHistory>();
+                db.Delete<SqlPriceHistory>(x => x.Ticker == sqlPriceHistories[0].Ticker);
+
+                foreach (SqlPriceHistory row in sqlPriceHistories)
+                {
+                    db.Insert<SqlPriceHistory>(row);
+                }
+            }
+        }
+
+        public List<SqlPriceHistory> GetPriceHistories(string ticker)
+        {
+            List<SqlPriceHistory> sqlPriceHistoriesList;
+
+            Debug.WriteLine("GetPriceHistories()");
+
+            var factory = FinancialStatementFactory();
+
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlPriceHistory>();
+                sqlPriceHistoriesList = db.Select<SqlPriceHistory>(x => x.Ticker == ticker);
+            }
+
+            return sqlPriceHistoriesList;
         }
     }
 }

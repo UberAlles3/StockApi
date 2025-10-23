@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlLayer.SQL_Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -100,7 +101,7 @@ namespace StockApi
             }
 
             HistoricDisplayList = new List<HistoricPriceData>();
-            HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.PriceString.NumericValue, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = "N/A" };
+            HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.PriceString.NumericValue, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = 0M };
             HistoricDisplayList.Add(HistoricDataToday);
             HistoricDisplayList.Add(HistoricData3YearsAgo);
 
@@ -236,13 +237,84 @@ namespace StockApi
                 WeekTrend = TrendEnum.Unknown;
         }
 
+        public static List<SqlPriceHistory> MapFrom(StockHistory source)
+        {
+            List<SqlPriceHistory> sqlPriceHistories = new List<SqlPriceHistory>();
+
+            // 3 Year
+            sqlPriceHistories.Add(new SqlPriceHistory()
+            {
+                Ticker = source.Ticker,
+                PeriodType = source.HistoricData3YearsAgo.PeriodType,
+                PriceDate  = source.HistoricData3YearsAgo.PriceDate,
+                Price      = (double)source.HistoricData3YearsAgo.Price,
+                Volume     = (double)source.HistoricData3YearsAgo.Volume,
+                UpdateDate = DateTime.Now.Date
+            });
+
+            // 1 Year
+            sqlPriceHistories.Add(new SqlPriceHistory()
+            {
+                Ticker = source.Ticker,
+                PeriodType = source.HistoricDataYearAgo.PeriodType,
+                PriceDate = source.HistoricDataYearAgo.PriceDate,
+                Price = (double)source.HistoricDataYearAgo.Price,
+                Volume = (double)source.HistoricDataYearAgo.Volume,
+                UpdateDate = DateTime.Now.Date
+            });
+
+
+            //// 4 years ago
+            //sqlPriceHistorys.Add(new SqlPriceHistory()
+            //{
+            //    Ticker = source.Ticker,
+            //    Year = DateTime.Now.AddYears(-4).Year,
+            //    Revenue = (double)source.Revenue4String.NumericValue,
+            //    CostOfRevenue = (double)source.CostOfRevenue4String.NumericValue,
+            //    OperatingExpense = (double)source.OperatingExpense4String.NumericValue,
+            //    NetIncome = (double)source.NetIncome4String.NumericValue,
+            //    BasicEPS = (double)source.BasicEps4String.NumericValue,
+            //    UpdateDate = DateTime.Now.Date
+            //});
+
+            return sqlPriceHistories;
+        }
+
+        public void MapFill(List<SqlIncomeStatement> sourceList)
+        {
+            sourceList = sourceList.OrderBy(x => x.Year).ToList();
+
+            //// 4 years ago
+            //Revenue4String.NumericValue = (decimal)sourceList[0].Revenue;
+            //CostOfRevenue4String.NumericValue = (decimal)sourceList[0].CostOfRevenue;
+            //OperatingExpense4String.NumericValue = (decimal)sourceList[0].OperatingExpense;
+            //NetIncome4String.NumericValue = (decimal)sourceList[0].NetIncome;
+            //BasicEps4String.NumericValue = (decimal)sourceList[0].BasicEPS;
+
+            //// 2 years ago
+            //Revenue2String.NumericValue = (decimal)sourceList[1].Revenue;
+            //CostOfRevenue2String.NumericValue = (decimal)sourceList[1].CostOfRevenue;
+            //OperatingExpense2String.NumericValue = (decimal)sourceList[1].OperatingExpense;
+            //NetIncome2String.NumericValue = (decimal)sourceList[1].NetIncome;
+            //BasicEps2String.NumericValue = (decimal)sourceList[1].BasicEPS;
+
+            //// TTM
+            //RevenueTtmString.NumericValue = (decimal)sourceList[2].Revenue;
+            //CostOfRevenueTtmString.NumericValue = (decimal)sourceList[2].CostOfRevenue;
+            //OperatingExpenseTtmString.NumericValue = (decimal)sourceList[2].OperatingExpense;
+            //NetIncomeTtmString.NumericValue = (decimal)sourceList[2].NetIncome;
+            //BasicEpsTtmString.NumericValue = (decimal)sourceList[2].BasicEPS;
+
+            return;
+        }
+
         public class HistoricPriceData
         {
             public string Ticker { get; set; }
             public string PeriodType { get; set; }
             public DateTime PriceDate { get; set; }
             public decimal Price { get; set; }
-            public string Volume { get; set; }
+            public decimal Volume { get; set; }
 
             public static HistoricPriceData MapFromApiStockQuote(StockQuote stockQuote, string periodType)
             {
@@ -252,7 +324,7 @@ namespace StockApi
                 historicPriceData.PeriodType = periodType;
                 historicPriceData.Price = Math.Round(stockQuote.Close, 2);
                 historicPriceData.PriceDate = stockQuote.QuoteDate;
-                historicPriceData.Volume = stockQuote.Volume.ToString("N0");
+                historicPriceData.Volume = stockQuote.Volume;
 
                 return historicPriceData;
             }

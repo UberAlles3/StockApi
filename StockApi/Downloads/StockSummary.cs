@@ -186,6 +186,7 @@ namespace StockApi
                 }
                 catch (Exception x)
                 {
+                    Debug.WriteLine($"GetStockData() {x.Message}");
                 }
 
                 CompanyOverview = longest._TrimSuffix("</");
