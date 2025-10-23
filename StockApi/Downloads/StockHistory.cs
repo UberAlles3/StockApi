@@ -282,30 +282,47 @@ namespace StockApi
             return sqlPriceHistory;
         }
 
-        public void MapFill(List<SqlIncomeStatement> sourceList)
+        public void MapFill(List<SqlPriceHistory> sourceList)
         {
-            sourceList = sourceList.OrderBy(x => x.Year).ToList();
+            //sourceList = sourceList.OrderBy(x => x.PriceDate).ToList();
 
-            //// 4 years ago
-            //Revenue4String.NumericValue = (decimal)sourceList[0].Revenue;
-            //CostOfRevenue4String.NumericValue = (decimal)sourceList[0].CostOfRevenue;
-            //OperatingExpense4String.NumericValue = (decimal)sourceList[0].OperatingExpense;
-            //NetIncome4String.NumericValue = (decimal)sourceList[0].NetIncome;
-            //BasicEps4String.NumericValue = (decimal)sourceList[0].BasicEPS;
+            foreach (SqlPriceHistory row in sourceList)
+            {
+                if (row.PeriodType == "3Y")
+                {
+                    HistoricData3YearsAgo.Ticker = this.Ticker;
+                    HistoricData3YearsAgo.PeriodType = row.PeriodType;
+                    HistoricData3YearsAgo.PriceDate = row.PriceDate;
+                    HistoricData3YearsAgo.Price = (decimal)row.Price;
+                    HistoricData3YearsAgo.Volume = (decimal)row.Volume;
+                }
 
-            //// 2 years ago
-            //Revenue2String.NumericValue = (decimal)sourceList[1].Revenue;
-            //CostOfRevenue2String.NumericValue = (decimal)sourceList[1].CostOfRevenue;
-            //OperatingExpense2String.NumericValue = (decimal)sourceList[1].OperatingExpense;
-            //NetIncome2String.NumericValue = (decimal)sourceList[1].NetIncome;
-            //BasicEps2String.NumericValue = (decimal)sourceList[1].BasicEPS;
+                if (row.PeriodType == "Y")
+                {
+                    HistoricDataYearAgo.Ticker = this.Ticker;
+                    HistoricDataYearAgo.PeriodType = row.PeriodType;
+                    HistoricDataYearAgo.PriceDate = row.PriceDate;
+                    HistoricDataYearAgo.Price = (decimal)row.Price;
+                    HistoricDataYearAgo.Volume = (decimal)row.Volume;
+                }
 
-            //// TTM
-            //RevenueTtmString.NumericValue = (decimal)sourceList[2].Revenue;
-            //CostOfRevenueTtmString.NumericValue = (decimal)sourceList[2].CostOfRevenue;
-            //OperatingExpenseTtmString.NumericValue = (decimal)sourceList[2].OperatingExpense;
-            //NetIncomeTtmString.NumericValue = (decimal)sourceList[2].NetIncome;
-            //BasicEpsTtmString.NumericValue = (decimal)sourceList[2].BasicEPS;
+                if (row.PeriodType == "M")
+                {
+                    HistoricDataMonthAgo.Ticker = this.Ticker;
+                    HistoricDataMonthAgo.PeriodType = row.PeriodType;
+                    HistoricDataMonthAgo.PriceDate = row.PriceDate;
+                    HistoricDataMonthAgo.Price = (decimal)row.Price;
+                    HistoricDataMonthAgo.Volume = (decimal)row.Volume;
+                }
+                if (row.PeriodType == "W")
+                {
+                    HistoricDataWeekAgo.Ticker = this.Ticker;
+                    HistoricDataWeekAgo.PeriodType = row.PeriodType;
+                    HistoricDataWeekAgo.PriceDate = row.PriceDate;
+                    HistoricDataWeekAgo.Price = (decimal)row.Price;
+                    HistoricDataWeekAgo.Volume = (decimal)row.Volume;
+                }
+            }
 
             return;
         }
