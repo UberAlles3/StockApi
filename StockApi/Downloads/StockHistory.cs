@@ -163,12 +163,28 @@ namespace StockApi
                 }
 
                 /////// Get price history for a year ago to determine long trend
-                quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
+                bool hasSqlData = CheckSqlForRecentData();
 
-                if (quoteList.Count > 0)
+                if (hasSqlData && HistoricDataYearAgo != null && HistoricDataYearAgo.Price > 0)
+                    hasSqlData = true;
+                else
+                    hasSqlData = false; // only has 3 years ago price and not last years price
+
+                if(hasSqlData == false)
                 {
-                    stockQuote = quoteList.Last();
-                    HistoricDataYearAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "Y");
+                    quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
+
+                    if (quoteList.Count > 0)
+                    {
+                        stockQuote = quoteList.Last();
+                        HistoricDataYearAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "Y");
+                    }
+
+                    ///////////////////////////////////
+                    ///      Save to SQL Server
+                    List<SqlPriceHistory> rows = MapFrom(this);
+                    SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                    _finacialStatement.SavePriceHistories(rows);
                 }
             }
 
