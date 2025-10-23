@@ -239,45 +239,47 @@ namespace StockApi
 
         public static List<SqlPriceHistory> MapFrom(StockHistory source)
         {
+            SqlPriceHistory sqlPriceHistory = null;
             List<SqlPriceHistory> sqlPriceHistories = new List<SqlPriceHistory>();
 
             // 3 Year
-            sqlPriceHistories.Add(new SqlPriceHistory()
-            {
-                Ticker = source.Ticker,
-                PeriodType = source.HistoricData3YearsAgo.PeriodType,
-                PriceDate  = source.HistoricData3YearsAgo.PriceDate,
-                Price      = (double)source.HistoricData3YearsAgo.Price,
-                Volume     = (double)source.HistoricData3YearsAgo.Volume,
-                UpdateDate = DateTime.Now.Date
-            });
+            sqlPriceHistory = MapPeriodPrice(source, sqlPriceHistories, source.HistoricData3YearsAgo);
+            sqlPriceHistories.Add(sqlPriceHistory);
 
             // 1 Year
-            sqlPriceHistories.Add(new SqlPriceHistory()
-            {
-                Ticker = source.Ticker,
-                PeriodType = source.HistoricDataYearAgo.PeriodType,
-                PriceDate = source.HistoricDataYearAgo.PriceDate,
-                Price = (double)source.HistoricDataYearAgo.Price,
-                Volume = (double)source.HistoricDataYearAgo.Volume,
-                UpdateDate = DateTime.Now.Date
-            });
+            sqlPriceHistory = MapPeriodPrice(source, sqlPriceHistories, source.HistoricDataYearAgo);
+            sqlPriceHistories.Add(sqlPriceHistory);
 
+            // 1 Month
+            sqlPriceHistory = MapPeriodPrice(source, sqlPriceHistories, source.HistoricDataMonthAgo);
+            sqlPriceHistories.Add(sqlPriceHistory);
 
-            //// 4 years ago
-            //sqlPriceHistorys.Add(new SqlPriceHistory()
-            //{
-            //    Ticker = source.Ticker,
-            //    Year = DateTime.Now.AddYears(-4).Year,
-            //    Revenue = (double)source.Revenue4String.NumericValue,
-            //    CostOfRevenue = (double)source.CostOfRevenue4String.NumericValue,
-            //    OperatingExpense = (double)source.OperatingExpense4String.NumericValue,
-            //    NetIncome = (double)source.NetIncome4String.NumericValue,
-            //    BasicEPS = (double)source.BasicEps4String.NumericValue,
-            //    UpdateDate = DateTime.Now.Date
-            //});
+            // 1 Week
+            sqlPriceHistory = MapPeriodPrice(source, sqlPriceHistories, source.HistoricDataWeekAgo);
+            sqlPriceHistories.Add(sqlPriceHistory);
 
             return sqlPriceHistories;
+        }
+
+        private static SqlPriceHistory MapPeriodPrice(StockHistory source, List<SqlPriceHistory> sqlPriceHistories, HistoricPriceData priceData)
+        {
+            SqlPriceHistory sqlPriceHistory = null;
+
+            if (priceData != null && priceData.Price > 0)
+            {
+                sqlPriceHistory = new SqlPriceHistory()
+                {
+                    Ticker = source.Ticker,
+                    PeriodType = priceData.PeriodType,
+                    PriceDate = priceData.PriceDate,
+                    Price = (double)priceData.Price,
+                    Volume = (double)priceData.Volume,
+                    UpdateDate = DateTime.Now.Date
+                };
+
+            }
+
+            return sqlPriceHistory;
         }
 
         public void MapFill(List<SqlIncomeStatement> sourceList)
