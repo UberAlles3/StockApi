@@ -66,7 +66,7 @@ namespace StockApi
 
         public async Task<List<StockHistory.HistoricPriceData>> GetPriceHistoryFor3Year(string ticker, StockSummary summary)
         {
-            
+            Ticker = ticker;
             
             /////// Get price history from 3 years ago
             List<StockQuote> quoteList = new List<StockQuote>();
@@ -74,8 +74,6 @@ namespace StockApi
             bool hasSqlData = CheckSqlForRecentData();
             if (!hasSqlData)
             {
-                HistoricData3YearsAgo.Ticker = Ticker;
-
                 try
                 {
                     // Some stocks didn't exist 3 years ago
@@ -108,6 +106,7 @@ namespace StockApi
                         summary.YearsRangeHigh.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
                     }
                 }
+                HistoricData3YearsAgo.Ticker = Ticker;
 
                 ///////////////////////////////////
                 ///      Save to SQL Server
@@ -133,6 +132,8 @@ namespace StockApi
             List<StockQuote> quoteList = new List<StockQuote>();
             /////// Get price history, today, week ago, month ago to determine short trend
             DateTime findDate;
+
+            Ticker = ticker;
 
             HistoricDataWeekAgo = null;
             HistoricDataMonthAgo = null;
@@ -346,7 +347,8 @@ namespace StockApi
             {
                 if (row.PeriodType == "3Y")
                 {
-                    HistoricData3YearsAgo.Ticker = this.Ticker;
+                    HistoricData3YearsAgo = new HistoricPriceData();
+                    HistoricData3YearsAgo.Ticker = row.Ticker;
                     HistoricData3YearsAgo.PeriodType = row.PeriodType;
                     HistoricData3YearsAgo.PriceDate = row.PriceDate;
                     HistoricData3YearsAgo.Price = (decimal)row.Price;
@@ -355,7 +357,8 @@ namespace StockApi
 
                 if (row.PeriodType == "Y")
                 {
-                    HistoricDataYearAgo.Ticker = this.Ticker;
+                    HistoricDataYearAgo = new HistoricPriceData();
+                    HistoricDataYearAgo.Ticker = row.Ticker;
                     HistoricDataYearAgo.PeriodType = row.PeriodType;
                     HistoricDataYearAgo.PriceDate = row.PriceDate;
                     HistoricDataYearAgo.Price = (decimal)row.Price;
@@ -364,7 +367,8 @@ namespace StockApi
 
                 if (row.PeriodType == "M")
                 {
-                    HistoricDataMonthAgo.Ticker = this.Ticker;
+                    HistoricDataMonthAgo = new HistoricPriceData();
+                    HistoricDataMonthAgo.Ticker = row.Ticker;
                     HistoricDataMonthAgo.PeriodType = row.PeriodType;
                     HistoricDataMonthAgo.PriceDate = row.PriceDate;
                     HistoricDataMonthAgo.Price = (decimal)row.Price;
@@ -372,7 +376,8 @@ namespace StockApi
                 }
                 if (row.PeriodType == "W")
                 {
-                    HistoricDataWeekAgo.Ticker = this.Ticker;
+                    HistoricDataWeekAgo = new HistoricPriceData();
+                    HistoricDataWeekAgo.Ticker = row.Ticker;
                     HistoricDataWeekAgo.PeriodType = row.PeriodType;
                     HistoricDataWeekAgo.PriceDate = row.PriceDate;
                     HistoricDataWeekAgo.Price = (decimal)row.Price;
