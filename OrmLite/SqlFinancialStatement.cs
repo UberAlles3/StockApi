@@ -142,7 +142,8 @@ namespace SqlLayer
 
                 foreach (SqlPriceHistory row in sqlPriceHistories)
                 {
-                    db.Insert<SqlPriceHistory>(row);
+                    if(row != null)
+                       db.Insert<SqlPriceHistory>(row);
                 }
             }
         }

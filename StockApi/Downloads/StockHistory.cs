@@ -1,4 +1,5 @@
-﻿using SqlLayer.SQL_Models;
+﻿using SqlLayer;
+using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,41 +66,57 @@ namespace StockApi
 
         public async Task<List<StockHistory.HistoricPriceData>> GetPriceHistoryFor3Year(string ticker, StockSummary summary)
         {
+            
+            
             /////// Get price history from 3 years ago
             List<StockQuote> quoteList = new List<StockQuote>();
-            try
+
+            bool hasSqlData = CheckSqlForRecentData();
+            if (!hasSqlData)
             {
-                // Some stocks didn't exist 3 years ago
-                quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4, "1d");
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message.Contains("Data doesn't exist for startDate"))
+                HistoricData3YearsAgo.Ticker = Ticker;
+
+                try
                 {
-                    // try a year ago
-                    quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
+                    // Some stocks didn't exist 3 years ago
+                    quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4, "1d");
                 }
-                else
-                    MessageBox.Show(ex.Message);
-            }
-
-            if (quoteList.Count > 0)
-            {
-                StockQuote stockQuote = quoteList.Last();
-                HistoricData3YearsAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "3Y");
-            }
-
-            if (summary.YearsRangeLow.StringValue == summary.YearsRangeHigh.StringValue) // Mutual fund range was faked
-            {
-                if (HistoricData3YearsAgo.Price < summary.PriceString.NumericValue) // going up
-                    summary.YearsRangeLow.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
-                else
+                catch (Exception ex)
                 {
-                    summary.YearsRangeLow.NumericValue = summary.PriceString.NumericValue * .95M;
-                    summary.YearsRangeHigh.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
+                    if (ex.Message.Contains("Data doesn't exist for startDate"))
+                    {
+                        // try a year ago
+                        quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
+                    }
+                    else
+                        MessageBox.Show(ex.Message);
                 }
+
+                if (quoteList.Count > 0)
+                {
+                    StockQuote stockQuote = quoteList.Last();
+                    HistoricData3YearsAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "3Y");
+                }
+
+                if (summary.YearsRangeLow.StringValue == summary.YearsRangeHigh.StringValue) // Mutual fund range was faked
+                {
+                    if (HistoricData3YearsAgo.Price < summary.PriceString.NumericValue) // going up
+                        summary.YearsRangeLow.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
+                    else
+                    {
+                        summary.YearsRangeLow.NumericValue = summary.PriceString.NumericValue * .95M;
+                        summary.YearsRangeHigh.NumericValue = (HistoricData3YearsAgo.Price + summary.YearsRangeLow.NumericValue) / 2;
+                    }
+                }
+
+                ///////////////////////////////////
+                ///      Save to SQL Server
+                List<SqlPriceHistory> rows = MapFrom(this);
+                SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                _finacialStatement.SavePriceHistories(rows);
             }
 
+            // todaay's price not saved to sql server.
             HistoricDisplayList = new List<HistoricPriceData>();
             HistoricDataToday = new HistoricPriceData() { PeriodType = "D", Price = summary.PriceString.NumericValue, PriceDate = DateTime.Now.Date, Ticker = ticker, Volume = 0M };
             HistoricDisplayList.Add(HistoricDataToday);
@@ -157,15 +174,30 @@ namespace StockApi
             HistoricDisplayList = new List<HistoricPriceData>();
 
             if (HistoricDataToday != null)
+            {
+                HistoricDataToday.Ticker = Ticker;
                 HistoricDisplayList.Add(HistoricDataToday);
+            }
             if (HistoricDataWeekAgo != null)
+            {
+                HistoricDataWeekAgo.Ticker = Ticker;
                 HistoricDisplayList.Add(HistoricDataWeekAgo);
+            }
             if (HistoricDataMonthAgo != null)
+            {
+                HistoricDataMonthAgo.Ticker = Ticker;
                 HistoricDisplayList.Add(HistoricDataMonthAgo);
+            }
             if (HistoricDataYearAgo != null)
+            {
+                HistoricDataYearAgo.Ticker = Ticker;
                 HistoricDisplayList.Add(HistoricDataYearAgo);
+            }
             if (HistoricData3YearsAgo != null)
+            {
+                HistoricData3YearsAgo.Ticker = Ticker;
                 HistoricDisplayList.Add(HistoricData3YearsAgo);
+            }
 
             // Set historic price trends
             SetTrends();
@@ -235,6 +267,30 @@ namespace StockApi
             }
             else
                 WeekTrend = TrendEnum.Unknown;
+        }
+
+        /// /////////////////////////////////////////////////////////////////////////////////////////
+        ///                                    SQL Support
+        /// /////////////////////////////////////////////////////////////////////////////////////////
+        public bool CheckSqlForRecentData()
+        {
+            SqlFinancialStatement sqlFinancialStatement = new SqlFinancialStatement();
+            List<SqlPriceHistory> rows = sqlFinancialStatement.GetPriceHistories(Ticker);
+            Random random = new Random();
+
+            if (rows.Count > 0)
+            {
+                DateTime staleDate = DateTime.Now.Date.AddDays(-12 + random.Next(1, 4));
+
+                if (rows[0].UpdateDate > staleDate) // We have recent data in the database, use it.
+                {
+                    MapFill(rows);
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public static List<SqlPriceHistory> MapFrom(StockHistory source)
