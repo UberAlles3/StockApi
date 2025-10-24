@@ -11,16 +11,22 @@ namespace SqlLayer
 {
     public class SqlFinancialStatement
     {
+        public static OrmLiteConnectionFactory FactorySingleton = null;
+
         /// <summary>
         /// Get the database connection
         /// </summary>
         /// <returns></returns>
         public static OrmLiteConnectionFactory FinancialStatementFactory()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["StockDataConnection"].ConnectionString;
-            OrmLiteConnectionFactory factory = new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
-            return factory;
+            if(FactorySingleton == null)
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["StockDataConnection"].ConnectionString;
+                FactorySingleton = new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
+            }
+            return FactorySingleton;
         }
+
         public SqlCashFlow SqlCashFlow { get; set; }
         public SqlIncomeStatement SqlIncomeStatement { get; set; }
         public SqlStatistic SqlStatistics { get; set; }
