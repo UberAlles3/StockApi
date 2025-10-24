@@ -10,9 +10,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using SqlLayer;
 using StockApi.Downloads;
-using SqlLayer.SQL_Models;
 using System.IO;
 using Drake.Extensions;
 
@@ -25,6 +23,8 @@ namespace StockApi
         List<Setting> _settings = new List<Setting>();
         private static bool _tickerFound = false;
         private static StockDownloads _stockDownloads = new StockDownloads("");
+        private static Analyze _analyze = new Analyze();
+        public static DataTable TickerTradesDataTable = null;
 
         // Markets
         MarketData _marketData;
@@ -32,9 +32,7 @@ namespace StockApi
         public MarketData Market_Dow;
         public MarketData Market_Nasdaq;
 
-        private static Analyze _analyze = new Analyze();
-        public static DataTable TickerTradesDataTable = null;
-
+        // Excel files
         private static string _excelFilePath = "";
         private static DateTime _tradesImportDateTime = DateTime.Now.AddYears(-2);
         private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
@@ -83,8 +81,7 @@ namespace StockApi
             ////// Testing section
             //FpmAPI fpmAPI = new FpmAPI();
             //fpmAPI.Test();
-            //StringSafeType<decimal> t = new StringSafeType<decimal>("");
-            //t.StringValue = "3.71B";
+
             // For dark menu.
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
@@ -135,10 +132,6 @@ namespace StockApi
             //////////
             //Metrics metrics = new Metrics();
             //int x = await metrics.DailyGetMetrics(PositionsDataTable);
-
-            //Finnhub can not get historic quotes, so not used 
-            //FinnhubAPI finnhubAPI = new FinnhubAPI();
-            //MarketData marketData = await finnhubAPI.GetQuote("INTC", DateTime.Now.AddDays(-3), 1);
 
             bool networkUp = NetworkInterface.GetIsNetworkAvailable();
             if(networkUp == false)
@@ -426,24 +419,13 @@ namespace StockApi
 
                 if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
                 {
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
                     _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
                     
                     if (_stockDownloads.stockSummary.LastException != null)
                     {
                         txtTickerList.Text = _stockDownloads.stockSummary.Error;
                         continue;
-                    }
-
-                    if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
-                    {
-                        Thread.Sleep(2000);
-                        _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
-                        if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
-                        {
-                            Thread.Sleep(2000);
-                            _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
-                        }
                     }
                 }
 
@@ -839,6 +821,9 @@ namespace StockApi
             MetricsTimer.Start();
         }
 
+        //////////////////////////////
+        //         Charting
+        //////////////////////////////
         private void btnChart_Click(object sender, EventArgs e)
         {
             ChartForm chartForm = new ChartForm();

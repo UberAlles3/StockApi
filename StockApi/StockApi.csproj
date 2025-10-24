@@ -11,17 +11,13 @@
   <ItemGroup>
     <Compile Remove="CommonClasses.cs" />
     <Compile Remove="ExcelInterop.cs" />
-    <Compile Remove="FinnhubAPI_NotUsed.cs" />
     <Compile Remove="StockHistoryOldScreenScrape.cs" />
-    <Compile Remove="TwelveDataAPI.cs" />
     <Compile Remove="WebView.cs" />
     <Compile Remove="WebView.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="CommonClasses.cs" />
-    <None Include="FinnhubAPI_NotUsed.cs" />
-    <None Include="TwelveDataAPI.cs" />
     <None Include="WebView.cs" />
     <None Include="WebView.Designer.cs" />
   </ItemGroup>
