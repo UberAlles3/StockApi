@@ -38,28 +38,6 @@ namespace SqlLayer
             this.SqlCashFlow = new SqlCashFlow();
         }
 
-        //public void SaveFinancials()
-        //{
-        //    Debug.WriteLine("SaveFinancials()");
-
-        //    var factory = FinancialStatementFactory();
-
-        //    using (IDbConnection db = factory.OpenDbConnection())
-        //    {
-        //        db.CreateTableIfNotExists<SqlCashFlow>();
-
-        //        db.Delete<SqlCashFlow>(x => x.Year > DateTime.Now.AddYears(-5).Year);
-
-        //        //foreach (string key in _statementCache.Keys)
-        //        //{
-        //        SqlCashFlow cashFlow = new SqlCashFlow() { Year = DateTime.Now.Year, EndCashPosition = 111, FreeCashFlow = 222.222, Ticker = "AAPL", OperatingCashFlow = 555, UpdateDate = DateTime.Now.Date};
-        //        db.Insert<SqlCashFlow>(cashFlow);
-        //        //    db.Insert<BalanceSheet>(_statementCache[key].BalanceSheet);
-        //        //    db.Insert<CashFlow>(_statementCache[key].CashFlow);
-        //        //}
-        //    }
-        //}
-
         public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
         {
             Debug.WriteLine("SaveIncomeStatements()");
@@ -87,7 +65,6 @@ namespace SqlLayer
             Debug.WriteLine("GetIncomeStatements()");
 
             var factory = FinancialStatementFactory();
-
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlStatistic>();
@@ -123,7 +100,6 @@ namespace SqlLayer
             Debug.WriteLine("GetStatistics()");
 
             var factory = FinancialStatementFactory();
-
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlStatistic>();
