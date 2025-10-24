@@ -16,7 +16,6 @@ namespace SqlLayer
         /// <summary>
         /// Get the database connection
         /// </summary>
-        /// <returns></returns>
         public static OrmLiteConnectionFactory FinancialStatementFactory()
         {
             if(FactorySingleton == null)
@@ -27,15 +26,15 @@ namespace SqlLayer
             return FactorySingleton;
         }
 
-        public SqlCashFlow SqlCashFlow { get; set; }
-        public SqlIncomeStatement SqlIncomeStatement { get; set; }
-        public SqlStatistic SqlStatistics { get; set; }
+        //public SqlCashFlow SqlCashFlow { get; set; }
+        //public SqlIncomeStatement SqlIncomeStatement { get; set; }
+        //public SqlStatistic SqlStatistics { get; set; }
 
  
         public SqlFinancialStatement()
         {
             //this.IncomeStatement = new IncomeStatement();
-            this.SqlCashFlow = new SqlCashFlow();
+            //this.SqlCashFlow = new SqlCashFlow();
         }
 
         public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
