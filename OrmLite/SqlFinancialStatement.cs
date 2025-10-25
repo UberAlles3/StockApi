@@ -66,7 +66,7 @@ namespace SqlLayer
             var factory = FinancialStatementFactory();
             using (IDbConnection db = factory.OpenDbConnection())
             {
-                db.CreateTableIfNotExists<SqlStatistic>();
+                db.CreateTableIfNotExists<SqlIncomeStatement>();
                 sqlIncomeStatementsList = db.Select<SqlIncomeStatement>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
             }
 
@@ -145,5 +145,42 @@ namespace SqlLayer
 
             return sqlPriceHistoriesList;
         }
+
+        public void SaveCashFlows(List<SqlCashFlow> sqlCashFlows)
+        {
+            Debug.WriteLine("SaveCashFlows()");
+
+            if (sqlCashFlows.Count == 0)
+                return;
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlCashFlow>();
+                db.Delete<SqlCashFlow>(x => x.Ticker == sqlCashFlows[0].Ticker && x.Year > DateTime.Now.AddYears(-5).Year);
+
+                foreach (SqlCashFlow row in sqlCashFlows)
+                {
+                    db.Insert<SqlCashFlow>(row);
+                }
+            }
+        }
+
+        public List<SqlCashFlow> GetCashFlows(string ticker)
+        {
+            List<SqlCashFlow> sqlCashFlowsList;
+
+            Debug.WriteLine("GetCashFlows()");
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlCashFlow>();
+                sqlCashFlowsList = db.Select<SqlCashFlow>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
+            }
+
+            return sqlCashFlowsList;
+        }
+
     }
 }

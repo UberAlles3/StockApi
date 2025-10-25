@@ -13,6 +13,7 @@ namespace StockApi.Downloads
         public StockHistory stockHistory = new StockHistory();
         public StockIncomeStatement stockIncomeStatement = new StockIncomeStatement();
         public StockStatistics stockStatistics = new StockStatistics();
+        public StockCashFlow stockCashFlow = new StockCashFlow();
 
         private string _ticker = "";
 
@@ -31,6 +32,7 @@ namespace StockApi.Downloads
                 await GetStatistics();
                 await GetIncomeStatement();
                 await GetHistory();
+                await GetCashFlow(); 
             }
 
             return found;
@@ -76,13 +78,12 @@ namespace StockApi.Downloads
             return true;
         }
 
+        public async Task<bool> GetCashFlow()
+        {
+            stockCashFlow = new StockCashFlow(); // initializes all properties
+            bool found = await stockCashFlow.GetStockData(_ticker);
 
-
-
-
-
-
-
-
+            return found;
+        }
     }
 }
