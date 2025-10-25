@@ -66,7 +66,6 @@ namespace StockApi
         {
             Ticker = ticker;
             string html;
-            string searchTerm = "";
 
             bool hasSqlData = CheckSqlForRecentData();
             if (!hasSqlData)

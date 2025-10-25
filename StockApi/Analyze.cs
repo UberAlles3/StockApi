@@ -38,7 +38,7 @@ namespace StockApi
             // Long Term Price Trend
             decimal priceTrendMetric = 1M;
             if (stockDownloads.stockHistory.HistoricDataToday.Price > stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 2M)
-                if(stockDownloads.stockSummary.ForwardPEString.NumericValue > 100)
+                if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100)
                     priceTrendMetric = 1.06M;
                 else
                     priceTrendMetric = 1.07M;
@@ -126,9 +126,9 @@ namespace StockApi
             // Price / Book
             decimal priceBookMetric = 1M;
             if (stockDownloads.stockSummary.PriceBookString.NumericValue > 5)
-                priceBookMetric = .99M; 
+                priceBookMetric = .99M;
             else if (stockDownloads.stockSummary.PriceBookString.NumericValue < 1)
-                priceBookMetric = 1.01M; 
+                priceBookMetric = 1.01M;
 
             output.AppendLine($"Price Book Metric = {priceBookMetric.ToString(".00")}");
 
@@ -163,49 +163,22 @@ namespace StockApi
 
             output.AppendLine($"Dividend Metric = {dividendMetric.ToString(".00")}");
 
-            ///////////////////////////////////// Finacial Metrics
+            //////////////////////////////////////////////////////////////////////////////////
+            ///                            Income Statement Metrics
+
             // Revenue - Should be increasing YOY
             decimal revenueMetric = 1M;
-            if (stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue > 0)
-            {
-                if (stockDownloads.stockIncomeStatement.Revenue4String.NumericValue > 0)
-                {
-                    // 4 years ago compaered to 2 years ago
-                    if (stockDownloads.stockIncomeStatement.Revenue2String.NumericValue > stockDownloads.stockIncomeStatement.Revenue4String.NumericValue  * 1.21M) // Revenue 2 years ago is 6% above revenue 4 years ago 
-                        revenueMetric = 1.026M;
-                    else if (stockDownloads.stockIncomeStatement.Revenue2String.NumericValue > stockDownloads.stockIncomeStatement.Revenue4String.NumericValue * 1.08M) // Revenue 2 years ago is 6% above revenue 4 years ago 
-                        revenueMetric = 1.02M;
-                    else if (stockDownloads.stockIncomeStatement.Revenue2String.NumericValue > stockDownloads.stockIncomeStatement.Revenue4String.NumericValue * 1.03M) // Revenue 2 years ago is 2% above revenue 4 years ago 
-                        revenueMetric = 1.008M;
-                    if (stockDownloads.stockIncomeStatement.Revenue2String.NumericValue < stockDownloads.stockIncomeStatement.Revenue4String.NumericValue * .97M) // Revenue 2 years ago is 2% below revenue 4 years ago 
-                        revenueMetric = .98M;
-
-                    // Current compared to 2 years ago
-                    if (stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue > stockDownloads.stockIncomeStatement.Revenue2String.NumericValue * 1.13M) // Revenue TTM is 5% above revenue 2 years ago 
-                        revenueMetric += + .016M;
-                    else if (stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue > stockDownloads.stockIncomeStatement.Revenue2String.NumericValue * 1.03M) // Revenue TTM is 5% above revenue 2 years ago 
-                        revenueMetric += + .008M;
-                    if (stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue < stockDownloads.stockIncomeStatement.Revenue2String.NumericValue * .97M) // Revenue TTM is 1% below revenue 2 years ago 
-                        revenueMetric -= .008M;
-
-                    // Current compared to 4 years ago
-                    if (stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue > stockDownloads.stockIncomeStatement.Revenue4String.NumericValue * 1.21M) // Revenue TTM is 5% above revenue 4 years ago 
-                        revenueMetric += .012M;
-                    else if (stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue > stockDownloads.stockIncomeStatement.Revenue4String.NumericValue * 1.1M) // Revenue TTM is 5% above revenue 4 years ago 
-                        revenueMetric += .008M;
-                    if (stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue < stockDownloads.stockIncomeStatement.Revenue4String.NumericValue * .98M) // Revenue TTM is 1% below revenue 4 years ago 
-                        revenueMetric -=  .008M;
-                }
-            }
+            revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.RevenueTtmString, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.Revenue4String);
             output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".00")}");
+
 
             /////////// Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
-            if(stockDownloads.stockIncomeStatement.Profit4String.NumericValue < 0)
+            if (stockDownloads.stockIncomeStatement.Profit4String.NumericValue < 0)
             {
-                if(stockDownloads.stockIncomeStatement.Profit2String.NumericValue > 0)
+                if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > 0)
                     profitMetric = 1.038M;
-                if(stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > 0)
+                if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > 0)
                     profitMetric += .018M;
             }
             else
@@ -314,7 +287,39 @@ namespace StockApi
 
             output.AppendLine($"Basic EPS Metric = {basicEpsMetric.ToString(".00")}");
 
-            // Valuation based on PE and sector
+
+            //////////////////////////////////////////////////////////////////////////////////
+            ///                             Cash Flow Metrics
+            // Operationg Cash Flow
+            decimal operCashFlowMetric = 1M;
+            operCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.OperatingCashFlowTtmString, stockDownloads.stockCashFlow.OperatingCashFlow2String, stockDownloads.stockCashFlow.OperatingCashFlow4String);
+            operCashFlowMetric = (operCashFlowMetric + 1) / 2;
+            output.AppendLine($"Oper. Cash Flow Metric = {operCashFlowMetric.ToString(".00")}");
+
+            // Free Cash Flow
+            decimal freeCashFlowMetric = 1M;
+            freeCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.FreeCashFlowTtmString, stockDownloads.stockCashFlow.FreeCashFlow2String, stockDownloads.stockCashFlow.FreeCashFlow4String);
+            freeCashFlowMetric = (freeCashFlowMetric + 1) / 2;
+            output.AppendLine($"Free Cash Flow Metric = {freeCashFlowMetric.ToString(".00")}");
+
+            decimal FcfRatio = 1;
+            decimal finalCashFlowMetric = (operCashFlowMetric + freeCashFlowMetric) / 2;
+            if (stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue > 100)
+            {
+                FcfRatio = stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue / stockDownloads.stockCashFlow.FreeCashFlowTtmString.NumericValue;
+                if (FcfRatio > 1) finalCashFlowMetric = finalCashFlowMetric * 1.01M;
+                else if (FcfRatio > .85M) finalCashFlowMetric = finalCashFlowMetric * 1.005M;
+                else if (FcfRatio < .3M) finalCashFlowMetric = finalCashFlowMetric * 0.99M;
+                else if (FcfRatio < .6M) finalCashFlowMetric = finalCashFlowMetric * 0.995M;
+            }
+            else
+            {
+                finalCashFlowMetric = 1M;
+            }
+            output.AppendLine($"Final Cash Flow Metric = {finalCashFlowMetric.ToString(".00")}");
+
+            ///////////////////////////////////////////////////////////////
+            ///               Valuation based on PE and sector
             decimal valuationMetric = 1M;
             if (stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
                 valuationMetric = .98M;
@@ -323,7 +328,7 @@ namespace StockApi
             output.AppendLine($"Valuation = {valuationMetric.ToString(".00")}");
 
             //// Calculate total metric
-            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric  + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * cashDebtMetric * valuationMetric;
+            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * cashDebtMetric * valuationMetric;
 
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
@@ -391,7 +396,7 @@ namespace StockApi
             output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
 
             buyPrice = buyPrice * ((totalMetric + 1) / 2);
-            sellPrice = sellPrice * ((totalMetric + 1) / 2); 
+            sellPrice = sellPrice * ((totalMetric + 1) / 2);
 
             if (sellPrice < analyzeInputs.SharesTradedPrice)
                 sellPrice = analyzeInputs.SharesTradedPrice * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.
@@ -408,12 +413,6 @@ namespace StockApi
             decimal limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * lowerMovementMultiplier) * .5M; // lower buy limit price too low
             if (buyPrice < limitPrice)
                 buyPrice = limitPrice;
-            //limitPrice = (stockDownloads.stockSummary.Price * lowerMovementMultiplier) * 1.3M; // upper buy limit
-            //if (buyPrice > limitPrice)
-            //    buyPrice = limitPrice;
-            //limitPrice = (stockDownloads.stockSummary.Price * upperMovementMultiplier) * .6M; // lower sell limit
-            //if (sellPrice < limitPrice)
-            //    sellPrice = limitPrice;
             limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * upperMovementMultiplier) * 1.4M; // upper sell limit
             if (sellPrice > limitPrice)
                 sellPrice = limitPrice;
@@ -494,6 +493,45 @@ namespace StockApi
             AnalysisMetricsOutputText = output.ToString();
 
             return totalMetric;
+        }
+
+        private static decimal SetYearOverYearTrend(StringSafeType<decimal> ttm, StringSafeType<decimal> year2, StringSafeType<decimal> year4)
+        {
+            decimal metric = 1;
+
+            if (ttm.NumericValue > 0)
+            {
+                if (year4.NumericValue > 0)
+                {
+                    // 4 years ago compaered to 2 years ago
+                    if (year2.NumericValue > year4.NumericValue * 1.21M) 
+                        metric = 1.026M;
+                    else if (year2.NumericValue > year4.NumericValue * 1.08M) 
+                        metric = 1.02M;
+                    else if (year2.NumericValue > year4.NumericValue * 1.03M) 
+                        metric = 1.008M;
+                    if (year2.NumericValue < year4.NumericValue * .97M) 
+                        metric = .98M;
+
+                    // Current compared to 2 years ago
+                    if (ttm.NumericValue > year2.NumericValue * 1.13M) 
+                        metric += +.016M;
+                    else if (ttm.NumericValue > year2.NumericValue * 1.03M) 
+                        metric += +.008M;
+                    if (ttm.NumericValue < year2.NumericValue * .97M) 
+                        metric -= .008M;
+
+                    // Current compared to 4 years ago
+                    if (ttm.NumericValue > year4.NumericValue * 1.21M) 
+                        metric += .012M;
+                    else if (ttm.NumericValue > year4.NumericValue * 1.1M) 
+                        metric += .008M;
+                    if (ttm.NumericValue < year4.NumericValue * .98M) 
+                        metric -= .008M;
+                }
+            }
+
+            return metric;
         }
 
         public class AnalyzeInputs

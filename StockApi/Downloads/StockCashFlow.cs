@@ -34,7 +34,7 @@ namespace StockApi
         public StringSafeType<Decimal> OperatingCashFlow4String = new StringSafeType<decimal>("--");
         public Color OperatingCashFlow4Color = Form1.TextForeColor;
 
-        /// EndCashPosition 
+        /// End Cash Position 
         public StringSafeType<Decimal> EndCashPositionTtmString = new StringSafeType<decimal>("--", "N0");
         public Color EndCashPositionTtmColor = Form1.TextForeColor;
         public StringSafeType<Decimal> EndCashPosition2String = new StringSafeType<decimal>("--", "N0");
