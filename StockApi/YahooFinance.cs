@@ -169,6 +169,34 @@ namespace StockApi
             string middle = parts[tagPosition].Substring(0, loc2);
             return middle;
         }
+
+        protected bool ParseHtmlRowData(string html, string searchTerm, StringSafeType<decimal> property0, StringSafeType<decimal> property2, StringSafeType<decimal> property4)
+        {
+            string partial = "";
+            List<string> numbers;
+
+            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == searchTerm).Term;
+            partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 320);
+
+            if (partial.Length < 100) // Some stocks like Vangaurd don't have cash flow, exit
+            {
+                numbers = null;
+                return false; //=====>>>>>>>
+            }
+
+            numbers = GetNumbersFromHtml(partial);
+            if (numbers.Count > 0)
+                property0.StringValue = numbers[0].Trim();
+            if (numbers.Count > 2)
+                property2.StringValue = numbers[2].Trim();
+            if (numbers.Count > 4)
+                property4.StringValue = numbers[4].Trim();
+            else if (numbers.Count > 3)
+                property4.StringValue = numbers[3].Trim();
+
+            return true;
+        }
+
         public bool NotNumber(string value)
         {
             return value == YahooFinance.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;

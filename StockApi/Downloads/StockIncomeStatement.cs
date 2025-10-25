@@ -66,7 +66,7 @@ namespace StockApi
         {
             Ticker = ticker;
             string html;
-            string searchTerm;
+            string searchTerm = "";
 
             bool hasSqlData = CheckSqlForRecentData();
             if (!hasSqlData)
@@ -83,105 +83,25 @@ namespace StockApi
                     Debug.WriteLine("GetStockIncomeStatement()");
 
                     //// Revenue History
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Revenue").Term;
-                    string partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-
-                    if (partial.Length < 100) // Some stocks like Vangaurd don't have financials, exit
-                    {
-                        return false; //=====>>>>>>>
-                    }
-
-                    List<string> numbers = GetNumbersFromHtml(partial);
-
-                    if (numbers.Count > 0)
-                    {
-                        RevenueTtmString.StringValue = numbers[0].Trim();
-
-                    }
-                    if (numbers.Count > 2)
-                        Revenue2String.StringValue = numbers[2].Trim();
-                    if (numbers.Count > 4)
-                        Revenue4String.StringValue = numbers[4].Trim();
-                    else if (numbers.Count > 3)
-                        Revenue4String.StringValue = numbers[3].Trim();
+                    if (ParseHtmlRowData(html, "Total Revenue", RevenueTtmString, Revenue2String, Revenue4String) == false)
+                        return false; //=====>>>>>>> Exit
 
                     // Cost of Revenue History
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Cost of Revenue").Term;
-                    partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-                    if (partial != "")
+                    if (ParseHtmlRowData(html, "Cost of Revenue", CostOfRevenueTtmString, CostOfRevenue2String, CostOfRevenue4String) == false)
                     {
-                        numbers = GetNumbersFromHtml(partial);
-                        //numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
-
-                        if (numbers.Count > 0)
-                            CostOfRevenueTtmString.StringValue = numbers[0].Trim();
-                        if (numbers.Count > 2)
-                            CostOfRevenue2String.StringValue = numbers[2].Trim();
-                        if (numbers.Count > 4)
-                            CostOfRevenue4String.StringValue = numbers[4].Trim();
-                        else if (numbers.Count > 3)
-                            CostOfRevenue4String.StringValue = numbers[3].Trim();
-                    }
-                    else
-                    {
-                        // Cost of Revenue History
-                        searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Expenses").Term;
-                        partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-                        if (partial != "")
-                        {
-                            numbers = GetNumbersFromHtml(partial);
-                            //numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
-
-                            if (numbers.Count > 0)
-                                CostOfRevenueTtmString.StringValue = numbers[0].Trim();
-                            if (numbers.Count > 2)
-                                CostOfRevenue2String.StringValue = numbers[2].Trim();
-                            if (numbers.Count > 4)
-                                CostOfRevenue4String.StringValue = numbers[4].Trim();
-                            else if (numbers.Count > 3)
-                                CostOfRevenue4String.StringValue = numbers[3].Trim();
-                        }
-                        else
+                        // Use Total Expenses instead
+                        if (ParseHtmlRowData(html, "Total Expenses", CostOfRevenueTtmString, CostOfRevenue2String, CostOfRevenue4String) == false)
                         {
                             CostOfRevenueTtmString.StringValue = CostOfRevenue2String.StringValue = CostOfRevenue4String.StringValue = "--";
                         }
                     }
 
                     //// Net Income
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Net Income Common").Term;
-                    partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 800);
-                    if (partial != "")
-                    {
-                        numbers = GetNumbersFromHtml(partial);
-
-                        if (numbers.Count > 0)
-                            NetIncomeTtmString.StringValue = numbers[0].Trim();
-                        if (numbers.Count > 2)
-                            NetIncome2String.StringValue = numbers[2].Trim();
-                        if (numbers.Count > 4)
-                            NetIncome4String.StringValue = numbers[4].Trim();
-                        else if (numbers.Count > 3)
-                            NetIncome4String.StringValue = numbers[3].Trim();
-                    }
+                    if (ParseHtmlRowData(html, "Net Income Common", NetIncomeTtmString, NetIncome2String, NetIncome4String) == false)
+                        return false; //=====>>>>>>> Exit
 
                     //// Operating Expenses
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Operating Expense").Term;
-                    partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-                    if (partial != "")
-                    {
-                        numbers = GetNumbersFromHtml(partial);
-                        //numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
-
-                        if (numbers.Count > 0)
-                            OperatingExpenseTtmString.StringValue = numbers[0].Trim();
-                        if (numbers.Count > 2)
-                            OperatingExpense2String.StringValue = numbers[2].Trim();
-                        if (numbers.Count > 4)
-                            OperatingExpense4String.StringValue = numbers[4].Trim();
-                        else if (numbers.Count > 3)
-                            OperatingExpense4String.StringValue = numbers[3].Trim();
-                    }
-                    else
+                    if (ParseHtmlRowData(html, "Operating Expense", OperatingExpenseTtmString, OperatingExpense2String, OperatingExpense4String) == false)
                     {
                         CostOfRevenueTtmString.NumericValue = RevenueTtmString.NumericValue - NetIncomeTtmString.NumericValue;
                         CostOfRevenue2String.NumericValue = Revenue2String.NumericValue - NetIncome2String.NumericValue;
@@ -189,24 +109,11 @@ namespace StockApi
                     }
 
                     //// Basic EPS
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Basic EPS").Term;
-                    partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 300);
-                    if (partial != "")
+                    if (ParseHtmlRowData(html, "Basic EPS", BasicEpsTtmString, BasicEps2String, BasicEps4String) == false)
                     {
-                        numbers = GetNumbersFromHtml(partial);
-                        //numbers = numbers.Select(x => x._TrimSuffix(".")).ToList();
-
-                        if (numbers.Count > 0)
-                            BasicEpsTtmString.StringValue = numbers[0].Trim();
-                        if (numbers.Count > 2)
-                            BasicEps2String.StringValue = numbers[2].Trim();
-                        if (numbers.Count > 4)
-                            BasicEps4String.StringValue = numbers[4].Trim();
-                        else if (numbers.Count > 3)
-                            BasicEps4String.StringValue = numbers[3].Trim();
-                    }
-                    else
+                        // Not found, set to default   
                         BasicEpsTtmString.StringValue = BasicEps2String.StringValue = BasicEps4String.StringValue = "--";
+                    }
 
                     ///////////////////////////////////
                     ///      Save to SQL Server
