@@ -187,10 +187,7 @@ namespace StockApi
 
             numbers = GetNumbersFromHtml(partial);
             if (numbers.Count > 0)
-            {
                 property0.StringValue = numbers[0].Trim();
-
-            }
             if (numbers.Count > 2)
                 property2.StringValue = numbers[2].Trim();
             if (numbers.Count > 4)
