@@ -707,6 +707,30 @@ namespace StockApi
                     lblOperProfit4YearsAgo.Text = _stockDownloads.stockIncomeStatement.Profit4String.NumericValue.ToString("N0");
                     lblOperProfit4YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Profit4YearsAgoColor;
 
+                    // Operating Cash Flow
+                    lblOperCashFlowTTM.Text = _stockDownloads.stockCashFlow.OperatingCashFlowTtmString.NumericValue.ToString("N0");
+                    lblOperCashFlowTTM.ForeColor = _stockDownloads.stockCashFlow.OperatingCashFlowTtmColor;
+                    lblOperCashFlow2YearsAgo.Text = _stockDownloads.stockCashFlow.OperatingCashFlow2String.NumericValue.ToString("N0");
+                    lblOperCashFlow2YearsAgo.ForeColor = _stockDownloads.stockCashFlow.OperatingCashFlow2Color;
+                    lblOperCashFlow4YearsAgo.Text = _stockDownloads.stockCashFlow.OperatingCashFlow4String.NumericValue.ToString("N0");
+                    lblOperCashFlow4YearsAgo.ForeColor = _stockDownloads.stockCashFlow.OperatingCashFlow4Color;
+
+                    // Free Cash Flow
+                    lblFreeCashFlowTTM.Text = _stockDownloads.stockCashFlow.FreeCashFlowTtmString.NumericValue.ToString("N0");
+                    lblFreeCashFlowTTM.ForeColor = _stockDownloads.stockCashFlow.FreeCashFlowTtmColor;
+                    lblFreeCashFlow2YearsAgo.Text = _stockDownloads.stockCashFlow.FreeCashFlow2String.NumericValue.ToString("N0");
+                    lblFreeCashFlow2YearsAgo.ForeColor = _stockDownloads.stockCashFlow.FreeCashFlow2Color;
+                    lblFreeCashFlow4YearsAgo.Text = _stockDownloads.stockCashFlow.FreeCashFlow4String.NumericValue.ToString("N0");
+                    lblFreeCashFlow4YearsAgo.ForeColor = _stockDownloads.stockCashFlow.FreeCashFlow4Color;
+
+                    // End Cash Postion
+                    lblEndCashPositionTTM.Text = _stockDownloads.stockCashFlow.EndCashPositionTtmString.NumericValue.ToString("N0");
+                    lblEndCashPositionTTM.ForeColor = _stockDownloads.stockCashFlow.EndCashPositionTtmColor;
+                    lblEndCashPosition2YearsAgo.Text = _stockDownloads.stockCashFlow.EndCashPosition2String.NumericValue.ToString("N0");
+                    lblEndCashPosition2YearsAgo.ForeColor = _stockDownloads.stockCashFlow.EndCashPosition2Color;
+                    lblEndCashPosition4YearsAgo.Text = _stockDownloads.stockCashFlow.EndCashPosition4String.NumericValue.ToString("N0");
+                    lblEndCashPosition4YearsAgo.ForeColor = _stockDownloads.stockCashFlow.EndCashPosition4Color;
+
                     // Basic EPS
                     lblBasicEpsTTM.Text = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue.ToString("0.00"); 
                     lblBasicEpsTTM.ForeColor = _stockDownloads.stockIncomeStatement.BasicEpsTtmColor;

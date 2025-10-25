@@ -38,9 +38,9 @@ namespace StockApi
         public StringSafeType<Decimal> EndCashPositionTtmString = new StringSafeType<decimal>("--", "N0");
         public Color EndCashPositionTtmColor = Form1.TextForeColor;
         public StringSafeType<Decimal> EndCashPosition2String = new StringSafeType<decimal>("--", "N0");
-        public Color EndCashPosition2YearsAgoColor = Form1.TextForeColor;
+        public Color EndCashPosition2Color = Form1.TextForeColor;
         public StringSafeType<Decimal> EndCashPosition4String = new StringSafeType<decimal>("--", "N0");
-        public Color EndCashPosition4YearsAgoColor = Form1.TextForeColor;
+        public Color EndCashPosition4Color = Form1.TextForeColor;
 
         ////////////////////////////////////////////
         ///                Methods
@@ -122,11 +122,11 @@ namespace StockApi
                     EndCashPositionTtmColor = Form1.TextForeColor;
 
                 if (EndCashPosition2String.NumericValue < (EndCashPosition4String.NumericValue * .9M))
-                    EndCashPosition2YearsAgoColor = Color.Red;
+                    EndCashPosition2Color = Color.Red;
                 else if (EndCashPosition2String.NumericValue > (EndCashPosition4String.NumericValue * 1.11M))
-                    EndCashPosition2YearsAgoColor = Color.Lime;
+                    EndCashPosition2Color = Color.Lime;
                 else
-                    EndCashPosition2YearsAgoColor = Form1.TextForeColor;
+                    EndCashPosition2Color = Form1.TextForeColor;
             }
 
             // Set Colors for Basic EPS labels (if EPS decreasing by 10% every 2 years, a problem

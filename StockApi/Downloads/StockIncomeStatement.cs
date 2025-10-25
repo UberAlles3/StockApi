@@ -103,6 +103,7 @@ namespace StockApi
                     //// Operating Expenses
                     if (ParseHtmlRowData(html, "Operating Expense", OperatingExpenseTtmString, OperatingExpense2String, OperatingExpense4String) == false)
                     {
+                        // Not found, calculate from revenue and net income
                         CostOfRevenueTtmString.NumericValue = RevenueTtmString.NumericValue - NetIncomeTtmString.NumericValue;
                         CostOfRevenue2String.NumericValue = Revenue2String.NumericValue - NetIncome2String.NumericValue;
                         CostOfRevenue4String.NumericValue = Revenue4String.NumericValue - NetIncome4String.NumericValue;
