@@ -302,9 +302,16 @@ namespace StockApi
             freeCashFlowMetric = (freeCashFlowMetric + 1) / 2;
             output.AppendLine($"Free Cash Flow Metric = {freeCashFlowMetric.ToString(".00")}");
 
+            // End Cash Position
+            decimal endCashMetric = 1M;
+            endCashMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.EndCashPositionTtmString, stockDownloads.stockCashFlow.EndCashPosition2String, stockDownloads.stockCashFlow.EndCashPosition4String);
+            endCashMetric = (endCashMetric + 1) / 2;
+            output.AppendLine($"End Cash Metric = {endCashMetric.ToString(".00")}");
+
+            // Extra ration calculations
             decimal FcfRatio = 1;
-            decimal finalCashFlowMetric = (operCashFlowMetric + freeCashFlowMetric) / 2;
-            if (stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue > 100)
+            decimal finalCashFlowMetric = (operCashFlowMetric + freeCashFlowMetric + endCashMetric) / 3;
+            if (stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue > 1000)
             {
                 FcfRatio = stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue / stockDownloads.stockCashFlow.FreeCashFlowTtmString.NumericValue;
                 if (FcfRatio > 1) finalCashFlowMetric = finalCashFlowMetric * 1.01M;
@@ -314,8 +321,19 @@ namespace StockApi
             }
             else
             {
-                finalCashFlowMetric = 1M;
+                if (stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue < -10000)
+                    finalCashFlowMetric = .995M;
             }
+
+            decimal cashRatio = 1; // How long cash can last, burn thru, for operating expenses
+            if (stockDownloads.stockCashFlow.EndCashPositionTtmString.NumericValue > 0 && stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.NumericValue > 0)
+                cashRatio = stockDownloads.stockCashFlow.EndCashPositionTtmString.NumericValue / stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.NumericValue;
+
+            if (cashRatio > 2.2M)
+                finalCashFlowMetric = finalCashFlowMetric * 1.008M;
+            if (cashRatio < 1.2M)
+                finalCashFlowMetric = finalCashFlowMetric * .992M;
+
             output.AppendLine($"Final Cash Flow Metric = {finalCashFlowMetric.ToString(".00")}");
 
             ///////////////////////////////////////////////////////////////
@@ -328,10 +346,12 @@ namespace StockApi
             output.AppendLine($"Valuation = {valuationMetric.ToString(".00")}");
 
             //// Calculate total metric
-            decimal totalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric + priceBookMetric) / 2) * dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * cashDebtMetric * valuationMetric;
+            decimal totalMetric =    priceTrendMetric   * epsMetric     * ((targetPriceMetric + priceBookMetric) / 2) * 
+                    dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * 
+                    cashDebtMetric * valuationMetric    * finalCashFlowMetric;
 
             output.AppendLine($"----------------------------------------------------");
-            string totalMetricString = $"Total Metric = {totalMetric.ToString(".00")}";
+            string totalMetricString = $"Total Metric = {totalMetric.ToString(".000")}";
             if (totalMetric < .78M)
             {
                 totalMetric = .78M;
