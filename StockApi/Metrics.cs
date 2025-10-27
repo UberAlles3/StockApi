@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using StockApi.Downloads;
+using SqlLayer;
+using SqlLayer.SQL_Models;
 
 namespace StockApi
 {
@@ -17,12 +19,11 @@ namespace StockApi
     /// </summary>
     public class Metrics
     {
-        //private StockSummary _stockSummary = new StockSummary();
-        //private StockIncomeStatement _stockFinancials = new StockIncomeStatement();
-        //private StockStatistics _stockStatistics = new StockStatistics();
-        //private StockHistory _stockHistory = new StockHistory();
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
+
+
+
 
         public async Task<int> DailyGetMetrics(DataTable positionsDataTable)
         {
@@ -60,7 +61,7 @@ namespace StockApi
             if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
             {
                 //stockList = stockList.Skip(0).Take(4).ToList();
-                stockList = stockList.Skip(1).Take(30).ToList();
+                stockList = stockList.Skip(0).Take(30).ToList();
                 desktopPath = Path.Combine(desktopPath, "StockMetricsMonday.txt");
             }
 
@@ -130,7 +131,6 @@ namespace StockApi
             {
                 return $"{ticker} Error {stockDownloads.stockSummary.Error}";
             }
-
 
             // Calculated PE can only be figured after both summary and finacial data is combined
             stockDownloads.stockSummary.SetCalculatedPE(stockDownloads);

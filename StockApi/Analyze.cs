@@ -1,4 +1,6 @@
-﻿using StockApi.Downloads;
+﻿using SqlLayer;
+using SqlLayer.SQL_Models;
+using StockApi.Downloads;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -252,6 +254,8 @@ namespace StockApi
             if (cashRatio < 1.2M)
                 finalCashFlowMetric = finalCashFlowMetric * .992M;
 
+            finalCashFlowMetric = Decimal.Round(finalCashFlowMetric, 3);
+
             output.AppendLine($"Final Cash Flow Metric = {finalCashFlowMetric.ToString(".00")}");
 
             ///////////////////////////////////////////////////////////////
@@ -264,30 +268,56 @@ namespace StockApi
             output.AppendLine($"Valuation = {valuationMetric.ToString(".00")}");
 
             //// Calculate total metric
-            decimal totalMetric =    priceTrendMetric   * epsMetric     * ((targetPriceMetric + priceBookMetric) / 2) * 
+            decimal finalMetric =    priceTrendMetric   * epsMetric     * ((targetPriceMetric + priceBookMetric) / 2) * 
                     dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * 
                     cashDebtMetric * valuationMetric    * finalCashFlowMetric;
 
+            finalMetric = Decimal.Round(finalMetric, 3);
+
+            ///////////////////////////////////
+            ///      Save to SQL Server
+            SqlMetric sqlMetric = new SqlMetric();
+            sqlMetric.BasicEps = (double)basicEpsMetric;
+            sqlMetric.CashDebt = (double)cashDebtMetric;
+            sqlMetric.CashFlow = (double)finalCashFlowMetric;
+            sqlMetric.Dividend = (double)dividendMetric;
+            sqlMetric.EarningsPerShare = (double)epsMetric;
+            sqlMetric.FinalMetric = (double)finalMetric;
+            sqlMetric.Month = DateTime.Now.Month;
+            sqlMetric.PriceBook = (double)priceBookMetric;
+            sqlMetric.PriceTrend = (double)priceTrendMetric;
+            sqlMetric.Profit = (double)profitMetric;
+            sqlMetric.ProfitMargin = (double)profitMarginMetric;
+            sqlMetric.Revenue = (double)revenueMetric;
+            sqlMetric.Ticker = _ticker;
+            sqlMetric.TargetPrice = (double)targetPriceMetric;
+            sqlMetric.UpdateDate = DateTime.Now;
+            sqlMetric.Valuation = (double)valuationMetric;
+            sqlMetric.Year = DateTime.Now.Year;
+
+            SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+            _finacialStatement.SaveMetrics(sqlMetric);
+
             output.AppendLine($"----------------------------------------------------");
-            string totalMetricString = $"Total Metric = {totalMetric.ToString(".000")}";
-            if (totalMetric < .78M)
+            string totalMetricString = $"Total Metric = {finalMetric.ToString(".000")}";
+            if (finalMetric < .78M)
             {
-                totalMetric = .78M;
-                totalMetricString += $"  low end limited to {totalMetric.ToString(".00")}";
+                finalMetric = .78M;
+                totalMetricString += $"  low end limited to {finalMetric.ToString(".00")}";
                 output.AppendLine($"Liquidate this stock!!!!!");
             }
-            if (totalMetric > 1.32M)
+            if (finalMetric > 1.32M)
             {
-                totalMetric = 1.32M;
-                totalMetricString += $"  high end limited to {totalMetric.ToString(".00")}";
+                finalMetric = 1.32M;
+                totalMetricString += $"  high end limited to {finalMetric.ToString(".00")}";
             }
             output.AppendLine(totalMetricString);
 
-            totalMetric = Math.Round(totalMetric, 2);
+            finalMetric = Math.Round(finalMetric, 2);
             if (forMetricOnly == true)
             {
                 AnalysisMetricsOutputText = output.ToString();
-                return totalMetric; //========================>>>>>>>>>>>>>>>>>>>>  Get out
+                return finalMetric; //========================>>>>>>>>>>>>>>>>>>>>  Get out
             }
 
             output.AppendLine("");
@@ -298,7 +328,7 @@ namespace StockApi
             output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
 
             // Adjust based on series of buys or sells
-            totalMetric = totalMetric * buySellMetric;
+            finalMetric = finalMetric * buySellMetric;
 
             // Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
             decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
@@ -333,8 +363,8 @@ namespace StockApi
             output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
 
-            buyPrice = buyPrice * ((totalMetric + 1) / 2);
-            sellPrice = sellPrice * ((totalMetric + 1) / 2);
+            buyPrice = buyPrice * ((finalMetric + 1) / 2);
+            sellPrice = sellPrice * ((finalMetric + 1) / 2);
 
             if (sellPrice < analyzeInputs.SharesTradedPrice)
                 sellPrice = analyzeInputs.SharesTradedPrice * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.
@@ -422,7 +452,7 @@ namespace StockApi
 
             // Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
             decimal profit = (SellPrice - stockDownloads.stockSummary.PriceString.NumericValue) * SellQuantity;
-            if (profit < 20M && totalMetric > .91M) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
+            if (profit < 20M && finalMetric > .91M) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
             {
                 SellPrice = (20M / (SellQuantity + 3)) + stockDownloads.stockSummary.PriceString.NumericValue;
                 output.AppendLine($"Minimum profit set to $20. Sell Price: {SellPrice.ToString("##.##")}");
@@ -430,7 +460,7 @@ namespace StockApi
 
             AnalysisMetricsOutputText = output.ToString();
 
-            return totalMetric;
+            return finalMetric;
         }
 
         private static decimal SetYearOverYearTrend(StringSafeType<decimal> year4, StringSafeType<decimal> year2, StringSafeType<decimal> ttm, int adjustment)
@@ -449,7 +479,7 @@ namespace StockApi
                 Debug.WriteLine($"{_ticker} {crt.FinalMetric} {ex.Message}");
             }
 
-            return (decimal)crt.FinalMetric;
+            return Decimal.Round((decimal)crt.FinalMetric, 3);
         }
 
         public static CrunchThreeResult CrunchThree(double one, double two, double three)
@@ -510,7 +540,7 @@ namespace StockApi
             if (factor > 0)
                 newMetric = metric - Math.Log(metric) / (6 - factor);
 
-            return newMetric;
+            return Math.Round(newMetric, 3);
         }
 
         public class CrunchThreeResult

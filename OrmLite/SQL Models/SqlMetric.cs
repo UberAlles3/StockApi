@@ -7,7 +7,7 @@ namespace SqlLayer.SQL_Models
 {
 
     [Alias("Metric")]
-    class SqlMetric
+    public class SqlMetric
     {
         public SqlMetric() { }
 
@@ -15,6 +15,8 @@ namespace SqlLayer.SQL_Models
         public int Id { get; set; }
 
         public string Ticker { get; set; }
+
+        public int Year { get; set; }
 
         public int Month { get; set; }
 
@@ -42,7 +44,7 @@ namespace SqlLayer.SQL_Models
 
         public double CashFlow { get; set; }
         
-        public double TotalMetric { get; set; }
+        public double FinalMetric { get; set; }
 
         public DateTime UpdateDate { get; set; }
     }

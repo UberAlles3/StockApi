@@ -26,15 +26,8 @@ namespace SqlLayer
             return FactorySingleton;
         }
 
-        //public SqlCashFlow SqlCashFlow { get; set; }
-        //public SqlIncomeStatement SqlIncomeStatement { get; set; }
-        //public SqlStatistic SqlStatistics { get; set; }
-
- 
         public SqlFinancialStatement()
         {
-            //this.IncomeStatement = new IncomeStatement();
-            //this.SqlCashFlow = new SqlCashFlow();
         }
 
         public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
@@ -84,10 +77,7 @@ namespace SqlLayer
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlStatistic>();
-
                 db.Delete<SqlStatistic>(x => x.Ticker == sqlStatistic.Ticker);
-
-                db.CreateTableIfNotExists<SqlStatistic>();
                 db.Insert<SqlStatistic>(sqlStatistic);
             }
         }
@@ -182,5 +172,36 @@ namespace SqlLayer
             return sqlCashFlowsList;
         }
 
+        public void SaveMetrics(SqlMetric sqlMetric)
+        {
+            Debug.WriteLine("SaveMetrics()");
+
+            if (sqlMetric == null)
+                return;
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlMetric>();
+                db.Delete<SqlMetric>(x => x.Year == DateTime.Now.Year && x.Month == DateTime.Now.Month);
+                db.Insert<SqlMetric>(sqlMetric);
+            }
+        }
+
+        public List<SqlMetric> GetMetrics()
+        {
+            List<SqlMetric> sqlMetricList;
+
+            Debug.WriteLine("GetMetrics()");
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlMetric>();
+                sqlMetricList = db.Select<SqlMetric>(x => x.Year == DateTime.Now.Year && x.Month == DateTime.Now.Month);
+            }
+
+            return sqlMetricList;
+        }
     }
 }
