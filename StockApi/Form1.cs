@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using StockApi.Downloads;
 using System.IO;
 using Drake.Extensions;
+using ServiceStack.Logging;
 
 namespace StockApi
 {
@@ -38,6 +39,10 @@ namespace StockApi
         private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
         private static DataTable _positionsDataTable = null;
         private static DataTable _tradesDataTable = null;
+
+        //private static ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+
         public static DataTable PositionsDataTable 
         {
             get 
@@ -83,8 +88,9 @@ namespace StockApi
             //fpmAPI.Test();
             //Analyze.CrunchThreeResult crt = Analyze.CrunchThree(10, 9, 7D);
             //                          crt = Analyze.CrunchThree(10D, 12D, 20D);
-
             // For dark menu.
+            //Program.logger.Error("testing");
+
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
  
@@ -130,7 +136,6 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-
             //////////
             //Metrics metrics = new Metrics();
             //int x = await metrics.DailyGetMetrics(PositionsDataTable);

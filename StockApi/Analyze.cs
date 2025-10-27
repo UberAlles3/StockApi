@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace StockApi
         public int SellQuantity;
         public decimal SellPrice = 0;
         public string AnalysisMetricsOutputText;
+        private static string _ticker = "";
 
         public decimal AnalyzeStockData(StockDownloads stockDownloads, AnalyzeInputs analyzeInputs, bool forMetricOnly)
         {
@@ -34,6 +36,8 @@ namespace StockApi
             // Fair Value
             // Profit Margin %
             // Volatility
+            _ticker = stockDownloads.stockSummary.Ticker;
+            Debug.WriteLine(stockDownloads.stockSummary.Ticker);
 
             // Long Term Price Trend
             decimal priceTrendMetric = 1M;
@@ -431,8 +435,19 @@ namespace StockApi
 
         private static decimal SetYearOverYearTrend(StringSafeType<decimal> year4, StringSafeType<decimal> year2, StringSafeType<decimal> ttm, int adjustment)
         {
-            CrunchThreeResult crt = CrunchThree((double)year4.NumericValue, (double)year2.NumericValue, (double)ttm.NumericValue);
-            crt.FinalMetric = AdjustMetric(crt.FinalMetric, adjustment); // less impact
+            CrunchThreeResult crt = new CrunchThreeResult();
+            decimal val = 0;
+
+            try
+            {
+                crt = CrunchThree((double)year4.NumericValue, (double)year2.NumericValue, (double)ttm.NumericValue);
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, adjustment); // less impact
+                val = (decimal)crt.FinalMetric;
+            }
+             catch(Exception ex) 
+            {
+                Debug.WriteLine($"{_ticker} {crt.FinalMetric} {ex.Message}");
+            }
 
             return (decimal)crt.FinalMetric;
         }
@@ -440,6 +455,13 @@ namespace StockApi
         public static CrunchThreeResult CrunchThree(double one, double two, double three)
         {
             CrunchThreeResult crt = new CrunchThreeResult();
+
+            if (one + two + three == 0)
+            {
+                Program.logger.Info($"{_ticker} had zeros in it.");
+                crt.FinalMetric = 1;
+                return crt;
+            }
 
             // Find Abs(minimum)
             double minimum = Math.Min(one, Math.Min(two, three)); // example -2, 3, -1 = 4    2, 3, 6 = 4   - 11, 100, 100 = 22
