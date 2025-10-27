@@ -166,7 +166,7 @@ namespace StockApi
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Income Statement Metrics
 
-            // Revenue - Should be increasing YOY
+            // Revenue 
             decimal revenueMetric = 1M;
             revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Revenue4String, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.RevenueTtmString, 0);
             output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".00")}");
@@ -175,46 +175,6 @@ namespace StockApi
             /////////// Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
             profitMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Profit4String, stockDownloads.stockIncomeStatement.Profit2String, stockDownloads.stockIncomeStatement.ProfitTtmString, 1);
-
-            //if (stockDownloads.stockIncomeStatement.Profit4String.NumericValue < 0)
-            //{
-            //    if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > 0)
-            //        profitMetric = 1.038M;
-            //    if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > 0)
-            //        profitMetric += .018M;
-            //}
-            //else
-            //{
-            //    // 2 years ago compared to 4 years ago
-            //    if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.3M)
-            //        profitMetric = 1.02M;
-            //    else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.12M)
-            //        profitMetric = 1.012M;
-            //    else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.04M)
-            //        profitMetric = 1.006M;
-            //    else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue < stockDownloads.stockIncomeStatement.Profit4String.NumericValue * .99M)
-            //        profitMetric = .98M;
-
-            //    // This year compared to 4 years ago
-            //    if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.5M)
-            //        profitMetric += .018M;
-            //    else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.2M)
-            //        profitMetric += .008M;
-            //    else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit4String.NumericValue * .98M)
-            //        profitMetric -= .01M;
-            //}
-
-            //// This year compared to 2 years ago
-            //if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.4M)
-            //    profitMetric += .024M;
-            //else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.2M)
-            //    profitMetric += .016M;
-            //else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.1M)
-            //    profitMetric += .011M;
-            //else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2String.NumericValue * .9M)
-            //    profitMetric -= .016M;
-            //else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2String.NumericValue * .95M)
-            //    profitMetric -= .01M;
 
             if (revenueMetric * profitMetric < .87M)
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}         * Financials are Bad *");
@@ -233,57 +193,10 @@ namespace StockApi
 
             /////////// Basic Earning per share growth
             decimal basicEpsMetric = 1.0M;
-            decimal BasicEpsTtm = stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue;
-            decimal BasicEps2Year = stockDownloads.stockIncomeStatement.BasicEps2String.NumericValue;
-            decimal BasicEps4Year = stockDownloads.stockIncomeStatement.BasicEps4String.NumericValue;
+ 
+            basicEpsMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.BasicEps4String, stockDownloads.stockIncomeStatement.BasicEps2String, stockDownloads.stockIncomeStatement.BasicEpsTtmString, -2);
 
-            if (BasicEpsTtm < 0 || BasicEps2Year < 0 || BasicEps4Year < 0)
-            {
-                decimal minEps = Math.Abs(Math.Min(Math.Min(BasicEpsTtm, BasicEps2Year), BasicEps4Year));
-
-                // make all numbers positive for comparisons
-                BasicEpsTtm = BasicEpsTtm + minEps + 1M;
-                BasicEps2Year = BasicEps2Year + minEps + 1M;
-                BasicEps4Year = BasicEps4Year + minEps + 1M;
-            }
-
-            // 2 years ago compared to 4 years ago
-            if (BasicEps2Year > BasicEps4Year * 1.6M)
-                basicEpsMetric = 1.018M;
-            else if (BasicEps2Year > BasicEps4Year * 1.3M)
-                basicEpsMetric = 1.013M;
-            else if (BasicEps2Year > BasicEps4Year * 1.15M)
-                basicEpsMetric = 1.008M;
-            else if (BasicEps2Year < BasicEps4Year * .75M)
-                basicEpsMetric = .98M;
-            else if (BasicEps2Year < BasicEps4Year * .9M)
-                basicEpsMetric = .99M;
-
-            // This year compared to 2 years ago
-            if (BasicEpsTtm > BasicEps2Year * 1.5M)
-                basicEpsMetric += .018M;
-            else if (BasicEpsTtm > BasicEps2Year * 1.2M)
-                basicEpsMetric += .012M;
-            else if (BasicEpsTtm > BasicEps2Year * 1.08M)
-                basicEpsMetric += .008M;
-            else if (BasicEpsTtm < BasicEps2Year * .83M)
-                basicEpsMetric -= .016M;
-            else if (BasicEpsTtm < BasicEps2Year * .92M)
-                basicEpsMetric -= .01M;
-
-            // This year compared to 4 years ago
-            if (BasicEpsTtm > BasicEps4Year * 1.7M)
-                basicEpsMetric += .020M;
-            else if (BasicEpsTtm > BasicEps4Year * 1.25M)
-                basicEpsMetric += .012M;
-            else if (BasicEpsTtm > BasicEps4Year * 1.1M)
-                basicEpsMetric += .008M;
-            else if (BasicEpsTtm < BasicEps4Year * .7M)
-                basicEpsMetric -= .016M;
-            else if (BasicEpsTtm < BasicEps4Year * .9M)
-                basicEpsMetric -= .01M;
-
-            // All negative earnings, downgrade the earnings metric
+             // All negative earnings, downgrade the earnings metric
             if (stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue < 0 && stockDownloads.stockIncomeStatement.BasicEps2String.NumericValue < 0 && stockDownloads.stockIncomeStatement.BasicEps4String.NumericValue < 0 && basicEpsMetric > 1.02M)
                 basicEpsMetric -= .02M;
 
