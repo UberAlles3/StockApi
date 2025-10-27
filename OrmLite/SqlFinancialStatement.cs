@@ -183,7 +183,7 @@ namespace SqlLayer
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlMetric>();
-                db.Delete<SqlMetric>(x => x.Year == DateTime.Now.Year && x.Month == DateTime.Now.Month);
+                db.Delete<SqlMetric>(x => x.Ticker == sqlMetric.Ticker && x.Year == DateTime.Now.Year && x.Month == DateTime.Now.Month);
                 db.Insert<SqlMetric>(sqlMetric);
             }
         }
