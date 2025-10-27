@@ -168,51 +168,53 @@ namespace StockApi
 
             // Revenue - Should be increasing YOY
             decimal revenueMetric = 1M;
-            revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.RevenueTtmString, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.Revenue4String);
+            revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Revenue4String, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.RevenueTtmString, 0);
             output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".00")}");
 
 
             /////////// Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
-            if (stockDownloads.stockIncomeStatement.Profit4String.NumericValue < 0)
-            {
-                if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > 0)
-                    profitMetric = 1.038M;
-                if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > 0)
-                    profitMetric += .018M;
-            }
-            else
-            {
-                // 2 years ago compared to 4 years ago
-                if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.3M)
-                    profitMetric = 1.02M;
-                else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.12M)
-                    profitMetric = 1.012M;
-                else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.04M)
-                    profitMetric = 1.006M;
-                else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue < stockDownloads.stockIncomeStatement.Profit4String.NumericValue * .99M)
-                    profitMetric = .98M;
+            profitMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Profit4String, stockDownloads.stockIncomeStatement.Profit2String, stockDownloads.stockIncomeStatement.ProfitTtmString, 1);
 
-                // This year compared to 4 years ago
-                if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.5M)
-                    profitMetric += .018M;
-                else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.2M)
-                    profitMetric += .008M;
-                else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit4String.NumericValue * .98M)
-                    profitMetric -= .01M;
-            }
+            //if (stockDownloads.stockIncomeStatement.Profit4String.NumericValue < 0)
+            //{
+            //    if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > 0)
+            //        profitMetric = 1.038M;
+            //    if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > 0)
+            //        profitMetric += .018M;
+            //}
+            //else
+            //{
+            //    // 2 years ago compared to 4 years ago
+            //    if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.3M)
+            //        profitMetric = 1.02M;
+            //    else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.12M)
+            //        profitMetric = 1.012M;
+            //    else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.04M)
+            //        profitMetric = 1.006M;
+            //    else if (stockDownloads.stockIncomeStatement.Profit2String.NumericValue < stockDownloads.stockIncomeStatement.Profit4String.NumericValue * .99M)
+            //        profitMetric = .98M;
 
-            // This year compared to 2 years ago
-            if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.4M)
-                profitMetric += .024M;
-            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.2M)
-                profitMetric += .016M;
-            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.1M)
-                profitMetric += .011M;
-            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2String.NumericValue * .9M)
-                profitMetric -= .016M;
-            else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2String.NumericValue * .95M)
-                profitMetric -= .01M;
+            //    // This year compared to 4 years ago
+            //    if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.5M)
+            //        profitMetric += .018M;
+            //    else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit4String.NumericValue * 1.2M)
+            //        profitMetric += .008M;
+            //    else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit4String.NumericValue * .98M)
+            //        profitMetric -= .01M;
+            //}
+
+            //// This year compared to 2 years ago
+            //if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.4M)
+            //    profitMetric += .024M;
+            //else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.2M)
+            //    profitMetric += .016M;
+            //else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue > stockDownloads.stockIncomeStatement.Profit2String.NumericValue * 1.1M)
+            //    profitMetric += .011M;
+            //else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2String.NumericValue * .9M)
+            //    profitMetric -= .016M;
+            //else if (stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue < stockDownloads.stockIncomeStatement.Profit2String.NumericValue * .95M)
+            //    profitMetric -= .01M;
 
             if (revenueMetric * profitMetric < .87M)
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".00")}         * Financials are Bad *");
@@ -292,37 +294,36 @@ namespace StockApi
             ///                             Cash Flow Metrics
             // Operationg Cash Flow
             decimal operCashFlowMetric = 1M;
-            operCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.OperatingCashFlowTtmString, stockDownloads.stockCashFlow.OperatingCashFlow2String, stockDownloads.stockCashFlow.OperatingCashFlow4String);
-            operCashFlowMetric = (operCashFlowMetric + 1) / 2;
+            operCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.OperatingCashFlow4String, stockDownloads.stockCashFlow.OperatingCashFlow2String, stockDownloads.stockCashFlow.OperatingCashFlowTtmString, -4);
             output.AppendLine($"Oper. Cash Flow Metric = {operCashFlowMetric.ToString(".00")}");
 
             // Free Cash Flow
             decimal freeCashFlowMetric = 1M;
-            freeCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.FreeCashFlowTtmString, stockDownloads.stockCashFlow.FreeCashFlow2String, stockDownloads.stockCashFlow.FreeCashFlow4String);
-            freeCashFlowMetric = (freeCashFlowMetric + 1) / 2;
+            freeCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.FreeCashFlow4String, stockDownloads.stockCashFlow.FreeCashFlow2String, stockDownloads.stockCashFlow.FreeCashFlowTtmString, -4);
             output.AppendLine($"Free Cash Flow Metric = {freeCashFlowMetric.ToString(".00")}");
 
             // End Cash Position
             decimal endCashMetric = 1M;
-            endCashMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.EndCashPositionTtmString, stockDownloads.stockCashFlow.EndCashPosition2String, stockDownloads.stockCashFlow.EndCashPosition4String);
-            endCashMetric = (endCashMetric + 1) / 2;
+            endCashMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.EndCashPosition4String, stockDownloads.stockCashFlow.EndCashPosition2String, stockDownloads.stockCashFlow.EndCashPositionTtmString, -4);
             output.AppendLine($"End Cash Metric = {endCashMetric.ToString(".00")}");
 
-            // Extra ration calculations
+            // Extra ratio calculations
             decimal FcfRatio = 1;
             decimal finalCashFlowMetric = (operCashFlowMetric + freeCashFlowMetric + endCashMetric) / 3;
             if (stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue > 1000)
             {
-                FcfRatio = stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue / stockDownloads.stockCashFlow.FreeCashFlowTtmString.NumericValue;
-                if (FcfRatio > 1) finalCashFlowMetric = finalCashFlowMetric * 1.01M;
-                else if (FcfRatio > .85M) finalCashFlowMetric = finalCashFlowMetric * 1.005M;
+                FcfRatio = stockDownloads.stockCashFlow.FreeCashFlowTtmString.NumericValue / stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue;
+                if (FcfRatio > 1.05M) finalCashFlowMetric = finalCashFlowMetric * 1.01M;
+                else if (FcfRatio > .9M) finalCashFlowMetric = finalCashFlowMetric * 1.005M;
                 else if (FcfRatio < .3M) finalCashFlowMetric = finalCashFlowMetric * 0.99M;
                 else if (FcfRatio < .6M) finalCashFlowMetric = finalCashFlowMetric * 0.995M;
             }
             else
             {
                 if (stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue < -10000)
-                    finalCashFlowMetric = .995M;
+                {
+                    finalCashFlowMetric = (decimal)AdjustMetric((double)finalCashFlowMetric, -4); // less impact
+                }
             }
 
             decimal cashRatio = 1; // How long cash can last, burn thru, for operating expenses
@@ -515,44 +516,80 @@ namespace StockApi
             return totalMetric;
         }
 
-        private static decimal SetYearOverYearTrend(StringSafeType<decimal> ttm, StringSafeType<decimal> year2, StringSafeType<decimal> year4)
+        private static decimal SetYearOverYearTrend(StringSafeType<decimal> year4, StringSafeType<decimal> year2, StringSafeType<decimal> ttm, int adjustment)
         {
-            decimal metric = 1;
+            CrunchThreeResult crt = CrunchThree((double)year4.NumericValue, (double)year2.NumericValue, (double)ttm.NumericValue);
+            crt.FinalMetric = AdjustMetric(crt.FinalMetric, adjustment); // less impact
 
-            if (ttm.NumericValue > 0)
-            {
-                if (year4.NumericValue > 0)
-                {
-                    // 4 years ago compaered to 2 years ago
-                    if (year2.NumericValue > year4.NumericValue * 1.21M) 
-                        metric = 1.026M;
-                    else if (year2.NumericValue > year4.NumericValue * 1.08M) 
-                        metric = 1.02M;
-                    else if (year2.NumericValue > year4.NumericValue * 1.03M) 
-                        metric = 1.008M;
-                    if (year2.NumericValue < year4.NumericValue * .97M) 
-                        metric = .98M;
-
-                    // Current compared to 2 years ago
-                    if (ttm.NumericValue > year2.NumericValue * 1.13M) 
-                        metric += +.016M;
-                    else if (ttm.NumericValue > year2.NumericValue * 1.03M) 
-                        metric += +.008M;
-                    if (ttm.NumericValue < year2.NumericValue * .97M) 
-                        metric -= .008M;
-
-                    // Current compared to 4 years ago
-                    if (ttm.NumericValue > year4.NumericValue * 1.21M) 
-                        metric += .012M;
-                    else if (ttm.NumericValue > year4.NumericValue * 1.1M) 
-                        metric += .008M;
-                    if (ttm.NumericValue < year4.NumericValue * .98M) 
-                        metric -= .008M;
-                }
-            }
-
-            return metric;
+            return (decimal)crt.FinalMetric;
         }
+
+        public static CrunchThreeResult CrunchThree(double one, double two, double three)
+        {
+            CrunchThreeResult crt = new CrunchThreeResult();
+
+            // Find Abs(minimum)
+            double minimum = Math.Min(one, Math.Min(two, three)); // example -2, 3, -1 = 4    2, 3, 6 = 4   - 11, 100, 100 = 22
+            double maximum = Math.Max(one, Math.Max(two, three)); // example -2, 3, -1 = 4    2, 3, 6 = 4   - 11, 100, 100 = 22
+            if (minimum < 0)
+                minimum = Math.Abs(minimum) * 2;
+            if (maximum < 0)
+                maximum = Math.Abs(maximum) * 2;
+
+            if (minimum * 6 < maximum)
+                minimum += maximum;
+
+            // Add to all 3 numbers
+            one += minimum; two += minimum; three += minimum;
+
+            // Get ratios between them
+            crt.Ratio1 = (double)two / (double)one;
+            crt.Ratio2 = (double)three / (double)two;
+            crt.Ratio3 = (double)three / (double)one;
+
+            // Get the Log() of the ratios and dvide by a factor of 8
+            crt.Log1 = 1 + Math.Log(crt.Ratio1) / 3; // diff for earlier less important
+            crt.Log2 = 1 + Math.Log(crt.Ratio2) / 2.2D;
+            crt.Log3 = 1 + Math.Log(crt.Ratio3) / 2.2D;
+
+            crt.FinalMetric = (crt.Log1 + crt.Log2 + crt.Log3) / 3;
+
+            if (crt.FinalMetric > 1.07D)
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, -4); // Lessen metric weight
+            if (crt.FinalMetric > 1.06D)
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, -2); // Lessen metric weight
+            if (crt.FinalMetric < .93D)
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, -4); // Lessen metric weight
+            if (crt.FinalMetric < .94D)
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, -2); // Lessen metric weight
+
+            return crt;
+        }
+
+        public static double AdjustMetric(double metric, double factor) // negative number less important, positive more important, range -5 to +5
+        {
+            double newMetric = metric;
+
+            if (factor < 0)
+                newMetric = metric - Math.Log(metric) / (6 + factor);
+            if (factor > 0)
+                newMetric = metric - Math.Log(metric) / (6 - factor);
+
+            return newMetric;
+        }
+
+        public class CrunchThreeResult
+        {
+            public double Ratio1;
+            public double Ratio2;
+            public double Ratio3;
+            public double Log1;
+            public double Log2;
+            public double Log3;
+            public double FinalMetric;
+        }
+
+
 
         public class AnalyzeInputs
         {

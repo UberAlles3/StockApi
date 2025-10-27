@@ -81,6 +81,8 @@ namespace StockApi
             ////// Testing section
             //FpmAPI fpmAPI = new FpmAPI();
             //fpmAPI.Test();
+            //Analyze.CrunchThreeResult crt = Analyze.CrunchThree(10, 9, 7D);
+            //                          crt = Analyze.CrunchThree(10D, 12D, 20D);
 
             // For dark menu.
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
