@@ -882,9 +882,41 @@ namespace StockApi
             chartForm.Show();
         }
 
-        //////////////////////////////
-        //      Menu Items
-        //////////////////////////////
+        /////////////////////////////////
+        //         Menu Items
+        /////////////////////////////////
+        ///////// Main 
+        private async void runDailyMetricsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string saveText = runDailyMetricsToolStripMenuItem.Text;
+
+            lblMessages.Text = "Running metrics for today...";
+            runDailyMetricsToolStripMenuItem.Text = "Running...";
+            runDailyMetricsToolStripMenuItem.Enabled = false;
+            runDailyMetricsToolStripMenuItem.ForeColor = Color.LightBlue;
+            // Execute your daily function here
+            Metrics metrics = new Metrics();
+            int x = await metrics.DailyGetMetrics(PositionsDataTable);
+            runDailyMetricsToolStripMenuItem.Text = saveText;
+            runDailyMetricsToolStripMenuItem.Enabled = true;
+            runDailyMetricsToolStripMenuItem.ForeColor = Color.White;
+            lblMessages.Text = "";
+        }
+        private void logToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string filePath = Path.Combine(Environment.CurrentDirectory, "logs\\app.log");
+
+            try
+            {
+                Process.Start("notepad.exe", filePath);
+            }
+            catch (Exception ex)
+            {
+                Program.logger.Error($"Error opening Notepad: {ex.Message}");
+                //MessageBox.Show($"Error opening Notepad: {ex.Message}", "Process Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void goldAndSilverToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenHyperlink("https://www.apmex.com/gold-price");
@@ -939,23 +971,6 @@ namespace StockApi
             }
         }
 
-        private async void runDailyMetricsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string saveText = runDailyMetricsToolStripMenuItem.Text;
-
-            lblMessages.Text = "Running metrics for today...";
-            runDailyMetricsToolStripMenuItem.Text = "Running...";
-            runDailyMetricsToolStripMenuItem.Enabled = false;
-            runDailyMetricsToolStripMenuItem.ForeColor = Color.LightBlue;
-            // Execute your daily function here
-            Metrics metrics = new Metrics();
-            int x = await metrics.DailyGetMetrics(PositionsDataTable);
-            runDailyMetricsToolStripMenuItem.Text = saveText;
-            runDailyMetricsToolStripMenuItem.Enabled = true;
-            runDailyMetricsToolStripMenuItem.ForeColor = Color.White;
-            lblMessages.Text = "";
-        }
-
         private async void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
@@ -997,7 +1012,6 @@ namespace StockApi
             offHighs.Owner = this;
             offHighs.Show();
         }
-
     }
     public class CustomColorTable : ProfessionalColorTable
     {
