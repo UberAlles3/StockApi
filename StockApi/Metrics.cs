@@ -22,9 +22,6 @@ namespace StockApi
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
 
-
-
-
         public async Task<int> DailyGetMetrics(DataTable positionsDataTable)
         {
             // Get all tickers from position table

@@ -31,17 +31,15 @@ namespace StockApi
         public decimal AnalyzeStockData(StockDownloads stockDownloads, AnalyzeInputs analyzeInputs, bool forMetricOnly)
         {
             _buyless = false;
-            StringBuilder output = new StringBuilder();
-            // combine trends with
-            // one year target
-            // EPS
-            // Fair Value
-            // Profit Margin %
-            // Volatility
             _ticker = stockDownloads.stockSummary.Ticker;
-            Debug.WriteLine(stockDownloads.stockSummary.Ticker);
+            StringBuilder output = new StringBuilder();
 
-            // Long Term Price Trend
+            Debug.WriteLine(_ticker);
+
+            //////////////////////////////////////////////////////////////////////////////////
+            ///                            Summary Metrics
+
+            ///////// Long Term Price Trend
             decimal priceTrendMetric = 1M;
             priceTrendMetric = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3YearsAgo.Price;
             if (priceTrendMetric > 2M) // limit
@@ -56,40 +54,7 @@ namespace StockApi
 
             output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".00")}");
 
-            // Consecutive buys or sells
-            decimal buySellMetric = 1M;
-            if (forMetricOnly == false)
-            {
-                List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
-                int buys = 0;
-                int sells = 0;
-                foreach (DataRow dr in drList)
-                {
-                    if (dr.ItemArray[2].ToString() == "Buy")
-                    {
-                        if (sells > 0)
-                            break;
-                        buys++;
-                    }
-                    if (dr.ItemArray[2].ToString() == "Sell")
-                    {
-                        if (buys > 0)
-                            break;
-                        sells++;
-                    }
-                }
-
-                if (buys == 2)
-                    buySellMetric = .98M;
-                if (buys == 3)
-                    buySellMetric = .96M;
-                if (sells == 2)
-                    buySellMetric = 1.02M;
-                if (sells == 3)
-                    buySellMetric = 1.04M;
-            }
-
-            // One Year Target - Not a very valuable metric. 
+            ////////// One Year Target - Not a very valuable metric. 
             decimal targetPriceMetric = 1M;
             if (stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue < stockDownloads.stockSummary.PriceString.NumericValue * .95M)
                 targetPriceMetric = .99M;
@@ -98,26 +63,15 @@ namespace StockApi
 
             output.AppendLine($"One Year Target Metric = {targetPriceMetric.ToString(".00")}");
 
-            // Earnings Per Share
+            ////////// Earnings Per Share
             decimal epsMetric = 1M;
-            if (stockDownloads.stockSummary.EarningsPerShareString.NumericValue < -6)
-                epsMetric = .94M;
-            else if (stockDownloads.stockSummary.EarningsPerShareString.NumericValue < -3)
-                epsMetric = .96M;
-            else if (stockDownloads.stockSummary.EarningsPerShareString.NumericValue < -1)
-                epsMetric = .98M;
-            else if (stockDownloads.stockSummary.EarningsPerShareString.NumericValue > 6)
-                epsMetric = 1.05M;
-            else if (stockDownloads.stockSummary.EarningsPerShareString.NumericValue > 3)
-                epsMetric = 1.03M;
-            else if (stockDownloads.stockSummary.EarningsPerShareString.NumericValue > 1)
-                epsMetric = 1.02M;
-            else if (stockDownloads.stockSummary.EarningsPerShareString.NumericValue > 0)
-                epsMetric = 1.01M;
+            epsMetric = (decimal)AdjustMetric((double)(1 + (stockDownloads.stockSummary.EarningsPerShareString.NumericValue / 100M)), -1.2D);
+            if (epsMetric > 1.06M) epsMetric = 1.06M;  // limit
+            if (epsMetric < .97M)  epsMetric = .97M;   // limit
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
-            // Price / Book
+            ////////// Price / Book
             decimal priceBookMetric = 1M;
             if (stockDownloads.stockSummary.PriceBookString.NumericValue > 5)
                 priceBookMetric = .99M;
@@ -126,7 +80,7 @@ namespace StockApi
 
             output.AppendLine($"Price Book Metric = {priceBookMetric.ToString(".00")}");
 
-            // Profit Margin Metric
+            ////////// Profit Margin Metric
             decimal profitMarginMetric = 1.00M;
             if (stockDownloads.stockSummary.ProfitMarginString.NumericValue < -6)
                 profitMarginMetric = .962M;
@@ -139,7 +93,7 @@ namespace StockApi
 
             output.AppendLine($"Profit Margin Metric = {profitMarginMetric.ToString(".00")}");
 
-            // Dividend Metric
+            /////////// Dividend Metric
             decimal dividendMetric = 1M;
             if (stockDownloads.stockSummary.DividendString.NumericValue > 8)
                 dividendMetric = 1.08M;
@@ -203,24 +157,25 @@ namespace StockApi
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                             Cash Flow Metrics
-            // Operationg Cash Flow
+            ////////// Operationg Cash Flow
             decimal operCashFlowMetric = 1M;
             operCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.OperatingCashFlow4String, stockDownloads.stockCashFlow.OperatingCashFlow2String, stockDownloads.stockCashFlow.OperatingCashFlowTtmString, -2);
             output.AppendLine($"Oper. Cash Flow Metric = {operCashFlowMetric.ToString(".00")}");
 
-            // Free Cash Flow
+            ////////// Free Cash Flow
             decimal freeCashFlowMetric = 1M;
             freeCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.FreeCashFlow4String, stockDownloads.stockCashFlow.FreeCashFlow2String, stockDownloads.stockCashFlow.FreeCashFlowTtmString, -2);
             output.AppendLine($"Free Cash Flow Metric = {freeCashFlowMetric.ToString(".00")}");
 
-            // End Cash Position
+            /////////// End Cash Position
             decimal endCashMetric = 1M;
             endCashMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.EndCashPosition4String, stockDownloads.stockCashFlow.EndCashPosition2String, stockDownloads.stockCashFlow.EndCashPositionTtmString, -2);
             output.AppendLine($"End Cash Metric = {endCashMetric.ToString(".00")}");
 
-            // Extra ratio calculations
-            decimal FcfRatio = 1;
             decimal finalCashFlowMetric = (operCashFlowMetric + freeCashFlowMetric + endCashMetric) / 3;
+
+            ////////// Extra ratio calculations. Adjusting finalCashFlowMetric 
+            decimal FcfRatio = 1;
             if (stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue > 1000)
             {
                 FcfRatio = stockDownloads.stockCashFlow.FreeCashFlowTtmString.NumericValue / stockDownloads.stockIncomeStatement.NetIncomeTtmString.NumericValue;
@@ -237,6 +192,7 @@ namespace StockApi
                 }
             }
 
+            ////////// Cash Ratio
             decimal cashRatio = 1; // How long cash can last, burn thru, for operating expenses
             if (stockDownloads.stockCashFlow.EndCashPositionTtmString.NumericValue > 0 && stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.NumericValue > 0)
                 cashRatio = stockDownloads.stockCashFlow.EndCashPositionTtmString.NumericValue / stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.NumericValue;
@@ -250,8 +206,8 @@ namespace StockApi
 
             output.AppendLine($"Final Cash Flow Metric = {finalCashFlowMetric.ToString(".00")}");
 
-            ///////////////////////////////////////////////////////////////
-            ///               Valuation based on PE and sector
+            //////////////////////////////////////////
+            ///   Valuation based on PE and sector
             decimal valuationMetric = 1M;
             if (stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
                 valuationMetric = .98M;
@@ -314,9 +270,43 @@ namespace StockApi
 
             output.AppendLine("");
 
-            ///////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////
             ///                     BUY and SELL
-            ///////////// Setting Price Movement Multipliers
+            ///////////////////////////////////////////////////////////////
+
+            // Consecutive buys or sells
+            decimal buySellMetric = 1M;
+            if (forMetricOnly == false)
+            {
+                List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
+                int buys = 0;
+                int sells = 0;
+                foreach (DataRow dr in drList)
+                {
+                    if (dr.ItemArray[2].ToString() == "Buy")
+                    {
+                        if (sells > 0)
+                            break;
+                        buys++;
+                    }
+                    if (dr.ItemArray[2].ToString() == "Sell")
+                    {
+                        if (buys > 0)
+                            break;
+                        sells++;
+                    }
+                }
+
+                if (buys == 2)
+                    buySellMetric = .98M;
+                if (buys == 3)
+                    buySellMetric = .96M;
+                if (sells == 2)
+                    buySellMetric = 1.02M;
+                if (sells == 3)
+                    buySellMetric = 1.04M;
+            }
+
             output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
 
             // Adjust based on series of buys or sells
