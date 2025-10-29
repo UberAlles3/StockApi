@@ -95,7 +95,9 @@ namespace StockApi
 
                 // Volatility
                 searchTerm = SearchTerms.Find(x => x.Name == "Volatility").Term;
-                VolatilityString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 3);
+                VolatilityString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, "1", 3);
+                if (VolatilityString.NumericValue == 0)
+                    VolatilityString.NumericValue = 1;
 
                 // Dividend
                 searchTerm = SearchTerms.Find(x => x.Name == "Dividend").Term;
@@ -119,7 +121,6 @@ namespace StockApi
                     OneYearTargetPriceString.StringValue = PriceString.StringValue;
 
                 // Price / Book
-                searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
                 PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 2);
 
                 //Profit Margin %
@@ -130,7 +131,6 @@ namespace StockApi
                 else
                     ProfitMarginString.StringValue = YahooFinance.NotApplicable;
 
-                Debug.WriteLine("GetStockSummary() 52 week range");
                 // 52 Week Range
                 searchTerm = SearchTerms.Find(x => x.Name == "52 Week Range").Term;
                 string range = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 4);

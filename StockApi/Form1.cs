@@ -90,6 +90,8 @@ namespace StockApi
             //                          crt = Analyze.CrunchThree(10D, 12D, 20D);
             // For dark menu.
             //Program.logger.Error("testing");
+            //double metric = Analyze.AdjustMetric(.4D, -15);
+
 
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());

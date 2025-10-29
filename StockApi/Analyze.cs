@@ -43,28 +43,16 @@ namespace StockApi
 
             // Long Term Price Trend
             decimal priceTrendMetric = 1M;
-            if (stockDownloads.stockHistory.HistoricDataToday.Price > stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 2M)
-                if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100)
-                    priceTrendMetric = 1.06M;
-                else
-                    priceTrendMetric = 1.07M;
-            else if (stockDownloads.stockHistory.HistoricDataToday.Price > stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 1.6M)
-                if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100)
-                    priceTrendMetric = 1.04M;
-                else
-                    priceTrendMetric = 1.05M;
-            else if (stockDownloads.stockHistory.HistoricDataToday.Price > stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 1.3M)
-                priceTrendMetric = 1.04M;
-            else if (stockDownloads.stockHistory.HistoricDataToday.Price > stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 1.2M)
-                priceTrendMetric = 1.02M;
-            else if (stockDownloads.stockHistory.HistoricDataToday.Price > stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 1.1M)
-                priceTrendMetric = 1.01M;
-            else if (stockDownloads.stockHistory.HistoricDataToday.Price < stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 0.6M)
-                priceTrendMetric = .9M;
-            else if (stockDownloads.stockHistory.HistoricDataToday.Price < stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 0.8M)
-                priceTrendMetric = .96M;
-            else if (stockDownloads.stockHistory.HistoricDataToday.Price < stockDownloads.stockHistory.HistoricData3YearsAgo.Price * 0.93M)
-                priceTrendMetric = .98M;
+            priceTrendMetric = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3YearsAgo.Price;
+            if (priceTrendMetric > 2M) // limit
+                priceTrendMetric = (((priceTrendMetric + 2) / 2) + 2) / 2;
+            if (priceTrendMetric < .5M) // limit
+                priceTrendMetric = (((priceTrendMetric + .5M) / 2) + .5M) / 2; 
+
+            priceTrendMetric = (decimal)AdjustMetric((double)priceTrendMetric, -18);
+
+            if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100)
+                priceTrendMetric = priceTrendMetric - .01M;
 
             output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".00")}");
 
@@ -200,9 +188,13 @@ namespace StockApi
             /////////// Basic Earning per share growth
             decimal basicEpsMetric = 1.0M;
  
-            basicEpsMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.BasicEps4String, stockDownloads.stockIncomeStatement.BasicEps2String, stockDownloads.stockIncomeStatement.BasicEpsTtmString, 0);
+            basicEpsMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.BasicEps4String, stockDownloads.stockIncomeStatement.BasicEps2String, stockDownloads.stockIncomeStatement.BasicEpsTtmString, -2);
+            if (basicEpsMetric > 1.07M)
+                basicEpsMetric = 1.07M;
+            if (basicEpsMetric < .96M)
+                basicEpsMetric = .96M;
 
-             // All negative earnings, downgrade the earnings metric
+            // All negative earnings, downgrade the earnings metric
             if (stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue < 0 && stockDownloads.stockIncomeStatement.BasicEps2String.NumericValue < 0 && stockDownloads.stockIncomeStatement.BasicEps4String.NumericValue < 0 && basicEpsMetric > 1.02M)
                 basicEpsMetric -= .02M;
 
@@ -249,10 +241,10 @@ namespace StockApi
             if (stockDownloads.stockCashFlow.EndCashPositionTtmString.NumericValue > 0 && stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.NumericValue > 0)
                 cashRatio = stockDownloads.stockCashFlow.EndCashPositionTtmString.NumericValue / stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.NumericValue;
 
-            if (cashRatio > 2.2M)
-                finalCashFlowMetric = finalCashFlowMetric * 1.008M;
-            if (cashRatio < 1.2M)
-                finalCashFlowMetric = finalCashFlowMetric * .992M;
+            if (cashRatio > 2M)
+                finalCashFlowMetric = finalCashFlowMetric * 1.006M;
+            if (cashRatio < .4M)
+                finalCashFlowMetric = finalCashFlowMetric * .994M;
 
             finalCashFlowMetric = Decimal.Round(finalCashFlowMetric, 3);
 
@@ -334,38 +326,6 @@ namespace StockApi
             decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
 
             volitilityFactor = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
-
-
-            //if (stockDownloads.stockSummary.VolatilityString.NumericValue < .5M)
-            //    volitilityFactor = .86M;
-            //else if (stockDownloads.stockSummary.VolatilityString.NumericValue < .8M)
-            //    volitilityFactor = .93M;
-            //else if (stockDownloads.stockSummary.VolatilityString.NumericValue > 2M)
-            //    volitilityFactor = 1.14M;
-            //else if (stockDownloads.stockSummary.VolatilityString.NumericValue > 1.2M)
-            //    volitilityFactor = 1.07M;
-
-            ////Debug.WriteLine(AdjustMetric(.5D, -1));
-            //Debug.WriteLine(AdjustMetric(.4D, -5));
-            ////Debug.WriteLine(AdjustMetric(.5D, -5));
-
-            //Debug.WriteLine("$$$$");
-
-            ////Debug.WriteLine(AdjustMetric(.8D, -1));
-            //Debug.WriteLine(AdjustMetric(.7D, -5));
-            ////Debug.WriteLine(AdjustMetric(.8D, -5));
-            //Debug.WriteLine("$$$$");
-
-            ////Debug.WriteLine(AdjustMetric(1.3D, -1));
-            //Debug.WriteLine(AdjustMetric(1.4D, -5));
-            ////Debug.WriteLine(AdjustMetric(1.3D, -5));
-            //Debug.WriteLine("$$$$");
-
-            ////Debug.WriteLine(AdjustMetric(2D, -1));
-            //Debug.WriteLine(AdjustMetric(2.2D, -5));
-            ////Debug.WriteLine(AdjustMetric(2D, -5));
- 
-
 
             output.AppendLine($"Volitility Factor = { volitilityFactor.ToString("##.##")}");
 
@@ -562,52 +522,13 @@ namespace StockApi
         {
             double newMetric = metric;
             double absFactor = Math.Abs(factor);
-            double cubeRoot = Math.Sqrt(Math.Sqrt(Math.Sqrt(metric)));
-            double logx = ((absFactor) + Math.Log(metric)) / (absFactor);
-
-            Debug.WriteLine($"{metric}   {logx}");
 
             if (factor == 0)
                 return metric;
 
-            //if (factor < 0)
-            //    newMetric = metric - (Math.Log(metric) / (6 + factor));
-            //if (factor > 0)
-            //    newMetric = metric - (Math.Log(metric) / (6 - factor));
+            newMetric = ((absFactor) + Math.Log(metric)) / (absFactor);
 
-            //if (factor < 0)
-            //    newMetric = metric  - (Math.Log(metric) * Math.Abs(factor));
-
-            //if (factor < 0)
-            //{
-            //    for (int i = 0; i < absFactor; i++)
-            //        newMetric = newMetric / cubeRoot;
-
-
-            //    // 1 = (1 / 10) = .1
-            //    // 1 - .1 = .9
-
-            //        // 2 = (4 / 10) = .4
-            //        // 2 - .4 = 1.6
-
-            //        // 3 = (9 / 10) = .9
-            //        // 3 - .9 = 2.1
-
-
-            //        // x = 2 / 1.44 = 1.44
-            //        // x = 9 / 3    = 3
-            //        //                newMetric = (metric + absFactor) / (1 + absFactor);
-            //        //              newMetric = newMetric + sqrRoot
-
-            //}
-
-
-            //if (factor > 0)
-            //{
-            //    newMetric = metric * (1 + (factor / 10));
-            //}
-
-            return Math.Round(logx, 3);
+            return Math.Round(newMetric, 3);
         }
 
         public class CrunchThreeResult
