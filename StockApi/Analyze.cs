@@ -42,14 +42,10 @@ namespace StockApi
             ///////// Long Term Price Trend
             decimal priceTrendMetric = 1M;
             priceTrendMetric = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3YearsAgo.Price;
-            if (priceTrendMetric > 2M) // limit
-                priceTrendMetric = (((priceTrendMetric + 2) / 2) + 2) / 2;
-            if (priceTrendMetric < .5M) // limit
-                priceTrendMetric = (((priceTrendMetric + .5M) / 2) + .5M) / 2; 
-
+            priceTrendMetric = SoftLimit(priceTrendMetric, .5M, 2M);
             priceTrendMetric = (decimal)AdjustMetric((double)priceTrendMetric, -18);
 
-            if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100)
+            if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100) // Overvalued stocks get downgraded
                 priceTrendMetric = priceTrendMetric - .01M;
 
             output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".00")}");
@@ -66,8 +62,7 @@ namespace StockApi
             ////////// Earnings Per Share
             decimal epsMetric = 1M;
             epsMetric = (decimal)AdjustMetric((double)(1 + (stockDownloads.stockSummary.EarningsPerShareString.NumericValue / 100M)), -1.2D);
-            if (epsMetric > 1.06M) epsMetric = 1.06M;  // limit
-            if (epsMetric < .97M)  epsMetric = .97M;   // limit
+            epsMetric = HardLimit(epsMetric, .97M, 1.06M);
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
 
@@ -517,6 +512,37 @@ namespace StockApi
                 return metric;
 
             newMetric = ((absFactor) + Math.Log(metric)) / (absFactor);
+
+            return Math.Round(newMetric, 3);
+        }
+
+        public static double HardLimit(double metric, double min, double max) // negative number less important, positive more important, range -5 to +5
+        {
+            return (double)HardLimit((decimal)metric, (decimal)min, (decimal)max);
+        }
+        public static decimal HardLimit(decimal metric, decimal min, decimal max) // negative number less important, positive more important, range -5 to +5
+        {
+            decimal newMetric = metric;
+
+            if (metric < min)
+                newMetric = min;
+            if (metric > max)
+                newMetric = max;
+
+            return Math.Round(newMetric, 3);
+        }
+        public static double SoftLimit(double metric, double min, double max) // negative number less important, positive more important, range -5 to +5
+        {
+            return (double)SoftLimit((decimal)metric, (decimal)min, (decimal)max);
+        }
+        public static decimal SoftLimit(decimal metric, decimal min, decimal max) // negative number less important, positive more important, range -5 to +5
+        {
+            decimal newMetric = metric;
+
+            if (newMetric > max) // limit
+                newMetric = (((newMetric + max) / 2) + max) / 2;
+            if (newMetric < min) // limit
+                newMetric = (((newMetric + min) / 2) + min) / 2;
 
             return Math.Round(newMetric, 3);
         }
