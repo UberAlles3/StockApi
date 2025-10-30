@@ -74,11 +74,11 @@ namespace StockApi
                 desktopPath = Path.Combine(desktopPath, "StockMetricsWednesday.txt");
             }
 
-            //if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
-            //{
-            //    stockList = stockList.Skip(4).Take(1).ToList();
-            //    desktopPath = Path.Combine(desktopPath, "Test.txt");
-            //}
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
+            {
+                stockList = stockList.Skip(0).Take(15).ToList();
+                desktopPath = Path.Combine(desktopPath, "StockMetricsMonday.txt");
+            }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
             {

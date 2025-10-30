@@ -43,7 +43,7 @@ namespace StockApi
             decimal priceTrendMetric = 1M;
             priceTrendMetric = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3YearsAgo.Price;
             priceTrendMetric = SoftLimit(priceTrendMetric, .5M, 2M);
-            priceTrendMetric = (decimal)AdjustMetric((double)priceTrendMetric, -18);
+            priceTrendMetric = AdjustMetric(priceTrendMetric, -18M);
 
             if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100) // Overvalued stocks get downgraded
                 priceTrendMetric = priceTrendMetric - .01M;
@@ -52,16 +52,15 @@ namespace StockApi
 
             ////////// One Year Target - Not a very valuable metric. 
             decimal targetPriceMetric = 1M;
-            if (stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue < stockDownloads.stockSummary.PriceString.NumericValue * .95M)
-                targetPriceMetric = .99M;
-            else if (stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue > stockDownloads.stockSummary.PriceString.NumericValue * 1.05M)
-                targetPriceMetric = 1.01M;
+            targetPriceMetric = stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue / stockDownloads.stockSummary.PriceString.NumericValue;
+            targetPriceMetric = AdjustMetric(targetPriceMetric, -10M);
+            targetPriceMetric = SoftLimit(targetPriceMetric, .9M, 1.01M);
 
             output.AppendLine($"One Year Target Metric = {targetPriceMetric.ToString(".00")}");
 
             ////////// Earnings Per Share
             decimal epsMetric = 1M;
-            epsMetric = (decimal)AdjustMetric((double)(1 + (stockDownloads.stockSummary.EarningsPerShareString.NumericValue / 100M)), -1.2D);
+            epsMetric = AdjustMetric((1 + (stockDownloads.stockSummary.EarningsPerShareString.NumericValue / 100M)), -1.2M);
             epsMetric = HardLimit(epsMetric, .97M, 1.06M);
 
             output.AppendLine($"Earnings Metric = {epsMetric}");
@@ -77,14 +76,11 @@ namespace StockApi
 
             ////////// Profit Margin Metric
             decimal profitMarginMetric = 1.00M;
-            if (stockDownloads.stockSummary.ProfitMarginString.NumericValue < -6)
-                profitMarginMetric = .962M;
-            else if (stockDownloads.stockSummary.ProfitMarginString.NumericValue < -2)
-                profitMarginMetric = .981M;
-            else if (stockDownloads.stockSummary.ProfitMarginString.NumericValue > 6)
-                profitMarginMetric = 1.04M;
-            else if (stockDownloads.stockSummary.ProfitMarginString.NumericValue > 2)
-                profitMarginMetric = 1.02M;
+
+            profitMarginMetric = ((stockDownloads.stockSummary.ProfitMarginString.NumericValue + 280) / 280);
+            profitMarginMetric = AdjustMetric(profitMarginMetric, -1);
+            profitMarginMetric = SoftLimit(profitMarginMetric, .97M, 1.035M);
+            profitMarginMetric = SoftLimit(profitMarginMetric, .96M, 1.045M);
 
             output.AppendLine($"Profit Margin Metric = {profitMarginMetric.ToString(".00")}");
 
@@ -503,6 +499,13 @@ namespace StockApi
             return crt;
         }
 
+        public static decimal AdjustMetric(decimal metric, decimal factor) // negative number less important, positive more important, range -5 to +5
+        {
+            decimal newMetric = metric;
+            newMetric = (decimal)AdjustMetric((double)metric, (double)factor);
+
+            return Math.Round(newMetric, 3);
+        }
         public static double AdjustMetric(double metric, double factor) // negative number less important, positive more important, range -5 to +5
         {
             double newMetric = metric;
