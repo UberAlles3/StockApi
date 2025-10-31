@@ -38,7 +38,6 @@ namespace StockApi
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Summary Metrics
-
             ///////// Long Term Price Trend
             decimal priceTrendMetric = 1M;
             priceTrendMetric = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3YearsAgo.Price;
@@ -96,7 +95,6 @@ namespace StockApi
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Income Statement Metrics
-
             /////////// Revenue 
             decimal revenueMetric = 1M;
             revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Revenue4String, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.RevenueTtmString, 0);

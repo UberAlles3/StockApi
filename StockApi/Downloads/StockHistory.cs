@@ -297,7 +297,7 @@ namespace StockApi
 
             if (rows.Count > 0)
             {
-                DateTime staleDate = DateTime.Now.Date.AddDays(-12 + random.Next(1, 4));
+                DateTime staleDate = DateTime.Now.Date.AddDays(-14 + random.Next(1, 4));
 
                 if (rows[0].UpdateDate > staleDate) // We have recent data in the database, use it.
                 {

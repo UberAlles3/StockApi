@@ -63,6 +63,23 @@ namespace SqlLayer
             return sqlSummaryList;
         }
 
+        //////////////////////////////////////////////////////////////
+        ///                     Income Statement
+        public List<SqlIncomeStatement> GetIncomeStatements(string ticker)
+        {
+            List<SqlIncomeStatement> sqlIncomeStatementsList;
+
+            Debug.WriteLine("GetIncomeStatements()");
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlIncomeStatement>();
+                sqlIncomeStatementsList = db.Select<SqlIncomeStatement>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
+            }
+
+            return sqlIncomeStatementsList;
+        }
 
         public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
         {
@@ -84,20 +101,36 @@ namespace SqlLayer
             }
         }
 
-        public List<SqlIncomeStatement> GetIncomeStatements(string ticker)
+        public void DeleteIncomeStatement(string ticker)
         {
-            List<SqlIncomeStatement> sqlIncomeStatementsList;
-
-            Debug.WriteLine("GetIncomeStatements()");
+            Debug.WriteLine("DeleteIncomeStatement()");
 
             var factory = FinancialStatementFactory();
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlIncomeStatement>();
-                sqlIncomeStatementsList = db.Select<SqlIncomeStatement>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
+                db.Delete<SqlIncomeStatement>(x => x.Ticker == ticker);
             }
 
-            return sqlIncomeStatementsList;
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////
+        ///                        Statistics
+        public List<SqlStatistic> GetStatistics(string ticker)
+        {
+            List<SqlStatistic> sqlStatisticsList;
+
+            Debug.WriteLine("GetStatistics()");
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlStatistic>();
+                sqlStatisticsList = db.Select<SqlStatistic>(x => x.Ticker == ticker);
+            }
+
+            return sqlStatisticsList;
         }
 
         public void SaveStatistics(SqlStatistic sqlStatistic)
@@ -116,20 +149,37 @@ namespace SqlLayer
             }
         }
 
-        public List<SqlStatistic> GetStatistics(string ticker)
+        public void DeleteStatistics(string ticker)
         {
-            List<SqlStatistic> sqlStatisticsList;
-
-            Debug.WriteLine("GetStatistics()");
+            Debug.WriteLine("DeleteStatistics()");
 
             var factory = FinancialStatementFactory();
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlStatistic>();
-                sqlStatisticsList = db.Select<SqlStatistic>(x => x.Ticker == ticker);
+                db.Delete<SqlStatistic>(x => x.Ticker == ticker);
             }
 
-            return sqlStatisticsList;
+            return;
+        }
+
+        //////////////////////////////////////////////////////////////
+        ///                        Price History
+        public List<SqlPriceHistory> GetPriceHistories(string ticker)
+        {
+            List<SqlPriceHistory> sqlPriceHistoriesList;
+
+            Debug.WriteLine("GetPriceHistories()");
+
+            var factory = FinancialStatementFactory();
+
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlPriceHistory>();
+                sqlPriceHistoriesList = db.Select<SqlPriceHistory>(x => x.Ticker == ticker);
+            }
+
+            return sqlPriceHistoriesList;
         }
 
         public void SavePriceHistories(List<SqlPriceHistory> sqlPriceHistories)
@@ -151,23 +201,6 @@ namespace SqlLayer
                        db.Insert<SqlPriceHistory>(row);
                 }
             }
-        }
-
-        public List<SqlPriceHistory> GetPriceHistories(string ticker)
-        {
-            List<SqlPriceHistory> sqlPriceHistoriesList;
-
-            Debug.WriteLine("GetPriceHistories()");
-
-            var factory = FinancialStatementFactory();
-
-            using (IDbConnection db = factory.OpenDbConnection())
-            {
-                db.CreateTableIfNotExists<SqlPriceHistory>();
-                sqlPriceHistoriesList = db.Select<SqlPriceHistory>(x => x.Ticker == ticker);
-            }
-
-            return sqlPriceHistoriesList;
         }
 
         public void SaveCashFlows(List<SqlCashFlow> sqlCashFlows)

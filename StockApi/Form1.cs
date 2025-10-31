@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using StockApi.Downloads;
 using System.IO;
 using Drake.Extensions;
+using SqlLayer;
 
 namespace StockApi
 {
@@ -1004,7 +1005,27 @@ namespace StockApi
             offHighs.Owner = this;
             offHighs.Show();
         }
+
+        private void summaryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void incomeStatementToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+            _finacialStatement.DeleteIncomeStatement(txtStockTicker.Text);
+            btnGetOne_click(null, null);
+        }
+
+        private void statisticsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+            _finacialStatement.DeleteStatistics(txtStockTicker.Text);
+            btnGetOne_click(null, null);
+        }
     }
+
     public class CustomColorTable : ProfessionalColorTable
     {
         //a bunch of other overrides...
