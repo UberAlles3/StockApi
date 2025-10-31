@@ -30,6 +30,40 @@ namespace SqlLayer
         {
         }
 
+
+        public void SaveSummary(SqlSummary sqlSummary)
+        {
+            Debug.WriteLine("SaveSummary()");
+
+            if (sqlSummary == null)
+                return;
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlSummary>();
+                db.Delete<SqlSummary>(x => x.Ticker == sqlSummary.Ticker);
+                db.Insert<SqlSummary>(sqlSummary);
+            }
+        }
+
+        public List<SqlSummary> GetSummary(string ticker)
+        {
+            List<SqlSummary> sqlSummaryList;
+
+            Debug.WriteLine("GetSummary()");
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlSummary>();
+                sqlSummaryList = db.Select<SqlSummary>(x => x.Ticker == ticker);
+            }
+
+            return sqlSummaryList;
+        }
+
+
         public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
         {
             Debug.WriteLine("SaveIncomeStatements()");

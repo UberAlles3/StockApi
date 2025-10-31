@@ -5,7 +5,14 @@ using System.Text;
 
 namespace SqlLayer.SQL_Models
 {
-    [Alias("CashFlow")]
+    public enum ValuationEnum
+    {
+        UnderValued,
+        FairValue,
+        OverValued
+    }
+
+    [Alias("Summary")]
     public class SqlSummary
     {
         public SqlSummary() { }
@@ -15,7 +22,7 @@ namespace SqlLayer.SQL_Models
 
         public string Ticker { get; set; }
 
-        public int Valuation { get; set; }
+        public ValuationEnum Valuation { get; set; }
 
         public double Dividend { get; set; }
 
@@ -36,8 +43,6 @@ namespace SqlLayer.SQL_Models
         public double YearsRangeHigh { get; set; }
 
         public double ForwardPE { get; set; }
-
-        public double CalculatedPE { get; set; }
 
         public DateTime UpdateDate { get; set; }
     }

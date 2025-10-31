@@ -111,17 +111,6 @@ namespace StockApi
             else
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".000")}");
 
-            /////////// Cash Debt
-            decimal cashDebtMetric = 1M;
-            if (stockDownloads.stockStatistics.TotalDebt > stockDownloads.stockStatistics.TotalCash * 5) // lots of debt compared to cash
-                cashDebtMetric = .96M;
-            else if (stockDownloads.stockStatistics.TotalCash > stockDownloads.stockStatistics.TotalDebt * 2) // lots of cash compared to debt
-                cashDebtMetric = 1.03M;
-            if (stockDownloads.stockStatistics.DebtEquityString.NumericValue > 120) // Over 120% D/E is bad
-                cashDebtMetric = cashDebtMetric * .96M;
-            output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".000")}");
-
-
             /////////// Basic Earning per share growth
             decimal basicEpsMetric = 1.0M;
  
@@ -134,6 +123,21 @@ namespace StockApi
 
             output.AppendLine($"Basic EPS Metric = {basicEpsMetric.ToString(".000")}");
 
+            //////////////////////////////////////////////////////////////////////////////////
+            ///                            Statistics Metrics
+            /////////// Cash Debt
+            decimal cashDebtMetric = 1M;
+            if (stockDownloads.stockStatistics.TotalDebt > stockDownloads.stockStatistics.TotalCash * 5) // lots of debt compared to cash
+                cashDebtMetric = .97M;
+            else if (stockDownloads.stockStatistics.TotalCash > stockDownloads.stockStatistics.TotalDebt * 2) // lots of cash compared to debt
+                cashDebtMetric = 1.03M;
+
+            if (stockDownloads.stockStatistics.DebtEquityString.NumericValue > 130) // Over 120% D/E is bad
+                cashDebtMetric = cashDebtMetric * .97M;
+            else if (stockDownloads.stockStatistics.DebtEquityString.NumericValue > 200) // Over 120% D/E is bad
+                cashDebtMetric = cashDebtMetric * .96M;
+            
+            output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".000")}");
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                             Cash Flow Metrics

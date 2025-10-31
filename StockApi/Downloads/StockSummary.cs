@@ -1,4 +1,6 @@
 ﻿using Drake.Extensions;
+using SqlLayer;
+using SqlLayer.SQL_Models;
 using StockApi.Downloads;
 using System;
 using System.Collections.Generic;
@@ -121,6 +123,7 @@ namespace StockApi
                     OneYearTargetPriceString.StringValue = PriceString.StringValue;
 
                 // Price / Book
+                searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
                 PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 2);
 
                 //Profit Margin %
@@ -191,6 +194,10 @@ namespace StockApi
 
                 CompanyOverview = longest._TrimSuffix("</");
 
+                ///////////////////////////////////
+                ///      Save to SQL Server
+                SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                _finacialStatement.SaveSummary(MapFrom(this));
             }
             catch (Exception x)
             {
@@ -264,6 +271,69 @@ namespace StockApi
             {
                 stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
             }
+        }
+
+        /// /////////////////////////////////////////////////////////////////////////////////////////
+        ///                                    SQL Support
+        /// /////////////////////////////////////////////////////////////////////////////////////////
+        public bool CheckSqlForRecentData()
+        {
+            SqlFinancialStatement sqlFinancialStatement = new SqlFinancialStatement();
+            List<SqlSummary> entities = sqlFinancialStatement.GetSummary(Ticker);
+            Random random = new Random();
+
+            if (entities.Count > 0)
+            {
+                DateTime staleDate = DateTime.Now.Date.AddDays(-12 + random.Next(1, 4));
+
+                if (entities[0].UpdateDate > staleDate) // We have recent data in the database, use it.
+                {
+                    MapFill(entities[0]);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public static SqlSummary MapFrom(StockSummary source)
+        {
+            SqlSummary sqlSummary = new SqlSummary();
+
+            sqlSummary.Ticker = source.Ticker;
+            sqlSummary.Valuation = (SqlLayer.SQL_Models.ValuationEnum)(int)source.Valuation;
+            sqlSummary.Dividend = (double)source.DividendString.NumericValue;
+            sqlSummary.EarningsPerShare = (double)source.EarningsPerShareString.NumericValue;
+            sqlSummary.ProfitMargin = (double)source.ProfitMarginString.NumericValue;
+            sqlSummary.PriceBook = (double)source.PriceBookString.NumericValue;
+            sqlSummary.OneYearTargetPrice = (double)source.OneYearTargetPriceString.NumericValue;
+            sqlSummary.Price = (double)source.PriceString.NumericValue;
+            sqlSummary.Volatility = (double)source.VolatilityString.NumericValue;
+            sqlSummary.YearsRangeLow = (double)source.YearsRangeLow.NumericValue;
+            sqlSummary.YearsRangeHigh = (double)source.YearsRangeHigh.NumericValue;
+            sqlSummary.ForwardPE = (double)source.ForwardPEString.NumericValue;
+            sqlSummary.UpdateDate = DateTime.Now.Date;
+
+            return sqlSummary;
+        }
+
+        public void MapFill(SqlSummary source)
+        {
+            Ticker = source.Ticker;
+            Valuation = (ValuationEnum)(int)source.Valuation;
+            DividendString.NumericValue = (decimal)source.Dividend;
+            EarningsPerShareString.NumericValue = (decimal)source.EarningsPerShare;
+            ProfitMarginString.NumericValue = (decimal)source.ProfitMargin;
+            PriceBookString.NumericValue = (decimal)source.PriceBook;
+            OneYearTargetPriceString.NumericValue = (decimal)source.OneYearTargetPrice;
+            PriceString.NumericValue = (decimal)source.Price;
+            VolatilityString.NumericValue = (decimal)source.Volatility;
+            YearsRangeLow.NumericValue = (decimal)source.YearsRangeLow;
+            YearsRangeHigh.NumericValue = (decimal)source.YearsRangeHigh;
+            ForwardPEString.NumericValue = (decimal)source.ForwardPE;
+
+            return;
         }
     }
 }

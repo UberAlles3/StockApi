@@ -13,7 +13,6 @@ using System.Windows.Forms;
 using StockApi.Downloads;
 using System.IO;
 using Drake.Extensions;
-using ServiceStack.Logging;
 
 namespace StockApi
 {
