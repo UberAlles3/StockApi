@@ -40,9 +40,6 @@ namespace StockApi
         private static DataTable _positionsDataTable = null;
         private static DataTable _tradesDataTable = null;
 
-        //private static ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-
         public static DataTable PositionsDataTable 
         {
             get 
@@ -136,10 +133,6 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-            //////////
-            //Metrics metrics = new Metrics();
-            //int x = await metrics.DailyGetMetrics(PositionsDataTable);
-
             bool networkUp = NetworkInterface.GetIsNetworkAvailable();
             if(networkUp == false)
             {
