@@ -97,11 +97,10 @@ namespace StockApi
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Income Statement Metrics
 
-            // Revenue 
+            /////////// Revenue 
             decimal revenueMetric = 1M;
             revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Revenue4String, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.RevenueTtmString, 0);
             output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".000")}");
-
 
             /////////// Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
@@ -112,6 +111,7 @@ namespace StockApi
             else
                 output.AppendLine($"Profit Metric = {profitMetric.ToString(".000")}");
 
+            /////////// Cash Debt
             decimal cashDebtMetric = 1M;
             if (stockDownloads.stockStatistics.TotalDebt > stockDownloads.stockStatistics.TotalCash * 5) // lots of debt compared to cash
                 cashDebtMetric = .96M;
