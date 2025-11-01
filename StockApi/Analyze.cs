@@ -228,6 +228,8 @@ namespace StockApi
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();
             _finacialStatement.SaveMetrics(sqlMetric);
 
+            ///////////////////////////////////
+            ///        Display Metrics
             output.AppendLine($"----------------------------------------------------");
             string totalMetricString = $"Total Metric = {finalMetric.ToString(".000")}";
             if (finalMetric < .78M)
