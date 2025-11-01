@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SqlLayer;
+using SqlLayer.SQL_Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,13 +28,32 @@ namespace StockApi.Downloads
         {
             bool found = true;
 
+            SqlCrudOperations _finacialStatement = new SqlCrudOperations();
+
             found = await GetSummary();
             if(found)
             {
-                await GetStatistics();
-                await GetIncomeStatement();
+                stockSummary.sqlTicker = _finacialStatement.GetTicker(_ticker);
+
+                stockIncomeStatement = new StockIncomeStatement(); // initializes all properties
+                stockStatistics = new StockStatistics(); // initializes all properties
+                stockCashFlow = new StockCashFlow(); // initializes all properties
+
+                if (stockSummary.sqlTicker.IsPreRevenueCompany == false && stockSummary.sqlTicker.IsFund == false) // This is a normal stock
+                {
+                    await GetStatistics();
+                    await GetIncomeStatement();
+                    await GetCashFlow();
+                }
+                else // either a fund or pre-revenue
+                {
+                    if (stockSummary.sqlTicker.IsPreRevenueCompany == true) // Pre-revenue, get only statistics
+                    {
+                        await GetStatistics();
+                    }
+                }
+
                 await GetHistory();
-                await GetCashFlow(); 
             }
 
             return found;

@@ -59,10 +59,11 @@ namespace StockApi
         public StringSafeType<Decimal> CalculatedPEString = new StringSafeType<decimal>("--");
         public StringSafeType<DateTime> EarningsDateString = new StringSafeType<DateTime>("--");
 
+        public SqlTicker sqlTicker = new SqlTicker();
+
         ////////////////////////////////////////////
         ///                Methods
         ////////////////////////////////////////////
-
         public override async Task<bool> GetStockData(string ticker)
         {
             Error = "";
@@ -196,7 +197,7 @@ namespace StockApi
 
                 ///////////////////////////////////
                 ///      Save to SQL Server
-                SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                SqlCrudOperations _finacialStatement = new SqlCrudOperations();
                 _finacialStatement.SaveSummary(MapFrom(this));
             }
             catch (Exception x)
@@ -278,8 +279,8 @@ namespace StockApi
         /// /////////////////////////////////////////////////////////////////////////////////////////
         public bool CheckSqlForRecentData()
         {
-            SqlFinancialStatement sqlFinancialStatement = new SqlFinancialStatement();
-            List<SqlSummary> entities = sqlFinancialStatement.GetSummary(Ticker);
+            SqlCrudOperations sqlFinancialStatement = new SqlCrudOperations();
+            List<SqlSummary> entities = sqlFinancialStatement.GetSummaryList(Ticker);
             Random random = new Random();
 
             if (entities.Count > 0)

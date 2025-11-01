@@ -132,7 +132,7 @@ namespace StockApi
 
                     ///////////////////////////////////
                     ///      Save to SQL Server
-                    SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                    SqlCrudOperations _finacialStatement = new SqlCrudOperations();
                     _finacialStatement.SaveStatistics(MapFrom(this));
                 }
                 catch (Exception x)
@@ -197,8 +197,8 @@ namespace StockApi
         /// /////////////////////////////////////////////////////////////////////////////////////////
         public bool CheckSqlForRecentData()
         {
-            SqlFinancialStatement sqlFinancialStatement = new SqlFinancialStatement();
-            List<SqlStatistic> statements = sqlFinancialStatement.GetStatistics(Ticker);
+            SqlCrudOperations sqlFinancialStatement = new SqlCrudOperations();
+            List<SqlStatistic> statements = sqlFinancialStatement.GetStatisticList(Ticker);
             Random random = new Random();
 
             // Generate a random integer between 1 (inclusive) and 4 (exclusive).
@@ -229,7 +229,7 @@ namespace StockApi
             sqlStatistic.Debt = (double)source.TotalDebt;
             sqlStatistic.DebtEquity = (double)source.DebtEquityString.NumericValue;
             sqlStatistic.ShortInterest = (double)source.ShortInterestString.NumericValue;
-            sqlStatistic.UpdateDate = DateTime.Now.Date;
+            sqlStatistic.UpdateDate = DateTime.Now;
 
             return sqlStatistic;
         }

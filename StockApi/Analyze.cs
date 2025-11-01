@@ -225,7 +225,7 @@ namespace StockApi
             sqlMetric.Valuation = (double)valuationMetric;
             sqlMetric.Year = DateTime.Now.Year;
 
-            SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+            SqlCrudOperations _finacialStatement = new SqlCrudOperations();
             _finacialStatement.SaveMetrics(sqlMetric);
 
             output.AppendLine($"----------------------------------------------------");

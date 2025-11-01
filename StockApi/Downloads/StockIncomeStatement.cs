@@ -118,7 +118,7 @@ namespace StockApi
                     ///////////////////////////////////
                     ///      Save to SQL Server
                     List<SqlIncomeStatement> ListSis = MapFrom(this);
-                    SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                    SqlCrudOperations _finacialStatement = new SqlCrudOperations();
                     _finacialStatement.SaveIncomeStatements(ListSis);
                 }
                 catch (Exception x)
@@ -246,8 +246,8 @@ namespace StockApi
         /// /////////////////////////////////////////////////////////////////////////////////////////
         public bool CheckSqlForRecentData()
         {
-            SqlFinancialStatement sqlFinancialStatement = new SqlFinancialStatement();
-            List<SqlIncomeStatement> statements = sqlFinancialStatement.GetIncomeStatements(Ticker);
+            SqlCrudOperations sqlFinancialStatement = new SqlCrudOperations();
+            List<SqlIncomeStatement> statements = sqlFinancialStatement.GetIncomeStatementList(Ticker);
             Random random = new Random();
 
             // Generate a random integer between 1 (inclusive) and 4 (exclusive).
@@ -283,7 +283,7 @@ namespace StockApi
                 OperatingExpense = (double)source.OperatingExpenseTtmString.NumericValue,
                 NetIncome = (double)source.NetIncomeTtmString.NumericValue,
                 BasicEPS = (double)source.BasicEpsTtmString.NumericValue,
-                UpdateDate = DateTime.Now.Date
+                UpdateDate = DateTime.Now
             });
 
             // 2 years ago
@@ -296,7 +296,7 @@ namespace StockApi
                 OperatingExpense = (double)source.OperatingExpense2String.NumericValue,
                 NetIncome = (double)source.NetIncome2String.NumericValue,
                 BasicEPS = (double)source.BasicEps2String.NumericValue,
-                UpdateDate = DateTime.Now.Date
+                UpdateDate = DateTime.Now
             });
 
             // 4 years ago
@@ -309,7 +309,7 @@ namespace StockApi
                 OperatingExpense = (double)source.OperatingExpense4String.NumericValue,
                 NetIncome = (double)source.NetIncome4String.NumericValue,
                 BasicEPS = (double)source.BasicEps4String.NumericValue,
-                UpdateDate = DateTime.Now.Date
+                UpdateDate = DateTime.Now
             });
 
             return sqlIncomeStatements;

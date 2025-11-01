@@ -85,7 +85,7 @@ namespace StockApi
                     ///////////////////////////////////
                     ///      Save to SQL Server
                     List<SqlCashFlow> rows = MapFrom(this);
-                    SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                    SqlCrudOperations _finacialStatement = new SqlCrudOperations();
                     _finacialStatement.SaveCashFlows(rows);
                 }
                 catch (Exception x)
@@ -176,8 +176,8 @@ namespace StockApi
         /// /////////////////////////////////////////////////////////////////////////////////////////
         public bool CheckSqlForRecentData()
         {
-            SqlFinancialStatement sqlFinancialStatement = new SqlFinancialStatement();
-            List<SqlCashFlow> cashFlows = sqlFinancialStatement.GetCashFlows(Ticker);
+            SqlCrudOperations sqlFinancialStatement = new SqlCrudOperations();
+            List<SqlCashFlow> cashFlows = sqlFinancialStatement.GetCashFlowList(Ticker);
             Random random = new Random();
 
             // Generate a random integer between 1 (inclusive) and 4 (exclusive).
@@ -211,7 +211,7 @@ namespace StockApi
                 FreeCashFlow = (double)source.FreeCashFlowTtmString.NumericValue,
                 OperatingCashFlow = (double)source.OperatingCashFlowTtmString.NumericValue,
                 EndCashPosition = (double)source.EndCashPositionTtmString.NumericValue,
-                UpdateDate = DateTime.Now.Date
+                UpdateDate = DateTime.Now
             });
 
             // 2 years ago
@@ -222,7 +222,7 @@ namespace StockApi
                 FreeCashFlow = (double)source.FreeCashFlow2String.NumericValue,
                 OperatingCashFlow = (double)source.OperatingCashFlow2String.NumericValue,
                 EndCashPosition = (double)source.EndCashPosition2String.NumericValue,
-                UpdateDate = DateTime.Now.Date
+                UpdateDate = DateTime.Now
             });
 
             // 4 years ago
@@ -233,7 +233,7 @@ namespace StockApi
                 FreeCashFlow = (double)source.FreeCashFlow4String.NumericValue,
                 OperatingCashFlow = (double)source.OperatingCashFlow4String.NumericValue,
                 EndCashPosition = (double)source.EndCashPosition4String.NumericValue,
-                UpdateDate = DateTime.Now.Date
+                UpdateDate = DateTime.Now
             });
 
             return sqlIncomeStatements;

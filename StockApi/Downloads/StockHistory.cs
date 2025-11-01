@@ -111,7 +111,7 @@ namespace StockApi
                 ///////////////////////////////////
                 ///      Save to SQL Server
                 List<SqlPriceHistory> rows = MapFrom(this);
-                SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                SqlCrudOperations _finacialStatement = new SqlCrudOperations();
                 _finacialStatement.SavePriceHistories(rows);
             }
 
@@ -183,7 +183,7 @@ namespace StockApi
                     ///////////////////////////////////
                     ///      Save to SQL Server
                     List<SqlPriceHistory> rows = MapFrom(this);
-                    SqlFinancialStatement _finacialStatement = new SqlFinancialStatement();
+                    SqlCrudOperations _finacialStatement = new SqlCrudOperations();
                     _finacialStatement.SavePriceHistories(rows);
                 }
             }
@@ -291,8 +291,8 @@ namespace StockApi
         /// /////////////////////////////////////////////////////////////////////////////////////////
         public bool CheckSqlForRecentData()
         {
-            SqlFinancialStatement sqlFinancialStatement = new SqlFinancialStatement();
-            List<SqlPriceHistory> rows = sqlFinancialStatement.GetPriceHistories(Ticker);
+            SqlCrudOperations sqlFinancialStatement = new SqlCrudOperations();
+            List<SqlPriceHistory> rows = sqlFinancialStatement.GetPriceHistoryList(Ticker);
             Random random = new Random();
 
             if (rows.Count > 0)
@@ -347,7 +347,7 @@ namespace StockApi
                     PriceDate = priceData.PriceDate,
                     Price = (double)priceData.Price,
                     Volume = (double)priceData.Volume,
-                    UpdateDate = DateTime.Now.Date
+                    UpdateDate = DateTime.Now
                 };
 
             }

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using ServiceStack.OrmLite;
 using SqlLayer.SQL_Models;
 
 namespace SqlLayer
 {
-    public class SqlFinancialStatement
+    public class SqlCrudOperations
     {
         public static OrmLiteConnectionFactory FactorySingleton = null;
 
@@ -26,10 +27,52 @@ namespace SqlLayer
             return FactorySingleton;
         }
 
-        public SqlFinancialStatement()
+        public SqlCrudOperations()
         {
         }
 
+        //////////////////////////////////////////////////////////////
+        ///                         Summary
+        public SqlTicker GetTicker(string ticker)
+        {
+            SqlTicker sqlTicker = GetTickerList(ticker).FirstOrDefault();
+
+            if (sqlTicker == null) sqlTicker = new SqlTicker() { Id = 0, IsFund = false, IsPreRevenueCompany = false };
+
+            return sqlTicker;
+        }
+
+        public List<SqlTicker> GetTickerList(string ticker)
+        {
+            List<SqlTicker> sqlTickerList;
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlTicker>();
+                sqlTickerList = db.Select<SqlTicker>(x => x.Ticker == ticker);
+            }
+
+            return sqlTickerList;
+        }
+
+        //////////////////////////////////////////////////////////////
+        ///                         Summary
+        public List<SqlSummary> GetSummaryList(string ticker)
+        {
+            List<SqlSummary> sqlSummaryList;
+
+            Debug.WriteLine("GetSummary()");
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlSummary>();
+                sqlSummaryList = db.Select<SqlSummary>(x => x.Ticker == ticker);
+            }
+
+            return sqlSummaryList;
+        }
 
         public void SaveSummary(SqlSummary sqlSummary)
         {
@@ -47,27 +90,12 @@ namespace SqlLayer
             }
         }
 
-        public List<SqlSummary> GetSummary(string ticker)
-        {
-            List<SqlSummary> sqlSummaryList;
-
-            Debug.WriteLine("GetSummary()");
-
-            var factory = FinancialStatementFactory();
-            using (IDbConnection db = factory.OpenDbConnection())
-            {
-                db.CreateTableIfNotExists<SqlSummary>();
-                sqlSummaryList = db.Select<SqlSummary>(x => x.Ticker == ticker);
-            }
-
-            return sqlSummaryList;
-        }
 
         //////////////////////////////////////////////////////////////
         ///                     Income Statement
-        public List<SqlIncomeStatement> GetIncomeStatements(string ticker)
+        public List<SqlIncomeStatement> GetIncomeStatementList(string ticker)
         {
-            List<SqlIncomeStatement> sqlIncomeStatementsList;
+            List<SqlIncomeStatement> sqlIncomeStatementList;
 
             Debug.WriteLine("GetIncomeStatements()");
 
@@ -75,10 +103,10 @@ namespace SqlLayer
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlIncomeStatement>();
-                sqlIncomeStatementsList = db.Select<SqlIncomeStatement>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
+                sqlIncomeStatementList = db.Select<SqlIncomeStatement>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
             }
 
-            return sqlIncomeStatementsList;
+            return sqlIncomeStatementList;
         }
 
         public void SaveIncomeStatements(List<SqlIncomeStatement> sqlIncomeStatements)
@@ -117,9 +145,9 @@ namespace SqlLayer
 
         //////////////////////////////////////////////////////////////
         ///                        Statistics
-        public List<SqlStatistic> GetStatistics(string ticker)
+        public List<SqlStatistic> GetStatisticList(string ticker)
         {
-            List<SqlStatistic> sqlStatisticsList;
+            List<SqlStatistic> sqlStatisticList;
 
             Debug.WriteLine("GetStatistics()");
 
@@ -127,10 +155,10 @@ namespace SqlLayer
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlStatistic>();
-                sqlStatisticsList = db.Select<SqlStatistic>(x => x.Ticker == ticker);
+                sqlStatisticList = db.Select<SqlStatistic>(x => x.Ticker == ticker);
             }
 
-            return sqlStatisticsList;
+            return sqlStatisticList;
         }
 
         public void SaveStatistics(SqlStatistic sqlStatistic)
@@ -165,9 +193,9 @@ namespace SqlLayer
 
         //////////////////////////////////////////////////////////////
         ///                        Price History
-        public List<SqlPriceHistory> GetPriceHistories(string ticker)
+        public List<SqlPriceHistory> GetPriceHistoryList(string ticker)
         {
-            List<SqlPriceHistory> sqlPriceHistoriesList;
+            List<SqlPriceHistory> sqlPriceHistoryList;
 
             Debug.WriteLine("GetPriceHistories()");
 
@@ -176,10 +204,10 @@ namespace SqlLayer
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlPriceHistory>();
-                sqlPriceHistoriesList = db.Select<SqlPriceHistory>(x => x.Ticker == ticker);
+                sqlPriceHistoryList = db.Select<SqlPriceHistory>(x => x.Ticker == ticker);
             }
 
-            return sqlPriceHistoriesList;
+            return sqlPriceHistoryList;
         }
 
         public void SavePriceHistories(List<SqlPriceHistory> sqlPriceHistories)
@@ -203,6 +231,24 @@ namespace SqlLayer
             }
         }
 
+        //////////////////////////////////////////////////////////////
+        ///                       Cash Flow
+        public List<SqlCashFlow> GetCashFlowList(string ticker)
+        {
+            List<SqlCashFlow> sqlCashFlowList;
+
+            Debug.WriteLine("GetCashFlows()");
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlCashFlow>();
+                sqlCashFlowList = db.Select<SqlCashFlow>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
+            }
+
+            return sqlCashFlowList;
+        }
+
         public void SaveCashFlows(List<SqlCashFlow> sqlCashFlows)
         {
             Debug.WriteLine("SaveCashFlows()");
@@ -223,20 +269,22 @@ namespace SqlLayer
             }
         }
 
-        public List<SqlCashFlow> GetCashFlows(string ticker)
+        //////////////////////////////////////////////////////////////
+        ///                         Metrics
+        public List<SqlMetric> GetMetricList()
         {
-            List<SqlCashFlow> sqlCashFlowsList;
+            List<SqlMetric> sqlMetricList;
 
-            Debug.WriteLine("GetCashFlows()");
+            Debug.WriteLine("GetMetrics()");
 
             var factory = FinancialStatementFactory();
             using (IDbConnection db = factory.OpenDbConnection())
             {
-                db.CreateTableIfNotExists<SqlCashFlow>();
-                sqlCashFlowsList = db.Select<SqlCashFlow>(x => x.Ticker == ticker && x.Year > DateTime.Now.Year - 5);
+                db.CreateTableIfNotExists<SqlMetric>();
+                sqlMetricList = db.Select<SqlMetric>(x => x.Year == DateTime.Now.Year && x.Month == DateTime.Now.Month);
             }
 
-            return sqlCashFlowsList;
+            return sqlMetricList;
         }
 
         public void SaveMetrics(SqlMetric sqlMetric)
@@ -254,21 +302,5 @@ namespace SqlLayer
                 db.Insert<SqlMetric>(sqlMetric);
             }
         }
-
-        public List<SqlMetric> GetMetrics()
-        {
-            List<SqlMetric> sqlMetricList;
-
-            Debug.WriteLine("GetMetrics()");
-
-            var factory = FinancialStatementFactory();
-            using (IDbConnection db = factory.OpenDbConnection())
-            {
-                db.CreateTableIfNotExists<SqlMetric>();
-                sqlMetricList = db.Select<SqlMetric>(x => x.Year == DateTime.Now.Year && x.Month == DateTime.Now.Month);
-            }
-
-            return sqlMetricList;
-        }
-    }
+     }
 }
