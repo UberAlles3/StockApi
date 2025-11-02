@@ -100,7 +100,7 @@ namespace StockApi
             }
             catch (System.Exception x)
             {
-                Program.logger.Error($"{x.Message}  {x.StackTrace}");
+                Program.logger.Error($"{tagName}\n{html}\n{loc1}\n{loc2}\n{x.Message}  {x.StackTrace}");
                 MessageBox.Show($"GetDataByTagName{x.Message}\n{tagName}\n{html}\n{loc1}\n{loc2}");
             }
 
