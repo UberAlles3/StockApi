@@ -272,6 +272,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
                 MessageBox.Show($"Error writing to file: {ex.Message}", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return; // Exit if file writing fails
             }
@@ -282,6 +283,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
                 MessageBox.Show($"Error opening Notepad: {ex.Message}", "Process Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -770,10 +772,11 @@ namespace StockApi
                     MessageBox.Show("Stock ticker was not found.");
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
                 ResetFormControls();
-                MessageBox.Show($"PostSummaryWebCall()\n {errorPlace}\n Error: {e.Message} {e.InnerException} {e.StackTrace}");
+                MessageBox.Show($"PostSummaryWebCall()\n {errorPlace}\n Error: {ex.Message} {ex.InnerException} {ex.StackTrace}");
             }
         }
 
@@ -913,8 +916,8 @@ namespace StockApi
             }
             catch (Exception ex)
             {
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
                 Program.logger.Error($"Error opening Notepad: {ex.Message}");
-                //MessageBox.Show($"Error opening Notepad: {ex.Message}", "Process Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -968,6 +971,7 @@ namespace StockApi
             }
             catch (Win32Exception ex)
             {
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
                 MessageBox.Show(ex.Message);
             }
         }

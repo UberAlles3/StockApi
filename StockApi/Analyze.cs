@@ -438,6 +438,7 @@ namespace StockApi
              catch(Exception ex) 
             {
                 Debug.WriteLine($"{_ticker} {crt.FinalMetric} {ex.Message}");
+                Program.logger.Error($"Error opening Notepad: {ex.Message}  {ex.StackTrace}");
             }
 
             return Decimal.Round((decimal)crt.FinalMetric, 3);

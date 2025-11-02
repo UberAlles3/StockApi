@@ -135,9 +135,10 @@ namespace StockApi
                     SqlCrudOperations _finacialStatement = new SqlCrudOperations();
                     _finacialStatement.SaveStatistics(MapFrom(this));
                 }
-                catch (Exception x)
+                catch (Exception ex)
                 {
-                    MessageBox.Show(x.Source + x.Message + "\n" + "GetStatisticsData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
+                    Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                    MessageBox.Show(ex.Source + ex.Message + "\n" + "GetStatisticsData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
                 }
             }
 

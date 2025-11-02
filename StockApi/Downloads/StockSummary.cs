@@ -188,9 +188,10 @@ namespace StockApi
                             AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;
                     }
                 }
-                catch (Exception x)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine($"GetStockData() {x.Message}");
+                    Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                    Debug.WriteLine($"GetStockData() {ex.Message}");
                 }
 
                 CompanyOverview = longest._TrimSuffix("</");
@@ -200,9 +201,10 @@ namespace StockApi
                 SqlCrudOperations _finacialStatement = new SqlCrudOperations();
                 _finacialStatement.SaveSummary(MapFrom(this));
             }
-            catch (Exception x)
+            catch (Exception ex)
             {
-                LastException = x;
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                LastException = ex;
                 Error = "GetSummaryData() " + ticker + " " + searchTerm;
                 Debug.WriteLine("Error!");
             }

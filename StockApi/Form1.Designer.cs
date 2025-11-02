@@ -64,6 +64,8 @@ namespace StockApi
             this.label65 = new System.Windows.Forms.Label();
             this.lnkCompanyOverview = new System.Windows.Forms.LinkLabel();
             this.panelFinancials = new System.Windows.Forms.Panel();
+            this.pnlNoFinancials = new System.Windows.Forms.Panel();
+            this.label36 = new System.Windows.Forms.Label();
             this.lblRevenueInMillions = new System.Windows.Forms.Label();
             this.lblEndCashPosition4YearsAgo = new System.Windows.Forms.Label();
             this.lblEndCashPosition2YearsAgo = new System.Windows.Forms.Label();
@@ -233,10 +235,9 @@ namespace StockApi
             this.label75 = new System.Windows.Forms.Label();
             this.MetricsTimer = new System.Windows.Forms.Timer(this.components);
             this.lblMessages = new System.Windows.Forms.Label();
-            this.pnlNoFinancials = new System.Windows.Forms.Panel();
-            this.label36 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
+            this.pnlNoFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -253,7 +254,6 @@ namespace StockApi
             this.menuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panelMarkets.SuspendLayout();
-            this.pnlNoFinancials.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGetOne
@@ -666,6 +666,24 @@ namespace StockApi
             this.panelFinancials.Name = "panelFinancials";
             this.panelFinancials.Size = new System.Drawing.Size(354, 357);
             this.panelFinancials.TabIndex = 43;
+            // 
+            // pnlNoFinancials
+            // 
+            this.pnlNoFinancials.Controls.Add(this.label36);
+            this.pnlNoFinancials.Location = new System.Drawing.Point(1, 48);
+            this.pnlNoFinancials.Name = "pnlNoFinancials";
+            this.pnlNoFinancials.Size = new System.Drawing.Size(353, 306);
+            this.pnlNoFinancials.TabIndex = 83;
+            // 
+            // label36
+            // 
+            this.label36.BackColor = System.Drawing.Color.Transparent;
+            this.label36.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label36.Location = new System.Drawing.Point(51, 14);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(251, 22);
+            this.label36.TabIndex = 74;
+            this.label36.Text = "Company is a fund and has no financials.";
             // 
             // lblRevenueInMillions
             // 
@@ -2385,7 +2403,7 @@ namespace StockApi
             this.summaryToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.summaryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.summaryToolStripMenuItem.Name = "summaryToolStripMenuItem";
-            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.summaryToolStripMenuItem.Text = "&Summary";
             this.summaryToolStripMenuItem.Click += new System.EventHandler(this.summaryToolStripMenuItem_Click);
             // 
@@ -2394,7 +2412,7 @@ namespace StockApi
             this.incomeStatementToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.incomeStatementToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.incomeStatementToolStripMenuItem.Name = "incomeStatementToolStripMenuItem";
-            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.incomeStatementToolStripMenuItem.Text = "&Income Statement";
             this.incomeStatementToolStripMenuItem.Click += new System.EventHandler(this.incomeStatementToolStripMenuItem_Click);
             // 
@@ -2403,7 +2421,7 @@ namespace StockApi
             this.statisticsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.statisticsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.statisticsToolStripMenuItem.Text = "&Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
             // 
@@ -2609,24 +2627,6 @@ namespace StockApi
             this.lblMessages.TabIndex = 45;
             this.lblMessages.Text = "Messages";
             // 
-            // pnlNoFinancials
-            // 
-            this.pnlNoFinancials.Controls.Add(this.label36);
-            this.pnlNoFinancials.Location = new System.Drawing.Point(1, 48);
-            this.pnlNoFinancials.Name = "pnlNoFinancials";
-            this.pnlNoFinancials.Size = new System.Drawing.Size(353, 306);
-            this.pnlNoFinancials.TabIndex = 83;
-            // 
-            // label36
-            // 
-            this.label36.BackColor = System.Drawing.Color.Transparent;
-            this.label36.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label36.Location = new System.Drawing.Point(51, 14);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(251, 22);
-            this.label36.TabIndex = 74;
-            this.label36.Text = "Company is a fund or just has no financials.";
-            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -2668,6 +2668,7 @@ namespace StockApi
             this.panel1.PerformLayout();
             this.panelFinancials.ResumeLayout(false);
             this.panelFinancials.PerformLayout();
+            this.pnlNoFinancials.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).EndInit();
@@ -2688,7 +2689,6 @@ namespace StockApi
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panelMarkets.ResumeLayout(false);
-            this.pnlNoFinancials.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

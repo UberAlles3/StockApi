@@ -87,7 +87,10 @@ namespace StockApi
                         quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
                     }
                     else
+                    {
+                        Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
                         MessageBox.Show(ex.Message);
+                    }
                 }
 
                 if (quoteList.Count > 0)

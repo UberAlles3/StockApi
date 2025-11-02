@@ -46,6 +46,7 @@ namespace StockApi
 
                     if (networkUp == false)
                     {
+                        Program.logger.Info("Your network connection is unavailable.");
                         MessageBox.Show("Your network connection is unavailable.");
                         return 1;
                     }
@@ -95,7 +96,11 @@ namespace StockApi
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
-                return 0;
+            {
+                //stockList = stockList.Skip(0).Take(4).ToList();
+                stockList = stockList.Skip(0).Take(30).ToList();
+                desktopPath = Path.Combine(desktopPath, "StockMetricsMonday.txt");
+            }
 
             string stockMetricString = "";
             foreach (string ticker in stockList)

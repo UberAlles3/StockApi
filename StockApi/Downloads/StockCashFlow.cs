@@ -90,6 +90,7 @@ namespace StockApi
                 }
                 catch (Exception x)
                 {
+                    Program.logger.Error($"{x.Message}  {x.StackTrace}");
                     MessageBox.Show(x.Source + x.Message + "\n" + "GetIncomeStatementData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
                 }
             }

@@ -109,6 +109,7 @@ namespace StockApi
                             }
                             catch (Exception ex)
                             {
+                                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
                                 MessageBox.Show($"JsonConvert.DeserializeObject {json} {ex.Message}");
                             }
                             
