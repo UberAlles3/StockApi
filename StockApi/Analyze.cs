@@ -145,18 +145,22 @@ namespace StockApi
             ///                             Cash Flow Metrics
             ////////// Operationg Cash Flow
             decimal operCashFlowMetric = 1M;
-            operCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.OperatingCashFlow4String, stockDownloads.stockCashFlow.OperatingCashFlow2String, stockDownloads.stockCashFlow.OperatingCashFlowTtmString, -2);
-            output.AppendLine($"Oper. Cash Flow Metric = {operCashFlowMetric.ToString(".000")}");
-
-            ////////// Free Cash Flow
             decimal freeCashFlowMetric = 1M;
-            freeCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.FreeCashFlow4String, stockDownloads.stockCashFlow.FreeCashFlow2String, stockDownloads.stockCashFlow.FreeCashFlowTtmString, -2);
-            output.AppendLine($"Free Cash Flow Metric = {freeCashFlowMetric.ToString(".000")}");
-
-            /////////// End Cash Position
             decimal endCashMetric = 1M;
-            endCashMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.EndCashPosition4String, stockDownloads.stockCashFlow.EndCashPosition2String, stockDownloads.stockCashFlow.EndCashPositionTtmString, -2);
-            output.AppendLine($"End Cash Metric = {endCashMetric.ToString(".000")}");
+
+            if (stockDownloads.stockSummary.sqlTicker.IsFund == false) // some type of stocks don't have income statements
+            {
+                operCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.OperatingCashFlow4String, stockDownloads.stockCashFlow.OperatingCashFlow2String, stockDownloads.stockCashFlow.OperatingCashFlowTtmString, -2);
+                output.AppendLine($"Oper. Cash Flow Metric = {operCashFlowMetric.ToString(".000")}");
+
+                ////////// Free Cash Flow
+                freeCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.FreeCashFlow4String, stockDownloads.stockCashFlow.FreeCashFlow2String, stockDownloads.stockCashFlow.FreeCashFlowTtmString, -2);
+                output.AppendLine($"Free Cash Flow Metric = {freeCashFlowMetric.ToString(".000")}");
+
+                /////////// End Cash Position
+                endCashMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.EndCashPosition4String, stockDownloads.stockCashFlow.EndCashPosition2String, stockDownloads.stockCashFlow.EndCashPositionTtmString, -2);
+                output.AppendLine($"End Cash Metric = {endCashMetric.ToString(".000")}");
+            }
 
             decimal finalCashFlowMetric = (operCashFlowMetric + freeCashFlowMetric + endCashMetric) / 3;
 
