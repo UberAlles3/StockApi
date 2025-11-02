@@ -100,7 +100,7 @@ namespace StockApi
             decimal profitMetric = 1M;
             decimal basicEpsMetric = 1M;
 
-            if (stockDownloads.stockSummary.sqlTicker.IsFund == false && stockDownloads.stockSummary.sqlTicker.IsFund == false)
+            if (stockDownloads.stockSummary.sqlTicker.IsFund == false && stockDownloads.stockSummary.sqlTicker.IsPreRevenueCompany == false) // some type of stocks don't have income statements
             {
                 /////////// Revenue 
                 revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Revenue4String, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.RevenueTtmString, 0);

@@ -98,7 +98,7 @@ namespace StockApi
             if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
             {
                 //stockList = stockList.Skip(0).Take(4).ToList();
-                stockList = stockList.Skip(30).Take(30).ToList();
+                stockList = stockList.Skip(120).Take(30).ToList();
                 desktopPath = Path.Combine(desktopPath, "StockMetricsMonday.txt");
             }
 
