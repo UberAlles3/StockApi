@@ -95,25 +95,29 @@ namespace StockApi
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Income Statement Metrics
-            /////////// Revenue 
+
             decimal revenueMetric = 1M;
-            revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Revenue4String, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.RevenueTtmString, 0);
-            output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".000")}");
-
-            /////////// Profit - Revenue - Cost of Revenue
             decimal profitMetric = 1M;
-            profitMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Profit4String, stockDownloads.stockIncomeStatement.Profit2String, stockDownloads.stockIncomeStatement.ProfitTtmString, 0);
+            decimal basicEpsMetric = 1M;
 
-            if (revenueMetric * profitMetric < .87M)
-                output.AppendLine($"Profit Metric = {profitMetric.ToString(".000")}         * Financials are Bad *");
-            else
-                output.AppendLine($"Profit Metric = {profitMetric.ToString(".000")}");
+            if (stockDownloads.stockSummary.sqlTicker.IsFund == false && stockDownloads.stockSummary.sqlTicker.IsFund == false)
+            {
+                /////////// Revenue 
+                revenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Revenue4String, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.RevenueTtmString, 0);
+                output.AppendLine($"Revenue Metric = {revenueMetric.ToString(".000")}");
 
-            /////////// Basic Earning per share growth
-            decimal basicEpsMetric = 1.0M;
- 
-            basicEpsMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.BasicEps4String, stockDownloads.stockIncomeStatement.BasicEps2String, stockDownloads.stockIncomeStatement.BasicEpsTtmString, -2);
-            basicEpsMetric = SoftLimit(basicEpsMetric, .96M, 1.054M);
+                /////////// Profit - Revenue - Cost of Revenue
+                profitMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Profit4String, stockDownloads.stockIncomeStatement.Profit2String, stockDownloads.stockIncomeStatement.ProfitTtmString, 0);
+
+                if (revenueMetric * profitMetric < .87M)
+                    output.AppendLine($"Profit Metric = {profitMetric.ToString(".000")}         * Financials are Bad *");
+                else
+                    output.AppendLine($"Profit Metric = {profitMetric.ToString(".000")}");
+
+                /////////// Basic Earning per share growth
+                basicEpsMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.BasicEps4String, stockDownloads.stockIncomeStatement.BasicEps2String, stockDownloads.stockIncomeStatement.BasicEpsTtmString, -2);
+                basicEpsMetric = SoftLimit(basicEpsMetric, .96M, 1.054M);
+            }
 
             // All negative earnings, downgrade the earnings metric
             if (stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue < 0 && stockDownloads.stockIncomeStatement.BasicEps2String.NumericValue < 0 && stockDownloads.stockIncomeStatement.BasicEps4String.NumericValue < 0 && basicEpsMetric > 1.02M)
