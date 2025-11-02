@@ -267,13 +267,9 @@ namespace StockApi
 
             //if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
             if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.3M) // Over valued
-            {
                 stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
-            }
-            if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .8M) // Under valued
-            {
+            else if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .8M) // Under valued
                 stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
-            }
         }
 
         /// /////////////////////////////////////////////////////////////////////////////////////////

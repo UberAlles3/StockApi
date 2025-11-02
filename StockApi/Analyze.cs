@@ -195,6 +195,14 @@ namespace StockApi
                 valuationMetric = .98M;
             else if (stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.UnderValued)
                 valuationMetric = 1.02M;
+
+            if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.8M) // Over valued
+                valuationMetric = .97M;
+
+            if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .6M) // Under valued
+                valuationMetric = 1.025M;
+
+
             output.AppendLine($"Valuation = {valuationMetric.ToString(".00")}");
 
             //// Calculate total metric

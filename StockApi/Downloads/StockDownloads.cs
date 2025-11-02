@@ -49,6 +49,8 @@ namespace StockApi.Downloads
                 {
                     if (stockSummary.sqlTicker.IsPreRevenueCompany == true) // Pre-revenue, get only statistics
                     {
+                        await GetCashFlow();
+                        await GetIncomeStatement();
                         await GetStatistics();
                     }
                 }
