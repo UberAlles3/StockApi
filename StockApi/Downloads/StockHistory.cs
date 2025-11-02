@@ -295,19 +295,20 @@ namespace StockApi
         public bool CheckSqlForRecentData()
         {
             SqlCrudOperations sqlFinancialStatement = new SqlCrudOperations();
-            List<SqlPriceHistory> rows = sqlFinancialStatement.GetPriceHistoryList(Ticker);
+            List<SqlPriceHistory> entities = sqlFinancialStatement.GetPriceHistoryList(Ticker);
             Random random = new Random();
 
-            if (rows.Count > 0)
+            if (entities.Count > 0)
             {
                 DateTime staleDate = DateTime.Now.Date.AddDays(-14 + random.Next(1, 4));
 
-                if (rows[0].UpdateDate > staleDate) // We have recent data in the database, use it.
+                if (entities[0].UpdateDate > staleDate) // We have recent data in the database, use it.
                 {
-                    MapFill(rows);
+                    MapFill(entities);
+                    return true;
                 }
 
-                return true;
+                return false; // need to go out and download new data
             }
 
             return false;

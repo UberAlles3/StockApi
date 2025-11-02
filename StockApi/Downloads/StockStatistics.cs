@@ -199,23 +199,24 @@ namespace StockApi
         public bool CheckSqlForRecentData()
         {
             SqlCrudOperations sqlFinancialStatement = new SqlCrudOperations();
-            List<SqlStatistic> statements = sqlFinancialStatement.GetStatisticList(Ticker);
+            List<SqlStatistic> entities = sqlFinancialStatement.GetStatisticList(Ticker);
             Random random = new Random();
 
             // Generate a random integer between 1 (inclusive) and 4 (exclusive).
             // This means the possible results are 1, 2, or 3.
             int randomNumber = random.Next(1, 4);
 
-            if (statements.Count > 0)
+            if (entities.Count > 0)
             {
                 DateTime staleDate = DateTime.Now.Date.AddDays(-12 + random.Next(1, 4));
 
-                if (statements[0].UpdateDate > staleDate) // We have recent data in the database, use it.
+                if (entities[0].UpdateDate > staleDate) // We have recent data in the database, use it.
                 {
-                    MapFill(statements[0]);
+                    MapFill(entities[0]);
+                    return true;
                 }
 
-                return true;
+                return false; // need to go out and download new data
             }
 
             return false;

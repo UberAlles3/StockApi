@@ -218,26 +218,7 @@ namespace StockApi
             // 1. Average PE for the sector
             // 2. How large the profits are. We can use current profit margin. >15% is a high profit margin. -15% is a bad profit margin.
             // 3. How fast profits are growing/decreasing. (Current profit / Prior Profit)
-            decimal profitTTM = ProfitTtmString.NumericValue + (ProfitTtmString.NumericValue + Profit4String.NumericValue) / 3;
-            decimal profit4Year = Profit4String.NumericValue + (ProfitTtmString.NumericValue + Profit4String.NumericValue) / 3;
-
-            if (profit4Year < 0)
-            {
-                profit4Year = 1;
-            }
-
-            //decimal profitGrowth = 1;
-            if (profit4Year + profitTTM == 0)
-            {
-                ProfitGrowth = 1;
-            }
-            else
-            {
-                ProfitGrowth = profitTTM / ((profitTTM + profit4Year) / 3); // Profit growth .5 - 2.0
-            }
-
-            if (ProfitGrowth > 2) // set max
-                ProfitGrowth = 2;
+            ProfitGrowth = Analyze.SetYearOverYearTrend(Profit4String, Profit2String, ProfitTtmString, 0);
 
             return true;
         }
@@ -248,23 +229,24 @@ namespace StockApi
         public bool CheckSqlForRecentData()
         {
             SqlCrudOperations sqlFinancialStatement = new SqlCrudOperations();
-            List<SqlIncomeStatement> statements = sqlFinancialStatement.GetIncomeStatementList(Ticker);
+            List<SqlIncomeStatement> entities = sqlFinancialStatement.GetIncomeStatementList(Ticker);
             Random random = new Random();
 
             // Generate a random integer between 1 (inclusive) and 4 (exclusive).
             // This means the possible results are 1, 2, or 3.
             int randomNumber = random.Next(1, 4);
 
-            if (statements.Count > 0)
+            if (entities.Count > 0)
             {
                 DateTime staleDate = DateTime.Now.Date.AddDays(-12 + random.Next(1, 4));
 
-                if(statements[0].UpdateDate > staleDate) // We have recent data in the database, use it.
+                if (entities[0].UpdateDate > staleDate) // We have recent data in the database, use it.
                 {
-                    MapFill(statements);
+                    MapFill(entities);
+                    return true;
                 }
 
-                return true;
+                return false; // need to go out and download new data
             }
 
             return false;

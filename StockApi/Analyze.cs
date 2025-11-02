@@ -197,13 +197,13 @@ namespace StockApi
                 valuationMetric = 1.02M;
 
             if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.8M) // Over valued
-                valuationMetric = .97M;
+                valuationMetric = .975M;
 
             if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .6M) // Under valued
                 valuationMetric = 1.025M;
 
 
-            output.AppendLine($"Valuation = {valuationMetric.ToString(".00")}");
+            output.AppendLine($"Valuation = {valuationMetric.ToString(".000")}");
 
             //// Calculate total metric
             decimal finalMetric =    priceTrendMetric   * epsMetric     * ((targetPriceMetric + priceBookMetric) / 2) * 
@@ -432,7 +432,7 @@ namespace StockApi
             return finalMetric;
         }
 
-        private static decimal SetYearOverYearTrend(StringSafeType<decimal> year4, StringSafeType<decimal> year2, StringSafeType<decimal> ttm, int adjustment)
+        public static decimal SetYearOverYearTrend(StringSafeType<decimal> year4, StringSafeType<decimal> year2, StringSafeType<decimal> ttm, int adjustment)
         {
             CrunchThreeResult crt = new CrunchThreeResult();
             decimal val = 0;

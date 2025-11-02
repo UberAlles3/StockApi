@@ -262,13 +262,13 @@ namespace StockApi
         {
             // Combine profit growth and margin into a number
             decimal marginFactor = 1 + (stockDownloads.stockSummary.ProfitMarginString.NumericValue / 100M);
-            stockDownloads.stockSummary.CalculatedPEString.StringValue = (stockDownloads.stockSummary.ForwardPEString.NumericValue / (marginFactor * stockDownloads.stockIncomeStatement.ProfitGrowth)).ToString("0.00");
+            stockDownloads.stockSummary.CalculatedPEString.StringValue = (stockDownloads.stockSummary.ForwardPEString.NumericValue / (marginFactor * stockDownloads.stockIncomeStatement.ProfitGrowth *.99M)).ToString("0.00");
             stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.FairValue;
 
             //if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
             if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.3M) // Over valued
                 stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
-            else if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .8M) // Under valued
+            else if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .76M) // Under valued
                 stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
         }
 
@@ -288,9 +288,10 @@ namespace StockApi
                 if (entities[0].UpdateDate > staleDate) // We have recent data in the database, use it.
                 {
                     MapFill(entities[0]);
+                    return true;
                 }
 
-                return true;
+                return false; // need to go out and download new data
             }
 
             return false;
