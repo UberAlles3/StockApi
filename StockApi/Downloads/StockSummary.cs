@@ -249,10 +249,10 @@ namespace StockApi
             ForwardPEColor = Form1.TextForeColor;
             if (EarningsDateString.IsDateTime)
             {
-                TimeSpan? diff = EarningsDateString.DateTimeValue - DateTime.Now;
-                if (diff.Value.TotalDays < 1 && diff.Value.TotalDays > 0)
+                DateTime dt = (EarningsDateString.DateTimeValue ?? DateTime.Now).Date;
+                if (dt  == DateTime.Now.Date)
                     EarningsDateColor = Color.Lime;
-                else if (diff.Value.TotalDays < 3 && diff.Value.TotalDays > 0)
+                else if (dt == DateTime.Now.AddDays(1).Date)
                     EarningsDateColor = Color.LightGreen;
             }
 

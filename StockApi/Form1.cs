@@ -41,6 +41,10 @@ namespace StockApi
         private static DataTable _positionsDataTable = null;
         private static DataTable _tradesDataTable = null;
 
+        // News
+        private static string _news = "";
+        private static DateTime newsDate = DateTime.Now.AddDays(-1);
+
         public static DataTable PositionsDataTable 
         {
             get 
@@ -109,7 +113,7 @@ namespace StockApi
             picDownTrend.Visible = false;
 
             lblCompanyNameAndTicker.Text = txtSharesTraded.Text = "";
-            lblMessages.Text = "";
+            txtMessages.Text = "";
 
             // temporary for testing
             txtStockTicker.Text = "AAPL";
@@ -121,6 +125,8 @@ namespace StockApi
             _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
             panelMarkets.Visible = false;
+
+            GetNewsEarnings();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -843,6 +849,7 @@ namespace StockApi
             TimeSpan timeUntilExecution = targetTime - now;
             MetricsTimer.Interval = (int)timeUntilExecution.TotalMilliseconds;
         }
+
         private async void MetricsTimer_Tick(object sender, EventArgs e)
         {
             // Stop the timer to prevent immediate re-triggering
@@ -850,12 +857,36 @@ namespace StockApi
 
             // Execute your daily function here
             Metrics metrics = new Metrics();
-            int x = await metrics.DailyGetMetrics(PositionsDataTable);
+            int x = await metrics.DailyGetMetrics(PositionsDataTable, null);
+
+            // Get news, earnings
+            GetNewsEarnings();
 
             // Reset the timer for the next daily execution
             SetNextDailyExecutionTime();
             MetricsTimer.Start();
         }
+
+        //////////////////////////////
+        //         News / Earnings
+        //////////////////////////////
+        private void GetNewsEarnings()
+        {
+            SqlCrudOperations _finacialStatement = new SqlCrudOperations();
+            List<SqlSummary> entities = _finacialStatement.GetAllSummaryList().Where(x => x.EarningsDate != null && x.EarningsDate > DateTime.Now.AddDays(-1) && x.EarningsDate < DateTime.Now.AddDays(1)).OrderBy(x => x.EarningsDate).ToList();
+            entities = entities.Take(10).ToList(); // Only take first 6
+
+            StringBuilder sb = new StringBuilder();
+            foreach (SqlSummary x in entities)
+            {
+                if(x.EarningsDate < DateTime.Now.AddHours(-16))
+                    sb.Append($"{x.Ticker} reported yesterday.\r\n");
+                else if ((x.EarningsDate ?? DateTime.Now).Date == DateTime.Now.Date)
+                    sb.Append($"{x.Ticker} reports today.\r\n");
+            }
+            _news = txtMessages.Text = sb.ToString();
+        }
+
 
         //////////////////////////////
         //         Charting
@@ -895,17 +926,17 @@ namespace StockApi
         {
             string saveText = runDailyMetricsToolStripMenuItem.Text;
 
-            lblMessages.Text = "Running metrics for today...";
+            txtMessages.Text = "Running metrics for today...\r\n";
             runDailyMetricsToolStripMenuItem.Text = "Running...";
             runDailyMetricsToolStripMenuItem.Enabled = false;
             runDailyMetricsToolStripMenuItem.ForeColor = Color.LightBlue;
             // Execute your daily function here
             Metrics metrics = new Metrics();
-            int x = await metrics.DailyGetMetrics(PositionsDataTable);
+            int x = await metrics.DailyGetMetrics(PositionsDataTable, txtMessages);
             runDailyMetricsToolStripMenuItem.Text = saveText;
             runDailyMetricsToolStripMenuItem.Enabled = true;
             runDailyMetricsToolStripMenuItem.ForeColor = Color.White;
-            lblMessages.Text = "";
+            txtMessages.Text = _news;
         }
         private void logToolStripMenuItem_Click(object sender, EventArgs e)
         {
