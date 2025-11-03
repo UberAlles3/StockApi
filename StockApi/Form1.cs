@@ -916,8 +916,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
-                Program.logger.Error($"Error opening Notepad: {ex.Message}");
+                Program.logger.Error($"Error opening Notepad: {ex.Message}  {ex.StackTrace}");
             }
         }
 

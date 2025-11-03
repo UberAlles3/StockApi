@@ -313,6 +313,7 @@ namespace StockApi
             sqlSummary.YearsRangeLow = (double)source.YearsRangeLow.NumericValue;
             sqlSummary.YearsRangeHigh = (double)source.YearsRangeHigh.NumericValue;
             sqlSummary.ForwardPE = (double)source.ForwardPEString.NumericValue;
+            sqlSummary.EarningsDate = source.EarningsDateString.DateTimeValue;
             sqlSummary.UpdateDate = DateTime.Now.Date;
 
             return sqlSummary;
@@ -332,6 +333,7 @@ namespace StockApi
             YearsRangeLow.NumericValue = (decimal)source.YearsRangeLow;
             YearsRangeHigh.NumericValue = (decimal)source.YearsRangeHigh;
             ForwardPEString.NumericValue = (decimal)source.ForwardPE;
+            EarningsDateString.DateTimeValue = source.EarningsDate;
 
             return;
         }

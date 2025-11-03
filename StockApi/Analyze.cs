@@ -148,7 +148,7 @@ namespace StockApi
             decimal freeCashFlowMetric = 1M;
             decimal endCashMetric = 1M;
 
-            if (stockDownloads.stockSummary.sqlTicker.IsFund == false) // some type of stocks don't have income statements
+            if (stockDownloads.stockSummary.sqlTicker.IsFund == false) // fund or ETFs don't have cash flow data
             {
                 operCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.OperatingCashFlow4String, stockDownloads.stockCashFlow.OperatingCashFlow2String, stockDownloads.stockCashFlow.OperatingCashFlowTtmString, -2);
                 output.AppendLine($"Oper. Cash Flow Metric = {operCashFlowMetric.ToString(".000")}");
