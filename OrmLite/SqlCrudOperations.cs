@@ -74,6 +74,20 @@ namespace SqlLayer
             return sqlSummaryList;
         }
 
+        public List<SqlSummary> GetAllSummaryList()
+        {
+            List<SqlSummary> sqlSummaryList;
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlSummary>();
+                sqlSummaryList = db.Select<SqlSummary>();
+            }
+
+            return sqlSummaryList;
+        }
+
         public void SaveSummary(SqlSummary sqlSummary)
         {
             Debug.WriteLine("SaveSummary()");

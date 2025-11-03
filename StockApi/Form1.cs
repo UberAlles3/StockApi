@@ -14,6 +14,7 @@ using StockApi.Downloads;
 using System.IO;
 using Drake.Extensions;
 using SqlLayer;
+using SqlLayer.SQL_Models;
 
 namespace StockApi
 {
@@ -1019,7 +1020,6 @@ namespace StockApi
 
         private void summaryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
         }
 
         private void incomeStatementToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1034,6 +1034,23 @@ namespace StockApi
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();
             _finacialStatement.DeleteStatistics(txtStockTicker.Text);
             btnGetOne_click(null, null);
+        }
+
+        private void earningDatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SqlCrudOperations _finacialStatement = new SqlCrudOperations();
+            List<SqlSummary> entities = _finacialStatement.GetAllSummaryList().Where(x => x.EarningsDate != null && x.EarningsDate > DateTime.Now).OrderBy(x => x.EarningsDate).ToList();
+
+            StringBuilder sb = new StringBuilder();
+            foreach (SqlSummary x in entities)
+            {
+                if (x.EarningsDate > DateTime.Now.AddDays(4))
+                    break;
+
+                sb.Append($"{x.Ticker,-12} {(x.EarningsDate ?? DateTime.Now).Date.ToString("MM/dd/yyyy")}\n");
+            }
+
+            MessageBox.Show(sb.ToString(), "Coming Up Earnings");
         }
     }
 

@@ -235,6 +235,7 @@ namespace StockApi
             this.label75 = new System.Windows.Forms.Label();
             this.MetricsTimer = new System.Windows.Forms.Timer(this.components);
             this.lblMessages = new System.Windows.Forms.Label();
+            this.earningDatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -388,9 +389,9 @@ namespace StockApi
             this.lblEarningsDate.BackColor = System.Drawing.Color.Transparent;
             this.lblEarningsDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblEarningsDate.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.lblEarningsDate.Location = new System.Drawing.Point(281, 208);
+            this.lblEarningsDate.Location = new System.Drawing.Point(274, 208);
             this.lblEarningsDate.Name = "lblEarningsDate";
-            this.lblEarningsDate.Size = new System.Drawing.Size(66, 22);
+            this.lblEarningsDate.Size = new System.Drawing.Size(75, 22);
             this.lblEarningsDate.TabIndex = 80;
             this.lblEarningsDate.Text = "0.00";
             this.lblEarningsDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -400,7 +401,7 @@ namespace StockApi
             this.lblCalculatedPE.BackColor = System.Drawing.Color.Transparent;
             this.lblCalculatedPE.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblCalculatedPE.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.lblCalculatedPE.Location = new System.Drawing.Point(290, 112);
+            this.lblCalculatedPE.Location = new System.Drawing.Point(292, 112);
             this.lblCalculatedPE.Name = "lblCalculatedPE";
             this.lblCalculatedPE.Size = new System.Drawing.Size(57, 22);
             this.lblCalculatedPE.TabIndex = 74;
@@ -436,7 +437,7 @@ namespace StockApi
             this.lblDividend.BackColor = System.Drawing.Color.Transparent;
             this.lblDividend.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblDividend.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.lblDividend.Location = new System.Drawing.Point(282, 143);
+            this.lblDividend.Location = new System.Drawing.Point(284, 143);
             this.lblDividend.Name = "lblDividend";
             this.lblDividend.Size = new System.Drawing.Size(65, 22);
             this.lblDividend.TabIndex = 34;
@@ -460,7 +461,7 @@ namespace StockApi
             this.lblPriceBook.BackColor = System.Drawing.Color.Transparent;
             this.lblPriceBook.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblPriceBook.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.lblPriceBook.Location = new System.Drawing.Point(268, 175);
+            this.lblPriceBook.Location = new System.Drawing.Point(270, 175);
             this.lblPriceBook.Name = "lblPriceBook";
             this.lblPriceBook.Size = new System.Drawing.Size(79, 22);
             this.lblPriceBook.TabIndex = 25;
@@ -484,7 +485,7 @@ namespace StockApi
             this.lblEPS.BackColor = System.Drawing.Color.Transparent;
             this.lblEPS.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblEPS.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.lblEPS.Location = new System.Drawing.Point(300, 80);
+            this.lblEPS.Location = new System.Drawing.Point(302, 80);
             this.lblEPS.Name = "lblEPS";
             this.lblEPS.Size = new System.Drawing.Size(46, 15);
             this.lblEPS.TabIndex = 8;
@@ -2185,7 +2186,8 @@ namespace StockApi
             this.tickerLinksToolStripMenuItem,
             this.performanceToolStripMenuItem,
             this.tradeMonitorToolStripMenuItem,
-            this.refreshToolStripMenuItem});
+            this.refreshToolStripMenuItem,
+            this.earningDatesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1444, 24);
@@ -2403,7 +2405,7 @@ namespace StockApi
             this.summaryToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.summaryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.summaryToolStripMenuItem.Name = "summaryToolStripMenuItem";
-            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.summaryToolStripMenuItem.Text = "&Summary";
             this.summaryToolStripMenuItem.Click += new System.EventHandler(this.summaryToolStripMenuItem_Click);
             // 
@@ -2412,7 +2414,7 @@ namespace StockApi
             this.incomeStatementToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.incomeStatementToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.incomeStatementToolStripMenuItem.Name = "incomeStatementToolStripMenuItem";
-            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.incomeStatementToolStripMenuItem.Text = "&Income Statement";
             this.incomeStatementToolStripMenuItem.Click += new System.EventHandler(this.incomeStatementToolStripMenuItem_Click);
             // 
@@ -2421,7 +2423,7 @@ namespace StockApi
             this.statisticsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.statisticsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.statisticsToolStripMenuItem.Text = "&Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
             // 
@@ -2626,6 +2628,14 @@ namespace StockApi
             this.lblMessages.Size = new System.Drawing.Size(229, 31);
             this.lblMessages.TabIndex = 45;
             this.lblMessages.Text = "Messages";
+            // 
+            // earningDatesToolStripMenuItem
+            // 
+            this.earningDatesToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.earningDatesToolStripMenuItem.Name = "earningDatesToolStripMenuItem";
+            this.earningDatesToolStripMenuItem.Size = new System.Drawing.Size(91, 20);
+            this.earningDatesToolStripMenuItem.Text = "Earning Dates";
+            this.earningDatesToolStripMenuItem.Click += new System.EventHandler(this.earningDatesToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -2896,6 +2906,7 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem statisticsToolStripMenuItem;
         private System.Windows.Forms.Panel pnlNoFinancials;
         private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.ToolStripMenuItem earningDatesToolStripMenuItem;
     }
 }
 

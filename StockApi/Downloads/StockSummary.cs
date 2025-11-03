@@ -250,9 +250,9 @@ namespace StockApi
             if (EarningsDateString.IsDateTime)
             {
                 TimeSpan? diff = EarningsDateString.DateTimeValue - DateTime.Now;
-                if (diff.Value.TotalDays < 1)
+                if (diff.Value.TotalDays < 1 && diff.Value.TotalDays > 0)
                     EarningsDateColor = Color.Lime;
-                else if (diff.Value.TotalDays < 2)
+                else if (diff.Value.TotalDays < 3 && diff.Value.TotalDays > 0)
                     EarningsDateColor = Color.LightGreen;
             }
 
