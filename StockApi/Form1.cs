@@ -1047,7 +1047,7 @@ namespace StockApi
                 if (x.EarningsDate > DateTime.Now.AddDays(4))
                     break;
 
-                sb.Append($"{x.Ticker,-12} {(x.EarningsDate ?? DateTime.Now).Date.ToString("MM/dd/yyyy")}\n");
+                sb.Append($"{x.Ticker,-12} {(x.EarningsDate ?? DateTime.Now).Date:MM/dd/yyyy}\n");
             }
 
             MessageBox.Show(sb.ToString(), "Coming Up Earnings");
