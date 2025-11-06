@@ -279,7 +279,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}", ex);
                 MessageBox.Show($"Error writing to file: {ex.Message}", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return; // Exit if file writing fails
             }
@@ -290,7 +290,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}", ex);
                 MessageBox.Show($"Error opening Notepad: {ex.Message}", "Process Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -781,7 +781,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}", ex);
                 ResetFormControls();
                 MessageBox.Show($"PostSummaryWebCall()\n {errorPlace}\n Error: {ex.Message} {ex.InnerException} {ex.StackTrace}");
             }
@@ -873,15 +873,16 @@ namespace StockApi
         private void GetNewsEarnings()
         {
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();
-            List<SqlSummary> entities = _finacialStatement.GetAllSummaryList().Where(x => x.EarningsDate != null && x.EarningsDate > DateTime.Now.AddDays(-1) && x.EarningsDate < DateTime.Now.AddDays(1)).OrderBy(x => x.EarningsDate).ToList();
-            entities = entities.Take(10).ToList(); // Only take first 6
+            List<SqlSummary> entities = _finacialStatement.GetAllSummaryList().Where(x => x.EarningsDate != null && x.EarningsDate > DateTime.Now.AddDays(-2) && x.EarningsDate < DateTime.Now.AddDays(1)).OrderBy(x => x.EarningsDate).ToList();
+            entities = entities.Take(24).ToList(); // Only take first 24
+            //entities.ForEach(x => x.EarningsDate = (x.EarningsDate ?? DateTime.MinValue));
 
             StringBuilder sb = new StringBuilder();
             foreach (SqlSummary x in entities)
             {
-                if(x.EarningsDate < DateTime.Now.AddHours(-16))
+                if((x.EarningsDate ?? DateTime.MinValue).Date == DateTime.Now.Date.AddDays(-1))
                     sb.Append($"{x.Ticker} reported yesterday.\r\n");
-                else if ((x.EarningsDate ?? DateTime.Now).Date == DateTime.Now.Date)
+                else if ((x.EarningsDate ?? DateTime.MinValue).Date == DateTime.Now.Date)
                     sb.Append($"{x.Ticker} reports today.\r\n");
             }
             _news = txtMessages.Text = sb.ToString();
@@ -948,7 +949,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"Error opening Notepad: {ex.Message}  {ex.StackTrace}");
+                Program.logger.Error($"Error opening Notepad: {ex.Message}  {ex.StackTrace}", ex);
             }
         }
 
@@ -1002,7 +1003,7 @@ namespace StockApi
             }
             catch (Win32Exception ex)
             {
-                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                Program.logger.Error($"{ex.Message}  {ex.StackTrace}", ex);
                 MessageBox.Show(ex.Message);
             }
         }

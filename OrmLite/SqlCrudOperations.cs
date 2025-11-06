@@ -32,7 +32,7 @@ namespace SqlLayer
         }
 
         //////////////////////////////////////////////////////////////
-        ///                         Summary
+        ///                         Ticker
         public SqlTicker GetTicker(string ticker)
         {
             SqlTicker sqlTicker = GetTickerList(ticker).FirstOrDefault();

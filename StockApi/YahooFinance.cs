@@ -98,10 +98,10 @@ namespace StockApi
             {
                 middle = html.Substring(loc1 + 1 + tagName.Length, loc2 - loc1 - 1);
             }
-            catch (System.Exception x)
+            catch (System.Exception ex)
             {
-                Program.logger.Error($"{tagName}\n{html}\n{loc1}\n{loc2}\n{x.Message}  {x.StackTrace}");
-                MessageBox.Show($"GetDataByTagName{x.Message}\n{tagName}\n{html}\n{loc1}\n{loc2}");
+                Program.logger.Error($"{tagName}\n{html}\n{loc1}\n{loc2}\n{ex.Message}  {ex.StackTrace}", ex);
+                return "Error. Check Log.";
             }
 
             return middle;
