@@ -66,18 +66,18 @@ namespace StockApi
                     Debug.WriteLine("GetStockCashFlow()");
 
                     //// Free Cash Flow
-                    if (ParseHtmlRowData(html, "Free Cash Flow", FreeCashFlowTtmString.StringValue, FreeCashFlow2String.StringValue, FreeCashFlow4String.StringValue) == false)
+                    if (ParseHtmlRowData(html, "Free Cash Flow", FreeCashFlowTtmString, FreeCashFlow2String, FreeCashFlow4String) == false)
                         return false; //=====>>>>>>> Exit
 
                     //// Operating Cash Flow                                  
-                    if (ParseHtmlRowData(html, "Operating Cash Flow", OperatingCashFlowTtmString.StringValue, OperatingCashFlow2String.StringValue, OperatingCashFlow4String.StringValue) == false)
+                    if (ParseHtmlRowData(html, "Operating Cash Flow", OperatingCashFlowTtmString, OperatingCashFlow2String, OperatingCashFlow4String) == false)
                     {
                         OperatingCashFlowTtmString.StringValue = OperatingCashFlow2String.StringValue = OperatingCashFlow4String.StringValue = "--";
                         return false; //=====>>>>>>> Exit
                     }
 
                     //// End Cash Position
-                    if (ParseHtmlRowData(html, "End Cash Position", EndCashPositionTtmString.StringValue, EndCashPosition2String.StringValue, EndCashPosition4String.StringValue) == false)
+                    if (ParseHtmlRowData(html, "End Cash Position", EndCashPositionTtmString, EndCashPosition2String, EndCashPosition4String) == false)
                     {
                         EndCashPositionTtmString.StringValue = EndCashPosition2String.StringValue = EndCashPosition4String.StringValue = "--";
                         return false; //=====>>>>>>> Exit

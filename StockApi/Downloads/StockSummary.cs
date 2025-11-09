@@ -1,5 +1,4 @@
-﻿using Drake.Extensions;
-using SqlLayer;
+﻿using SqlLayer;
 using SqlLayer.SQL_Models;
 using StockApi.Downloads;
 using System;

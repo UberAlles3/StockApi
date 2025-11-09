@@ -198,7 +198,7 @@ namespace YahooLayer
             return middle;
         }
 
-        protected bool ParseHtmlRowData(string html, string searchTerm, string property0, string property2, string property4)
+        protected bool ParseHtmlRowData(string html, string searchTerm, StringSafeType<decimal> property0, StringSafeType<decimal> property2, StringSafeType<decimal> property4)
         {
             string partial = "";
             List<string> numbers;
@@ -214,13 +214,13 @@ namespace YahooLayer
 
             numbers = GetNumbersFromHtml(partial);
             if (numbers.Count > 0)
-                property0 = numbers[0].Trim();
+                property0.StringValue = numbers[0].Trim();
             if (numbers.Count > 2)
-                property2 = numbers[2].Trim();
+                property2.StringValue = numbers[2].Trim();
             if (numbers.Count > 4)
-                property4 = numbers[4].Trim();
+                property4.StringValue = numbers[4].Trim();
             else if (numbers.Count > 3)
-                property4 = numbers[3].Trim();
+                property4.StringValue = numbers[3].Trim();
 
             return true;
         }
