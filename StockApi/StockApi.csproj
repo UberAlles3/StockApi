@@ -12,20 +12,14 @@
     <Compile Remove="CommonClasses.cs" />
     <Compile Remove="ExcelInterop.cs" />
     <Compile Remove="StockHistoryOldScreenScrape.cs" />
-    <Compile Remove="StringSafeType.cs" />
     <Compile Remove="WebView.cs" />
     <Compile Remove="WebView.Designer.cs" />
-    <Compile Remove="YahooFinance.cs" />
-    <Compile Remove="YahooFinanceAPI.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="CommonClasses.cs" />
-    <None Include="StringSafeType.cs" />
     <None Include="WebView.cs" />
     <None Include="WebView.Designer.cs" />
-    <None Include="YahooFinance.cs" />
-    <None Include="YahooFinanceAPI.cs" />
   </ItemGroup>
 
   <ItemGroup>
