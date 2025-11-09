@@ -14,12 +14,16 @@
     <Compile Remove="StockHistoryOldScreenScrape.cs" />
     <Compile Remove="WebView.cs" />
     <Compile Remove="WebView.Designer.cs" />
+    <Compile Remove="YahooFinance.cs" />
+    <Compile Remove="YahooFinanceAPI.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="CommonClasses.cs" />
     <None Include="WebView.cs" />
     <None Include="WebView.Designer.cs" />
+    <None Include="YahooFinance.cs" />
+    <None Include="YahooFinanceAPI.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,12 +31,13 @@
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2420.47" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OrmLite\SqlLayer.csproj" />
+    <ProjectReference Include="..\YahooLayer\YahooLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

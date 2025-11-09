@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Xml;
+using YahooLayer;
 
 namespace StockApi
 {
@@ -60,10 +61,10 @@ namespace StockApi
         public string Value { get; set; }
     }
 
-    public class SearchTerm
-    {
-        public string Name { get; set; }
-        public string Term { get; set; }
-    }
+    //public class SearchTerm
+    //{
+    //    public string Name { get; set; }
+    //    public string Term { get; set; }
+    //}
 
 }

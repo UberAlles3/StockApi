@@ -38,7 +38,6 @@ namespace StockApi
             this.btnGetOne = new System.Windows.Forms.Button();
             this.txtStockTicker = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnGetAll = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -151,9 +150,6 @@ namespace StockApi
             this.label13 = new System.Windows.Forms.Label();
             this.picMonthTrend = new System.Windows.Forms.PictureBox();
             this.picSpinner = new System.Windows.Forms.PictureBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtTickerList = new System.Windows.Forms.TextBox();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btn10DayChart = new System.Windows.Forms.Button();
@@ -220,6 +216,7 @@ namespace StockApi
             this.incomeStatementToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.earningDatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stockMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label70 = new System.Windows.Forms.Label();
             this.lblSandP500 = new System.Windows.Forms.Label();
@@ -288,17 +285,6 @@ namespace StockApi
             this.label1.Size = new System.Drawing.Size(41, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "Ticker:";
-            // 
-            // btnGetAll
-            // 
-            this.btnGetAll.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnGetAll.Location = new System.Drawing.Point(20, 492);
-            this.btnGetAll.Name = "btnGetAll";
-            this.btnGetAll.Size = new System.Drawing.Size(213, 28);
-            this.btnGetAll.TabIndex = 3;
-            this.btnGetAll.Text = "Get Stock Info";
-            this.btnGetAll.UseVisualStyleBackColor = true;
-            this.btnGetAll.Click += new System.EventHandler(this.btnGetAll_Click);
             // 
             // label2
             // 
@@ -1659,38 +1645,6 @@ namespace StockApi
             this.picSpinner.TabIndex = 13;
             this.picSpinner.TabStop = false;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label5.Location = new System.Drawing.Point(20, 163);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(158, 15);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Tickers (CRLF delimeted list):";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.ForeColor = System.Drawing.Color.DarkGray;
-            this.label7.Location = new System.Drawing.Point(20, 141);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(217, 15);
-            this.label7.TabIndex = 10;
-            this.label7.Text = "__________________________________________";
-            // 
-            // txtTickerList
-            // 
-            this.txtTickerList.AcceptsReturn = true;
-            this.txtTickerList.Location = new System.Drawing.Point(20, 186);
-            this.txtTickerList.Multiline = true;
-            this.txtTickerList.Name = "txtTickerList";
-            this.txtTickerList.Size = new System.Drawing.Size(213, 292);
-            this.txtTickerList.TabIndex = 11;
-            this.txtTickerList.Text = "INTC";
-            // 
             // btnAnalyze
             // 
             this.btnAnalyze.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -2187,7 +2141,8 @@ namespace StockApi
             this.performanceToolStripMenuItem,
             this.tradeMonitorToolStripMenuItem,
             this.refreshToolStripMenuItem,
-            this.earningDatesToolStripMenuItem});
+            this.earningDatesToolStripMenuItem,
+            this.stockMetricsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1444, 24);
@@ -2405,7 +2360,7 @@ namespace StockApi
             this.summaryToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.summaryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.summaryToolStripMenuItem.Name = "summaryToolStripMenuItem";
-            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.summaryToolStripMenuItem.Text = "&Summary";
             this.summaryToolStripMenuItem.Click += new System.EventHandler(this.summaryToolStripMenuItem_Click);
             // 
@@ -2414,7 +2369,7 @@ namespace StockApi
             this.incomeStatementToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.incomeStatementToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.incomeStatementToolStripMenuItem.Name = "incomeStatementToolStripMenuItem";
-            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.incomeStatementToolStripMenuItem.Text = "&Income Statement";
             this.incomeStatementToolStripMenuItem.Click += new System.EventHandler(this.incomeStatementToolStripMenuItem_Click);
             // 
@@ -2423,7 +2378,7 @@ namespace StockApi
             this.statisticsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.statisticsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.statisticsToolStripMenuItem.Text = "&Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
             // 
@@ -2434,6 +2389,14 @@ namespace StockApi
             this.earningDatesToolStripMenuItem.Size = new System.Drawing.Size(91, 20);
             this.earningDatesToolStripMenuItem.Text = "Earning Dates";
             this.earningDatesToolStripMenuItem.Click += new System.EventHandler(this.earningDatesToolStripMenuItem_Click);
+            // 
+            // stockMetricsToolStripMenuItem
+            // 
+            this.stockMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.stockMetricsToolStripMenuItem.Name = "stockMetricsToolStripMenuItem";
+            this.stockMetricsToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
+            this.stockMetricsToolStripMenuItem.Text = "&Stock Metrics";
+            this.stockMetricsToolStripMenuItem.Click += new System.EventHandler(this.stockMetricsToolStripMenuItem_Click);
             // 
             // panel3
             // 
@@ -2511,7 +2474,7 @@ namespace StockApi
             this.panelMarkets.Controls.Add(this.lblSandP500);
             this.panelMarkets.Controls.Add(this.lblSandP500Change);
             this.panelMarkets.Controls.Add(this.label70);
-            this.panelMarkets.Location = new System.Drawing.Point(4, 529);
+            this.panelMarkets.Location = new System.Drawing.Point(4, 477);
             this.panelMarkets.Name = "panelMarkets";
             this.panelMarkets.Size = new System.Drawing.Size(237, 87);
             this.panelMarkets.TabIndex = 44;
@@ -2632,11 +2595,11 @@ namespace StockApi
             this.txtMessages.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtMessages.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtMessages.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.txtMessages.Location = new System.Drawing.Point(12, 619);
+            this.txtMessages.Location = new System.Drawing.Point(12, 570);
             this.txtMessages.Multiline = true;
             this.txtMessages.Name = "txtMessages";
             this.txtMessages.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMessages.Size = new System.Drawing.Size(229, 97);
+            this.txtMessages.Size = new System.Drawing.Size(229, 146);
             this.txtMessages.TabIndex = 45;
             // 
             // Form1
@@ -2655,11 +2618,7 @@ namespace StockApi
             this.Controls.Add(this.picSidewaysTrend);
             this.Controls.Add(this.picDownTrend);
             this.Controls.Add(this.picUpTrend);
-            this.Controls.Add(this.txtTickerList);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.btnGetAll);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtStockTicker);
             this.Controls.Add(this.btnGetOne);
@@ -2711,7 +2670,6 @@ namespace StockApi
         private System.Windows.Forms.Button btnGetOne;
         private System.Windows.Forms.TextBox txtStockTicker;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnGetAll;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblVolatility;
         private System.Windows.Forms.Panel panel1;
@@ -2719,9 +2677,6 @@ namespace StockApi
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblEPS;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label7;
-        public System.Windows.Forms.TextBox txtTickerList;
         private System.Windows.Forms.Button btnAnalyze;
         private System.Windows.Forms.PictureBox picSpinner;
         private System.Windows.Forms.Label label8;
@@ -2909,6 +2864,7 @@ namespace StockApi
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.ToolStripMenuItem earningDatesToolStripMenuItem;
         private System.Windows.Forms.TextBox txtMessages;
+        private System.Windows.Forms.ToolStripMenuItem stockMetricsToolStripMenuItem;
     }
 }
 

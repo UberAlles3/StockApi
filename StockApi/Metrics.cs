@@ -11,6 +11,7 @@ using System.Diagnostics;
 using StockApi.Downloads;
 using SqlLayer;
 using SqlLayer.SQL_Models;
+using YahooLayer;
 
 namespace StockApi
 {

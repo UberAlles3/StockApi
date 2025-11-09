@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using YahooLayer;
 
 namespace StockApi
 {
@@ -203,7 +204,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                Program.logger.Error($"******ERROR**********\r\n   {ex.StackTrace}\r\n   {ex.StackTrace}\r\n");
                 LastException = ex;
                 Error = "GetSummaryData() " + ticker + " " + searchTerm;
                 Debug.WriteLine("Error!");

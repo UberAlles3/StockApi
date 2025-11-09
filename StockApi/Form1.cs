@@ -195,7 +195,7 @@ namespace StockApi
 
             if (_stockDownloads.stockSummary.LastException != null)
             {
-                txtTickerList.Text = "Error:" + Environment.NewLine + _stockDownloads.stockSummary.Error;
+                txtMessages.Text = "Error:" + Environment.NewLine + _stockDownloads.stockSummary.Error;
             }
 
             if (_tickerFound)
@@ -393,79 +393,6 @@ namespace StockApi
             dataGridView1.Refresh();
         }
 
-        private async void btnGetAll_Click(object sender, EventArgs e)
-        {
-            StringBuilder builder = new StringBuilder();
-            List<string> stockList = new List<string>();
-
-            bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
-
-            if (networkUp == false)
-            {
-                MessageBox.Show("Your network connection is unavailable.");
-                return;
-            }
-
-            stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
-            stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
-
-            txtTickerList.Text = "";
-            //builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend, 3YearPrice, 3YearPriceChange{Environment.NewLine}");
-            foreach (string ticker in stockList)
-            {
-                _stockDownloads.stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
-
-                txtTickerList.Text += $"{ticker}" + Environment.NewLine;
-
-                // Extract the individual data values from the html
-                _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
-
-                if (_stockDownloads.stockSummary.LastException != null)
-                {
-                    txtTickerList.Text = _stockDownloads.stockSummary.Error;
-                    continue;
-                }
-
-                if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
-                {
-                    Thread.Sleep(1000);
-                    _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
-                    
-                    if (_stockDownloads.stockSummary.LastException != null)
-                    {
-                        txtTickerList.Text = _stockDownloads.stockSummary.Error;
-                        continue;
-                    }
-                }
-
-                _stockDownloads.stockIncomeStatement = new StockIncomeStatement();
-                bool found = await _stockDownloads.stockIncomeStatement.GetStockData(ticker);
-
-                // Calculated PE can only be figured after both summary and finacial data is combined
-                _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads);
-
-                // get 3 year ago price
-                await _stockDownloads.stockHistory.GetPriceHistoryFor3Year(ticker, _stockDownloads.stockSummary);
-
-                if (_stockDownloads.stockHistory.HistoricDisplayList.Count > 0)
-                    _stockDownloads.stockHistory.HistoricData3YearsAgo = _stockDownloads.stockHistory.HistoricDisplayList.Last();
-                else
-                    _stockDownloads.stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
-
-                decimal percent_diff = _stockDownloads.stockSummary.PriceString.NumericValue / _stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
-
-                Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
-                txtSharesOwned.Text = "1";
-                txtSharesTraded.Text = "1";
-                SetUpAnalyzeInputs(analyzeInputs);
-                decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, true);
-
-                builder.Append($"{_stockDownloads.stockSummary.Ticker}, {_stockDownloads.stockSummary.VolatilityString.NumericValue}, {_stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {_stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue}, {_stockDownloads.stockSummary.PriceBookString.NumericValue}, {_stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {_stockDownloads.stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
-                builder.Append($", {_stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockDownloads.stockSummary.YearsRangeLow.NumericValue},{_stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
-                Thread.Sleep(800);
-            }
-            txtTickerList.Text = builder.ToString();
-        }
 
         private void PreSummaryWebCall()
         {
@@ -473,7 +400,6 @@ namespace StockApi
             btnGetAllHistory.Visible = true;
             txtAnalysisOutput.Text = "";
             lblValuation.Text = "";
-            txtTickerList.Text = txtStockTicker.Text;
             pic3YearTrend.Image = picSidewaysTrend.Image;
             picYearTrend.Image = picSidewaysTrend.Image;
             picMonthTrend.Image = picSidewaysTrend.Image;
@@ -1083,6 +1009,13 @@ namespace StockApi
             }
 
             MessageBox.Show(sb.ToString(), "Coming Up Earnings");
+        }
+
+        private void stockMetricsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MetricsForm f = new MetricsForm(txtStockTicker.Text);
+            f.Owner = this;
+            f.Show();
         }
     }
 

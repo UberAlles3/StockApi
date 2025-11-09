@@ -9,6 +9,7 @@ using SqlLayer;
 using SqlLayer.SQL_Models;
 using System.Linq;
 using System.Diagnostics;
+using YahooLayer;
 
 namespace StockApi
 {

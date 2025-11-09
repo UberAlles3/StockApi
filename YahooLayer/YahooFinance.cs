@@ -1,20 +1,21 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace StockApi
+namespace YahooLayer
 {
-    public class YahooFinancexxx
+    public class YahooFinance
     {
         public static string NotApplicable = "N/A";
         //private static readonly object syncObj = new object();
         private string _ticker;
-        //public static List<SearchTerm> SearchTerms = new List<SearchTerm>(); // singleton instance, load once
+        private static List<SearchTerm> searchTerms = null; // singleton instance, load once
+        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinance));
 
         public string Ticker
         {
@@ -22,10 +23,27 @@ namespace StockApi
             set { _ticker = value.ToUpper(); }
         }
 
+        public static List<SearchTerm> SearchTerms 
+        {
+            get
+            {
+                if (searchTerms == null)
+                    searchTerms = new List<SearchTerm>();
+                if (searchTerms.Count == 0)
+                    searchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
+                return searchTerms;
+            }
+
+            set => searchTerms = value; 
+        }
+
         public YahooFinance()
         {
-            if (SearchTerms.Count == 0)
-                SearchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
+            // TODO takeout
+            //SearchTerms = new List<SearchTerm>();
+
+            //if (SearchTerms.Count == 0)
+            //    SearchTerms = ConfigurationManager.GetSection("SearchTokens") as List<SearchTerm>;
         }
 
         public virtual Task<bool> GetStockData(string ticker)
@@ -100,7 +118,7 @@ namespace StockApi
             }
             catch (System.Exception ex)
             {
-                Program.logger.Error($"{tagName}\n{html}\n{loc1}\n{loc2}\n{ex.Message}  {ex.StackTrace}", ex);
+                logger.Error($"{tagName}\n{html}\n{loc1}\n{loc2}\n{ex.Message}  {ex.StackTrace}", ex);
                 return "Error. Check Log.";
             }
 
@@ -167,11 +185,20 @@ namespace StockApi
                 return defaultValue;
             }
 
-            string middle = parts[tagPosition].Substring(0, loc2);
+            string middle = "";
+            try
+            {
+                middle = parts[tagPosition].Substring(0, loc2);
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"*******ERROR**********\r\n   searchText={searchText}\r\n   loc1={loc1}    \r\nloc2={loc2}\r\n   {ex.Message}\r\n   {ex.StackTrace}\r\n");
+            }
+
             return middle;
         }
 
-        protected bool ParseHtmlRowData(string html, string searchTerm, StringSafeType<decimal> property0, StringSafeType<decimal> property2, StringSafeType<decimal> property4)
+        protected bool ParseHtmlRowData(string html, string searchTerm, string property0, string property2, string property4)
         {
             string partial = "";
             List<string> numbers;
@@ -187,13 +214,13 @@ namespace StockApi
 
             numbers = GetNumbersFromHtml(partial);
             if (numbers.Count > 0)
-                property0.StringValue = numbers[0].Trim();
+                property0 = numbers[0].Trim();
             if (numbers.Count > 2)
-                property2.StringValue = numbers[2].Trim();
+                property2 = numbers[2].Trim();
             if (numbers.Count > 4)
-                property4.StringValue = numbers[4].Trim();
+                property4 = numbers[4].Trim();
             else if (numbers.Count > 3)
-                property4.StringValue = numbers[3].Trim();
+                property4 = numbers[3].Trim();
 
             return true;
         }
@@ -215,6 +242,12 @@ namespace StockApi
             psiRenew.UseShellExecute = false;
             Process.Start(psiRenew)?.WaitForExit();
         }
+
+    }
+    public class SearchTerm
+    {
+        public string Name { get; set; }
+        public string Term { get; set; }
     }
 }
 

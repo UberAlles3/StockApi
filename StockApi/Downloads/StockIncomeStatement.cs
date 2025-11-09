@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YahooLayer;
 
 namespace StockApi
 {
@@ -82,25 +83,25 @@ namespace StockApi
                     Debug.WriteLine("GetStockIncomeStatement()");
 
                     //// Revenue History
-                    if (ParseHtmlRowData(html, "Total Revenue", RevenueTtmString, Revenue2String, Revenue4String) == false)
+                    if (ParseHtmlRowData(html, "Total Revenue", RevenueTtmString.StringValue, Revenue2String.StringValue, Revenue4String.StringValue) == false)
                         return false; //=====>>>>>>> Exit
 
                     // Cost of Revenue History
-                    if (ParseHtmlRowData(html, "Cost of Revenue", CostOfRevenueTtmString, CostOfRevenue2String, CostOfRevenue4String) == false)
+                    if (ParseHtmlRowData(html, "Cost of Revenue", CostOfRevenueTtmString.StringValue, CostOfRevenue2String.StringValue, CostOfRevenue4String.StringValue) == false)
                     {
                         // Use Total Expenses instead
-                        if (ParseHtmlRowData(html, "Total Expenses", CostOfRevenueTtmString, CostOfRevenue2String, CostOfRevenue4String) == false)
+                        if (ParseHtmlRowData(html, "Total Expenses", CostOfRevenueTtmString.StringValue, CostOfRevenue2String.StringValue, CostOfRevenue4String.StringValue) == false)
                         {
                             CostOfRevenueTtmString.StringValue = CostOfRevenue2String.StringValue = CostOfRevenue4String.StringValue = "--";
                         }
                     }
 
                     //// Net Income
-                    if (ParseHtmlRowData(html, "Net Income Common", NetIncomeTtmString, NetIncome2String, NetIncome4String) == false)
+                    if (ParseHtmlRowData(html, "Net Income Common", NetIncomeTtmString.StringValue, NetIncome2String.StringValue, NetIncome4String.StringValue) == false)
                         return false; //=====>>>>>>> Exit
 
                     //// Operating Expenses
-                    if (ParseHtmlRowData(html, "Operating Expense", OperatingExpenseTtmString, OperatingExpense2String, OperatingExpense4String) == false)
+                    if (ParseHtmlRowData(html, "Operating Expense", OperatingExpenseTtmString.StringValue, OperatingExpense2String.StringValue, OperatingExpense4String.StringValue) == false)
                     {
                         // Not found, calculate from revenue and net income
                         CostOfRevenueTtmString.NumericValue = RevenueTtmString.NumericValue - NetIncomeTtmString.NumericValue;
@@ -109,7 +110,7 @@ namespace StockApi
                     }
 
                     //// Basic EPS
-                    if (ParseHtmlRowData(html, "Basic EPS", BasicEpsTtmString, BasicEps2String, BasicEps4String) == false)
+                    if (ParseHtmlRowData(html, "Basic EPS", BasicEpsTtmString.StringValue, BasicEps2String.StringValue, BasicEps4String.StringValue) == false)
                     {
                         // Not found, set to default   
                         BasicEpsTtmString.StringValue = BasicEps2String.StringValue = BasicEps4String.StringValue = "--";
