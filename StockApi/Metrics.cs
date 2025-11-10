@@ -23,7 +23,7 @@ namespace StockApi
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
 
-        public async Task<int> DailyGetMetrics(DataTable positionsDataTable, TextBox textBox)
+        public async Task<int> DailyGetMetrics(DataTable positionsDataTable, RichTextBox textBox)
         {
             // Get all tickers from position table
             List<string> stockList = new List<string>();

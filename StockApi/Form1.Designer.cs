@@ -232,7 +232,10 @@ namespace StockApi
             this.lblDOW30Change = new System.Windows.Forms.Label();
             this.label75 = new System.Windows.Forms.Label();
             this.MetricsTimer = new System.Windows.Forms.Timer(this.components);
-            this.txtMessages = new System.Windows.Forms.TextBox();
+            this.txtMessages = new System.Windows.Forms.RichTextBox();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -252,6 +255,7 @@ namespace StockApi
             this.menuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panelMarkets.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnGetOne
@@ -2360,7 +2364,7 @@ namespace StockApi
             this.summaryToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.summaryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.summaryToolStripMenuItem.Name = "summaryToolStripMenuItem";
-            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.summaryToolStripMenuItem.Text = "&Summary";
             this.summaryToolStripMenuItem.Click += new System.EventHandler(this.summaryToolStripMenuItem_Click);
             // 
@@ -2369,7 +2373,7 @@ namespace StockApi
             this.incomeStatementToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.incomeStatementToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.incomeStatementToolStripMenuItem.Name = "incomeStatementToolStripMenuItem";
-            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.incomeStatementToolStripMenuItem.Text = "&Income Statement";
             this.incomeStatementToolStripMenuItem.Click += new System.EventHandler(this.incomeStatementToolStripMenuItem_Click);
             // 
@@ -2378,7 +2382,7 @@ namespace StockApi
             this.statisticsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.statisticsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.statisticsToolStripMenuItem.Text = "&Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
             // 
@@ -2474,7 +2478,7 @@ namespace StockApi
             this.panelMarkets.Controls.Add(this.lblSandP500);
             this.panelMarkets.Controls.Add(this.lblSandP500Change);
             this.panelMarkets.Controls.Add(this.label70);
-            this.panelMarkets.Location = new System.Drawing.Point(4, 477);
+            this.panelMarkets.Location = new System.Drawing.Point(6, 634);
             this.panelMarkets.Name = "panelMarkets";
             this.panelMarkets.Size = new System.Drawing.Size(237, 87);
             this.panelMarkets.TabIndex = 44;
@@ -2591,16 +2595,51 @@ namespace StockApi
             // 
             // txtMessages
             // 
-            this.txtMessages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
-            this.txtMessages.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtMessages.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtMessages.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.txtMessages.Location = new System.Drawing.Point(12, 570);
-            this.txtMessages.Multiline = true;
+            this.txtMessages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
+            this.txtMessages.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtMessages.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.txtMessages.Location = new System.Drawing.Point(4, 4);
+            this.txtMessages.Margin = new System.Windows.Forms.Padding(8);
             this.txtMessages.Name = "txtMessages";
-            this.txtMessages.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMessages.Size = new System.Drawing.Size(229, 146);
+            this.txtMessages.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.txtMessages.ShortcutsEnabled = false;
+            this.txtMessages.Size = new System.Drawing.Size(229, 416);
             this.txtMessages.TabIndex = 45;
+            this.txtMessages.Text = "";
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(48)))), ((int)(((byte)(96)))));
+            this.panel4.Controls.Add(this.txtMessages);
+            this.panel4.ForeColor = System.Drawing.Color.White;
+            this.panel4.Location = new System.Drawing.Point(6, 179);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(237, 423);
+            this.panel4.TabIndex = 46;
+            // 
+            // label5
+            // 
+            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label5.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label5.Location = new System.Drawing.Point(8, 149);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(233, 29);
+            this.label5.TabIndex = 47;
+            this.label5.Text = "Messages";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label7
+            // 
+            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label7.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label7.Location = new System.Drawing.Point(6, 615);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(233, 29);
+            this.label7.TabIndex = 48;
+            this.label7.Text = "Markets";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
@@ -2611,7 +2650,9 @@ namespace StockApi
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1444, 721);
-            this.Controls.Add(this.txtMessages);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.panel4);
             this.Controls.Add(this.panelMarkets);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.webView21);
@@ -2660,6 +2701,7 @@ namespace StockApi
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panelMarkets.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2863,8 +2905,11 @@ namespace StockApi
         private System.Windows.Forms.Panel pnlNoFinancials;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.ToolStripMenuItem earningDatesToolStripMenuItem;
-        private System.Windows.Forms.TextBox txtMessages;
         private System.Windows.Forms.ToolStripMenuItem stockMetricsToolStripMenuItem;
+        private System.Windows.Forms.RichTextBox txtMessages;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label7;
     }
 }
 

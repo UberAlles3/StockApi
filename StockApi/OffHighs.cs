@@ -35,7 +35,8 @@ namespace StockApi
 
             // Get all buys for the last week
             IEnumerable<DataRow> tickerTrades = _tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Buy" && x[(int)TC.DowLevel].ToString().Trim() != "").Skip(700);
-            tickerTrades = tickerTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(20).OrderBy(x => x[(int)TC.TradeDate]);
+            tickerTrades = tickerTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(70).OrderBy(x => x[(int)TC.TradeDate]);
+            tickerTrades = tickerTrades.Where(x => Convert.ToDateTime(x[(int)TC.TradeDate].ToString()) > DateTime.Now.AddDays(-30));
 
             //string ticker = tickers[0];
             txtTickerList.Text = ""; // "Ticker      High    Current     Target" + Environment.NewLine;
@@ -54,13 +55,13 @@ namespace StockApi
                 decimal high = quotes.Max(x => x.Close);
 
                 txtTickerList.Text += $"{(ticker + "    ").Substring(0, 5)}";
-                if (current.Last().Close < high * .94M)
+                if (current.Last().Close < high * .93M)
                 {
-                    txtTickerList.Text += $"    {(high).ToString("00.00").PadLeft(7, ' ')}    {current.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .94M).ToString(" 00.00").PadLeft(7, ' ')} ";
+                    txtTickerList.Text += $"    {(high).ToString("00.00").PadLeft(7, ' ')}    {current.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .93M).ToString(" 00.00").PadLeft(7, ' ')} ";
 
                     DataRow trade = tickerTrades.Where(x => x[(int)TC.Ticker].ToString() == ticker).LastOrDefault();
 
-                    if(trade != null && Convert.ToDateTime(trade.ItemArray[(int)TC.TradeDate]) > DateTime.Now.AddDays(-20)) // If already bought in the last 20 days
+                    if(trade != null && Convert.ToDateTime(trade.ItemArray[(int)TC.TradeDate]) > DateTime.Now.AddDays(-30)) // If already bought in the last 30 days
                     {
                         txtTickerList.Text += $" Already bought at {trade.ItemArray[(int)TC.TradePrice]}";
                     }
