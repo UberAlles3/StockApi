@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Compile Remove="CommonClasses.cs" />
+    <Compile Remove="Downloads\StockCashFlow.cs" />
     <Compile Remove="ExcelInterop.cs" />
     <Compile Remove="StockHistoryOldScreenScrape.cs" />
     <Compile Remove="WebView.cs" />
@@ -18,6 +19,7 @@
 
   <ItemGroup>
     <None Include="CommonClasses.cs" />
+    <None Include="Downloads\StockCashFlow.cs" />
     <None Include="WebView.cs" />
     <None Include="WebView.Designer.cs" />
   </ItemGroup>

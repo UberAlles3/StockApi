@@ -5,9 +5,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Downloads\StockDownloads.cs" />
+    <Compile Remove="Downloads\StockHistory.cs" />
+    <Compile Remove="Downloads\StockIncomeStatement.cs" />
+    <Compile Remove="Downloads\StockStatistics.cs" />
+    <Compile Remove="Downloads\StockSummary.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Downloads\StockDownloads.cs" />
+    <None Include="Downloads\StockHistory.cs" />
+    <None Include="Downloads\StockIncomeStatement.cs" />
+    <None Include="Downloads\StockStatistics.cs" />
+    <None Include="Downloads\StockSummary.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OrmLite\SqlLayer.csproj" />
   </ItemGroup>
 
 </Project>
