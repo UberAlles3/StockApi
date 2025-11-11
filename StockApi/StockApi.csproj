@@ -11,8 +11,14 @@
   <ItemGroup>
     <Compile Remove="CommonClasses.cs" />
     <Compile Remove="Downloads\StockCashFlow.cs" />
+    <Compile Remove="Downloads\StockDownloads.cs" />
+    <Compile Remove="Downloads\StockHistory.cs" />
+    <Compile Remove="Downloads\StockIncomeStatement.cs" />
+    <Compile Remove="Downloads\StockStatistics.cs" />
+    <Compile Remove="Downloads\StockSummary.cs" />
     <Compile Remove="ExcelInterop.cs" />
     <Compile Remove="StockHistoryOldScreenScrape.cs" />
+    <Compile Remove="StringExtensions.cs" />
     <Compile Remove="WebView.cs" />
     <Compile Remove="WebView.Designer.cs" />
   </ItemGroup>
@@ -20,6 +26,12 @@
   <ItemGroup>
     <None Include="CommonClasses.cs" />
     <None Include="Downloads\StockCashFlow.cs" />
+    <None Include="Downloads\StockDownloads.cs" />
+    <None Include="Downloads\StockHistory.cs" />
+    <None Include="Downloads\StockIncomeStatement.cs" />
+    <None Include="Downloads\StockStatistics.cs" />
+    <None Include="Downloads\StockSummary.cs" />
+    <None Include="StringExtensions.cs" />
     <None Include="WebView.cs" />
     <None Include="WebView.Designer.cs" />
   </ItemGroup>

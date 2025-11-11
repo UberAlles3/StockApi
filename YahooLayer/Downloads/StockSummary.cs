@@ -1,6 +1,5 @@
 ﻿using SqlLayer;
 using SqlLayer.SQL_Models;
-using StockApi.Downloads;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,10 +9,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using System.Windows.Forms;
-using YahooLayer;
 
-namespace StockApi
+namespace YahooLayer
 {
     public class StockSummary : YahooFinance
     {
@@ -26,13 +23,13 @@ namespace StockApi
 
         private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
 
-        public Color DividendColor = Form1.TextForeColor;
-        public Color EPSColor = Form1.TextForeColor;
-        public Color PriceBookColor = Form1.TextForeColor;
-        public Color ProfitMarginColor = Form1.TextForeColor;
-        public Color OneYearTargetColor = Form1.TextForeColor;
-        public Color ForwardPEColor = Form1.TextForeColor;
-        public Color EarningsDateColor = Form1.TextForeColor;
+        public Color DividendColor = Color.White;
+        public Color EPSColor = Color.White;
+        public Color PriceBookColor = Color.White;
+        public Color ProfitMarginColor = Color.White;
+        public Color OneYearTargetColor = Color.White;
+        public Color ForwardPEColor = Color.White;
+        public Color EarningsDateColor = Color.White;
 
         public string _html = "";
         private string companyName = "";
@@ -60,6 +57,17 @@ namespace StockApi
         public StringSafeType<DateTime> EarningsDateString = new StringSafeType<DateTime>("--");
 
         public SqlTicker sqlTicker = new SqlTicker();
+
+        public StockSummary()
+        {
+            DividendColor      = _normalColor;
+            EPSColor           = _normalColor;
+            PriceBookColor     = _normalColor;
+            ProfitMarginColor  = _normalColor;
+            OneYearTargetColor = _normalColor;
+            ForwardPEColor     = _normalColor;
+            EarningsDateColor  = _normalColor;
+        }
 
         ////////////////////////////////////////////
         ///                Methods
@@ -190,7 +198,7 @@ namespace StockApi
                 }
                 catch (Exception ex)
                 {
-                    Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                    logger.Error($"{ex.Message}  {ex.StackTrace}");
                     Debug.WriteLine($"GetStockData() {ex.Message}");
                 }
 
@@ -203,7 +211,7 @@ namespace StockApi
             }
             catch (Exception ex)
             {
-                Program.logger.Error($"******ERROR**********\r\n   {ex.StackTrace}\r\n   {ex.StackTrace}\r\n");
+                logger.Error($"******ERROR**********\r\n   {ex.StackTrace}\r\n   {ex.StackTrace}\r\n");
                 LastException = ex;
                 Error = "GetSummaryData() " + ticker + " " + searchTerm;
                 Debug.WriteLine("Error!");
@@ -212,10 +220,10 @@ namespace StockApi
             //*******************
             //    Set Colors
             //*******************
-            DividendColor = Form1.TextForeColor;
+            DividendColor = _normalColor;
             if (DividendString.NumericValue > 1.5M)
                 DividendColor = Color.Lime;
-            EPSColor = Form1.TextForeColor;
+            EPSColor = _normalColor;
             if (EarningsPerShareString.NumericValue < -1)
                 EPSColor = Color.Red;
             else if (EarningsPerShareString.NumericValue > 1)
@@ -225,15 +233,15 @@ namespace StockApi
             else if (ProfitMarginString.NumericValue > 2)
                 ProfitMarginColor = Color.Lime;
             else
-                ProfitMarginColor = Form1.TextForeColor;
+                ProfitMarginColor = _normalColor;
             
             if (PriceBookString.NumericValue > 5)
                 PriceBookColor = Color.Red;
             else if (PriceBookString.NumericValue < 1)
                 PriceBookColor = Color.Lime;
             else
-                PriceBookColor = Form1.TextForeColor;
-            OneYearTargetColor = Form1.TextForeColor;
+                PriceBookColor = _normalColor;
+            OneYearTargetColor = _normalColor;
             if (OneYearTargetPriceString.NumericValue < PriceString.NumericValue * .9M)
                 OneYearTargetColor = Color.Red;
             else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
@@ -244,9 +252,9 @@ namespace StockApi
             else if (ForwardPEString.NumericValue < 15)
                 ForwardPEColor = Color.Lime;
             else
-                ForwardPEColor = Form1.TextForeColor;
+                ForwardPEColor = _normalColor;
 
-            ForwardPEColor = Form1.TextForeColor;
+            ForwardPEColor = _normalColor;
             if (EarningsDateString.IsDateTime)
             {
                 DateTime dt = (EarningsDateString.DateTimeValue ?? DateTime.Now).Date;

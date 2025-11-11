@@ -4,21 +4,24 @@ using System.Text;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using SqlLayer;
 using SqlLayer.SQL_Models;
 using System.Linq;
 using System.Diagnostics;
 using YahooLayer;
 
-namespace StockApi
+namespace YahooLayer
 {
     public class StockStatistics : YahooFinance
     {
         private static readonly string _statisticsUrl = "https://finance.yahoo.com/quote/???/key-statistics/";
 
+        public Color TotalCashColor     = Color.White;
+        public Color TotalDebtColor     = Color.White;
+        public Color ShortInterestColor = Color.White;
+        public Color DebtEquityColor    = Color.White; 
+
         /////////////////// TotalCash
-        public Color TotalCashColor = Form1.TextForeColor;
         private string totalCashString = NotApplicable;
         private decimal totalCash = 0;
         public string TotalCashString
@@ -45,7 +48,6 @@ namespace StockApi
         }
 
         /////////////////// TotalDebt
-        public Color TotalDebtColor = Form1.TextForeColor;
         private string totalDebtString = NotApplicable;
         private decimal totalDebt = 0;
         public string TotalDebtString
@@ -73,11 +75,17 @@ namespace StockApi
 
         /// Short Interest
         public StringSafeType<Decimal> ShortInterestString = new StringSafeType<decimal>("--");
-        public Color ShortInterestColor = Form1.TextForeColor;
         /// Debt Equity
         public StringSafeType<Decimal> DebtEquityString = new StringSafeType<decimal>("--");
-        public Color DebtEquityColor = Form1.TextForeColor;
 
+
+        public StockStatistics()
+        {
+            TotalCashColor     = _normalColor;
+            TotalDebtColor     = _normalColor;
+            ShortInterestColor = _normalColor;
+            DebtEquityColor    = _normalColor;
+        }
 
         ////////////////////////////////////////////
         ///                Methods
@@ -138,8 +146,8 @@ namespace StockApi
                 }
                 catch (Exception ex)
                 {
-                    Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
-                    MessageBox.Show(ex.Source + ex.Message + "\n" + "GetStatisticsData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
+                    logger.Error($"{ex.Message}\r\n  {ex.StackTrace}\r\n");
+                    //MessageBox.Show(ex.Source + ex.Message + "\n" + "GetStatisticsData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
                 }
             }
 
@@ -149,7 +157,7 @@ namespace StockApi
             else if (TotalDebt < TotalCash * .6M)
                 TotalDebtColor = Color.Lime;
             else
-                TotalDebtColor = Form1.TextForeColor;
+                TotalDebtColor = _normalColor;
 
             // Set Colors of Debt Equity
             if (DebtEquityString.NumericValue > 60)
@@ -157,7 +165,7 @@ namespace StockApi
             else if (DebtEquityString.NumericValue < 35)
                 DebtEquityColor = Color.Lime;
             else
-                DebtEquityColor = Form1.TextForeColor;
+                DebtEquityColor = _normalColor;
 
             // Set Colors of Debt Equity
             if (ShortInterestString.NumericValue > 8)
@@ -165,7 +173,7 @@ namespace StockApi
             else if (ShortInterestString.NumericValue < 2 && TotalDebt != 0)
                 ShortInterestColor = Color.Lime;
             else
-                ShortInterestColor = Form1.TextForeColor;
+                ShortInterestColor = _normalColor;
 
             // Set Colors of Total Debt
             if (TotalDebt > TotalCash * 1.6M)
@@ -173,7 +181,7 @@ namespace StockApi
             else if (TotalDebt < TotalCash * .6M)
                 TotalDebtColor = Color.Lime;
             else
-                TotalDebtColor = Form1.TextForeColor;
+                TotalDebtColor = _normalColor;
 
             // Set Colors of Debt Equity
             if (DebtEquityString.NumericValue > 60)
@@ -181,7 +189,7 @@ namespace StockApi
             else if (DebtEquityString.NumericValue < 35 && TotalDebt != 0)
                 DebtEquityColor = Color.Lime;
             else
-                DebtEquityColor = Form1.TextForeColor;
+                DebtEquityColor = _normalColor;
 
             // Set Colors of Debt Equity
             if (ShortInterestString.NumericValue > 8)
@@ -189,7 +197,7 @@ namespace StockApi
             else if (ShortInterestString.NumericValue < 2 && TotalDebt != 0 )
                 ShortInterestColor = Color.Lime;
             else
-                ShortInterestColor = Form1.TextForeColor;
+                ShortInterestColor = _normalColor;
 
             return true;
         }

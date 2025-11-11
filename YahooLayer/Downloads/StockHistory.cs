@@ -1,14 +1,13 @@
-﻿using SqlLayer;
+﻿using log4net;
+using SqlLayer;
 using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using YahooLayer;
 
-namespace StockApi
+namespace YahooLayer
 {
     /// <summary>
     /// Goes out on the web to the Yahoo financial page and gets stock history data.
@@ -89,8 +88,8 @@ namespace StockApi
                     }
                     else
                     {
-                        Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
-                        MessageBox.Show(ex.Message);
+                        logger.Error($"******ERROR**********\r\n   {ex.StackTrace}\r\n   {ex.StackTrace}\r\n");
+                        //MessageBox.Show(ex.Message);
                     }
                 }
 

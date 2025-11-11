@@ -10,11 +10,10 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using StockApi.Downloads;
 using System.IO;
-using Drake.Extensions;
 using SqlLayer;
 using SqlLayer.SQL_Models;
+using YahooLayer;
 
 namespace StockApi
 {

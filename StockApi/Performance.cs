@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Drake.Extensions;
 using PC = StockApi.ExcelManager.PositionColumns;
 using TC = StockApi.ExcelManager.TradeColumns;
+using YahooLayer;
 
 namespace StockApi
 {

@@ -15,8 +15,6 @@ namespace YahooLayer
     public class StockCashFlow : YahooFinance
     {
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/cash-flow/";
-        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinance));
-        private static Color _normalColor = Color.LightSteelBlue;
 
         ////////////////////////////////////////////
         ///                Properties

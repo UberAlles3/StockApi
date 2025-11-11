@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Drawing;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +14,10 @@ namespace YahooLayer
     {
         public static string NotApplicable = "N/A";
         //private static readonly object syncObj = new object();
-        private string _ticker;
+        private static string _ticker;
         private static List<SearchTerm> searchTerms = null; // singleton instance, load once
         public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinance));
+        protected static Color _normalColor = Color.LightSteelBlue;
 
         public string Ticker
         {
@@ -243,6 +245,136 @@ namespace YahooLayer
             Process.Start(psiRenew)?.WaitForExit();
         }
 
+        public static decimal SetYearOverYearTrend(StringSafeType<decimal> year4, StringSafeType<decimal> year2, StringSafeType<decimal> ttm, int adjustment)
+        {
+            CrunchThreeResult crt = new CrunchThreeResult();
+            decimal val = 0;
+
+            try
+            {
+                crt = CrunchThree((double)year4.NumericValue, (double)year2.NumericValue, (double)ttm.NumericValue);
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, adjustment); // less impact
+                val = (decimal)crt.FinalMetric;
+            }
+            catch (Exception ex)
+            {
+                //Debug.WriteLine($"{_ticker} {crt.FinalMetric} {ex.Message}");
+                logger.Error($"{ex.Message}\r\n  {ex.StackTrace}\r\n");
+            }
+
+            return Decimal.Round((decimal)crt.FinalMetric, 3);
+        }
+
+        public static CrunchThreeResult CrunchThree(double one, double two, double three)
+        {
+            CrunchThreeResult crt = new CrunchThreeResult();
+
+            if (one + two + three == 0)
+            {
+                logger.Info($"{_ticker} had zeros in it.");
+                crt.FinalMetric = 1;
+                return crt;
+            }
+
+            // Find Abs(minimum)
+            double minimum = Math.Min(one, Math.Min(two, three)); // example -2, 3, -1 = 4    2, 3, 6 = 4   - 11, 100, 100 = 22
+            double maximum = Math.Max(one, Math.Max(two, three)); // example -2, 3, -1 = 4    2, 3, 6 = 4   - 11, 100, 100 = 22
+            if (minimum < 0)
+                minimum = Math.Abs(minimum) * 2;
+            if (maximum < 0)
+                maximum = Math.Abs(maximum) * 2;
+
+            if (minimum * 6 < maximum)
+                minimum += maximum;
+
+            // Add to all 3 numbers
+            one += minimum; two += minimum; three += minimum;
+
+            // Get ratios between them
+            crt.Ratio1 = (double)two / (double)one;
+            crt.Ratio2 = (double)three / (double)two;
+            crt.Ratio3 = (double)three / (double)one;
+
+            // Get the Log() of the ratios and dvide by a factor of 8
+            crt.Log1 = 1 + Math.Log(crt.Ratio1) / 3; // diff for earlier less important
+            crt.Log2 = 1 + Math.Log(crt.Ratio2) / 2.2D;
+            crt.Log3 = 1 + Math.Log(crt.Ratio3) / 2.2D;
+
+            crt.FinalMetric = (crt.Log1 + crt.Log2 + crt.Log3) / 3;
+
+            if (crt.FinalMetric > 1.07D)
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, -3); // Lessen metric weight
+            if (crt.FinalMetric > 1.06D)
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, -1); // Lessen metric weight
+            if (crt.FinalMetric < .93D)
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, -3); // Lessen metric weight
+            if (crt.FinalMetric < .94D)
+                crt.FinalMetric = AdjustMetric(crt.FinalMetric, -1); // Lessen metric weight
+
+            return crt;
+        }
+
+        public static decimal AdjustMetric(decimal metric, decimal factor) // negative number less important, positive more important, range -5 to +5
+        {
+            decimal newMetric = metric;
+            newMetric = (decimal)AdjustMetric((double)metric, (double)factor);
+
+            return Math.Round(newMetric, 3);
+        }
+        public static double AdjustMetric(double metric, double factor) // negative number less important, positive more important, range -5 to +5
+        {
+            double newMetric = metric;
+            double absFactor = Math.Abs(factor);
+
+            if (factor == 0)
+                return metric;
+
+            newMetric = ((absFactor) + Math.Log(metric)) / (absFactor);
+
+            return Math.Round(newMetric, 3);
+        }
+
+        public static double HardLimit(double metric, double min, double max) // negative number less important, positive more important, range -5 to +5
+        {
+            return (double)HardLimit((decimal)metric, (decimal)min, (decimal)max);
+        }
+        public static decimal HardLimit(decimal metric, decimal min, decimal max) // negative number less important, positive more important, range -5 to +5
+        {
+            decimal newMetric = metric;
+
+            if (metric < min)
+                newMetric = min;
+            if (metric > max)
+                newMetric = max;
+
+            return Math.Round(newMetric, 3);
+        }
+        public static double SoftLimit(double metric, double min, double max) // negative number less important, positive more important, range -5 to +5
+        {
+            return (double)SoftLimit((decimal)metric, (decimal)min, (decimal)max);
+        }
+        public static decimal SoftLimit(decimal metric, decimal min, decimal max) // negative number less important, positive more important, range -5 to +5
+        {
+            decimal newMetric = metric;
+
+            if (newMetric > max) // limit
+                newMetric = (((newMetric + max) / 2) + max) / 2;
+            if (newMetric < min) // limit
+                newMetric = (((newMetric + min) / 2) + min) / 2;
+
+            return Math.Round(newMetric, 3);
+        }
+
+        public class CrunchThreeResult
+        {
+            public double Ratio1;
+            public double Ratio2;
+            public double Ratio3;
+            public double Log1;
+            public double Log2;
+            public double Log3;
+            public double FinalMetric;
+        }
     }
     public class SearchTerm
     {

@@ -1,5 +1,4 @@
-﻿using Drake.Extensions;
-using SqlLayer;
+﻿using SqlLayer;
 using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
@@ -9,9 +8,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YahooLayer;
 
-namespace StockApi
+namespace YahooLayer
 {
     public class StockIncomeStatement : YahooFinance
     {

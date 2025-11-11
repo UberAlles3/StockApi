@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
-using StockApi.Downloads;
 using SqlLayer;
 using SqlLayer.SQL_Models;
 using YahooLayer;

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using log4net;
 
 namespace YahooLayer
 {
@@ -13,6 +14,7 @@ namespace YahooLayer
         private HttpClient _httpClient;
         private readonly string _baseUri = "https://query2.finance.yahoo.com/v8/finance/chart/[ticker]";
         private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinance));
 
         public async Task<List<StockQuote>> GetQuotes(string ticker, DateTime startDate, int numberOfdays, string interval)
         {
@@ -106,7 +108,7 @@ namespace YahooLayer
                             }
                             catch (Exception ex)
                             {
-                                // TODO Program.logger.Error($"{ex.Message}  {ex.StackTrace}");
+                                logger.Error($"{ex.Message}  {ex.StackTrace}");
                                 // MessageBox.Show($"JsonConvert.DeserializeObject {json} {ex.Message}");
                             }
                             
