@@ -12,7 +12,7 @@ using System.Web;
 
 namespace YahooLayer
 {
-    public class StockSummary : YahooFinance
+    public class StockSummary : YahooFinanceBase
     {
         public enum ValuationEnum
         {
@@ -98,7 +98,7 @@ namespace YahooLayer
 
                 // Price
                 searchTerm = SearchTerms.Find(x => x.Name == "Price").Term;
-                PriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 1);
+                PriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 1);
 
                 // EPS
                 searchTerm = SearchTerms.Find(x => x.Name == "EPS").Term;
@@ -113,7 +113,7 @@ namespace YahooLayer
                 // Dividend
                 searchTerm = SearchTerms.Find(x => x.Name == "Dividend").Term;
                 string dividend = GetValueFromHtmlBySearchTerm(_html, searchTerm, "0", 3);
-                if (!dividend.Contains(YahooFinance.NotApplicable) && dividend.IndexOf("(") > 1)
+                if (!dividend.Contains(YahooFinanceBase.NotApplicable) && dividend.IndexOf("(") > 1)
                 {
                     dividend = dividend.Substring(dividend.IndexOf("(") + 1);
                     dividend = dividend.Substring(0, dividend.IndexOf(")") - 1);
@@ -127,25 +127,25 @@ namespace YahooLayer
 
                 // One year target
                 searchTerm = SearchTerms.Find(x => x.Name == "One Year Target").Term;
-                OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 4).Trim();
+                OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 4).Trim();
                 if (OneYearTargetPriceString.NumericValue == 0)
                     OneYearTargetPriceString.StringValue = PriceString.StringValue;
 
                 // Price / Book
                 searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
-                PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 2);
+                PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 2);
 
                 //Profit Margin %
                 searchTerm = SearchTerms.Find(x => x.Name == "Profit Margin").Term;
-                string profitMarginString = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 2);
-                if (profitMarginString != YahooFinance.NotApplicable && profitMarginString.IndexOf("%") > 0)
+                string profitMarginString = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 2);
+                if (profitMarginString != YahooFinanceBase.NotApplicable && profitMarginString.IndexOf("%") > 0)
                     ProfitMarginString.StringValue = profitMarginString.Substring(0, profitMarginString.IndexOf("%"));
                 else
-                    ProfitMarginString.StringValue = YahooFinance.NotApplicable;
+                    ProfitMarginString.StringValue = YahooFinanceBase.NotApplicable;
 
                 // 52 Week Range
                 searchTerm = SearchTerms.Find(x => x.Name == "52 Week Range").Term;
-                string range = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 4);
+                string range = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 4);
                 int idx = range.IndexOf("-");
                 if (idx > 0)
                 {
@@ -161,11 +161,11 @@ namespace YahooLayer
 
                 // Forward P/E
                 searchTerm = SearchTerms.Find(x => x.Name == "Forward P/E").Term;
-                ForwardPEString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 2);
+                ForwardPEString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 2);
 
                 // Earnings Date
                 searchTerm = SearchTerms.Find(x => x.Name == "Earnings Date").Term;
-                EarningsDateString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinance.NotApplicable, 3);
+                EarningsDateString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 3);
 
                 Debug.WriteLine("GetStockSummary() Company Overview");
                 // Company Overview

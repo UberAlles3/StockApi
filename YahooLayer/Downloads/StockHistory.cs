@@ -13,7 +13,7 @@ namespace YahooLayer
     /// Goes out on the web to the Yahoo financial page and gets stock history data.
     /// It determines long and short term price trends for the stock.
     /// </summary>
-    public class StockHistory : YahooFinance
+    public class StockHistory : YahooFinanceBase
     {
         public enum TrendEnum
         {

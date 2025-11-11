@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace YahooLayer
 {
-    public class YahooFinance
+    public class YahooFinanceBase
     {
         public static string NotApplicable = "N/A";
         //private static readonly object syncObj = new object();
         private static string _ticker;
         private static List<SearchTerm> searchTerms = null; // singleton instance, load once
-        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinance));
+        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinanceBase));
         protected static Color _normalColor = Color.LightSteelBlue;
 
         public string Ticker
@@ -39,7 +39,7 @@ namespace YahooLayer
             set => searchTerms = value; 
         }
 
-        public YahooFinance()
+        public YahooFinanceBase()
         {
             // TODO takeout
             //SearchTerms = new List<SearchTerm>();
@@ -205,7 +205,7 @@ namespace YahooLayer
             string partial = "";
             List<string> numbers;
 
-            searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == searchTerm).Term;
+            searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == searchTerm).Term;
             partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 320);
 
             if (partial.Length < 100) // Some stocks like Vangaurd don't have cash flow, exit
@@ -229,7 +229,7 @@ namespace YahooLayer
 
         public bool NotNumber(string value)
         {
-            return value == YahooFinance.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;
+            return value == YahooFinanceBase.NotApplicable || value == "" || value == "--" || "-0123456789.,".IndexOf(value.Substring(0, 1)) < 0;
         }
 
         public static void RenewIPAddress()

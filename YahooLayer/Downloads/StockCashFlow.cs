@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace YahooLayer 
 {
-    public class StockCashFlow : YahooFinance
+    public class StockCashFlow : YahooFinanceBase
     {
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/cash-flow/";
 

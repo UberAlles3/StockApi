@@ -11,7 +11,7 @@ using YahooLayer;
 
 namespace StockApi
 {
-    public class Analyze : YahooFinance
+    public class Analyze : YahooFinanceBase
     {
         public enum BuyOrSell
         {

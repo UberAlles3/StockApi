@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace YahooLayer
 {
-    public class StockIncomeStatement : YahooFinance
+    public class StockIncomeStatement : YahooFinanceBase
     {
         private static readonly string _financialsUrl = "https://finance.yahoo.com/quote/???/financials/";
         public decimal ProfitGrowth = 1;

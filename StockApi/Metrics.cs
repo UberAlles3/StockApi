@@ -37,7 +37,7 @@ namespace StockApi
                 try
                 {
                     //await new MarketData().GetMarketData("^GSPC", false);
-                    YahooFinance.RenewIPAddress();
+                    YahooFinanceBase.RenewIPAddress();
                     Thread.Sleep(2000); // wait 2 seconds
                 }
                 catch

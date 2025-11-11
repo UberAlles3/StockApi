@@ -14,7 +14,7 @@ namespace YahooLayer
         private HttpClient _httpClient;
         private readonly string _baseUri = "https://query2.finance.yahoo.com/v8/finance/chart/[ticker]";
         private static readonly DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinance));
+        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinanceBase));
 
         public async Task<List<StockQuote>> GetQuotes(string ticker, DateTime startDate, int numberOfdays, string interval)
         {

@@ -12,7 +12,7 @@ using YahooLayer;
 
 namespace YahooLayer
 {
-    public class StockStatistics : YahooFinance
+    public class StockStatistics : YahooFinanceBase
     {
         private static readonly string _statisticsUrl = "https://finance.yahoo.com/quote/???/key-statistics/";
 
@@ -111,30 +111,30 @@ namespace YahooLayer
                     Debug.WriteLine("GetStockStatistics()");
 
                     // Total Cash
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Cash").Term;
-                    TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                    searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Total Cash").Term;
+                    TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 2);
 
                     if (TotalCashString == "--") // try again
                     {
                         Thread.Sleep(2000);
                         html = await GetHtmlForTicker(_statisticsUrl, Ticker);
                         // Total Cash
-                        searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Cash").Term;
-                        TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                        searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Total Cash").Term;
+                        TotalCashString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 2);
                     }
 
                     // Total Debt
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Total Debt").Term;
-                    TotalDebtString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                    searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Total Debt").Term;
+                    TotalDebtString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 2);
                     // Debt/Equity Ratio
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
-                    DebtEquityString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 2);
+                    searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
+                    DebtEquityString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 2);
 
 
                     // Short Interest
-                    searchTerm = YahooFinance.SearchTerms.Find(x => x.Name == "Short Interest").Term;
-                    ShortInterestString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinance.NotApplicable, 4);
-                    if (ShortInterestString.StringValue != YahooFinance.NotApplicable && ShortInterestString.StringValue.IndexOf("%") > 0)
+                    searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Short Interest").Term;
+                    ShortInterestString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 4);
+                    if (ShortInterestString.StringValue != YahooFinanceBase.NotApplicable && ShortInterestString.StringValue.IndexOf("%") > 0)
                         ShortInterestString.StringValue = ShortInterestString.StringValue.Substring(0, ShortInterestString.StringValue.IndexOf("%"));
                     else
                         ShortInterestString.StringValue = "--";
