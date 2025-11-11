@@ -28,11 +28,8 @@ namespace StockApi
         public static DataTable TickerTradesDataTable = null;
 
         // Markets
-        MarketData _marketData;
-        public MarketData Market_SandP;
-        public MarketData Market_Dow;
-        public MarketData Market_Nasdaq;
-
+        Markets _markets = new Markets();
+        
         // Excel files
         private static string _excelFilePath = "";
         private static DateTime _tradesImportDateTime = DateTime.Now.AddYears(-2);
@@ -78,7 +75,6 @@ namespace StockApi
         {
             InitializeComponent();
             _settings = ConfigurationManager.GetSection("Settings") as List<Setting>;
-            _marketData = new MarketData();
             SetupDailyTimer();
         }
 
@@ -123,6 +119,8 @@ namespace StockApi
 
             _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
+            // Markets
+            _markets = new Markets();
             panelMarkets.Visible = false;
 
             GetNewsEarnings();
@@ -160,21 +158,16 @@ namespace StockApi
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
-            Market_SandP = new MarketData();
-            Market_Dow = new MarketData();
-            Market_Nasdaq = new MarketData();
             try
             {
-                Market_SandP = await _marketData.GetMarketData("^GSPC", true);
-                Market_Dow = await _marketData.GetMarketData("^DJI", true);
-                Market_Nasdaq = await _marketData.GetMarketData("^IXIC", true);
+                _markets.GetAllMarketData();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Market data failed." + Environment.NewLine + ex.Message);
-                Market_SandP.CurrentLevel.StringValue = "0";
-                Market_Dow.CurrentLevel.StringValue = "0";
-                Market_Nasdaq.CurrentLevel.StringValue = "0";
+                _markets.SAndP.CurrentLevel.StringValue = "0";
+                _markets.Dow.CurrentLevel.StringValue = "0";
+                _markets.Nasdaq.CurrentLevel.StringValue = "0";
             }
 
             ////////////////////////////////////////////////////////
@@ -455,23 +448,23 @@ namespace StockApi
                     lblSellPrice.Text = "0.00";
                     errorPlace = "Setting labels #2";
                     /////////  Market Data
-                    lblSandP500.Text = Market_SandP.CurrentLevel.NumericValue.ToString("N0");
-                    lblSandP500Change.Text = Market_SandP.Change.ToString();
-                    lblSandP500PercChange.Text = Market_SandP.PercentageChange.ToString("0.0") + "%";
-                    lblSandP500Change.ForeColor = Market_SandP.MarketColor;
-                    lblSandP500PercChange.ForeColor = Market_SandP.MarketColor;
+                    lblSandP500.Text = _markets.SAndP.CurrentLevel.NumericValue.ToString("N0");
+                    lblSandP500Change.Text = _markets.SAndP.Change.ToString();
+                    lblSandP500PercChange.Text = _markets.SAndP.PercentageChange.ToString("0.0") + "%";
+                    lblSandP500Change.ForeColor = _markets.SAndP.MarketColor;
+                    lblSandP500PercChange.ForeColor = _markets.SAndP.MarketColor;
 
-                    lblDOW30.Text = Market_Dow.CurrentLevel.NumericValue.ToString("N0");
-                    lblDOW30Change.Text = Market_Dow.Change.ToString();
-                    lblDOW30PercChange.Text = Market_Dow.PercentageChange.ToString("0.0") + "%";
-                    lblDOW30Change.ForeColor = Market_Dow.MarketColor;
-                    lblDOW30PercChange.ForeColor = Market_Dow.MarketColor;
+                    lblDOW30.Text = _markets.Dow.CurrentLevel.NumericValue.ToString("N0");
+                    lblDOW30Change.Text = _markets.Dow.Change.ToString();
+                    lblDOW30PercChange.Text = _markets.Dow.PercentageChange.ToString("0.0") + "%";
+                    lblDOW30Change.ForeColor = _markets.Dow.MarketColor;
+                    lblDOW30PercChange.ForeColor = _markets.Dow.MarketColor;
 
-                    lblNasdaq.Text = Market_Nasdaq.CurrentLevel.NumericValue.ToString("N0");
-                    lblNasdaqChange.Text = Market_Nasdaq.Change.ToString();
-                    lblNasdaqPercChange.Text = Market_Nasdaq.PercentageChange.ToString("0.0") + "%";
-                    lblNasdaqChange.ForeColor = Market_Nasdaq.MarketColor;
-                    lblNasdaqPercChange.ForeColor = Market_Nasdaq.MarketColor;
+                    lblNasdaq.Text = _markets.Nasdaq.CurrentLevel.NumericValue.ToString("N0");
+                    lblNasdaqChange.Text = _markets.Nasdaq.Change.ToString();
+                    lblNasdaqPercChange.Text = _markets.Nasdaq.PercentageChange.ToString("0.0") + "%";
+                    lblNasdaqChange.ForeColor = _markets.Nasdaq.MarketColor;
+                    lblNasdaqPercChange.ForeColor = _markets.Nasdaq.MarketColor;
 
                     // Calculated PE can only be figured after both summary and finacial data is combined
                     _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads);
@@ -936,11 +929,11 @@ namespace StockApi
         private async void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            if(Market_Dow == null)
+            if(_markets.Dow == null)
             {
-                Market_Dow = await _marketData.GetMarketData("^DJI", true);
+                _markets.Dow = await _markets.GetMarketData("^DJI", true);
             }
-            performance.GetLatestBuyPerformance(Market_Dow, PositionsDataTable, TradesDataTable);
+            performance.GetLatestBuyPerformance(_markets.Dow, PositionsDataTable, TradesDataTable);
             performance.ShowPerformanceForm(this);  
         }
         private void latestSellsToolStripMenuItem_Click(object sender, EventArgs e)

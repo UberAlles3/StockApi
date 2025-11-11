@@ -16,6 +16,7 @@ namespace StockApi
         //public string Ticker { get; set; } = "";
         public StringSafeType<decimal> PreviousClose { get; set; } = new StringSafeType<decimal>("");
         public StringSafeType<decimal> CurrentLevel { get; set; } = new StringSafeType<decimal>("");
+
         public int Change
         {
             get => Convert.ToInt32(CurrentLevel.NumericValue - PreviousClose.NumericValue);
@@ -46,6 +47,31 @@ namespace StockApi
 
                 return color;
             }
+        }
+    }
+
+    public class Markets
+    {
+        private MarketData dow;
+        private MarketData sAndPdow;
+        private MarketData nasdaq;
+
+        public MarketData Dow { get => dow; set => dow = value; }
+        public MarketData Nasdaq { get => nasdaq; set => nasdaq = value; }
+        public MarketData SAndP { get => sAndPdow; set => sAndPdow = value; }
+
+        public Markets()
+        {
+            Dow = new MarketData();
+            Nasdaq = new MarketData();
+            SAndP = new MarketData();
+        }
+
+        public async void GetAllMarketData()
+        {
+            Dow = await GetMarketData("^GSPC", true);
+            Nasdaq = await GetMarketData("^DJI", true);
+            SAndP = await GetMarketData("^IXIC", true);
         }
 
         public async Task<MarketData> GetMarketData(string ticker, bool showMessageBox)
