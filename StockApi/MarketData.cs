@@ -67,16 +67,28 @@ namespace StockApi
             SAndP = new MarketData();
         }
 
-        public async void GetAllMarketData()
+        public async Task<Markets> GetAllMarketData()
         {
-            Dow = await GetMarketData("^GSPC", true);
-            Nasdaq = await GetMarketData("^DJI", true);
-            SAndP = await GetMarketData("^IXIC", true);
+            try
+            {
+                Dow = await GetMarketData("^GSPC", true);
+                Nasdaq = await GetMarketData("^DJI", true);
+                SAndP = await GetMarketData("^IXIC", true);
+            }
+            catch (Exception ex)
+            {
+                Dow.CurrentLevel.StringValue = "0";
+                Nasdaq.CurrentLevel.StringValue = "0";
+                SAndP.CurrentLevel.StringValue = "0";
+            }
+
+            return this;
         }
 
         public async Task<MarketData> GetMarketData(string ticker, bool showMessageBox)
         {
             FpmAPI fpmAPI = new FpmAPI();
+          
             MarketData marketData = await fpmAPI.GetQuote(ticker, showMessageBox);
 
             return marketData;

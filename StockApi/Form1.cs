@@ -78,7 +78,7 @@ namespace StockApi
             SetupDailyTimer();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
             ////// Testing section
             //FpmAPI fpmAPI = new FpmAPI();
@@ -87,7 +87,6 @@ namespace StockApi
             //                          crt = Analyze.CrunchThree(10D, 12D, 20D);
             // For dark menu.
             //Program.logger.Error("testing");
-
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
  
@@ -119,11 +118,10 @@ namespace StockApi
 
             _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
-            // Markets
-            _markets = new Markets();
-            panelMarkets.Visible = false;
-
             GetNewsEarnings();
+            _markets = new Markets();
+            await _markets.GetAllMarketData();
+            DisplayMarketData();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -165,9 +163,6 @@ namespace StockApi
             catch (Exception ex)
             {
                 MessageBox.Show($"Market data failed." + Environment.NewLine + ex.Message);
-                _markets.SAndP.CurrentLevel.StringValue = "0";
-                _markets.Dow.CurrentLevel.StringValue = "0";
-                _markets.Nasdaq.CurrentLevel.StringValue = "0";
             }
 
             ////////////////////////////////////////////////////////
@@ -448,23 +443,7 @@ namespace StockApi
                     lblSellPrice.Text = "0.00";
                     errorPlace = "Setting labels #2";
                     /////////  Market Data
-                    lblSandP500.Text = _markets.SAndP.CurrentLevel.NumericValue.ToString("N0");
-                    lblSandP500Change.Text = _markets.SAndP.Change.ToString();
-                    lblSandP500PercChange.Text = _markets.SAndP.PercentageChange.ToString("0.0") + "%";
-                    lblSandP500Change.ForeColor = _markets.SAndP.MarketColor;
-                    lblSandP500PercChange.ForeColor = _markets.SAndP.MarketColor;
-
-                    lblDOW30.Text = _markets.Dow.CurrentLevel.NumericValue.ToString("N0");
-                    lblDOW30Change.Text = _markets.Dow.Change.ToString();
-                    lblDOW30PercChange.Text = _markets.Dow.PercentageChange.ToString("0.0") + "%";
-                    lblDOW30Change.ForeColor = _markets.Dow.MarketColor;
-                    lblDOW30PercChange.ForeColor = _markets.Dow.MarketColor;
-
-                    lblNasdaq.Text = _markets.Nasdaq.CurrentLevel.NumericValue.ToString("N0");
-                    lblNasdaqChange.Text = _markets.Nasdaq.Change.ToString();
-                    lblNasdaqPercChange.Text = _markets.Nasdaq.PercentageChange.ToString("0.0") + "%";
-                    lblNasdaqChange.ForeColor = _markets.Nasdaq.MarketColor;
-                    lblNasdaqPercChange.ForeColor = _markets.Nasdaq.MarketColor;
+                    DisplayMarketData();
 
                     // Calculated PE can only be figured after both summary and finacial data is combined
                     _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads);
@@ -661,7 +640,7 @@ namespace StockApi
                         lblEndCashPosition4YearsAgo.ForeColor = _stockDownloads.stockCashFlow.EndCashPosition4Color;
 
                         // Basic EPS
-                        lblBasicEpsTTM.Text = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue.ToString("0.00"); 
+                        lblBasicEpsTTM.Text = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue.ToString("0.00");
                         lblBasicEpsTTM.ForeColor = _stockDownloads.stockIncomeStatement.BasicEpsTtmColor;
                         lblBasicEps2YearsAgo.Text = _stockDownloads.stockIncomeStatement.BasicEps2String.NumericValue.ToString("0.00");
                         lblBasicEps2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.BasicEps2Color;
@@ -703,6 +682,27 @@ namespace StockApi
                 ResetFormControls();
                 MessageBox.Show($"PostSummaryWebCall()\n {errorPlace}\n Error: {ex.Message} {ex.InnerException} {ex.StackTrace}");
             }
+        }
+
+        private void DisplayMarketData()
+        {
+            lblSandP500.Text = _markets.SAndP.CurrentLevel.NumericValue.ToString("N0");
+            lblSandP500Change.Text = _markets.SAndP.Change.ToString();
+            lblSandP500PercChange.Text = _markets.SAndP.PercentageChange.ToString("0.0") + "%";
+            lblSandP500Change.ForeColor = _markets.SAndP.MarketColor;
+            lblSandP500PercChange.ForeColor = _markets.SAndP.MarketColor;
+
+            lblDOW30.Text = _markets.Dow.CurrentLevel.NumericValue.ToString("N0");
+            lblDOW30Change.Text = _markets.Dow.Change.ToString();
+            lblDOW30PercChange.Text = _markets.Dow.PercentageChange.ToString("0.0") + "%";
+            lblDOW30Change.ForeColor = _markets.Dow.MarketColor;
+            lblDOW30PercChange.ForeColor = _markets.Dow.MarketColor;
+
+            lblNasdaq.Text = _markets.Nasdaq.CurrentLevel.NumericValue.ToString("N0");
+            lblNasdaqChange.Text = _markets.Nasdaq.Change.ToString();
+            lblNasdaqPercChange.Text = _markets.Nasdaq.PercentageChange.ToString("0.0") + "%";
+            lblNasdaqChange.ForeColor = _markets.Nasdaq.MarketColor;
+            lblNasdaqPercChange.ForeColor = _markets.Nasdaq.MarketColor;
         }
 
         private void btnAnalyze_Click(object sender, EventArgs e)
