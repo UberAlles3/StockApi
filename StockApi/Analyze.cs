@@ -44,7 +44,7 @@ namespace StockApi
             priceTrendMetric = SoftLimit(priceTrendMetric, .5M, 2M);
             priceTrendMetric = AdjustMetric(priceTrendMetric, -18M);
 
-            if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100) // Overvalued stocks get downgraded
+            if (stockDownloads.stockSummary.ForwardPEString.NumericValue > 100) // Color.FromArgb(205, 232, 202);Overvalued stocks get downgraded
                 priceTrendMetric = priceTrendMetric - .01M;
 
             output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".000")}");

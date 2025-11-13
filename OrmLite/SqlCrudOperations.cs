@@ -285,17 +285,18 @@ namespace SqlLayer
 
         //////////////////////////////////////////////////////////////
         ///                         Metrics
-        public List<SqlMetric> GetMetricList()
+        public List<SqlMetric> GetMetricList(DateTime minDate, string ticker)
         {
             List<SqlMetric> sqlMetricList;
-
-            Debug.WriteLine("GetMetrics()");
 
             var factory = FinancialStatementFactory();
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlMetric>();
-                sqlMetricList = db.Select<SqlMetric>(x => x.Year == DateTime.Now.Year && x.Month == DateTime.Now.Month);
+                if(ticker == null)
+                    sqlMetricList = db.Select<SqlMetric>(x => x.Year*100+x.Month >= minDate.Year*100+minDate.Month);
+                else
+                    sqlMetricList = db.Select<SqlMetric>(x => x.Year * 100 + x.Month >= minDate.Year * 100 + minDate.Month && x.Ticker == ticker);
             }
 
             return sqlMetricList;

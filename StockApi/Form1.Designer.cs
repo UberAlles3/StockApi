@@ -30,11 +30,11 @@ namespace StockApi
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnGetOne = new System.Windows.Forms.Button();
             this.txtStockTicker = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -1561,25 +1561,25 @@ namespace StockApi
             this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridView1.Location = new System.Drawing.Point(10, 69);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -1788,25 +1788,25 @@ namespace StockApi
             this.dataGridView2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.ColumnHeadersVisible = false;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridView2.Location = new System.Drawing.Point(8, 407);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 25;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -2432,7 +2432,7 @@ namespace StockApi
             // 
             this.label70.BackColor = System.Drawing.Color.Transparent;
             this.label70.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label70.Location = new System.Drawing.Point(14, 18);
+            this.label70.Location = new System.Drawing.Point(14, 54);
             this.label70.Name = "label70";
             this.label70.Size = new System.Drawing.Size(62, 22);
             this.label70.TabIndex = 41;
@@ -2444,7 +2444,7 @@ namespace StockApi
             this.lblSandP500.BackColor = System.Drawing.Color.Transparent;
             this.lblSandP500.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblSandP500.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblSandP500.Location = new System.Drawing.Point(68, 18);
+            this.lblSandP500.Location = new System.Drawing.Point(68, 54);
             this.lblSandP500.Name = "lblSandP500";
             this.lblSandP500.Size = new System.Drawing.Size(57, 22);
             this.lblSandP500.TabIndex = 42;
@@ -2456,7 +2456,7 @@ namespace StockApi
             this.lblSandP500Change.BackColor = System.Drawing.Color.Transparent;
             this.lblSandP500Change.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblSandP500Change.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblSandP500Change.Location = new System.Drawing.Point(123, 18);
+            this.lblSandP500Change.Location = new System.Drawing.Point(123, 54);
             this.lblSandP500Change.Name = "lblSandP500Change";
             this.lblSandP500Change.Size = new System.Drawing.Size(57, 22);
             this.lblSandP500Change.TabIndex = 43;
@@ -2488,7 +2488,7 @@ namespace StockApi
             this.lblNasdaqPercChange.BackColor = System.Drawing.Color.Transparent;
             this.lblNasdaqPercChange.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblNasdaqPercChange.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblNasdaqPercChange.Location = new System.Drawing.Point(186, 58);
+            this.lblNasdaqPercChange.Location = new System.Drawing.Point(186, 34);
             this.lblNasdaqPercChange.Name = "lblNasdaqPercChange";
             this.lblNasdaqPercChange.Size = new System.Drawing.Size(43, 22);
             this.lblNasdaqPercChange.TabIndex = 52;
@@ -2500,7 +2500,7 @@ namespace StockApi
             this.lblDOW30PercChange.BackColor = System.Drawing.Color.Transparent;
             this.lblDOW30PercChange.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblDOW30PercChange.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblDOW30PercChange.Location = new System.Drawing.Point(186, 37);
+            this.lblDOW30PercChange.Location = new System.Drawing.Point(186, 14);
             this.lblDOW30PercChange.Name = "lblDOW30PercChange";
             this.lblDOW30PercChange.Size = new System.Drawing.Size(43, 22);
             this.lblDOW30PercChange.TabIndex = 51;
@@ -2512,7 +2512,7 @@ namespace StockApi
             this.lblSandP500PercChange.BackColor = System.Drawing.Color.Transparent;
             this.lblSandP500PercChange.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblSandP500PercChange.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblSandP500PercChange.Location = new System.Drawing.Point(186, 18);
+            this.lblSandP500PercChange.Location = new System.Drawing.Point(186, 54);
             this.lblSandP500PercChange.Name = "lblSandP500PercChange";
             this.lblSandP500PercChange.Size = new System.Drawing.Size(43, 22);
             this.lblSandP500PercChange.TabIndex = 50;
@@ -2524,7 +2524,7 @@ namespace StockApi
             this.lblNasdaq.BackColor = System.Drawing.Color.Transparent;
             this.lblNasdaq.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblNasdaq.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblNasdaq.Location = new System.Drawing.Point(68, 58);
+            this.lblNasdaq.Location = new System.Drawing.Point(68, 34);
             this.lblNasdaq.Name = "lblNasdaq";
             this.lblNasdaq.Size = new System.Drawing.Size(57, 22);
             this.lblNasdaq.TabIndex = 48;
@@ -2536,7 +2536,7 @@ namespace StockApi
             this.lblNasdaqChange.BackColor = System.Drawing.Color.Transparent;
             this.lblNasdaqChange.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblNasdaqChange.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblNasdaqChange.Location = new System.Drawing.Point(123, 58);
+            this.lblNasdaqChange.Location = new System.Drawing.Point(123, 34);
             this.lblNasdaqChange.Name = "lblNasdaqChange";
             this.lblNasdaqChange.Size = new System.Drawing.Size(57, 22);
             this.lblNasdaqChange.TabIndex = 49;
@@ -2547,7 +2547,7 @@ namespace StockApi
             // 
             this.label76.BackColor = System.Drawing.Color.Transparent;
             this.label76.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label76.Location = new System.Drawing.Point(14, 58);
+            this.label76.Location = new System.Drawing.Point(14, 34);
             this.label76.Name = "label76";
             this.label76.Size = new System.Drawing.Size(62, 22);
             this.label76.TabIndex = 47;
@@ -2559,7 +2559,7 @@ namespace StockApi
             this.lblDOW30.BackColor = System.Drawing.Color.Transparent;
             this.lblDOW30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblDOW30.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblDOW30.Location = new System.Drawing.Point(68, 37);
+            this.lblDOW30.Location = new System.Drawing.Point(68, 14);
             this.lblDOW30.Name = "lblDOW30";
             this.lblDOW30.Size = new System.Drawing.Size(57, 22);
             this.lblDOW30.TabIndex = 45;
@@ -2571,7 +2571,7 @@ namespace StockApi
             this.lblDOW30Change.BackColor = System.Drawing.Color.Transparent;
             this.lblDOW30Change.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblDOW30Change.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblDOW30Change.Location = new System.Drawing.Point(123, 37);
+            this.lblDOW30Change.Location = new System.Drawing.Point(123, 14);
             this.lblDOW30Change.Name = "lblDOW30Change";
             this.lblDOW30Change.Size = new System.Drawing.Size(57, 22);
             this.lblDOW30Change.TabIndex = 46;
@@ -2582,7 +2582,7 @@ namespace StockApi
             // 
             this.label75.BackColor = System.Drawing.Color.Transparent;
             this.label75.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label75.Location = new System.Drawing.Point(14, 37);
+            this.label75.Location = new System.Drawing.Point(14, 14);
             this.label75.Name = "label75";
             this.label75.Size = new System.Drawing.Size(62, 22);
             this.label75.TabIndex = 44;

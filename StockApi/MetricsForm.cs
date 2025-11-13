@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using YahooLayer;
+using SqlLayer;
 
 namespace StockApi
 {
@@ -27,12 +28,41 @@ namespace StockApi
         private void MetricsForm_Load(object sender, EventArgs e)
         {
             txtTickerList.Text = _ticker;
-
-            
+            comboBox1.Items.Add("Lastest");
+            comboBox1.Items.Add("Last 2 Months");
+            comboBox1.Items.Add("Last Year");
+            comboBox1.SelectedIndex = 0;
         }
 
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            List<SqlMetric> metrics = new List<SqlMetric>();
+            string ticker = txtTicker.Text;
 
-        private void BindListToHistoricPriceGrid(List<SqlMetric> metrics)
+            txtTicker.Text = ticker = ticker.ToUpper();
+
+            if (ticker.Trim() == "")
+                ticker = null;
+            else
+                ticker = ticker.ToUpper();
+
+            // Get All the metric rows
+            SqlCrudOperations sqlCrudOperations = new SqlCrudOperations();
+
+            if (comboBox1.SelectedIndex == 0)
+                metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddDays(-1), ticker);
+            if (comboBox1.SelectedIndex == 1)
+                metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-1), ticker);
+            if (comboBox1.SelectedIndex == 2)
+                metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-11), ticker);
+
+            metrics = metrics.OrderBy(x => x.Ticker).ThenBy(x => x.Year).ThenBy(x => x.Month).ToList();
+
+            BindListToMetricGrid(metrics);
+            ColorGrid(metrics);
+        }
+
+        private void BindListToMetricGrid(List<SqlMetric> metrics)
         {
             var bindingList = new BindingList<SqlMetric>(metrics);
             var source = new BindingSource(bindingList, null);
@@ -40,17 +70,167 @@ namespace StockApi
             dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
             dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
             dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
+            dataGridView1.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
             dataGridView1.DataSource = source.DataSource;
             dataGridView1.Columns[0].Visible = false;
-            dataGridView1.Columns[1].Visible = false;
-            dataGridView1.Columns[2].HeaderText = "Date";
-            dataGridView1.Columns[3].Width = 120;
-            dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
-            dataGridView1.Columns[3].DefaultCellStyle.Format = "N2";
-            dataGridView1.Columns[4].Width = 120;
+            dataGridView1.Columns[1].HeaderText = "Ticker";
+            dataGridView1.Columns[1].Width = 60;
+            dataGridView1.Columns[2].HeaderText = "Year";
+            dataGridView1.Columns[2].Width = 50;
+            dataGridView1.Columns[3].HeaderText = "Month";
+            dataGridView1.Columns[3].Width = 50;
+            
+            dataGridView1.Columns[4].HeaderText = "Price Trend";
+            dataGridView1.Columns[4].Width = 55;
             dataGridView1.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[4].DefaultCellStyle.Format = "N3";
+            
+            dataGridView1.Columns[5].HeaderText = "Earnings Per Share";
+            dataGridView1.Columns[5].Width = 55;
+            dataGridView1.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[5].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[6].HeaderText = "Target Price";
+            dataGridView1.Columns[6].Width = 55;
+            dataGridView1.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[6].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[7].HeaderText = "Price Book";
+            dataGridView1.Columns[7].Width = 55;
+            dataGridView1.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[7].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[8].HeaderText = "Dividend";
+            dataGridView1.Columns[8].Width = 60;
+            dataGridView1.Columns[8].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[8].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[9].HeaderText = "Profit Margin";
+            dataGridView1.Columns[9].Width = 55;
+            dataGridView1.Columns[9].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[9].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[10].HeaderText = "Revenue";
+            dataGridView1.Columns[10].Width = 60;
+            dataGridView1.Columns[10].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[10].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[11].HeaderText = "Profit";
+            dataGridView1.Columns[11].Width = 55;
+            dataGridView1.Columns[11].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[11].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[12].HeaderText = "Basic EPS";
+            dataGridView1.Columns[12].Width = 55;
+            dataGridView1.Columns[12].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[12].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[13].HeaderText = "Cash Debt";
+            dataGridView1.Columns[13].Width = 55;
+            dataGridView1.Columns[13].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[13].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[14].HeaderText = "Valuation";
+            dataGridView1.Columns[14].Width = 60;
+            dataGridView1.Columns[14].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[14].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[15].HeaderText = "Cash Flow";
+            dataGridView1.Columns[15].Width = 55;
+            dataGridView1.Columns[15].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[15].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[16].HeaderText = "Final Metric";
+            dataGridView1.Columns[16].Width = 55;
+            dataGridView1.Columns[16].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[16].DefaultCellStyle.Format = "N3";
+
+            dataGridView1.Columns[17].HeaderText = "Update Date";
+            dataGridView1.Columns[17].Width = 80;
+            dataGridView1.Columns[17].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            dataGridView1.Columns[17].DefaultCellStyle.Format = "MM/dd/yyyy";
+
             dataGridView1.Refresh();
         }
+
+        private void ColorGrid(List<SqlMetric> metrics)
+        {
+            string ticker = "";
+            double previous = 0;
+            double current = 0;
+            int i = 0;
+            foreach (SqlMetric r in metrics)
+            {
+                if (ticker != r.Ticker)
+                {
+                    ticker = r.Ticker;
+                    previous = r.FinalMetric;
+                }
+
+                if (r.FinalMetric > previous * 1.032)
+                {
+                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.Lime;
+                }
+                else if (r.FinalMetric > previous * 1.01)
+                {
+                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.FromArgb(205, 242, 202);
+                }
+                else if (r.FinalMetric < previous * .97)
+                {
+                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.Red;
+                }
+                else if (r.FinalMetric < previous * .99)
+                {
+                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.FromArgb(242, 202, 202); 
+                }
+
+                i++;
+            }
+                    //for (i2 = i; i2 < i + Math.Min(5, (TickerTradesDataTable.Rows.Count)) && i < TickerTradesDataTable.Rows.Count - Math.Min(4, (TickerTradesDataTable.Rows.Count - 1)); i2++)
+                    //{
+                    //    if (TickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max) // High - Green coloring
+                    //    {
+                    //        current = previous = 0;
+                    //        try
+                    //        {
+                    //            if (i2 > 0)
+                    //                previous = float.Parse(TickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                    //            current = float.Parse(TickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
+                    //        }
+                    //        catch { } // eat the error
+                    //        if (current > previous)
+                    //        {
+                    //            dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Lime;
+                    //            if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Lime)
+                    //                dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
+                    //        }
+                    //    }
+                    //    if (TickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min) // Low - Red coloring
+                    //    {
+                    //        // get previous, if previous < than this low, don't color and leave previous alone
+                    //        current = previous = 0;
+                    //        try
+                    //        {
+                    //            if (i2 > 0)
+                    //                previous = float.Parse(TickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
+                    //            else
+                    //                previous = 10000;
+                    //            current = float.Parse(TickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
+                    //        }
+                    //        catch { } // eat the error
+                    //        if (current < previous)
+                    //        {
+                    //            dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Red;
+                    //            if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Red)
+                    //                dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
+                    //        }
+                    //    }
+                    //}
+
+            //}
+        }
+
 
 
         private async void btnGetAll_Click(object sender, EventArgs e)

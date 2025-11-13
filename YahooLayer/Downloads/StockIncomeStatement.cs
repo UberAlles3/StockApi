@@ -238,7 +238,7 @@ namespace YahooLayer
             // 2. How large the profits are. We can use current profit margin. >15% is a high profit margin. -15% is a bad profit margin.
             // 3. How fast profits are growing/decreasing. (Current profit / Prior Profit)
             // TODO
-            ProfitGrowth = 1; // SetYearOverYearTrend(Profit4String, Profit2String, ProfitTtmString, 0);
+            ProfitGrowth = SetYearOverYearTrend(Profit4String, Profit2String, ProfitTtmString, 0);
 
             return true;
         }
