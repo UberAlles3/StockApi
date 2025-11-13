@@ -46,5 +46,10 @@ namespace SqlLayer.SQL_Models
         public DateTime? EarningsDate { get; set; }
 
         public DateTime UpdateDate { get; set; }
+
+        public override string ToString()
+        {
+            return $"Ticker: {Ticker}, EarningsDate: {EarningsDate}, UpdateDate: {UpdateDate}";
+        }
     }
 }

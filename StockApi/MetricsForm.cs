@@ -31,7 +31,7 @@ namespace StockApi
             comboBox1.Items.Add("Lastest");
             comboBox1.Items.Add("Last 2 Months");
             comboBox1.Items.Add("Last Year");
-            comboBox1.SelectedIndex = 0;
+            comboBox1.SelectedIndex = 1;
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
