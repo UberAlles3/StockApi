@@ -37,6 +37,7 @@ namespace StockApi
         private void btnSearch_Click(object sender, EventArgs e)
         {
             List<SqlMetric> metrics = new List<SqlMetric>();
+            List<SqlMetric> bigMovers = new List<SqlMetric>();
             string ticker = txtTicker.Text;
 
             txtTicker.Text = ticker = ticker.ToUpper();
@@ -57,6 +58,10 @@ namespace StockApi
                 metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-11), ticker);
 
             metrics = metrics.OrderBy(x => x.Ticker).ThenBy(x => x.Year).ThenBy(x => x.Month).ToList();
+            bigMovers = GetBigMovers(metrics);
+
+            if (chkBigChanges.Checked == true)
+                metrics = bigMovers;
 
             BindListToMetricGrid(metrics);
             ColorGrid(metrics);
@@ -154,6 +159,37 @@ namespace StockApi
             dataGridView1.Refresh();
         }
 
+        private List<SqlMetric> GetBigMovers(List<SqlMetric> metrics)
+        {
+            List<SqlMetric> bigMovers = new List<SqlMetric>();
+
+            string ticker = "";
+            double previous = 0;
+            SqlMetric p = null;
+            foreach (SqlMetric r in metrics)
+            {
+                if (ticker != r.Ticker)
+                {
+                    p = r;
+                    ticker = r.Ticker;
+                    previous = r.FinalMetric;
+                }
+
+                if (r.FinalMetric > previous * 1.032)
+                {
+                    bigMovers.Add(p);
+                    bigMovers.Add(r);
+                }
+                else if (r.FinalMetric < previous * .97)
+                {
+                    bigMovers.Add(p);
+                    bigMovers.Add(r);
+                }
+            }
+
+            return bigMovers;
+        }
+
         private void ColorGrid(List<SqlMetric> metrics)
         {
             string ticker = "";
@@ -187,51 +223,7 @@ namespace StockApi
 
                 i++;
             }
-                    //for (i2 = i; i2 < i + Math.Min(5, (TickerTradesDataTable.Rows.Count)) && i < TickerTradesDataTable.Rows.Count - Math.Min(4, (TickerTradesDataTable.Rows.Count - 1)); i2++)
-                    //{
-                    //    if (TickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == max) // High - Green coloring
-                    //    {
-                    //        current = previous = 0;
-                    //        try
-                    //        {
-                    //            if (i2 > 0)
-                    //                previous = float.Parse(TickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
-                    //            current = float.Parse(TickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
-                    //        }
-                    //        catch { } // eat the error
-                    //        if (current > previous)
-                    //        {
-                    //            dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Lime;
-                    //            if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Lime)
-                    //                dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
-                    //        }
-                    //    }
-                    //    if (TickerTradesDataTable.Rows[i2].ItemArray[5].ToString() == min) // Low - Red coloring
-                    //    {
-                    //        // get previous, if previous < than this low, don't color and leave previous alone
-                    //        current = previous = 0;
-                    //        try
-                    //        {
-                    //            if (i2 > 0)
-                    //                previous = float.Parse(TickerTradesDataTable.Rows[i2 - 1].ItemArray[5].ToString());
-                    //            else
-                    //                previous = 10000;
-                    //            current = float.Parse(TickerTradesDataTable.Rows[i2].ItemArray[5].ToString());
-                    //        }
-                    //        catch { } // eat the error
-                    //        if (current < previous)
-                    //        {
-                    //            dataGridView2.Rows[i2].Cells[5].Style.ForeColor = Color.Red;
-                    //            if (i2 > 1 && dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor == Color.Red)
-                    //                dataGridView2.Rows[i2 - 1].Cells[5].Style.ForeColor = Color.Silver;
-                    //        }
-                    //    }
-                    //}
-
-            //}
         }
-
-
 
         private async void btnGetAll_Click(object sender, EventArgs e)
         {

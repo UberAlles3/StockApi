@@ -266,6 +266,7 @@ namespace YahooLayer
 
             return true;
         }
+
         public void SetCalculatedPE(StockDownloads stockDownloads)
         {
             // Combine profit growth and margin into a number

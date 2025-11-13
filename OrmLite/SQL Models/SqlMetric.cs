@@ -47,5 +47,10 @@ namespace SqlLayer.SQL_Models
         public double FinalMetric { get; set; }
 
         public DateTime UpdateDate { get; set; }
+
+        public override string ToString()
+        {
+            return $"Ticker: {Ticker}, Year: {Year}, Month: {Month}, UpdateDate: {UpdateDate}";
+        }
     }
 }
