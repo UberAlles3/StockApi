@@ -76,6 +76,12 @@ namespace YahooLayer
             return found;
         }
 
+        public async Task<bool> GetIncomeStatement(string ticker)
+        {
+            _ticker = ticker;
+            return await GetIncomeStatement();
+        }
+
         public async Task<bool> GetIncomeStatement()
         {
             stockIncomeStatement = new StockIncomeStatement(); // initializes all properties

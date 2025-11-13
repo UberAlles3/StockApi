@@ -788,17 +788,29 @@ namespace StockApi
         //////////////////////////////
         //         News / Earnings
         //////////////////////////////
-        private void GetNewsEarnings()
+        private async void GetNewsEarnings()
         {
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();
-            List<SqlSummary> entities = _finacialStatement.GetAllSummaryList().Where(x => x.EarningsDate != null && x.EarningsDate > DateTime.Now.AddDays(-2) && x.EarningsDate < DateTime.Now.AddDays(1)).OrderBy(x => x.EarningsDate).ToList();
+            List<SqlSummary> entities = _finacialStatement.GetAllSummaryList().Where(x => x.EarningsDate != null && x.EarningsDate > DateTime.Now.AddDays(-4) && x.EarningsDate < DateTime.Now.AddDays(1)).OrderBy(x => x.EarningsDate).ToList();
             entities = entities.Take(24).ToList(); // Only take first 24
             //entities.ForEach(x => x.EarningsDate = (x.EarningsDate ?? DateTime.MinValue));
 
             StringBuilder sb = new StringBuilder();
             foreach (SqlSummary x in entities)
             {
-                if((x.EarningsDate ?? DateTime.MinValue).Date == DateTime.Now.Date.AddDays(-1))
+                // Delete sql data so the new earnings data can be refreshed
+                if ((x.EarningsDate ?? DateTime.MinValue).Date > DateTime.Now.Date.AddDays(-4) && (x.EarningsDate ?? DateTime.MinValue).Date < DateTime.Now.Date.AddDays(-1))
+                {
+                    List<SqlIncomeStatement> statements = _finacialStatement.GetIncomeStatementList(x.Ticker);
+
+                    if (statements.Count > 0 && statements[0].UpdateDate < DateTime.Now.Date.AddDays(-3))
+                    {
+                        _finacialStatement.DeleteIncomeStatement(x.Ticker);
+                        await _stockDownloads.GetIncomeStatement(x.Ticker);
+                    }
+                }
+
+                if ((x.EarningsDate ?? DateTime.MinValue).Date == DateTime.Now.Date.AddDays(-1))
                     sb.Append($"{x.Ticker} reported yesterday.\r\n");
                 else if ((x.EarningsDate ?? DateTime.MinValue).Date == DateTime.Now.Date)
                     sb.Append($"{x.Ticker} reports today.\r\n");
