@@ -119,11 +119,10 @@ namespace StockApi
             _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
             GetNewsEarnings();
-            
-            // TODO
-            //_markets = new Markets();
-            //await _markets.GetAllMarketData();
-            //DisplayMarketData();
+
+            _markets = new Markets();
+            await _markets.GetAllMarketData();
+            DisplayMarketData();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
