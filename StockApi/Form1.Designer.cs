@@ -216,6 +216,7 @@ namespace StockApi
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.earningDatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stockMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.excelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label70 = new System.Windows.Forms.Label();
             this.lblSandP500 = new System.Windows.Forms.Label();
@@ -2145,7 +2146,8 @@ namespace StockApi
             this.tradeMonitorToolStripMenuItem,
             this.refreshToolStripMenuItem,
             this.earningDatesToolStripMenuItem,
-            this.stockMetricsToolStripMenuItem});
+            this.stockMetricsToolStripMenuItem,
+            this.excelToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1444, 24);
@@ -2362,7 +2364,7 @@ namespace StockApi
             this.incomeStatementToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.incomeStatementToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.incomeStatementToolStripMenuItem.Name = "incomeStatementToolStripMenuItem";
-            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.incomeStatementToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.incomeStatementToolStripMenuItem.Text = "&Income Statement";
             this.incomeStatementToolStripMenuItem.Click += new System.EventHandler(this.incomeStatementToolStripMenuItem_Click);
             // 
@@ -2371,7 +2373,7 @@ namespace StockApi
             this.statisticsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.statisticsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.statisticsToolStripMenuItem.Text = "&Statistics";
             this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
             // 
@@ -2390,6 +2392,14 @@ namespace StockApi
             this.stockMetricsToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
             this.stockMetricsToolStripMenuItem.Text = "&Stock Metrics";
             this.stockMetricsToolStripMenuItem.Click += new System.EventHandler(this.stockMetricsToolStripMenuItem_Click);
+            // 
+            // excelToolStripMenuItem
+            // 
+            this.excelToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.excelToolStripMenuItem.Name = "excelToolStripMenuItem";
+            this.excelToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.excelToolStripMenuItem.Text = "&Excel";
+            this.excelToolStripMenuItem.Click += new System.EventHandler(this.excelToolStripMenuItem_Click);
             // 
             // panel3
             // 
@@ -2898,6 +2908,7 @@ namespace StockApi
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ToolStripMenuItem excelToolStripMenuItem;
     }
 }
 

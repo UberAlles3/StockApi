@@ -75,7 +75,7 @@ namespace StockApi
                 Nasdaq = await GetMarketData("^DJI", true);
                 SAndP = await GetMarketData("^IXIC", true);
             }
-            catch (Exception ex)
+            catch 
             {
                 Dow.CurrentLevel.StringValue = "0";
                 Nasdaq.CurrentLevel.StringValue = "0";

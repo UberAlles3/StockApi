@@ -194,7 +194,6 @@ namespace StockApi
         {
             string ticker = "";
             double previous = 0;
-            double current = 0;
             int i = 0;
             foreach (SqlMetric r in metrics)
             {

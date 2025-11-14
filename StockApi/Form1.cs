@@ -119,9 +119,11 @@ namespace StockApi
             _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
             GetNewsEarnings();
-            _markets = new Markets();
-            await _markets.GetAllMarketData();
-            DisplayMarketData();
+            
+            // TODO
+            //_markets = new Markets();
+            //await _markets.GetAllMarketData();
+            //DisplayMarketData();
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -158,7 +160,7 @@ namespace StockApi
 
             try
             {
-                _markets.GetAllMarketData();
+                await _markets.GetAllMarketData();
             }
             catch (Exception ex)
             {
@@ -1018,6 +1020,13 @@ namespace StockApi
         private void stockMetricsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MetricsForm f = new MetricsForm(txtStockTicker.Text);
+            f.Owner = this;
+            f.Show();
+        }
+
+        private void excelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExcelForm f = new ExcelForm(PositionsDataTable);
             f.Owner = this;
             f.Show();
         }

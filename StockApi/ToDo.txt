@@ -1,3 +1,5 @@
 ﻿DONE Add dividend to form and take into account as a metric
 DONE Add flat trend
 DONE Add 3 year trend
+AAPL	1.11	7.46	280.46	57.97
+AB	0.84	3.02	41.14	2.10
