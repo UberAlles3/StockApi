@@ -10,6 +10,8 @@ using PC = StockApi.ExcelManager.PositionColumns;
 using TC = StockApi.ExcelManager.TradeColumns;
 using System.Threading.Tasks;
 using YahooLayer;
+using System.IO;
+using ExcelDataReader;
 
 namespace StockApi
 {
@@ -100,6 +102,5 @@ namespace StockApi
 
             return tickers;
         }
-
     }
 }

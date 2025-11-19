@@ -1,8 +1,12 @@
 ﻿using ExcelDataReader;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace StockApi
 {
@@ -13,7 +17,8 @@ namespace StockApi
             Ticker = 0,
             QuantityHeld = 1,
             Price = 2,
-            Metric = 32
+            BuySell = 3,
+            Metric = 33
         }
 
         public enum TradeColumns : int
@@ -91,6 +96,74 @@ namespace StockApi
 
             }
         }
+
+        public List<ExcelPositions> GetPositionsListFromPositionsTable(string filePath)
+        {
+            var dataList = new List<ExcelPositions>();
+            string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
+            File.Copy(filePath, importFilePath, true);
+
+
+            using (var stream = File.Open(importFilePath, FileMode.Open, FileAccess.Read))
+            {
+                var columnNames = new List<string>();
+
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    // Assuming the first row contains headers
+
+                    while (reader.Read())
+                    {
+                        if (columnNames.Count == 0) // First row is columm names
+                        {
+                            for (int i = 0; i < 8; i++)
+                            {
+                                columnNames.Add(reader.GetString(i));
+                            }
+                        }
+                        else
+                        {
+                            object val = null;
+                            var item = new ExcelPositions();
+                            for (int i = 0; i < 8; i++)
+                            {
+                                PropertyInfo pi = item.GetType().GetProperty(SanitizeName(columnNames[i]));
+                                val = reader.GetValue(i);
+
+                                if (val == null || val.ToString().Trim() == "")
+                                {
+                                    if (pi.PropertyType.IsValueType)
+                                    {
+                                        val = Activator.CreateInstance(pi.PropertyType); // For value types, get default instance
+                                    }
+                                }
+                                else
+                                {
+                                    if (val.ToString().Contains("***"))
+                                        break;
+                                }
+
+                                // Use reflection or a mapping dictionary to set property values
+                                pi.SetValue(item, Convert.ChangeType(val, pi.PropertyType), null);
+                            }
+
+                            if (val.ToString().Contains("***"))
+                                continue;
+
+                            if (item.Symbol == null || item.Symbol.Trim() == "")
+                                break;
+
+                            dataList.Add(item);
+                        }
+                    }
+                }
+            }
+
+            return dataList;
+        }
+
+
+
         public List<string> GetStockListFromPositionsTable(DataTable positionsDataTable)
         {
             List<string> stockList;
@@ -98,6 +171,72 @@ namespace StockApi
             stockList = positions.Select(x => x[(int)PositionColumns.Ticker].ToString().Trim()).ToList();
             stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
             return stockList;
+        }
+
+
+        ////////////////////////////////////////////////////
+        /// Generating class code from Excel columns
+        /// 
+        public void GenerateClassCodeFromExcelSheet(string filePath)
+        {
+            string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
+            File.Copy(filePath, importFilePath, true);
+
+
+            using (var stream = File.Open(importFilePath, FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    // Assuming the first row contains headers
+                    reader.Read();
+                    var columnNames = new List<string>();
+                    for (int i = 0; i < 8; i++)
+                    {
+                        columnNames.Add(reader.GetString(i));
+                    }
+                    GenerateClassCode("ExcelPositions", columnNames);
+                }
+            }
+        }
+
+        public static string GenerateClassCode(string className, List<string> columnNames)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"public class {className}");
+            sb.AppendLine("{");
+
+            foreach (var columnName in columnNames)
+            {
+                // Sanitize column names for valid C# property names
+                var sanitizedColumnName = SanitizeName(columnName);
+                // You might infer type here based on data, otherwise default to string
+                sb.AppendLine($"    public string {sanitizedColumnName} {{ get; set; }}");
+            }
+            sb.AppendLine("}");
+            return sb.ToString();
+        }
+
+        private static string SanitizeName(string name)
+        {
+            // Implement logic to remove spaces, special characters, and ensure valid identifier
+            // Example: "My Column Name" -> "MyColumnName"
+            return Regex.Replace(name, @"[^a-zA-Z0-9_]", string.Empty);
+        }
+    }
+
+    public class ExcelPositions
+    {
+        public string Symbol { get; set; }
+        public double Quantity { get; set; }
+        public double Price { get; set; }
+        public string BuySell { get; set; }
+        public double BuyQuantity { get; set; }
+        public double BuyPrice { get; set; }
+        public double SellQuantity { get; set; }
+        public double SellPrice { get; set; }
+        public override string ToString()
+        {
+            return $"Symbol: {Symbol}, Quantity: {Quantity}";
         }
     }
 }

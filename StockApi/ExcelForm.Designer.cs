@@ -60,7 +60,7 @@ namespace StockApi
             this.Controls.Add(this.btnParse);
             this.Controls.Add(this.textBox1);
             this.Name = "ExcelForm";
-            this.Text = "ExeclForm";
+            this.Text = "Import from Excel export";
             this.Load += new System.EventHandler(this.ExeclForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

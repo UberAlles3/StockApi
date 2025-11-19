@@ -123,6 +123,8 @@ namespace StockApi
             _markets = new Markets();
             await _markets.GetAllMarketData();
             DisplayMarketData();
+
+            //(new ExcelManager()).GenerateClassCodeFromExcelSheet(_excelFilePath);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -1025,7 +1027,7 @@ namespace StockApi
 
         private void excelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExcelForm f = new ExcelForm(PositionsDataTable);
+            ExcelForm f = new ExcelForm(_excelFilePath);
             f.Owner = this;
             f.Show();
         }
