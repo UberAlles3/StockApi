@@ -774,6 +774,30 @@ namespace StockApi
             runDailyMetricsToolStripMenuItem.ForeColor = Color.White;
             txtMessages.Text = _news;
         }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text Files|*.txt|All Files|*.*";
+            openFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
+            openFileDialog.Title = "Select a File";
+            string selectedFilePath;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                selectedFilePath = openFileDialog.FileName;
+
+                try
+                {
+                    Process.Start("notepad.exe", selectedFilePath);
+                }
+                catch (Exception ex)
+                {
+                    Program.logger.Error($"Error opening Notepad: {ex.Message}  {ex.StackTrace}", ex);
+                }
+            }
+        }
+
         private void logToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string filePath = Path.Combine(Environment.CurrentDirectory, "logs\\app.log");
@@ -933,6 +957,7 @@ namespace StockApi
             f.Owner = this;
             f.Show();
         }
+
     }
 
     public class CustomColorTable : ProfessionalColorTable

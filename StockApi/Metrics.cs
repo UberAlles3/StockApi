@@ -21,6 +21,7 @@ namespace StockApi
     {
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
+        private string _applicationPath = System.Windows.Forms.Application.StartupPath;
 
         public async Task<int> DailyGetMetrics(DataTable positionsDataTable, RichTextBox textBox)
         {
@@ -53,32 +54,30 @@ namespace StockApi
                 }
             }
 
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
             if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
             {
                 //stockList = stockList.Skip(80).Take(50).ToList();
                 stockList = stockList.Skip(0).Take(30).ToList();
-                desktopPath = Path.Combine(desktopPath, "StockMetricsMonday.txt");
+                _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
             {
                 stockList = stockList.Skip(30).Take(30).ToList();
-                desktopPath = Path.Combine(desktopPath, "StockMetricsTuesday.txt");
+                _applicationPath = Path.Combine(_applicationPath, "StockMetricsTuesday.txt");
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
             {
                 stockList = stockList.Skip(60).Take(30).ToList(); 
-                desktopPath = Path.Combine(desktopPath, "StockMetricsWednesday.txt");
+                _applicationPath = Path.Combine(_applicationPath, "StockMetricsWednesday.txt");
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
             {
                 stockList = stockList.Skip(90).Take(30).ToList();
-                desktopPath = Path.Combine(desktopPath, "StockMetricsThursday.txt");
+                _applicationPath = Path.Combine(_applicationPath, "StockMetricsThursday.txt");
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
@@ -86,20 +85,20 @@ namespace StockApi
                 //stockList = stockList.Skip(60).Take(30).ToList();
                 //desktopPath = Path.Combine(desktopPath, "StockMetricsSaturday_V-Z.txt");
                 stockList = stockList.Skip(120).Take(30).ToList();
-                desktopPath = Path.Combine(desktopPath, "StockMetricsFriday_T-V.txt");
+                _applicationPath = Path.Combine(_applicationPath, "StockMetricsFriday_T-V.txt");
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
             {
                 stockList = stockList.Skip(0).Take(10).ToList();
-                desktopPath = Path.Combine(desktopPath, "StockMetricsSaturday_V-Z.txt");
+                _applicationPath = Path.Combine(_applicationPath, "StockMetricsSaturday_V-Z.txt");
             }
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
             {
                 //stockList = stockList.Skip(0).Take(4).ToList();
                 stockList = stockList.Skip(10).Take(10).ToList();
-                desktopPath = Path.Combine(desktopPath, "StockMetricsMonday.txt");
+                _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
             }
 
             string stockMetricString = "";
@@ -113,9 +112,9 @@ namespace StockApi
                 Thread.Sleep(800);
             }
 
-            if (Directory.Exists(desktopPath))
-                Directory.Delete(desktopPath);
-            File.WriteAllText(desktopPath, builder.ToString());
+            if (Directory.Exists(_applicationPath))
+                Directory.Delete(_applicationPath);
+            File.WriteAllText(_applicationPath, builder.ToString());
 
 
             MessageBox.Show("Daily function executed!");
