@@ -216,7 +216,6 @@ namespace StockApi
                     dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
                     dataGridView2.DataSource = tradeSource.DataSource;
                     dataGridView2.Columns[0].HeaderText = "Date";
-                    //dataGridView2.Columns[0].DefaultCellStyle.Format = "MM/dd/yyyy";
                     dataGridView2.Columns[1].Visible = false;
                     dataGridView2.Columns[2].HeaderText = "Buy/Sell";
                     dataGridView2.Columns[2].Width = 60;
@@ -240,7 +239,6 @@ namespace StockApi
                     dataGridView2.Columns[8].Visible = false;
                     dataGridView2.Columns[9].Visible = false;
 
-                    //dataGridView2.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
                     dataGridView2.Refresh();
                 }
                 else
@@ -594,21 +592,21 @@ namespace StockApi
                             _stockDownloads.stockSummary.EarningsPerShareString.StringValue = _stockDownloads.stockIncomeStatement.BasicEpsTtmString.StringValue;
 
                         // Revenue
-                        lblFinRevTTM.Text = $"{_stockDownloads.stockIncomeStatement.RevenueTtmString:n0}";
+                        lblFinRevTTM.Text = _stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue.ToString("N0");
                         lblFinRevTTM.ForeColor = _stockDownloads.stockIncomeStatement.RevenueTtmColor;
-                        lblFinRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue2String.StringValue;
+                        lblFinRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue2String.NumericValue.ToString("N0"); 
                         lblFinRev2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Revenue2Color;
-                        lblFinRev4YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue4String.StringValue;
+                        lblFinRev4YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue4String.NumericValue.ToString("N0");
 
                         // Cost of Revenue
-                        lblFinCostRevTTM.Text = _stockDownloads.stockIncomeStatement.CostOfRevenueTtmString.StringValue;
-                        lblFinCostRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.CostOfRevenue2String.StringValue;
-                        lblFinCostRev4YearsAgo.Text = _stockDownloads.stockIncomeStatement.CostOfRevenue4String.StringValue;
+                        lblFinCostRevTTM.Text = _stockDownloads.stockIncomeStatement.CostOfRevenueTtmString.NumericValue.ToString("N0");
+                        lblFinCostRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.CostOfRevenue2String.NumericValue.ToString("N0");
+                        lblFinCostRev4YearsAgo.Text = _stockDownloads.stockIncomeStatement.CostOfRevenue4String.NumericValue.ToString("N0");
 
                         // Operating Expense
-                        lblOperExpTTM.Text = _stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.StringValue;
-                        lblOperExp2YearsAgo.Text = _stockDownloads.stockIncomeStatement.OperatingExpense2String.StringValue;
-                        lblOperExp4YearsAgo.Text = _stockDownloads.stockIncomeStatement.OperatingExpense4String.StringValue;
+                        lblOperExpTTM.Text = _stockDownloads.stockIncomeStatement.OperatingExpenseTtmString.NumericValue.ToString("N0");
+                        lblOperExp2YearsAgo.Text = _stockDownloads.stockIncomeStatement.OperatingExpense2String.NumericValue.ToString("N0");
+                        lblOperExp4YearsAgo.Text = _stockDownloads.stockIncomeStatement.OperatingExpense4String.NumericValue.ToString("N0");
 
                         // Operating Profit / Loss
                         lblOperProfitTTM.Text = _stockDownloads.stockIncomeStatement.ProfitTtmString.NumericValue.ToString("N0");

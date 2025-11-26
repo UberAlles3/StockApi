@@ -172,7 +172,7 @@ namespace YahooLayer
                 searchTerm = SearchTerms.Find(x => x.Name == "Company Overview").Term;
                 string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(_html, searchTerm, 6000);
                 htmlSnippet = HttpUtility.HtmlDecode(htmlSnippet);
-                string[] parts = htmlSnippet.Split(">");
+                string[] parts = htmlSnippet.Split('>');
                 string longest = parts.OrderByDescending(s => s.Length).First();
 
                 try
@@ -186,11 +186,11 @@ namespace YahooLayer
                         int sectorIndex = parts.Select((s, i) => new { i, s }).Where(x => x.s.Contains("Sector<")).Select(t => t.i).First();
                         sectorIndex -= 3;
 
-                        string[] words = (parts[sectorIndex] + " |").Split(" ");
+                        string[] words = (parts[sectorIndex] + " |").Split(' ');
                         if (words.Length > 2)
                             this.Sector = words[0] + " " + words[1];
                         else
-                            this.Sector = (parts[sectorIndex] + " |").Split(" ")[0];
+                            this.Sector = (parts[sectorIndex] + " |").Split(' ')[0];
                         // find average PE for Sector
                         if (_sectors.ContainsKey(Sector))
                             AverageSectorPE = _sectors.First(x => x.Key == Sector).Value;
