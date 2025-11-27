@@ -779,7 +779,7 @@ namespace StockApi
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text Files|*.txt|All Files|*.*";
-            openFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
+            openFileDialog.InitialDirectory = Application.StartupPath;
             openFileDialog.Title = "Select a File";
             string selectedFilePath;
 
