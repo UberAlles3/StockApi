@@ -15,13 +15,13 @@ using ExcelDataReader;
 
 namespace StockApi
 {
-    public partial class OffHighs : Form
+    public partial class OffHighsForm : Form
     {
         private List<string> _tickers;
         private DataTable _positionsDataTable;
         private DataTable _tradesDataTable;
 
-        public OffHighs(List<string> tickers, DataTable positionsDataTable, DataTable tradesDataTable)
+        public OffHighsForm(List<string> tickers, DataTable positionsDataTable, DataTable tradesDataTable)
         {
             InitializeComponent();
             _tickers = tickers.Where(x => x != "******").ToList();
@@ -70,6 +70,11 @@ namespace StockApi
                 }
                 txtTickerList.Text += Environment.NewLine;
             }
+        }
+
+        private void OffHighsForm_Resize(object sender, EventArgs e)
+        {
+            txtTickerList.Height = this.Height - 80;
         }
 
         public static List<string> GetHighMetricTickers(DataTable positionsDataTable)

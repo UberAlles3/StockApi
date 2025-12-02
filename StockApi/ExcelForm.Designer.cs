@@ -53,9 +53,10 @@ namespace StockApi
             // 
             // ExcelForm
             // 
+            this.AcceptButton = this.btnParse;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(64)))), ((int)(((byte)(128)))));
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnParse);
             this.Controls.Add(this.textBox1);

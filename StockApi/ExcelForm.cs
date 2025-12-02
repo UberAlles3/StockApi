@@ -46,12 +46,19 @@ namespace StockApi
                 cells = line.Split("\t");
                 if (cells.GetLength(0) > 5)
                 {
-                    excelPosition = positions.Where(x => x.Symbol.ToUpper().Trim() == cells[0].Trim()).First();
-                    if (cells[4].ToUpper() == "BUY")
-                        q = excelPosition.Quantity + Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+                    excelPosition = positions.Where(x => x.Symbol.ToUpper().Trim() == cells[0].Trim()).FirstOrDefault();
+                    if (excelPosition != null)
+                    {
+                        if (cells[4].ToUpper() == "BUY")
+                            q = excelPosition.Quantity + Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+                        else
+                            q = excelPosition.Quantity - Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+                    }
                     else
-                        q = excelPosition.Quantity - Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
-
+                    {
+                        excelPosition = new ExcelPositions();
+                        q = Convert.ToDouble(cells[5].Replace("Shares", ""));
+                    }
 
                     sb.Append(cells[0] + "\t"); // Ticker
                     sb.Append(q.ToString() + "\t"); // Shares bought added 

@@ -57,7 +57,7 @@ namespace StockApi
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
             if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
             {
-                //stockList = stockList.Skip(80).Take(50).ToList();
+                //stockList = stockList.Skip(100).Take(20).ToList();
                 stockList = stockList.Skip(0).Take(30).ToList();
                 _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
             }

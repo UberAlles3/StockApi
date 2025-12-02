@@ -893,18 +893,18 @@ namespace StockApi
 
         private void offHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<string> tickers = OffHighs.GetHighMetricTickers(PositionsDataTable);
+            List<string> tickers = OffHighsForm.GetHighMetricTickers(PositionsDataTable);
 
-            OffHighs offHighs = new OffHighs(tickers, PositionsDataTable, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(tickers, PositionsDataTable, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }
 
         private void watchOffHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<string> tickers = OffHighs.GetWatchListTickers(PositionsDataTable);
+            List<string> tickers = OffHighsForm.GetWatchListTickers(PositionsDataTable);
 
-            OffHighs offHighs = new OffHighs(tickers, PositionsDataTable, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(tickers, PositionsDataTable, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }

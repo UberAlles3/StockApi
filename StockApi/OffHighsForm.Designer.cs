@@ -1,7 +1,7 @@
 ﻿
 namespace StockApi
 {
-    partial class OffHighs
+    partial class OffHighsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -41,7 +41,7 @@ namespace StockApi
             this.txtTickerList.Multiline = true;
             this.txtTickerList.Name = "txtTickerList";
             this.txtTickerList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtTickerList.Size = new System.Drawing.Size(477, 639);
+            this.txtTickerList.Size = new System.Drawing.Size(477, 640);
             this.txtTickerList.TabIndex = 12;
             // 
             // label1
@@ -53,16 +53,17 @@ namespace StockApi
             this.label1.TabIndex = 13;
             this.label1.Text = "Ticker                  High            Current               Target";
             // 
-            // OffHighs
+            // OffHighsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 683);
+            this.ClientSize = new System.Drawing.Size(501, 681);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtTickerList);
-            this.Name = "OffHighs";
+            this.Name = "OffHighsForm";
             this.Text = "Off Highs";
             this.Load += new System.EventHandler(this.OffHighs_Load);
+            this.Resize += new System.EventHandler(this.OffHighsForm_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
 
