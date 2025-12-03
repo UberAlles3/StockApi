@@ -193,6 +193,7 @@ namespace StockApi
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runDailyMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lINKSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kitcoGoldAndSilverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -236,7 +237,6 @@ namespace StockApi
             this.panel4 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -317,6 +317,7 @@ namespace StockApi
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(28)))), ((int)(((byte)(56)))));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.pnlNoFinancials);
             this.panel1.Controls.Add(this.btnGetHtml);
             this.panel1.Controls.Add(this.lblEarningsDate);
             this.panel1.Controls.Add(this.lblCalculatedPE);
@@ -606,7 +607,6 @@ namespace StockApi
             // panelFinancials
             // 
             this.panelFinancials.BackColor = System.Drawing.Color.Transparent;
-            this.panelFinancials.Controls.Add(this.pnlNoFinancials);
             this.panelFinancials.Controls.Add(this.lblRevenueInMillions);
             this.panelFinancials.Controls.Add(this.lblEndCashPosition4YearsAgo);
             this.panelFinancials.Controls.Add(this.lblEndCashPosition2YearsAgo);
@@ -662,7 +662,7 @@ namespace StockApi
             // pnlNoFinancials
             // 
             this.pnlNoFinancials.Controls.Add(this.label36);
-            this.pnlNoFinancials.Location = new System.Drawing.Point(1, 48);
+            this.pnlNoFinancials.Location = new System.Drawing.Point(13, 33);
             this.pnlNoFinancials.Name = "pnlNoFinancials";
             this.pnlNoFinancials.Size = new System.Drawing.Size(353, 306);
             this.pnlNoFinancials.TabIndex = 83;
@@ -2172,16 +2172,25 @@ namespace StockApi
             this.runDailyMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.runDailyMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.runDailyMetricsToolStripMenuItem.Name = "runDailyMetricsToolStripMenuItem";
-            this.runDailyMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runDailyMetricsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.runDailyMetricsToolStripMenuItem.Text = "&Run Daily Metrics";
             this.runDailyMetricsToolStripMenuItem.Click += new System.EventHandler(this.runDailyMetricsToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.BackColor = System.Drawing.Color.Black;
+            this.toolStripMenuItem3.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(166, 22);
+            this.toolStripMenuItem3.Text = "&Open Metric File";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
             // 
             // logToolStripMenuItem
             // 
             this.logToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.logToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.logToolStripMenuItem.Text = "&Log";
             this.logToolStripMenuItem.Click += new System.EventHandler(this.logToolStripMenuItem_Click);
             // 
@@ -2641,15 +2650,6 @@ namespace StockApi
             this.label7.TabIndex = 48;
             this.label7.Text = "Markets";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.BackColor = System.Drawing.Color.Black;
-            this.toolStripMenuItem3.ForeColor = System.Drawing.Color.White;
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItem3.Text = "&Open Metric File";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
             // 
             // Form1
             // 

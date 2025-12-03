@@ -51,6 +51,9 @@ namespace YahooLayer
             OperatingCashFlowTtmColor = _normalColor;
             OperatingCashFlow2Color = _normalColor;
             OperatingCashFlow4Color = _normalColor;
+            EndCashPositionTtmColor = _normalColor;
+            EndCashPosition2Color = _normalColor;
+            EndCashPosition4Color = _normalColor;
         }
 
         ////////////////////////////////////////////
