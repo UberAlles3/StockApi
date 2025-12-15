@@ -249,14 +249,25 @@ namespace StockApi
                     quantity = Convert.ToInt32(temp);
                 }
 
-                // Get current price for sold stock
-                decimal currentPrice = await stockHistory.GetTodaysPrice(ticker);
+                // Get current price for sold stock, some stock can get delisted
+                decimal currentPrice = 0;
+                try
+                {
+                    currentPrice = await stockHistory.GetTodaysPrice(ticker);
 
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("Not Found"))
+                        continue;
+                    else
+                    throw ex;
+                }
+                
                 if(currentPrice == 0)
                 {
                     currentPrice = 999;
                 }
-
 
                 // Get the price sold
                 temp = trade.ItemArray[(int)TC.TradePrice].ToString();

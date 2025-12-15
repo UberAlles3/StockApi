@@ -41,6 +41,8 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlNoFinancials = new System.Windows.Forms.Panel();
+            this.label36 = new System.Windows.Forms.Label();
             this.btnGetHtml = new System.Windows.Forms.Button();
             this.lblEarningsDate = new System.Windows.Forms.Label();
             this.lblCalculatedPE = new System.Windows.Forms.Label();
@@ -63,8 +65,6 @@ namespace StockApi
             this.label65 = new System.Windows.Forms.Label();
             this.lnkCompanyOverview = new System.Windows.Forms.LinkLabel();
             this.panelFinancials = new System.Windows.Forms.Panel();
-            this.pnlNoFinancials = new System.Windows.Forms.Panel();
-            this.label36 = new System.Windows.Forms.Label();
             this.lblRevenueInMillions = new System.Windows.Forms.Label();
             this.lblEndCashPosition4YearsAgo = new System.Windows.Forms.Label();
             this.lblEndCashPosition2YearsAgo = new System.Windows.Forms.Label();
@@ -238,8 +238,8 @@ namespace StockApi
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
-            this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
+            this.panelFinancials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).BeginInit();
@@ -317,7 +317,6 @@ namespace StockApi
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(28)))), ((int)(((byte)(56)))));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.pnlNoFinancials);
             this.panel1.Controls.Add(this.btnGetHtml);
             this.panel1.Controls.Add(this.lblEarningsDate);
             this.panel1.Controls.Add(this.lblCalculatedPE);
@@ -363,6 +362,24 @@ namespace StockApi
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(375, 674);
             this.panel1.TabIndex = 6;
+            // 
+            // pnlNoFinancials
+            // 
+            this.pnlNoFinancials.Controls.Add(this.label36);
+            this.pnlNoFinancials.Location = new System.Drawing.Point(0, 42);
+            this.pnlNoFinancials.Name = "pnlNoFinancials";
+            this.pnlNoFinancials.Size = new System.Drawing.Size(353, 306);
+            this.pnlNoFinancials.TabIndex = 83;
+            // 
+            // label36
+            // 
+            this.label36.BackColor = System.Drawing.Color.Transparent;
+            this.label36.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label36.Location = new System.Drawing.Point(51, 14);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(251, 22);
+            this.label36.TabIndex = 74;
+            this.label36.Text = "Company is a fund and has no financials.";
             // 
             // btnGetHtml
             // 
@@ -607,6 +624,7 @@ namespace StockApi
             // panelFinancials
             // 
             this.panelFinancials.BackColor = System.Drawing.Color.Transparent;
+            this.panelFinancials.Controls.Add(this.pnlNoFinancials);
             this.panelFinancials.Controls.Add(this.lblRevenueInMillions);
             this.panelFinancials.Controls.Add(this.lblEndCashPosition4YearsAgo);
             this.panelFinancials.Controls.Add(this.lblEndCashPosition2YearsAgo);
@@ -658,24 +676,6 @@ namespace StockApi
             this.panelFinancials.Name = "panelFinancials";
             this.panelFinancials.Size = new System.Drawing.Size(354, 357);
             this.panelFinancials.TabIndex = 43;
-            // 
-            // pnlNoFinancials
-            // 
-            this.pnlNoFinancials.Controls.Add(this.label36);
-            this.pnlNoFinancials.Location = new System.Drawing.Point(13, 33);
-            this.pnlNoFinancials.Name = "pnlNoFinancials";
-            this.pnlNoFinancials.Size = new System.Drawing.Size(353, 306);
-            this.pnlNoFinancials.TabIndex = 83;
-            // 
-            // label36
-            // 
-            this.label36.BackColor = System.Drawing.Color.Transparent;
-            this.label36.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label36.Location = new System.Drawing.Point(51, 14);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(251, 22);
-            this.label36.TabIndex = 74;
-            this.label36.Text = "Company is a fund and has no financials.";
             // 
             // lblRevenueInMillions
             // 
@@ -2688,9 +2688,9 @@ namespace StockApi
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.pnlNoFinancials.ResumeLayout(false);
             this.panelFinancials.ResumeLayout(false);
             this.panelFinancials.PerformLayout();
-            this.pnlNoFinancials.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pic3YearTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picYearTrend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWeekTrend)).EndInit();

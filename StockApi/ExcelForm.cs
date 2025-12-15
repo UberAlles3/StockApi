@@ -58,6 +58,8 @@ namespace StockApi
                     {
                         excelPosition = new ExcelPositions();
                         q = Convert.ToDouble(cells[5].Replace("Shares", ""));
+                        MessageBox.Show("First add the new stock to the positions sheet. Exiting.");
+                        return;
                     }
 
                     sb.Append(cells[0] + "\t"); // Ticker

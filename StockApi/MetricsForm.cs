@@ -30,8 +30,10 @@ namespace StockApi
             txtTickerList.Text = _ticker;
             comboBox1.Items.Add("Lastest");
             comboBox1.Items.Add("Last 2 Months");
+            comboBox1.Items.Add("Last 3 Months");
+            comboBox1.Items.Add("Last 6 Months");
             comboBox1.Items.Add("Last Year");
-            comboBox1.SelectedIndex = 1;
+            comboBox1.SelectedIndex = 2;
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -55,6 +57,10 @@ namespace StockApi
             if (comboBox1.SelectedIndex == 1)
                 metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-1), ticker);
             if (comboBox1.SelectedIndex == 2)
+                metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-3), ticker);
+            if (comboBox1.SelectedIndex == 3)
+                metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-5), ticker);
+            if (comboBox1.SelectedIndex == 4)
                 metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-11), ticker);
 
             metrics = metrics.OrderBy(x => x.Ticker).ThenBy(x => x.Year).ThenBy(x => x.Month).ToList();
