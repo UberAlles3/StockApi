@@ -736,6 +736,15 @@ namespace StockApi
             chartForm.Show();
         }
 
+        private void btn5YearChart_Click(object sender, EventArgs e)
+        {
+            ChartForm chartForm = new ChartForm();
+            chartForm.Owner = this;
+            chartForm.Text = txtStockTicker.Text + " - 5 Year Chart";
+            chartForm.Url = chartForm.Url5Year.Replace("?ticker?", txtStockTicker.Text);
+            chartForm.Show();
+        }
+
         private void btn3YearChart_Click(object sender, EventArgs e)
         {
             ChartForm chartForm = new ChartForm();
@@ -957,7 +966,6 @@ namespace StockApi
             f.Owner = this;
             f.Show();
         }
-
     }
 
     public class CustomColorTable : ProfessionalColorTable
