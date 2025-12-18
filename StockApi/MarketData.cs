@@ -71,8 +71,8 @@ namespace StockApi
         {
             try
             {
-                Dow = await GetMarketData("^GSPC", true);
-                Nasdaq = await GetMarketData("^DJI", true);
+                Nasdaq = await GetMarketData("^GSPC", true);
+                Dow = await GetMarketData("^DJI", true);
                 SAndP = await GetMarketData("^IXIC", true);
             }
             catch 
