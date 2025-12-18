@@ -116,7 +116,7 @@ namespace StockApi
                     {
                         if (columnNames.Count == 0) // First row is columm names
                         {
-                            for (int i = 0; i < 8; i++)
+                            for (int i = 0; i < 17; i++)
                             {
                                 columnNames.Add(reader.GetString(i));
                             }
@@ -125,26 +125,29 @@ namespace StockApi
                         {
                             object val = null;
                             var item = new ExcelPositions();
-                            for (int i = 0; i < 8; i++)
+                            for (int i = 0; i < 17; i++)
                             {
-                                PropertyInfo pi = item.GetType().GetProperty(SanitizeName(columnNames[i]));
-                                val = reader.GetValue(i);
-
-                                if (val == null || val.ToString().Trim() == "")
+                                if(columnNames[i] != null)
                                 {
-                                    if (pi.PropertyType.IsValueType)
+                                    PropertyInfo pi = item.GetType().GetProperty(SanitizeName(columnNames[i]));
+                                    val = reader.GetValue(i);
+
+                                    if (val == null || val.ToString().Trim() == "")
                                     {
-                                        val = Activator.CreateInstance(pi.PropertyType); // For value types, get default instance
+                                        if (pi.PropertyType.IsValueType)
+                                        {
+                                            val = Activator.CreateInstance(pi.PropertyType); // For value types, get default instance
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    if (val.ToString().Contains("***"))
-                                        break;
-                                }
+                                    else
+                                    {
+                                        if (val.ToString().Contains("***"))
+                                            break;
+                                    }
 
-                                // Use reflection or a mapping dictionary to set property values
-                                pi.SetValue(item, Convert.ChangeType(val, pi.PropertyType), null);
+                                    // Use reflection or a mapping dictionary to set property values
+                                    pi.SetValue(item, Convert.ChangeType(val, pi.PropertyType), null);
+                                }
                             }
 
                             if (val.ToString().Contains("***"))
@@ -234,6 +237,10 @@ namespace StockApi
         public double BuyPrice { get; set; }
         public double SellQuantity { get; set; }
         public double SellPrice { get; set; }
+        public double SharesToBuy { get; set; }
+        public double BuyTarget { get; set; }
+        public double SharesToSell { get; set; }
+        public double SellTarget { get; set; }
         public override string ToString()
         {
             return $"Symbol: {Symbol}, Quantity: {Quantity}";

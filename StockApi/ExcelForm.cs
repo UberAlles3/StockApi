@@ -50,9 +50,17 @@ namespace StockApi
                     if (excelPosition != null)
                     {
                         if (cells[4].ToUpper() == "BUY")
+                        {
                             q = excelPosition.Quantity + Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+                            if (excelPosition.Price > excelPosition.BuyPrice)
+                                excelPosition.Price = excelPosition.BuyPrice - .01;
+                        }
                         else
+                        {
                             q = excelPosition.Quantity - Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+                            if (excelPosition.Price < excelPosition.SellPrice)
+                                excelPosition.Price = excelPosition.SellPrice + .01;
+                        }
                     }
                     else
                     {
