@@ -170,27 +170,39 @@ namespace StockApi
             List<SqlMetric> bigMovers = new List<SqlMetric>();
 
             string ticker = "";
-            double previous = 0;
-            SqlMetric p = null;
+            SqlMetric first = null;
+            SqlMetric last = null;
+            bool bigMover = false;
             foreach (SqlMetric r in metrics)
             {
+                // Change of ticker 
                 if (ticker != r.Ticker)
                 {
-                    p = r;
-                    ticker = r.Ticker;
-                    previous = r.FinalMetric;
-                }
+                    if(first != null && bigMover) // first change of ticker
+                    {
+                        // Add first and last to Big Movers
+                        bigMovers.Add(first);
+                        bigMovers.Add(last);
+                        bigMover = false;
+                    }
 
-                if (r.FinalMetric > previous * 1.032)
-                {
-                    bigMovers.Add(p);
-                    bigMovers.Add(r);
+
+                    first = r;
                 }
-                else if (r.FinalMetric < previous * .97)
+                ticker = r.Ticker;
+                last = r;
+
+                // only add first and last metric
+                if (r.FinalMetric > first.FinalMetric * 1.032 || r.FinalMetric < first.FinalMetric * .97)
                 {
-                    bigMovers.Add(p);
-                    bigMovers.Add(r);
+                    bigMover = true;
                 }
+            }
+
+            if (bigMover)
+            {
+                bigMovers.Add(first);
+                bigMovers.Add(last);
             }
 
             return bigMovers;

@@ -260,7 +260,7 @@ namespace YahooLayer
             {
                 DateTime staleDate = DateTime.Now.Date.AddDays(-12 + random.Next(1, 4));
 
-                if (entities[0].UpdateDate > staleDate) // We have recent data in the database, use it.
+                if (entities[0].UpdateDate > staleDate && entities.Count > 2) // We have recent data in the database, use it.
                 {
                     MapFill(entities);
                     return true;

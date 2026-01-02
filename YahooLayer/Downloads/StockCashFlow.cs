@@ -201,7 +201,7 @@ namespace YahooLayer
             // This means the possible results are 1, 2, or 3.
             int randomNumber = random.Next(1, 4);
 
-            if (entities.Count > 0)
+            if (entities.Count > 2)
             {
                 DateTime staleDate = DateTime.Now.Date.AddDays(-12 + random.Next(1, 4));
 
