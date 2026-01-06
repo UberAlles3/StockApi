@@ -1738,7 +1738,7 @@ namespace StockApi
             this.btnChart.TabIndex = 49;
             this.btnChart.Text = "1 Year Chart";
             this.btnChart.UseVisualStyleBackColor = true;
-            this.btnChart.Click += new System.EventHandler(this.btnChart_Click);
+            this.btnChart.Click += new System.EventHandler(this.btn1YearChart_Click);
             // 
             // btnGetAllHistory
             // 
