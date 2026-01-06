@@ -23,7 +23,14 @@ namespace StockApi
 
         private void ChartForm_Load(object sender, EventArgs e)
         {
-            pictureBox1.Load(Url);
+            try
+            {
+                pictureBox1.Load(Url);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }    
         }
     }
 }

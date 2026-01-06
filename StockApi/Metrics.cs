@@ -76,7 +76,7 @@ namespace StockApi
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
             {
-                stockList = stockList.Skip(90).Take(30).ToList();
+                stockList = stockList.Skip(90).Take(32).ToList();
                 _applicationPath = Path.Combine(_applicationPath, "StockMetricsThursday.txt");
             }
 
@@ -84,7 +84,7 @@ namespace StockApi
             {
                 //stockList = stockList.Skip(60).Take(40).ToList();
                 //desktopPath = Path.Combine(desktopPath, "StockMetricsSaturday_V-Z.txt");
-                stockList = stockList.Skip(120).Take(30).ToList();
+                stockList = stockList.Skip(122).Take(32).ToList();
                 _applicationPath = Path.Combine(_applicationPath, "StockMetricsFriday_T-V.txt");
             }
 
