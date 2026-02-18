@@ -72,7 +72,8 @@ namespace StockApi
 
                     sb.Append(cells[0] + "\t"); // Ticker
                     sb.Append(q.ToString() + "\t"); // Shares bought added 
-                    sb.Append(excelPosition.Price.ToString() + "\t"); // Current price, from spreadsheet
+                    //sb.Append(excelPosition.Price.ToString() + "\t"); // Current price, from spreadsheet
+                    sb.Append(cells[8].Replace("$", "") + "\t"); // fill Price
                     sb.Append(cells[4] + "\t"); // Buy/Sell
                     if(cells[4].ToUpper() == "BUY")
                     {
