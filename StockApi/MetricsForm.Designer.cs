@@ -31,7 +31,6 @@ namespace StockApi
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.txtTickerList = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.btnGetAll = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -41,18 +40,14 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.txtTicker = new System.Windows.Forms.TextBox();
             this.chkBigChanges = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtBeginLetter = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtEndLetter = new System.Windows.Forms.TextBox();
+            this.btnRunMetrics = new System.Windows.Forms.Button();
+            this.txtTickerList = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // txtTickerList
-            // 
-            this.txtTickerList.AcceptsReturn = true;
-            this.txtTickerList.Location = new System.Drawing.Point(1219, 68);
-            this.txtTickerList.Multiline = true;
-            this.txtTickerList.Name = "txtTickerList";
-            this.txtTickerList.Size = new System.Drawing.Size(160, 292);
-            this.txtTickerList.TabIndex = 15;
-            this.txtTickerList.Text = "INTC";
             // 
             // label5
             // 
@@ -68,7 +63,7 @@ namespace StockApi
             // btnGetAll
             // 
             this.btnGetAll.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnGetAll.Location = new System.Drawing.Point(1219, 374);
+            this.btnGetAll.Location = new System.Drawing.Point(1236, 518);
             this.btnGetAll.Name = "btnGetAll";
             this.btnGetAll.Size = new System.Drawing.Size(160, 28);
             this.btnGetAll.TabIndex = 12;
@@ -159,24 +154,90 @@ namespace StockApi
             this.txtTicker.Size = new System.Drawing.Size(100, 23);
             this.txtTicker.TabIndex = 50;
             // 
-            // chkBigchanges
+            // chkBigChanges
             // 
             this.chkBigChanges.AutoSize = true;
             this.chkBigChanges.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.chkBigChanges.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.chkBigChanges.Location = new System.Drawing.Point(494, 47);
-            this.chkBigChanges.Name = "chkBigchanges";
+            this.chkBigChanges.Location = new System.Drawing.Point(474, 47);
+            this.chkBigChanges.Name = "chkBigChanges";
             this.chkBigChanges.Size = new System.Drawing.Size(125, 21);
             this.chkBigChanges.TabIndex = 51;
             this.chkBigChanges.Text = "Big changes only";
             this.chkBigChanges.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label4.Location = new System.Drawing.Point(746, 25);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(156, 16);
+            this.label4.TabIndex = 52;
+            this.label4.Text = "Run Metrics for Stocks...";
+            // 
+            // txtBeginLetter
+            // 
+            this.txtBeginLetter.Location = new System.Drawing.Point(746, 44);
+            this.txtBeginLetter.Name = "txtBeginLetter";
+            this.txtBeginLetter.Size = new System.Drawing.Size(62, 23);
+            this.txtBeginLetter.TabIndex = 53;
+            this.txtBeginLetter.Text = "A";
+            // 
+            // label3
+            // 
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label3.Location = new System.Drawing.Point(814, 47);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 16);
+            this.label3.TabIndex = 54;
+            this.label3.Text = "through";
+            // 
+            // txtEndLetter
+            // 
+            this.txtEndLetter.Location = new System.Drawing.Point(872, 44);
+            this.txtEndLetter.Name = "txtEndLetter";
+            this.txtEndLetter.Size = new System.Drawing.Size(62, 23);
+            this.txtEndLetter.TabIndex = 55;
+            this.txtEndLetter.Text = "Z";
+            // 
+            // btnRunMetrics
+            // 
+            this.btnRunMetrics.Location = new System.Drawing.Point(963, 29);
+            this.btnRunMetrics.Name = "btnRunMetrics";
+            this.btnRunMetrics.Size = new System.Drawing.Size(75, 38);
+            this.btnRunMetrics.TabIndex = 56;
+            this.btnRunMetrics.Text = "Run";
+            this.btnRunMetrics.UseVisualStyleBackColor = true;
+            this.btnRunMetrics.Click += new System.EventHandler(this.btnRunMetrics_Click);
+            // 
+            // txtTickerList
+            // 
+            this.txtTickerList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
+            this.txtTickerList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtTickerList.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.txtTickerList.Location = new System.Drawing.Point(1219, 68);
+            this.txtTickerList.Margin = new System.Windows.Forms.Padding(8);
+            this.txtTickerList.Name = "txtTickerList";
+            this.txtTickerList.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.txtTickerList.ShortcutsEnabled = false;
+            this.txtTickerList.Size = new System.Drawing.Size(189, 439);
+            this.txtTickerList.TabIndex = 57;
+            this.txtTickerList.Text = "";
             // 
             // MetricsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(1391, 696);
+            this.ClientSize = new System.Drawing.Size(1425, 696);
+            this.Controls.Add(this.txtTickerList);
+            this.Controls.Add(this.btnRunMetrics);
+            this.Controls.Add(this.txtEndLetter);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtBeginLetter);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.chkBigChanges);
             this.Controls.Add(this.txtTicker);
             this.Controls.Add(this.label2);
@@ -184,7 +245,6 @@ namespace StockApi
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.txtTickerList);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnGetAll);
             this.Name = "MetricsForm";
@@ -197,8 +257,6 @@ namespace StockApi
         }
 
         #endregion
-
-        public System.Windows.Forms.TextBox txtTickerList;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnGetAll;
         private System.Windows.Forms.Button btnSearch;
@@ -208,5 +266,11 @@ namespace StockApi
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtTicker;
         private System.Windows.Forms.CheckBox chkBigChanges;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtBeginLetter;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtEndLetter;
+        private System.Windows.Forms.Button btnRunMetrics;
+        private System.Windows.Forms.RichTextBox txtTickerList;
     }
 }

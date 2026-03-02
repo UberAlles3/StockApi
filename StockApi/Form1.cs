@@ -680,7 +680,7 @@ namespace StockApi
 
             // Execute your daily function here
             Metrics metrics = new Metrics();
-            int x = await metrics.DailyGetMetrics(PositionsDataTable, null);
+            int x = await metrics.DailyGetMetrics(PositionsDataTable, null, "", "");
 
             // Get news, earnings
             GetNewsEarnings();
@@ -765,23 +765,7 @@ namespace StockApi
         //         Menu Items
         /////////////////////////////////
         ///////// Main 
-        private async void runDailyMetricsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string saveText = runDailyMetricsToolStripMenuItem.Text;
-
-            txtMessages.Text = "Running metrics for today...\r\n";
-            runDailyMetricsToolStripMenuItem.Text = "Running...";
-            runDailyMetricsToolStripMenuItem.Enabled = false;
-            runDailyMetricsToolStripMenuItem.ForeColor = Color.LightBlue;
-            // Execute your daily function here
-            Metrics metrics = new Metrics();
-            int x = await metrics.DailyGetMetrics(PositionsDataTable, txtMessages);
-            runDailyMetricsToolStripMenuItem.Text = saveText;
-            runDailyMetricsToolStripMenuItem.Enabled = true;
-            runDailyMetricsToolStripMenuItem.ForeColor = Color.White;
-            txtMessages.Text = _news;
-        }
-
+ 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -951,13 +935,55 @@ namespace StockApi
             MessageBox.Show(sb.ToString(), "Coming Up Earnings");
         }
 
-        private void stockMetricsToolStripMenuItem_Click(object sender, EventArgs e)
+        ////// Metrics 
+        private void viewMetricsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MetricsForm f = new MetricsForm(txtStockTicker.Text);
             f.Owner = this;
             f.Show();
         }
 
+        private async void runMetricsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //string saveText = runMetricsToolStripMenuItem.Text;
+
+            //txtMessages.Text = "Running metrics for today...\r\n";
+            //runMetricsToolStripMenuItem.Text = "Running...";
+            //runMetricsToolStripMenuItem.Enabled = false;
+            //runMetricsToolStripMenuItem.ForeColor = Color.LightBlue;
+            //// Execute your daily function here
+            //Metrics metrics = new Metrics();
+            //int x = await metrics.DailyGetMetrics(PositionsDataTable, txtMessages);
+            //runMetricsToolStripMenuItem.Text = saveText;
+            //runMetricsToolStripMenuItem.Enabled = true;
+            //runMetricsToolStripMenuItem.ForeColor = Color.White;
+            //txtMessages.Text = _news;
+        }
+
+        private void openMetricsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text Files|*.txt|All Files|*.*";
+            openFileDialog.InitialDirectory = Application.StartupPath;
+            openFileDialog.Title = "Select a File";
+            string selectedFilePath;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                selectedFilePath = openFileDialog.FileName;
+
+                try
+                {
+                    Process.Start("notepad.exe", selectedFilePath);
+                }
+                catch (Exception ex)
+                {
+                    Program.logger.Error($"Error opening Notepad: {ex.Message}  {ex.StackTrace}", ex);
+                }
+            }
+        }
+
+        ////// Excel 
         private void excelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ExcelForm f = new ExcelForm(_excelFilePath);

@@ -2,4 +2,4 @@
 DONE Add flat trend
 DONE Add 3 year trend
 
-Excel import get current price from buy or sell price.
+Done Excel import get current price from buy or sell price.

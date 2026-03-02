@@ -324,5 +324,11 @@ namespace StockApi
             analyzeInputs.SharesTradedPrice = 1;
             analyzeInputs.MovementTargetPercent = 20;
         }
+
+        private async void btnRunMetrics_Click(object sender, EventArgs e)
+        {
+            Metrics metrics = new Metrics();
+            int x = await metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text);
+        }
     }
 }

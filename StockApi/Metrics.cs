@@ -23,7 +23,7 @@ namespace StockApi
         private ExcelManager _excelManager = new ExcelManager();
         private string _applicationPath = System.Windows.Forms.Application.StartupPath;
 
-        public async Task<int> DailyGetMetrics(DataTable positionsDataTable, RichTextBox textBox)
+        public async Task<int> DailyGetMetrics(DataTable positionsDataTable, RichTextBox textBox, string startLetter, string endLetter)
         {
             // Get all tickers from position table
             List<string> stockList = new List<string>();
@@ -55,50 +55,58 @@ namespace StockApi
             }
 
             stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
-            {
-                //stockList = stockList.Skip(100).Take(20).ToList();
-                stockList = stockList.Skip(0).Take(30).ToList();
-                _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
-            }
 
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
+            if (startLetter != "")
             {
-                stockList = stockList.Skip(30).Take(30).ToList();
-                _applicationPath = Path.Combine(_applicationPath, "StockMetricsTuesday.txt");
+                startLetter = startLetter.ToUpper();
+                endLetter = endLetter.ToUpper();
+                stockList = stockList.Where(x => string.Compare(x, startLetter) > 0 && string.Compare(x, endLetter+"zzz") < 0).ToList();
+                _applicationPath = Path.Combine(_applicationPath, "StockMetrics.txt");
             }
-
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
+            else
             {
-                stockList = stockList.Skip(60).Take(30).ToList(); 
-                _applicationPath = Path.Combine(_applicationPath, "StockMetricsWednesday.txt");
-            }
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+                {
+                    //stockList = stockList.Skip(100).Take(20).ToList();
+                    stockList = stockList.Skip(0).Take(30).ToList();
+                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
+                }
 
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
-            {
-                stockList = stockList.Skip(90).Take(32).ToList();
-                _applicationPath = Path.Combine(_applicationPath, "StockMetricsThursday.txt");
-            }
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    stockList = stockList.Skip(30).Take(30).ToList();
+                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsTuesday.txt");
+                }
 
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
-            {
-                //stockList = stockList.Skip(60).Take(40).ToList();
-                //desktopPath = Path.Combine(desktopPath, "StockMetricsSaturday_V-Z.txt");
-                stockList = stockList.Skip(122).Take(32).ToList();
-                _applicationPath = Path.Combine(_applicationPath, "StockMetricsFriday_T-V.txt");
-            }
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
+                {
+                    stockList = stockList.Skip(60).Take(30).ToList();
+                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsWednesday.txt");
+                }
 
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
-            {
-                stockList = stockList.Skip(0).Take(10).ToList();
-                _applicationPath = Path.Combine(_applicationPath, "StockMetricsSaturday_V-Z.txt");
-            }
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
+                {
+                    stockList = stockList.Skip(90).Take(32).ToList();
+                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsThursday.txt");
+                }
 
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
-            {
-                //stockList = stockList.Skip(0).Take(4).ToList();
-                stockList = stockList.Skip(10).Take(10).ToList();
-                _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
+                {
+                    stockList = stockList.Skip(122).Take(32).ToList();
+                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsFriday_T-V.txt");
+                }
+
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    stockList = stockList.Skip(0).Take(10).ToList();
+                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsSaturday_V-Z.txt");
+                }
+
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    stockList = stockList.Skip(10).Take(10).ToList();
+                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
+                }
             }
 
             string stockMetricString = "";
@@ -116,8 +124,16 @@ namespace StockApi
                 Directory.Delete(_applicationPath);
             File.WriteAllText(_applicationPath, builder.ToString());
 
+            try
+            {
+                Process.Start("notepad.exe", _applicationPath);
+            }
+            catch (Exception ex)
+            {
+                Program.logger.Error($"Error opening Notepad: {ex.Message}  {ex.StackTrace}", ex);
+            }
 
-            MessageBox.Show("Daily function executed!");
+            //MessageBox.Show("Daily function executed!");
 
             return 0;
         }
@@ -151,10 +167,12 @@ namespace StockApi
                 Debug.WriteLine(_analyze.AnalysisMetricsOutputText);
             }
 
-            stockMetricString = $"{stockDownloads.stockSummary.Ticker}, {stockDownloads.stockSummary.VolatilityString.NumericValue}, {stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue},"
-                                     + $" {stockDownloads.stockSummary.PriceBookString.NumericValue}, {stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {stockDownloads.stockSummary.DividendString.NumericValue}, {stockDownloads.stockStatistics.ShortInterestString.NumericValue}"
-                                     + $", {stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{stockDownloads.stockSummary.YearsRangeLow.NumericValue},{stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}";
-
+            //stockMetricString = $"{stockDownloads.stockSummary.Ticker}, {stockDownloads.stockSummary.VolatilityString.NumericValue}, {stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue},"
+            //                         + $" {stockDownloads.stockSummary.PriceBookString.NumericValue}, {stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {stockDownloads.stockSummary.DividendString.NumericValue}, {stockDownloads.stockStatistics.ShortInterestString.NumericValue}"
+            //                         + $", {stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{stockDownloads.stockSummary.YearsRangeLow.NumericValue},{stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}";
+            stockMetricString = $"{stockDownloads.stockSummary.Ticker}\t{stockDownloads.stockSummary.VolatilityString.NumericValue}\t{stockDownloads.stockSummary.EarningsPerShareString.NumericValue}\t{stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue}\t"
+                                     + $" {stockDownloads.stockSummary.PriceBookString.NumericValue}\t{stockDownloads.stockSummary.ProfitMarginString.NumericValue}\t{stockDownloads.stockSummary.DividendString.NumericValue}\t{stockDownloads.stockStatistics.ShortInterestString.NumericValue}\t"
+                                     + $"{stockDownloads.stockHistory.HistoricData3YearsAgo.Price}\t{percent_diff.ToString("0.00")}\t{stockDownloads.stockSummary.YearsRangeLow.NumericValue}\t{stockDownloads.stockSummary.YearsRangeHigh.NumericValue}\t{totalMetric}{Environment.NewLine}";
             return stockMetricString;
         }
     }

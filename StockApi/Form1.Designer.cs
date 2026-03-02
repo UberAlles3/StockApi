@@ -30,11 +30,11 @@ namespace StockApi
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnGetOne = new System.Windows.Forms.Button();
             this.txtStockTicker = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -152,6 +152,7 @@ namespace StockApi
             this.picSpinner = new System.Windows.Forms.PictureBox();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btn5YearChart = new System.Windows.Forms.Button();
             this.btn10DayChart = new System.Windows.Forms.Button();
             this.btn3YearChart = new System.Windows.Forms.Button();
             this.btnChart = new System.Windows.Forms.Button();
@@ -192,8 +193,6 @@ namespace StockApi
             this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runDailyMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lINKSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kitcoGoldAndSilverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -217,6 +216,9 @@ namespace StockApi
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.earningDatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stockMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.excelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label70 = new System.Windows.Forms.Label();
@@ -237,7 +239,6 @@ namespace StockApi
             this.panel4 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.btn5YearChart = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -1563,25 +1564,25 @@ namespace StockApi
             this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.Location = new System.Drawing.Point(10, 69);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -1707,6 +1708,17 @@ namespace StockApi
             this.panel2.Size = new System.Drawing.Size(406, 674);
             this.panel2.TabIndex = 14;
             // 
+            // btn5YearChart
+            // 
+            this.btn5YearChart.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btn5YearChart.Location = new System.Drawing.Point(27, 313);
+            this.btn5YearChart.Name = "btn5YearChart";
+            this.btn5YearChart.Size = new System.Drawing.Size(81, 24);
+            this.btn5YearChart.TabIndex = 68;
+            this.btn5YearChart.Text = "5 Year Chart";
+            this.btn5YearChart.UseVisualStyleBackColor = true;
+            this.btn5YearChart.Click += new System.EventHandler(this.btn5YearChart_Click);
+            // 
             // btn10DayChart
             // 
             this.btn10DayChart.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -1791,25 +1803,25 @@ namespace StockApi
             this.dataGridView2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.ColumnHeadersVisible = false;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView2.Location = new System.Drawing.Point(8, 407);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 25;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -2161,38 +2173,18 @@ namespace StockApi
             // 
             this.mainToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.mainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runDailyMetricsToolStripMenuItem,
-            this.toolStripMenuItem3,
             this.logToolStripMenuItem});
             this.mainToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.mainToolStripMenuItem.Name = "mainToolStripMenuItem";
             this.mainToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.mainToolStripMenuItem.Text = "&Main";
             // 
-            // runDailyMetricsToolStripMenuItem
-            // 
-            this.runDailyMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
-            this.runDailyMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.runDailyMetricsToolStripMenuItem.Name = "runDailyMetricsToolStripMenuItem";
-            this.runDailyMetricsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.runDailyMetricsToolStripMenuItem.Text = "&Run Daily Metrics";
-            this.runDailyMetricsToolStripMenuItem.Click += new System.EventHandler(this.runDailyMetricsToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.BackColor = System.Drawing.Color.Black;
-            this.toolStripMenuItem3.ForeColor = System.Drawing.Color.White;
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(166, 22);
-            this.toolStripMenuItem3.Text = "&Open Metric File";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
-            // 
             // logToolStripMenuItem
             // 
             this.logToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.logToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.logToolStripMenuItem.Text = "&Log";
             this.logToolStripMenuItem.Click += new System.EventHandler(this.logToolStripMenuItem_Click);
             // 
@@ -2400,11 +2392,41 @@ namespace StockApi
             // 
             // stockMetricsToolStripMenuItem
             // 
+            this.stockMetricsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewMetricsToolStripMenuItem,
+            this.runMetricsToolStripMenuItem,
+            this.openMetricsToolStripMenuItem});
             this.stockMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.stockMetricsToolStripMenuItem.Name = "stockMetricsToolStripMenuItem";
             this.stockMetricsToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
             this.stockMetricsToolStripMenuItem.Text = "&Stock Metrics";
-            this.stockMetricsToolStripMenuItem.Click += new System.EventHandler(this.stockMetricsToolStripMenuItem_Click);
+            // 
+            // viewMetricsToolStripMenuItem
+            // 
+            this.viewMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.viewMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.viewMetricsToolStripMenuItem.Name = "viewMetricsToolStripMenuItem";
+            this.viewMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewMetricsToolStripMenuItem.Text = "View Metrics";
+            this.viewMetricsToolStripMenuItem.Click += new System.EventHandler(this.viewMetricsToolStripMenuItem_Click);
+            // 
+            // runMetricsToolStripMenuItem
+            // 
+            this.runMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.runMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.runMetricsToolStripMenuItem.Name = "runMetricsToolStripMenuItem";
+            this.runMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runMetricsToolStripMenuItem.Text = "Run Metrics";
+            this.runMetricsToolStripMenuItem.Click += new System.EventHandler(this.runMetricsToolStripMenuItem_Click);
+            // 
+            // openMetricsToolStripMenuItem
+            // 
+            this.openMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.openMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openMetricsToolStripMenuItem.Name = "openMetricsToolStripMenuItem";
+            this.openMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openMetricsToolStripMenuItem.Text = "Open Metrics";
+            this.openMetricsToolStripMenuItem.Click += new System.EventHandler(this.openMetricsToolStripMenuItem_Click);
             // 
             // excelToolStripMenuItem
             // 
@@ -2653,17 +2675,6 @@ namespace StockApi
             this.label7.Text = "Markets";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // btn5YearChart
-            // 
-            this.btn5YearChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn5YearChart.Location = new System.Drawing.Point(27, 313);
-            this.btn5YearChart.Name = "btn5YearChart";
-            this.btn5YearChart.Size = new System.Drawing.Size(81, 24);
-            this.btn5YearChart.TabIndex = 68;
-            this.btn5YearChart.Text = "5 Year Chart";
-            this.btn5YearChart.UseVisualStyleBackColor = true;
-            this.btn5YearChart.Click += new System.EventHandler(this.btn5YearChart_Click);
-            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -2903,7 +2914,6 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem watchOffHighsToolStripMenuItem;
         private System.Windows.Forms.Timer MetricsTimer;
         private System.Windows.Forms.Button btnGetHtml;
-        private System.Windows.Forms.ToolStripMenuItem runDailyMetricsToolStripMenuItem;
         private System.Windows.Forms.Label lblBasicEps4YearsAgo;
         private System.Windows.Forms.Label lblBasicEps2YearsAgo;
         private System.Windows.Forms.Label lblBasicEpsTTM;
@@ -2933,8 +2943,10 @@ namespace StockApi
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ToolStripMenuItem excelToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.Button btn5YearChart;
+        private System.Windows.Forms.ToolStripMenuItem viewMetricsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runMetricsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openMetricsToolStripMenuItem;
     }
 }
 
