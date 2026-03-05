@@ -1711,18 +1711,18 @@ namespace StockApi
             // btn5YearChart
             // 
             this.btn5YearChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn5YearChart.Location = new System.Drawing.Point(27, 313);
+            this.btn5YearChart.Location = new System.Drawing.Point(25, 313);
             this.btn5YearChart.Name = "btn5YearChart";
-            this.btn5YearChart.Size = new System.Drawing.Size(81, 24);
+            this.btn5YearChart.Size = new System.Drawing.Size(90, 24);
             this.btn5YearChart.TabIndex = 68;
-            this.btn5YearChart.Text = "5 Year Chart";
+            this.btn5YearChart.Text = "All Data Chart";
             this.btn5YearChart.UseVisualStyleBackColor = true;
             this.btn5YearChart.Click += new System.EventHandler(this.btn5YearChart_Click);
             // 
             // btn10DayChart
             // 
             this.btn10DayChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn10DayChart.Location = new System.Drawing.Point(291, 313);
+            this.btn10DayChart.Location = new System.Drawing.Point(297, 313);
             this.btn10DayChart.Name = "btn10DayChart";
             this.btn10DayChart.Size = new System.Drawing.Size(86, 24);
             this.btn10DayChart.TabIndex = 51;
@@ -1733,7 +1733,7 @@ namespace StockApi
             // btn3YearChart
             // 
             this.btn3YearChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn3YearChart.Location = new System.Drawing.Point(115, 313);
+            this.btn3YearChart.Location = new System.Drawing.Point(121, 313);
             this.btn3YearChart.Name = "btn3YearChart";
             this.btn3YearChart.Size = new System.Drawing.Size(81, 24);
             this.btn3YearChart.TabIndex = 50;
@@ -1744,7 +1744,7 @@ namespace StockApi
             // btnChart
             // 
             this.btnChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnChart.Location = new System.Drawing.Point(203, 313);
+            this.btnChart.Location = new System.Drawing.Point(209, 313);
             this.btnChart.Name = "btnChart";
             this.btnChart.Size = new System.Drawing.Size(81, 24);
             this.btnChart.TabIndex = 49;
@@ -2184,7 +2184,7 @@ namespace StockApi
             this.logToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.logToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
             this.logToolStripMenuItem.Text = "&Log";
             this.logToolStripMenuItem.Click += new System.EventHandler(this.logToolStripMenuItem_Click);
             // 
@@ -2406,7 +2406,7 @@ namespace StockApi
             this.viewMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.viewMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.viewMetricsToolStripMenuItem.Name = "viewMetricsToolStripMenuItem";
-            this.viewMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewMetricsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.viewMetricsToolStripMenuItem.Text = "View Metrics";
             this.viewMetricsToolStripMenuItem.Click += new System.EventHandler(this.viewMetricsToolStripMenuItem_Click);
             // 
@@ -2415,7 +2415,7 @@ namespace StockApi
             this.runMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.runMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.runMetricsToolStripMenuItem.Name = "runMetricsToolStripMenuItem";
-            this.runMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runMetricsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.runMetricsToolStripMenuItem.Text = "Run Metrics";
             this.runMetricsToolStripMenuItem.Click += new System.EventHandler(this.runMetricsToolStripMenuItem_Click);
             // 
@@ -2424,7 +2424,7 @@ namespace StockApi
             this.openMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.openMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.openMetricsToolStripMenuItem.Name = "openMetricsToolStripMenuItem";
-            this.openMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openMetricsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.openMetricsToolStripMenuItem.Text = "Open Metrics";
             this.openMetricsToolStripMenuItem.Click += new System.EventHandler(this.openMetricsToolStripMenuItem_Click);
             // 

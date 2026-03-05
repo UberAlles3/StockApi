@@ -50,7 +50,7 @@ namespace StockApi
             this.ClientSize = new System.Drawing.Size(578, 336);
             this.Controls.Add(this.pictureBox1);
             this.Name = "ChartForm";
-            this.Text = "Form2";
+            this.Text = "Charting";
             this.Load += new System.EventHandler(this.ChartForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
