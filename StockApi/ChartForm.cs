@@ -26,6 +26,8 @@ namespace StockApi
         public string UrlSC5Year = "https://stockcharts.com/c-sc/sc?s=?ticker?&p=D&b=1&g=0&yr=1&mn=0&dy=0&i=p45662470291";
 
 
+        // finviz https://charts2.finviz.com/chart.ashx?t=aapl&ty=l&ta=0&p=d&s=l
+
 
         //https://stockcharts.com/c-sc/sc?s=XOM&p=D&b=1&g=0&yr=1&mn=0&dy=0&i=p45662470291
 
