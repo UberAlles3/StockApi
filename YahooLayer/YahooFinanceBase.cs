@@ -329,6 +329,9 @@ namespace YahooLayer
             if (factor == 0)
                 return metric;
 
+            if (metric < .1)
+                metric = .1;
+
             newMetric = ((absFactor) + Math.Log(metric)) / (absFactor);
 
             return Math.Round(newMetric, 3);
