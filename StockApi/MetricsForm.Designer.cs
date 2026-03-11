@@ -46,6 +46,7 @@ namespace StockApi
             this.txtEndLetter = new System.Windows.Forms.TextBox();
             this.btnRunMetrics = new System.Windows.Forms.Button();
             this.txtTickerList = new System.Windows.Forms.RichTextBox();
+            this.btnCancelMetrics = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -200,7 +201,7 @@ namespace StockApi
             this.txtEndLetter.Name = "txtEndLetter";
             this.txtEndLetter.Size = new System.Drawing.Size(62, 23);
             this.txtEndLetter.TabIndex = 55;
-            this.txtEndLetter.Text = "Z";
+            this.txtEndLetter.Text = "B";
             // 
             // btnRunMetrics
             // 
@@ -226,12 +227,23 @@ namespace StockApi
             this.txtTickerList.TabIndex = 57;
             this.txtTickerList.Text = "";
             // 
+            // btnCancelMetrics
+            // 
+            this.btnCancelMetrics.Location = new System.Drawing.Point(1059, 29);
+            this.btnCancelMetrics.Name = "btnCancelMetrics";
+            this.btnCancelMetrics.Size = new System.Drawing.Size(75, 38);
+            this.btnCancelMetrics.TabIndex = 58;
+            this.btnCancelMetrics.Text = "Cancel";
+            this.btnCancelMetrics.UseVisualStyleBackColor = true;
+            this.btnCancelMetrics.Click += new System.EventHandler(this.btnCancelMetrics_Click);
+            // 
             // MetricsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1425, 696);
+            this.Controls.Add(this.btnCancelMetrics);
             this.Controls.Add(this.txtTickerList);
             this.Controls.Add(this.btnRunMetrics);
             this.Controls.Add(this.txtEndLetter);
@@ -272,5 +284,6 @@ namespace StockApi
         private System.Windows.Forms.TextBox txtEndLetter;
         private System.Windows.Forms.Button btnRunMetrics;
         private System.Windows.Forms.RichTextBox txtTickerList;
+        private System.Windows.Forms.Button btnCancelMetrics;
     }
 }

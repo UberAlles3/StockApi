@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using YahooLayer;
 using SqlLayer;
+using System.Threading.Tasks;
 
 namespace StockApi
 {
@@ -18,6 +19,7 @@ namespace StockApi
         private static StockDownloads _stockDownloads = new StockDownloads("");
         private static Analyze _analyze = new Analyze();
         private string _ticker;
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         public MetricsForm(string ticker)
         {
@@ -91,12 +93,12 @@ namespace StockApi
             dataGridView1.Columns[2].Width = 50;
             dataGridView1.Columns[3].HeaderText = "Month";
             dataGridView1.Columns[3].Width = 50;
-            
+
             dataGridView1.Columns[4].HeaderText = "Price Trend";
             dataGridView1.Columns[4].Width = 55;
             dataGridView1.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
             dataGridView1.Columns[4].DefaultCellStyle.Format = "N3";
-            
+
             dataGridView1.Columns[5].HeaderText = "Earnings Per Share";
             dataGridView1.Columns[5].Width = 55;
             dataGridView1.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
@@ -178,7 +180,7 @@ namespace StockApi
                 // Change of ticker 
                 if (ticker != r.Ticker)
                 {
-                    if(first != null && bigMover) // first change of ticker
+                    if (first != null && bigMover) // first change of ticker
                     {
                         // Add first and last to Big Movers
                         bigMovers.Add(first);
@@ -235,7 +237,7 @@ namespace StockApi
                 }
                 else if (r.FinalMetric < previous * .99)
                 {
-                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.FromArgb(242, 202, 202); 
+                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.FromArgb(242, 202, 202);
                 }
 
                 i++;
@@ -312,7 +314,7 @@ namespace StockApi
                 builder.Append($", {_stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockDownloads.stockSummary.YearsRangeLow.NumericValue},{_stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
                 Thread.Sleep(800);
             }
-            
+
             txtTickerList.Text = builder.ToString();
         }
 
@@ -328,7 +330,35 @@ namespace StockApi
         private async void btnRunMetrics_Click(object sender, EventArgs e)
         {
             Metrics metrics = new Metrics();
-            int x = await metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text);
+            //int x = await metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text);
+
+            try
+            {
+                // Pass the token to the async method
+                Task<int> calculationTask = metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
+
+                // Request cancellation after a specific duration (e.g., 500 milliseconds)
+                //cts.CancelAfter(TimeSpan.FromMilliseconds(600000));
+
+                // Await the task. If cancelled, a TaskCanceledException is thrown here.
+                int x = await calculationTask;
+                //Console.WriteLine($"Result: {result}");
+            }
+            catch (OperationCanceledException)
+            {
+                MessageBox.Show("Metrics cancelled.");
+                txtTickerList.Clear();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private void btnCancelMetrics_Click(object sender, EventArgs e)
+        {
+            cts.Cancel();
         }
     }
+
 }

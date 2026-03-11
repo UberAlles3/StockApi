@@ -22,8 +22,8 @@ namespace StockApi
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
         private string _applicationPath = System.Windows.Forms.Application.StartupPath;
-
-        public async Task<int> DailyGetMetrics(DataTable positionsDataTable, RichTextBox textBox, string startLetter, string endLetter)
+        
+        public async Task<int> DailyGetMetrics(DataTable positionsDataTable, RichTextBox textBox, string startLetter, string endLetter, CancellationToken cancellationToken)
         {
             // Get all tickers from position table
             List<string> stockList = new List<string>();
@@ -112,6 +112,12 @@ namespace StockApi
             string stockMetricString = "";
             foreach (string ticker in stockList)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    // Clean up here, then...
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+
                 stockMetricString = await GetStockMetric(ticker, analyzeInputs);
                 builder.Append(stockMetricString);
                 Debug.Print(stockMetricString);

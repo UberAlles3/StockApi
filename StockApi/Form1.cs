@@ -680,7 +680,8 @@ namespace StockApi
 
             // Execute your daily function here
             Metrics metrics = new Metrics();
-            int x = await metrics.DailyGetMetrics(PositionsDataTable, null, "", "");
+            CancellationTokenSource cts = new CancellationTokenSource();
+            int x = await metrics.DailyGetMetrics(PositionsDataTable, null, "", "", cts.Token);
 
             // Get news, earnings
             GetNewsEarnings();
