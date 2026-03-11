@@ -113,16 +113,17 @@ namespace StockApi
             foreach (string ticker in stockList)
             {
                 if (cancellationToken.IsCancellationRequested)
-                {
-                    // Clean up here, then...
                     cancellationToken.ThrowIfCancellationRequested();
-                }
 
                 stockMetricString = await GetStockMetric(ticker, analyzeInputs);
                 builder.Append(stockMetricString);
                 Debug.Print(stockMetricString);
                 if(textBox != null)
                     textBox.Text += ticker + "\r\n";
+
+                if (cancellationToken.IsCancellationRequested)
+                    cancellationToken.ThrowIfCancellationRequested();
+
                 Thread.Sleep(800);
             }
 

@@ -2417,7 +2417,7 @@ namespace StockApi
             this.runMetricsToolStripMenuItem.Name = "runMetricsToolStripMenuItem";
             this.runMetricsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.runMetricsToolStripMenuItem.Text = "Run Metrics";
-            this.runMetricsToolStripMenuItem.Click += new System.EventHandler(this.runMetricsToolStripMenuItem_Click);
+            //this.runMetricsToolStripMenuItem.Click += new System.EventHandler(this.runMetricsToolStripMenuItem_Click);
             // 
             // openMetricsToolStripMenuItem
             // 

@@ -335,19 +335,13 @@ namespace StockApi
             try
             {
                 // Pass the token to the async method
-                Task<int> calculationTask = metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
-
-                // Request cancellation after a specific duration (e.g., 500 milliseconds)
-                //cts.CancelAfter(TimeSpan.FromMilliseconds(600000));
-
-                // Await the task. If cancelled, a TaskCanceledException is thrown here.
-                int x = await calculationTask;
-                //Console.WriteLine($"Result: {result}");
+                int x = await metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
             }
             catch (OperationCanceledException)
             {
                 MessageBox.Show("Metrics cancelled.");
                 txtTickerList.Clear();
+                cts = new CancellationTokenSource(); //reset
             }
             catch (Exception ex)
             {
@@ -360,5 +354,4 @@ namespace StockApi
             cts.Cancel();
         }
     }
-
 }

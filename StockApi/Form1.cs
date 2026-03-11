@@ -944,22 +944,22 @@ namespace StockApi
             f.Show();
         }
 
-        private async void runMetricsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //string saveText = runMetricsToolStripMenuItem.Text;
+        //private async void runMetricsToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    //string saveText = runMetricsToolStripMenuItem.Text;
 
-            //txtMessages.Text = "Running metrics for today...\r\n";
-            //runMetricsToolStripMenuItem.Text = "Running...";
-            //runMetricsToolStripMenuItem.Enabled = false;
-            //runMetricsToolStripMenuItem.ForeColor = Color.LightBlue;
-            //// Execute your daily function here
-            //Metrics metrics = new Metrics();
-            //int x = await metrics.DailyGetMetrics(PositionsDataTable, txtMessages);
-            //runMetricsToolStripMenuItem.Text = saveText;
-            //runMetricsToolStripMenuItem.Enabled = true;
-            //runMetricsToolStripMenuItem.ForeColor = Color.White;
-            //txtMessages.Text = _news;
-        }
+        //    //txtMessages.Text = "Running metrics for today...\r\n";
+        //    //runMetricsToolStripMenuItem.Text = "Running...";
+        //    //runMetricsToolStripMenuItem.Enabled = false;
+        //    //runMetricsToolStripMenuItem.ForeColor = Color.LightBlue;
+        //    //// Execute your daily function here
+        //    //Metrics metrics = new Metrics();
+        //    //int x = await metrics.DailyGetMetrics(PositionsDataTable, txtMessages);
+        //    //runMetricsToolStripMenuItem.Text = saveText;
+        //    //runMetricsToolStripMenuItem.Enabled = true;
+        //    //runMetricsToolStripMenuItem.ForeColor = Color.White;
+        //    //txtMessages.Text = _news;
+        //}
 
         private void openMetricsToolStripMenuItem_Click(object sender, EventArgs e)
         {
