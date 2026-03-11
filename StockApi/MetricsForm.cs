@@ -330,11 +330,10 @@ namespace StockApi
         private async void btnRunMetrics_Click(object sender, EventArgs e)
         {
             Metrics metrics = new Metrics();
-            //int x = await metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text);
 
+            // Allow cancelling DailyMetrics with the Cancel button
             try
             {
-                // Pass the token to the async method
                 int x = await metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
             }
             catch (OperationCanceledException)
