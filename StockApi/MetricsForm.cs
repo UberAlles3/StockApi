@@ -188,7 +188,6 @@ namespace StockApi
                         bigMover = false;
                     }
 
-
                     first = r;
                 }
                 ticker = r.Ticker;
