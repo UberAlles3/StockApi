@@ -14,6 +14,7 @@ using System.IO;
 using SqlLayer;
 using SqlLayer.SQL_Models;
 using YahooLayer;
+using PC = StockApi.ExcelManager.PositionColumns;
 
 namespace StockApi
 {
@@ -36,6 +37,7 @@ namespace StockApi
         private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
         private static DataTable _positionsDataTable = null;
         private static DataTable _tradesDataTable = null;
+        public static List<string> AllOwnedTickers = new List<string>();
 
         // News
         private static string _news = "";
@@ -50,10 +52,20 @@ namespace StockApi
                 {
                     _positionsDataTable = (new ExcelManager()).ImportExceelSheet(_excelFilePath, 0, 0, 36);
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
+
+                    _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
+
+                    foreach (DataRow trade in _positionsDataTable.AsEnumerable())
+                    {
+                        // Fill tickers list
+                        AllOwnedTickers.Add(trade.ItemArray[(int)PC.Ticker].ToString());
+
+                    }
+                    AllOwnedTickers = AllOwnedTickers.OrderBy(x => x).ToList(); 
                 }
                 return _positionsDataTable;
             }
-            set => _positionsDataTable = value; 
+            set => _positionsDataTable = value;
         }
         public static DataTable TradesDataTable 
         {
@@ -124,6 +136,7 @@ namespace StockApi
             await _markets.GetAllMarketData();
             DisplayMarketData();
 
+            var primeThePositionsDataTable = PositionsDataTable;
             //(new ExcelManager()).GenerateClassCodeFromExcelSheet(_excelFilePath);
         }
 

@@ -65,7 +65,10 @@ namespace StockApi
             if (comboBox1.SelectedIndex == 4)
                 metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-11), ticker);
 
+            metrics = metrics.Where(metrics => Form1.AllOwnedTickers.Contains(metrics.Ticker)).ToList();
+
             metrics = metrics.OrderBy(x => x.Ticker).ThenBy(x => x.Year).ThenBy(x => x.Month).ToList();
+
             bigMovers = GetBigMovers(metrics);
 
             if (chkBigChanges.Checked == true)
@@ -214,13 +217,35 @@ namespace StockApi
             string ticker = "";
             double previous = 0;
             int i = 0;
+            Color currentColor = Color.Black;
+            Color currentForeColor = Form1.TextForeColor;
+            Color altColor = Color.FromArgb(0, 0, 48);
+            Color altForeColor = Color.White;
+
             foreach (SqlMetric r in metrics)
             {
                 if (ticker != r.Ticker)
                 {
                     ticker = r.Ticker;
                     previous = r.FinalMetric;
+                    if(i > 0)
+                    {
+//                        dataGridView1.Rows[i].Cells[17].Style.BackColor = currentColor;
+                        if (currentColor == Color.Black)
+                        {
+                            currentColor = altColor;
+                            currentForeColor = altForeColor;
+                        }
+                        else
+                        {
+                            currentColor = Color.Black;
+                            currentForeColor = Form1.TextForeColor;
+                        }
+                    }
                 }
+
+                if (i < dataGridView1.Rows.Count-2)
+                    dataGridView1.Rows[i].Cells[17].Style.BackColor = currentColor;
 
                 if (r.FinalMetric > previous * 1.032)
                 {
@@ -329,6 +354,7 @@ namespace StockApi
         private async void btnRunMetrics_Click(object sender, EventArgs e)
         {
             Metrics metrics = new Metrics();
+            txtTickerList.Clear();
 
             // Allow cancelling DailyMetrics with the Cancel button
             try
