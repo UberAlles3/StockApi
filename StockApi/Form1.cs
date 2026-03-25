@@ -286,6 +286,10 @@ namespace StockApi
                     if (sss.Contains("Split"))
                     {
                         splitting = true;
+                        // Delete SQL price history
+                        SqlCrudOperations _finacialStatement = new SqlCrudOperations();
+                        _finacialStatement.DeletePriceHistory(txtStockTicker.Text);
+
                         ratio = Convert.ToInt32(sss._Between("Split", "-"));
                     }
 
