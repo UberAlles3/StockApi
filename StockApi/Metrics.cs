@@ -59,8 +59,8 @@ namespace StockApi
             if (startLetter != "")
             {
                 startLetter = startLetter.ToUpper();
-                endLetter = endLetter.ToUpper();
-                stockList = stockList.Where(x => string.Compare(x, startLetter) > 0 && string.Compare(x, endLetter+"zzz") < 0).ToList();
+                endLetter = endLetter.ToUpper() + "ZZZ";
+                stockList = stockList.Where(x => string.Compare(x, startLetter) >= 0 && string.Compare(x, endLetter) < 0).ToList();
                 _applicationPath = Path.Combine(_applicationPath, "StockMetrics.txt");
             }
             else
