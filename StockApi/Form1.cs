@@ -958,6 +958,7 @@ namespace StockApi
         {
             MetricsForm f = new MetricsForm(txtStockTicker.Text);
             f.Owner = this;
+            f.Icon = this.Icon;
             f.Show();
         }
 

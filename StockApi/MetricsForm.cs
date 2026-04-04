@@ -18,24 +18,39 @@ namespace StockApi
     {
         private static StockDownloads _stockDownloads = new StockDownloads("");
         private static Analyze _analyze = new Analyze();
-        private string _ticker;
+        //private string _ticker;
         private CancellationTokenSource cts = new CancellationTokenSource();
 
         public MetricsForm(string ticker)
         {
-            _ticker = ticker;
+            //_ticker = ticker;
             InitializeComponent();
         }
 
         private void MetricsForm_Load(object sender, EventArgs e)
         {
-            txtTickerList.Text = _ticker;
+            //txtTickerList.Text = _ticker;
             comboBox1.Items.Add("Lastest");
             comboBox1.Items.Add("Last 2 Months");
             comboBox1.Items.Add("Last 3 Months");
             comboBox1.Items.Add("Last 6 Months");
             comboBox1.Items.Add("Last Year");
             comboBox1.SelectedIndex = 2;
+
+            dataGridView1.Top = 1;
+            dataGridView1.Height = panel1.Height - 2;
+            dataGridView1.Left = 1;
+            dataGridView1.Width = panel1.Width - 2;
+
+            btnCancelMetrics.Visible = false;
+        }
+
+        private void MetricsForm_Paint(object sender, PaintEventArgs e)
+        {
+            int width = this.Width - 17;
+            int height = this.Height - 39;
+            Pen greenPen = new Pen(Color.FromArgb(255, 128, 128, 128), 3);
+            e.Graphics.DrawRectangle(greenPen, 0, -1, width, height);
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -268,93 +283,96 @@ namespace StockApi
             }
         }
 
-        private async void btnGetAll_Click(object sender, EventArgs e)
-        {
-            StringBuilder builder = new StringBuilder();
-            List<string> stockList = new List<string>();
-            bool _tickerFound = false;
+        //private async void btnGetAll_Click(object sender, EventArgs e)
+        //{
+        //    StringBuilder builder = new StringBuilder();
+        //    List<string> stockList = new List<string>();
+        //    bool _tickerFound = false;
 
-            bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+        //    bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
 
-            if (networkUp == false)
-            {
-                MessageBox.Show("Your network connection is unavailable.");
-                return;
-            }
+        //    if (networkUp == false)
+        //    {
+        //        MessageBox.Show("Your network connection is unavailable.");
+        //        return;
+        //    }
 
-            stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
-            stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
+        //    stockList = txtTickerList.Text.Split(Environment.NewLine).ToList();
+        //    stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
 
-            txtTickerList.Text = "";
-            //builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend, 3YearPrice, 3YearPriceChange{Environment.NewLine}");
-            foreach (string ticker in stockList)
-            {
-                _stockDownloads.stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
+        //    txtTickerList.Text = "";
+        //    //builder.Append($"Ticker, Volatility, EarningsPerShare, OneYearTargetPrice, PriceBook, ProfitMargin, Dividend, 3YearPrice, 3YearPriceChange{Environment.NewLine}");
+        //    foreach (string ticker in stockList)
+        //    {
+        //        _stockDownloads.stockSummary.Ticker = ticker.Substring(0, (ticker + ",").IndexOf(",")).ToUpper();
 
-                txtTickerList.Text += $"{ticker}" + Environment.NewLine;
+        //        txtTickerList.Text += $"{ticker}" + Environment.NewLine;
 
-                // Extract the individual data values from the html
-                _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
+        //        // Extract the individual data values from the html
+        //        _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
 
-                if (_stockDownloads.stockSummary.LastException != null)
-                {
-                    txtTickerList.Text = _stockDownloads.stockSummary.Error;
-                    continue;
-                }
+        //        if (_stockDownloads.stockSummary.LastException != null)
+        //        {
+        //            txtTickerList.Text = _stockDownloads.stockSummary.Error;
+        //            continue;
+        //        }
 
-                if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
-                {
-                    Thread.Sleep(1000);
-                    _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
+        //        if (_stockDownloads.stockSummary.EarningsPerShareString.StringValue == "--")
+        //        {
+        //            Thread.Sleep(1000);
+        //            _tickerFound = await _stockDownloads.stockSummary.GetStockData(_stockDownloads.stockSummary.Ticker);
 
-                    if (_stockDownloads.stockSummary.LastException != null)
-                    {
-                        txtTickerList.Text = _stockDownloads.stockSummary.Error;
-                        continue;
-                    }
-                }
+        //            if (_stockDownloads.stockSummary.LastException != null)
+        //            {
+        //                txtTickerList.Text = _stockDownloads.stockSummary.Error;
+        //                continue;
+        //            }
+        //        }
 
-                _stockDownloads.stockIncomeStatement = new StockIncomeStatement();
-                bool found = await _stockDownloads.stockIncomeStatement.GetStockData(ticker);
+        //        _stockDownloads.stockIncomeStatement = new StockIncomeStatement();
+        //        bool found = await _stockDownloads.stockIncomeStatement.GetStockData(ticker);
 
-                // Calculated PE can only be figured after both summary and finacial data is combined
-                _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads);
+        //        // Calculated PE can only be figured after both summary and finacial data is combined
+        //        _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads);
 
-                // get 3 year ago price
-                await _stockDownloads.stockHistory.GetPriceHistoryFor3Year(ticker, _stockDownloads.stockSummary);
+        //        // get 3 year ago price
+        //        await _stockDownloads.stockHistory.GetPriceHistoryFor3Year(ticker, _stockDownloads.stockSummary);
 
-                if (_stockDownloads.stockHistory.HistoricDisplayList.Count > 0)
-                    _stockDownloads.stockHistory.HistoricData3YearsAgo = _stockDownloads.stockHistory.HistoricDisplayList.Last();
-                else
-                    _stockDownloads.stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
+        //        if (_stockDownloads.stockHistory.HistoricDisplayList.Count > 0)
+        //            _stockDownloads.stockHistory.HistoricData3YearsAgo = _stockDownloads.stockHistory.HistoricDisplayList.Last();
+        //        else
+        //            _stockDownloads.stockHistory.HistoricData3YearsAgo = new StockHistory.HistoricPriceData() { Ticker = _stockDownloads.stockSummary.Ticker, Price = _stockDownloads.stockSummary.PriceString.NumericValue };
 
-                decimal percent_diff = _stockDownloads.stockSummary.PriceString.NumericValue / _stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
+        //        decimal percent_diff = _stockDownloads.stockSummary.PriceString.NumericValue / _stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
 
-                Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
-                SetUpAnalyzeInputs(analyzeInputs);
-                decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, true);
+        //        Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
+        //        SetUpAnalyzeInputs(analyzeInputs);
+        //        decimal totalMetric = _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, true);
 
-                builder.Append($"{_stockDownloads.stockSummary.Ticker}, {_stockDownloads.stockSummary.VolatilityString.NumericValue}, {_stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {_stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue}, {_stockDownloads.stockSummary.PriceBookString.NumericValue}, {_stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {_stockDownloads.stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
-                builder.Append($", {_stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockDownloads.stockSummary.YearsRangeLow.NumericValue},{_stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
-                Thread.Sleep(800);
-            }
+        //        builder.Append($"{_stockDownloads.stockSummary.Ticker}, {_stockDownloads.stockSummary.VolatilityString.NumericValue}, {_stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {_stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue}, {_stockDownloads.stockSummary.PriceBookString.NumericValue}, {_stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {_stockDownloads.stockSummary.DividendString.NumericValue}, {_stockDownloads.stockStatistics.ShortInterestString.NumericValue}");
+        //        builder.Append($", {_stockDownloads.stockHistory.HistoricData3YearsAgo.Price}, {percent_diff.ToString("0.00")},{_stockDownloads.stockSummary.YearsRangeLow.NumericValue},{_stockDownloads.stockSummary.YearsRangeHigh.NumericValue},{totalMetric}{Environment.NewLine}");
+        //        Thread.Sleep(800);
+        //    }
 
-            txtTickerList.Text = builder.ToString();
-        }
+        //    txtTickerList.Text = builder.ToString();
+        //}
 
-        private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
-        {
-            analyzeInputs.SharesOwned = 1;
-            analyzeInputs.LastTradeBuySell = Analyze.BuyOrSell.Buy;
-            analyzeInputs.QuantityTraded = 1;
-            analyzeInputs.SharesTradedPrice = 1;
-            analyzeInputs.MovementTargetPercent = 20;
-        }
+        //private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
+        //{
+        //    analyzeInputs.SharesOwned = 1;
+        //    analyzeInputs.LastTradeBuySell = Analyze.BuyOrSell.Buy;
+        //    analyzeInputs.QuantityTraded = 1;
+        //    analyzeInputs.SharesTradedPrice = 1;
+        //    analyzeInputs.MovementTargetPercent = 20;
+        //}
 
         private async void btnRunMetrics_Click(object sender, EventArgs e)
         {
             Metrics metrics = new Metrics();
             txtTickerList.Clear();
+
+            btnCancelMetrics.Visible = true;
+            btnRunMetrics.Enabled = false;
 
             // Allow cancelling DailyMetrics with the Cancel button
             try
@@ -371,6 +389,9 @@ namespace StockApi
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
+
+            btnCancelMetrics.Visible = false;
+            btnRunMetrics.Enabled = true;
         }
 
         private void btnCancelMetrics_Click(object sender, EventArgs e)

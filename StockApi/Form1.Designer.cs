@@ -217,7 +217,6 @@ namespace StockApi
             this.earningDatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stockMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.excelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -2394,7 +2393,6 @@ namespace StockApi
             // 
             this.stockMetricsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewMetricsToolStripMenuItem,
-            this.runMetricsToolStripMenuItem,
             this.openMetricsToolStripMenuItem});
             this.stockMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.stockMetricsToolStripMenuItem.Name = "stockMetricsToolStripMenuItem";
@@ -2406,25 +2404,16 @@ namespace StockApi
             this.viewMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.viewMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.viewMetricsToolStripMenuItem.Name = "viewMetricsToolStripMenuItem";
-            this.viewMetricsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-            this.viewMetricsToolStripMenuItem.Text = "View Metrics";
+            this.viewMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewMetricsToolStripMenuItem.Text = "Run / View Metrics";
             this.viewMetricsToolStripMenuItem.Click += new System.EventHandler(this.viewMetricsToolStripMenuItem_Click);
-            // 
-            // runMetricsToolStripMenuItem
-            // 
-            this.runMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
-            this.runMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.runMetricsToolStripMenuItem.Name = "runMetricsToolStripMenuItem";
-            this.runMetricsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-            this.runMetricsToolStripMenuItem.Text = "Run Metrics";
-            //this.runMetricsToolStripMenuItem.Click += new System.EventHandler(this.runMetricsToolStripMenuItem_Click);
             // 
             // openMetricsToolStripMenuItem
             // 
             this.openMetricsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
             this.openMetricsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.openMetricsToolStripMenuItem.Name = "openMetricsToolStripMenuItem";
-            this.openMetricsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.openMetricsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openMetricsToolStripMenuItem.Text = "Open Metrics";
             this.openMetricsToolStripMenuItem.Click += new System.EventHandler(this.openMetricsToolStripMenuItem_Click);
             // 
@@ -2945,7 +2934,6 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem excelToolStripMenuItem;
         private System.Windows.Forms.Button btn5YearChart;
         private System.Windows.Forms.ToolStripMenuItem viewMetricsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runMetricsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openMetricsToolStripMenuItem;
     }
 }
