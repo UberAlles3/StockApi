@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using YahooLayer;
 using PC = StockApi.ExcelManager.PositionColumns;
 
 namespace StockApi
@@ -26,13 +27,15 @@ namespace StockApi
         ////V VISA INC CLASS                  A Filled  Buy	1 Shares Limit $323.85	Day	$323.65 
         ////NICE NICE LTD FSPONSORED ADR           1 ADR REPS    1  ORD SHS    Filled Buy	2 Shares Limit $112.74	Day + ext	$112.71 
         ////DUOL DUOLINGO INC CLASS                  A Filled  Buy	1 Shares Limit $176.90	Day	$176.89 
-        private void btnParse_Click(object sender, EventArgs e)
+        private async void btnParse_Click(object sender, EventArgs e)
         {
             string[] lines;
             string[] cells;
             double q = 0;
             StringBuilder sb = new StringBuilder();
             ExcelPositions excelPosition = null;
+            decimal currentPrice = 0;
+            StockHistory stockHistory = new StockHistory();
 
             lines = textBox1.Text.Split("\r\n");
 
@@ -40,7 +43,7 @@ namespace StockApi
 
             //Symbol Quantity    Price    BuySell    Buy Quantiy    Buy Price    Sell Quantity   Sell Price
 
-            // Postions new data
+            // For the Postions sheet
             foreach (string line in lines)
             {
                 cells = line.Split("\t");
@@ -72,8 +75,18 @@ namespace StockApi
 
                     sb.Append(cells[0] + "\t"); // Ticker
                     sb.Append(q.ToString() + "\t"); // Shares bought added 
-                    //sb.Append(excelPosition.Price.ToString() + "\t"); // Current price, from spreadsheet
-                    sb.Append(cells[8].Replace("$", "") + "\t"); // fill Price
+                                                    //sb.Append(excelPosition.Price.ToString() + "\t"); // Current price, from spreadsheet
+
+                    try
+                    {
+                        currentPrice = await stockHistory.GetTodaysPrice(cells[0]);
+                        sb.Append(currentPrice.ToString("0.00") + "\t"); // fill Price
+                    }
+                    catch (Exception ex)
+                    {
+                        sb.Append(cells[8].Replace("$", "") + "\t"); // fill Price
+                    }
+
                     sb.Append(cells[4] + "\t"); // Buy/Sell
                     if(cells[4].ToUpper() == "BUY")
                     {
@@ -105,6 +118,7 @@ namespace StockApi
             }
             sb.Append("\r\nTrades\r\n-------------------------------------------------------------\r\n");
 
+            // For the Trades sheet
             foreach (string line in lines)
             {
                 cells = line.Split("\t");
