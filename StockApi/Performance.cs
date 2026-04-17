@@ -49,7 +49,7 @@ namespace StockApi
             // Get last 25 buys
             EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)TC.DowLevel].ToString().Trim() != "0" && x[(int)TC.DowLevel].ToString().Trim() != "");
 
-            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Buy" && x[(int)TC.DowLevel].ToString().Trim() != "").Skip(700);
+            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => (x[(int)TC.BuySell].ToString() == "Buy" || x[(int)TC.BuySell].ToString() == "Buy Shrt") && x[(int)TC.DowLevel].ToString().Trim() != "").OrderByDescending(x => x[(int)TC.TradeDate]).Take(40);
             tickerTrades = tickerTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25).OrderBy(x => x[(int)TC.TradeDate]);
 
             _performanceList.Clear();

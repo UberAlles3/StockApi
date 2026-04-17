@@ -38,7 +38,7 @@ namespace StockApi
             this.textBox1.Location = new System.Drawing.Point(12, 83);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(776, 346);
+            this.textBox1.Size = new System.Drawing.Size(776, 504);
             this.textBox1.TabIndex = 0;
             // 
             // btnParse
@@ -57,7 +57,7 @@ namespace StockApi
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(64)))), ((int)(((byte)(128)))));
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 599);
             this.Controls.Add(this.btnParse);
             this.Controls.Add(this.textBox1);
             this.Name = "ExcelForm";
