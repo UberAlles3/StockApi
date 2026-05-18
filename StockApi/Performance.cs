@@ -228,7 +228,7 @@ namespace StockApi
             return performanceList;
         }
 
-        public async Task<List<PerformanceItem>> GetLiquidationPerformance(DataTable tradesDataTable)
+        public async Task<List<PerformanceItem>> GetLiquidationPerformance(DataTable positionsDataTable, DataTable tradesDataTable)
         {
             StockHistory stockHistory = new StockHistory();
             List<PerformanceItem> performanceList = new List<PerformanceItem>();
@@ -240,10 +240,16 @@ namespace StockApi
             performanceList.Clear();
             foreach (DataRow trade in tickerTrades)
             {
-                // Search in positions for ticker to get current price 
+                // Get current price 
                 string ticker = trade.ItemArray[(int)TC.Ticker].ToString();
                 string temp = trade.ItemArray[(int)TC.QuantityTraded].ToString();
                 int quantity = 0;
+
+                var count = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString() == ticker).Count();
+
+                if (count > 0)
+                    continue;
+
                 if (temp._IsInt())
                 {
                     quantity = Convert.ToInt32(temp);

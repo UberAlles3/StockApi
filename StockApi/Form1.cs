@@ -896,7 +896,7 @@ namespace StockApi
         private async void liquidationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(TradesDataTable);
+            List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(PositionsDataTable, TradesDataTable);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Liquidation Performance", 1);
         }
 

@@ -82,7 +82,7 @@ namespace StockApi
                         currentPrice = await stockHistory.GetTodaysPrice(cells[0]);
                         sb.Append(currentPrice.ToString("0.00") + "\t"); // fill Price
                     }
-                    catch (Exception ex)
+                    catch 
                     {
                         sb.Append(cells[8].Replace("$", "") + "\t"); // fill Price
                     }
