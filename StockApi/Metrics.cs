@@ -32,6 +32,11 @@ namespace StockApi
             analyzeInputs.SharesOwned = 1;
             analyzeInputs.QuantityTraded = 1;
 
+            //////////////////// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            ///// Not running for a while 5/27/2026
+
+
+
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
             if (networkUp == false)
             {
