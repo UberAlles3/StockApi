@@ -168,6 +168,11 @@ namespace YahooLayer
         public decimal Close { get; set; }
         public decimal Price { get; set; } // Only valued for current date
         public long Volume { get; set; }
+
+        public override string ToString()
+        {
+            return $"Ticker: {Ticker}, QuoteDate: {QuoteDate}, Close: {Close}, Price {Price}";
+        }
     }
 
     /////////////////////////////////////////////////

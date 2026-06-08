@@ -44,12 +44,12 @@ namespace StockApi
             txtTickerList.Text = ""; // "Ticker      High    Current     Target" + Environment.NewLine;
             foreach (string ticker in _tickers)
             {
-                //if (ticker != "LEN")
+                //if (ticker != "AVGO")
                 //    continue;
 
-                // Find last five price by week
-                List<StockQuote> quotes = await yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-42), 42, "5d");
-                // Find last five price by week
+                // Find last 40 price 
+                List<StockQuote> quotes = await yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-42), 42, "1d");
+                // Find last five price by day
                 List<StockQuote> current = await yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddDays(-3), 4, "1d");
 
 
@@ -57,13 +57,13 @@ namespace StockApi
                 decimal high = quotes.Max(x => x.Close);
 
                 txtTickerList.Text += $"{(ticker + "    ").Substring(0, 5)}";
-                if (current.Last().Close < high * .90M) // 10% drop
+                if (current.Last().Close < high * .88M) // 12% drop
                 {
-                    txtTickerList.Text += $"    {(high).ToString("00.00").PadLeft(7, ' ')}    {current.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .90M).ToString(" 00.00").PadLeft(7, ' ')} ";
+                    txtTickerList.Text += $"    {(high).ToString("00.00").PadLeft(7, ' ')}    {current.Last().Close.ToString("00.00").PadLeft(7, ' ')}    {(high * .88M).ToString(" 00.00").PadLeft(7, ' ')} ";
 
                     DataRow trade = tickerTrades.Where(x => x[(int)TC.Ticker].ToString() == ticker).LastOrDefault();
 
-                    if(trade != null && Convert.ToDateTime(trade.ItemArray[(int)TC.TradeDate]) > DateTime.Now.AddDays(-30)) // If already bought in the last 30 days
+                    if(trade != null && Convert.ToDateTime(trade.ItemArray[(int)TC.TradeDate]) > DateTime.Now.AddDays(-32)) // If already bought in the last 30 days
                     {
                         txtTickerList.Text += $" Already bought at {trade.ItemArray[(int)TC.TradePrice]}";
                     }
