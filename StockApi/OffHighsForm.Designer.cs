@@ -41,7 +41,7 @@ namespace StockApi
             this.txtTickerList.Multiline = true;
             this.txtTickerList.Name = "txtTickerList";
             this.txtTickerList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtTickerList.Size = new System.Drawing.Size(477, 640);
+            this.txtTickerList.Size = new System.Drawing.Size(610, 640);
             this.txtTickerList.TabIndex = 12;
             // 
             // label1
@@ -49,15 +49,16 @@ namespace StockApi
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(271, 15);
+            this.label1.Size = new System.Drawing.Size(358, 15);
             this.label1.TabIndex = 13;
-            this.label1.Text = "Ticker                  High            Current               Target";
+            this.label1.Text = "Ticker           Month  High         Year High          Current             Targe" +
+    "t";
             // 
             // OffHighsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 681);
+            this.ClientSize = new System.Drawing.Size(634, 681);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtTickerList);
             this.Name = "OffHighsForm";

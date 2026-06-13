@@ -13,8 +13,8 @@ namespace StockApi
 {
     public partial class ExcelForm : Form
     {
-        List<ExcelPositions> _positions;
-        public ExcelForm(List<ExcelPositions> positions)
+        List<ExcelPosition> _positions;
+        public ExcelForm(List<ExcelPosition> positions)
         {
             _positions = positions;
             InitializeComponent();
@@ -33,7 +33,7 @@ namespace StockApi
             string[] cells;
             double q = 0;
             StringBuilder sb = new StringBuilder();
-            ExcelPositions excelPosition = null;
+            ExcelPosition excelPosition = null;
             decimal currentPrice = 0;
             StockHistory stockHistory = new StockHistory();
 
@@ -67,7 +67,7 @@ namespace StockApi
                     }
                     else
                     {
-                        excelPosition = new ExcelPositions();
+                        excelPosition = new ExcelPosition();
                         q = Convert.ToDouble(cells[5].Replace("Shares", ""));
                         MessageBox.Show("First add the new stock to the positions sheet. Exiting.");
                         return;

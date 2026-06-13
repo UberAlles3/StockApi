@@ -97,9 +97,9 @@ namespace StockApi
             }
         }
 
-        public List<ExcelPositions> GetPositionsListFromPositionsTable(string filePath)
+        public List<ExcelPosition> GetPositionsListFromPositionsTable(string filePath)
         {
-            var dataList = new List<ExcelPositions>();
+            var dataList = new List<ExcelPosition>();
             string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
             File.Copy(filePath, importFilePath, true);
 
@@ -125,7 +125,7 @@ namespace StockApi
                         else
                         {
                             object val = null;
-                            var item = new ExcelPositions();
+                            var item = new ExcelPosition();
                             for (int i = 0; i < 34; i++)
                             {
                                 if (i > 18 && i < 30)
@@ -182,7 +182,7 @@ namespace StockApi
 
 
 
-        public List<string> GetStockListFromPositionsTable(List<ExcelPositions> positionList)
+        public List<string> GetStockListFromPositionsTable(List<ExcelPosition> positionList)
         {
             List<string> stockList;
             stockList = positionList.Select(x => x.Symbol).ToList();
@@ -240,7 +240,7 @@ namespace StockApi
         }
     }
 
-    public class ExcelPositions
+    public class ExcelPosition
     {
         public string Symbol { get; set; }
         public double Quantity { get; set; }

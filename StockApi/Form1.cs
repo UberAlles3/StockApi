@@ -63,8 +63,8 @@ namespace StockApi
             set => _positionsDataTable = value;
         }
 
-        private static List<ExcelPositions> _positionList;
-        public static List<ExcelPositions> PositionList
+        private static List<ExcelPosition> _positionList;
+        public static List<ExcelPosition> PositionList
         {
             get
             {
@@ -76,8 +76,8 @@ namespace StockApi
             set => _positionList = value;
         }
 
-        private static List<ExcelPositions> _watchPositionList;
-        public static List<ExcelPositions> WatchPositionList
+        private static List<ExcelPosition> _watchPositionList;
+        public static List<ExcelPosition> WatchPositionList
         {
             get
             {
@@ -930,18 +930,18 @@ namespace StockApi
 
         private void offHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<string> tickers = OffHighsForm.GetHighMetricTickers(PositionList);
+            List<ExcelPosition> positions = PositionList.Where(x => x.TotalMetric > 1.18).ToList(); // Get high metric stock symbols
 
-            OffHighsForm offHighs = new OffHighsForm(PositionList, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(positions, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }
 
         private void watchOffHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<string> tickers = OffHighsForm.GetWatchListTickers(PositionsDataTable);
+            List<ExcelPosition> positions = WatchPositionList.Where(x => x.TotalMetric > 1.10).ToList(); // Get watch list stock symbols
 
-            OffHighsForm offHighs = new OffHighsForm(PositionList, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(positions, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }
