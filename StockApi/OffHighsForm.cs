@@ -75,21 +75,13 @@ namespace StockApi
             txtTickerList.Height = this.Height - 80;
         }
 
-        public static List<string> GetHighMetricTickers(DataTable positionsDataTable)
+        public static List<string> GetHighMetricTickers(List<ExcelPositions> positionsList)
         {
-            List<string> tickers = new List<string>();
-
-            IEnumerable<DataRow> tickersDR = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Metric].ToString().Contains("1.2") || x[(int)PC.Metric].ToString().Contains("1.3"));
-            tickersDR = tickersDR.OrderBy(x => x[(int)PC.Ticker]);
-
-            foreach (DataRow trade in tickersDR)
-            {
-                // Fill tickers list
-                tickers.Add(trade.ItemArray[(int)PC.Ticker].ToString());
-            }
+            List<string> tickers = positionsList.Where(x => x.TotalMetric > 1.2).Select(x => x.Symbol).ToList();
 
             return tickers;
         }
+
         public static List<string> GetWatchListTickers(DataTable positionsDataTable)
         {
             List<string> tickers = new List<string>();

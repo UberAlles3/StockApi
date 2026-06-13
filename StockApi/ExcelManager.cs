@@ -182,15 +182,13 @@ namespace StockApi
 
 
 
-        public List<string> GetStockListFromPositionsTable(DataTable positionsDataTable)
+        public List<string> GetStockListFromPositionsTable(List<ExcelPositions> positionList)
         {
             List<string> stockList;
-            EnumerableRowCollection<DataRow> positions = positionsDataTable.AsEnumerable().Where(x => x[(int)PositionColumns.Ticker].ToString().Trim() != "" && !x[(int)PositionColumns.Ticker].ToString().Contains("*") && x[(int)PositionColumns.QuantityHeld].ToString().Trim() != "" && x[(int)PositionColumns.QuantityHeld].ToString().Trim() != "0");
-            stockList = positions.Select(x => x[(int)PositionColumns.Ticker].ToString().Trim()).ToList();
-            stockList = stockList.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList(); // remove blacks
+            stockList = positionList.Select(x => x.Symbol).ToList();
+
             return stockList;
         }
-
 
         ////////////////////////////////////////////////////
         /// Generating class code from Excel columns

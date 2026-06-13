@@ -33,17 +33,15 @@ namespace StockApi
         
         // Excel files
         private static string _excelFilePath = "";
-        private static DateTime _tradesImportDateTime = DateTime.Now.AddYears(-2);
         private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
-        private static DataTable _positionsDataTable = null;
-        private static DataTable _tradesDataTable = null;
-        private static List<ExcelPositions> _positionsList;
+        private static DateTime _tradesImportDateTime = DateTime.Now.AddYears(-2);
         public static List<string> AllOwnedTickers = new List<string>();  // TODO get list from PositionList
 
         // News
         private static string _news = "";
         private static DateTime newsDate = DateTime.Now.AddDays(-1);
 
+        private static DataTable _positionsDataTable = null;
         public static DataTable PositionsDataTable 
         {
             get 
@@ -55,20 +53,36 @@ namespace StockApi
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
 
                     _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
-                    _positionsList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
+                    _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
 
                     // Fill tickers list
-                    AllOwnedTickers = _positionsList.Select(x => x.Symbol).OrderBy(x => x).ToList();
+                    AllOwnedTickers = _positionList.Select(x => x.Symbol).OrderBy(x => x).ToList();
                 }
                 return _positionsDataTable;
             }
             set => _positionsDataTable = value;
         }
+
+        private static List<ExcelPositions> _positionList;
+        public static List<ExcelPositions> PositionList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                var dummy = PositionsDataTable;
+
+                return _positionList;
+            }
+            set => _positionList = value;
+        }
+
+        private static DataTable _tradesDataTable = null;
         public static DataTable TradesDataTable 
         {
             get
             {
                 DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
+
                 if (excelFileDateTime > _tradesImportDateTime)
                 {
                     _tradesDataTable = (new ExcelManager()).ImportExceelSheet(_excelFilePath, 1, 40);
@@ -700,7 +714,7 @@ namespace StockApi
             ///// Not running for a while 5/27/2026
             return;
 
-            int x = await metrics.DailyGetMetrics(PositionsDataTable, null, "", "", cts.Token);
+            int x = await metrics.DailyGetMetrics(PositionList, null, "", "", cts.Token);
 
             // Get news, earnings
             GetNewsEarnings();
@@ -904,9 +918,9 @@ namespace StockApi
 
         private void offHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<string> tickers = OffHighsForm.GetHighMetricTickers(PositionsDataTable);
+            List<string> tickers = OffHighsForm.GetHighMetricTickers(PositionList);
 
-            OffHighsForm offHighs = new OffHighsForm(_positionsList, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(PositionList, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }
@@ -915,7 +929,7 @@ namespace StockApi
         {
             List<string> tickers = OffHighsForm.GetWatchListTickers(PositionsDataTable);
 
-            OffHighsForm offHighs = new OffHighsForm(_positionsList, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(PositionList, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }

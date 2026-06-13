@@ -387,7 +387,7 @@ namespace StockApi
             // Allow cancelling DailyMetrics with the Cancel button
             try
             {
-                int x = await metrics.DailyGetMetrics(Form1.PositionsDataTable, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
+                int x = await metrics.DailyGetMetrics(Form1.PositionList, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
             }
             catch (OperationCanceledException)
             {

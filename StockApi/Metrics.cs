@@ -23,7 +23,7 @@ namespace StockApi
         private ExcelManager _excelManager = new ExcelManager();
         private string _applicationPath = System.Windows.Forms.Application.StartupPath;
         
-        public async Task<int> DailyGetMetrics(DataTable positionsDataTable, RichTextBox textBox, string startLetter, string endLetter, CancellationToken cancellationToken)
+        public async Task<int> DailyGetMetrics(List<ExcelPositions> positionList, RichTextBox textBox, string startLetter, string endLetter, CancellationToken cancellationToken)
         {
             // Get all tickers from position table
             List<string> stockList = new List<string>();
@@ -56,7 +56,7 @@ namespace StockApi
                 }
             }
 
-            stockList = _excelManager.GetStockListFromPositionsTable(positionsDataTable);
+            stockList = _excelManager.GetStockListFromPositionsTable(positionList);
 
             if (startLetter != "")
             {
