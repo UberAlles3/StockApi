@@ -67,48 +67,48 @@ namespace StockApi
             }
             else
             {
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
-                {
-                    //stockList = stockList.Skip(100).Take(20).ToList();
-                    stockList = stockList.Skip(0).Take(30).ToList();
-                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
-                }
+                //if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+                //{
+                //    //stockList = stockList.Skip(100).Take(20).ToList();
+                //    stockList = stockList.Skip(0).Take(30).ToList();
+                //    _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
+                //}
 
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
-                {
-                    stockList = stockList.Skip(30).Take(30).ToList();
-                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsTuesday.txt");
-                }
+                //if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday)
+                //{
+                //    stockList = stockList.Skip(30).Take(30).ToList();
+                //    _applicationPath = Path.Combine(_applicationPath, "StockMetricsTuesday.txt");
+                //}
 
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
-                {
-                    stockList = stockList.Skip(60).Take(30).ToList();
-                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsWednesday.txt");
-                }
+                //if (DateTime.Now.DayOfWeek == DayOfWeek.Wednesday)
+                //{
+                //    stockList = stockList.Skip(60).Take(30).ToList();
+                //    _applicationPath = Path.Combine(_applicationPath, "StockMetricsWednesday.txt");
+                //}
 
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
-                {
-                    stockList = stockList.Skip(90).Take(34).ToList();
-                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsThursday.txt");
-                }
+                //if (DateTime.Now.DayOfWeek == DayOfWeek.Thursday)
+                //{
+                //    stockList = stockList.Skip(90).Take(34).ToList();
+                //    _applicationPath = Path.Combine(_applicationPath, "StockMetricsThursday.txt");
+                //}
 
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
-                {
-                    stockList = stockList.Skip(124).Take(36).ToList();
-                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsFriday_T-V.txt");
-                }
+                //if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
+                //{
+                //    stockList = stockList.Skip(124).Take(36).ToList();
+                //    _applicationPath = Path.Combine(_applicationPath, "StockMetricsFriday_T-V.txt");
+                //}
 
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
-                {
-                    stockList = stockList.Skip(0).Take(10).ToList();
-                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsSaturday_V-Z.txt");
-                }
+                //if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+                //{
+                //    stockList = stockList.Skip(0).Take(10).ToList();
+                //    _applicationPath = Path.Combine(_applicationPath, "StockMetricsSaturday_V-Z.txt");
+                //}
 
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    stockList = stockList.Skip(10).Take(10).ToList();
-                    _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
-                }
+                //if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                //{
+                //    stockList = stockList.Skip(10).Take(10).ToList();
+                //    _applicationPath = Path.Combine(_applicationPath, "StockMetricsMonday.txt");
+                //}
             }
 
             string stockMetricString = "";
