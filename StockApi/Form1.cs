@@ -911,13 +911,13 @@ namespace StockApi
             {
                 _markets.Dow = await _markets.GetMarketData("^DJI", true);
             }
-            performance.GetLatestBuyPerformance(_markets.Dow, PositionsDataTable, TradesDataTable);
+            performance.GetLatestBuyPerformance(_markets.Dow, PositionList, TradesDataTable);
             performance.ShowPerformanceForm(this);  
         }
         private void latestSellsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(PositionsDataTable, TradesDataTable);
+            List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(PositionList, TradesDataTable);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Sell Performance", 0);
         }
 
