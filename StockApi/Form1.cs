@@ -53,10 +53,10 @@ namespace StockApi
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
 
                     _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
-                    _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
 
-                    // Fill tickers list
-                    AllOwnedTickers = _positionList.Select(x => x.Symbol).OrderBy(x => x).ToList();
+                    _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
+                    _watchPositionList = _positionList.Where(x => x.Quantity == 0).ToList();
+                    _positionList = _positionList.Where(x => x.Quantity > 0).ToList(); 
                 }
                 return _positionsDataTable;
             }
@@ -74,6 +74,19 @@ namespace StockApi
                 return _positionList;
             }
             set => _positionList = value;
+        }
+
+        private static List<ExcelPositions> _watchPositionList;
+        public static List<ExcelPositions> WatchPositionList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                var dummy = PositionsDataTable;
+
+                return _watchPositionList;
+            }
+            set => _watchPositionList = value;
         }
 
         private static DataTable _tradesDataTable = null;
@@ -729,17 +742,16 @@ namespace StockApi
         //////////////////////////////
         private async void GetNewsEarnings()
         {
-            List<ExcelPositions> positions;
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();
             List<SqlSummary> entities = _finacialStatement.GetAllSummaryList().Where(x => x.EarningsDate != null && x.EarningsDate > DateTime.Now.AddDays(-4) && x.EarningsDate < DateTime.Now.AddDays(1)).OrderBy(x => x.EarningsDate).ToList();
             entities = entities.Take(24).ToList(); // Only take first 24
             //entities.ForEach(x => x.EarningsDate = (x.EarningsDate ?? DateTime.MinValue));
-            positions = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
+            //positions = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
 
             StringBuilder sb = new StringBuilder();
             foreach (SqlSummary x in entities)
             {
-                if(positions.Any(z => z.Symbol.Contains(x.Ticker)))
+                if(PositionList.Any(z => z.Symbol.Contains(x.Ticker)))
                 {
 
                     // Delete sql data so the new earnings data can be refreshed
@@ -1021,7 +1033,7 @@ namespace StockApi
         ////// Excel 
         private void excelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExcelForm f = new ExcelForm(_excelFilePath);
+            ExcelForm f = new ExcelForm(PositionList);
             f.Owner = this;
             f.Show();
         }

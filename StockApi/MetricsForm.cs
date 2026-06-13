@@ -80,7 +80,7 @@ namespace StockApi
             if (comboBox1.SelectedIndex == 4)
                 metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-11), ticker);
 
-            metrics = metrics.Where(metrics => Form1.AllOwnedTickers.Contains(metrics.Ticker)).ToList();
+            metrics = metrics.Where(metrics => Form1.PositionList.Select(x => x.Symbol).Contains(metrics.Ticker)).ToList();
 
             metrics = metrics.OrderBy(x => x.Ticker).ThenBy(x => x.Year).ThenBy(x => x.Month).ToList();
 

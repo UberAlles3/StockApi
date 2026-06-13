@@ -13,10 +13,10 @@ namespace StockApi
 {
     public partial class ExcelForm : Form
     {
-        List<ExcelPositions> positions;
-        public ExcelForm(string excelPositionsPath)
+        List<ExcelPositions> _positions;
+        public ExcelForm(List<ExcelPositions> positions)
         {
-            positions = (new ExcelManager()).GetPositionsListFromPositionsTable(excelPositionsPath);
+            _positions = positions;
             InitializeComponent();
         }
 
@@ -49,7 +49,7 @@ namespace StockApi
                 cells = line.Split("\t");
                 if (cells.GetLength(0) > 5)
                 {
-                    excelPosition = positions.Where(x => x.Symbol.ToUpper().Trim() == cells[0].Trim()).FirstOrDefault();
+                    excelPosition = _positions.Where(x => x.Symbol.ToUpper().Trim() == cells[0].Trim()).FirstOrDefault();
                     if (excelPosition != null)
                     {
                         if (cells[4].ToUpper() == "BUY")
@@ -124,7 +124,7 @@ namespace StockApi
                 cells = line.Split("\t");
                 if (cells.GetLength(0) > 5)
                 {
-                    excelPosition = positions.Where(x => x.Symbol.ToUpper().Trim() == cells[0].Trim()).First();
+                    excelPosition = _positions.Where(x => x.Symbol.ToUpper().Trim() == cells[0].Trim()).First();
                     if (cells[4].ToUpper() == "BUY")
                     {
                         q = excelPosition.Quantity + Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
