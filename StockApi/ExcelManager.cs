@@ -107,6 +107,7 @@ namespace StockApi
             using (var stream = File.Open(importFilePath, FileMode.Open, FileAccess.Read))
             {
                 var columnNames = new List<string>();
+                PropertyInfo pi;
 
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
@@ -116,7 +117,7 @@ namespace StockApi
                     {
                         if (columnNames.Count == 0) // First row is columm names
                         {
-                            for (int i = 0; i < 17; i++)
+                            for (int i = 0; i < 34; i++)
                             {
                                 columnNames.Add(reader.GetString(i));
                             }
@@ -125,11 +126,18 @@ namespace StockApi
                         {
                             object val = null;
                             var item = new ExcelPositions();
-                            for (int i = 0; i < 17; i++)
+                            for (int i = 0; i < 34; i++)
                             {
-                                if(columnNames[i] != null)
+                                if (i > 18 && i < 30)
+                                    continue;
+
+                                if (columnNames[i] != null)
                                 {
-                                    PropertyInfo pi = item.GetType().GetProperty(SanitizeName(columnNames[i]));
+                                    pi = item.GetType().GetProperty(SanitizeName(columnNames[i]));
+
+                                    if (pi == null)
+                                        continue;
+
                                     val = reader.GetValue(i);
 
                                     if (val == null || val.ToString().Trim() == "")
@@ -146,7 +154,14 @@ namespace StockApi
                                     }
 
                                     // Use reflection or a mapping dictionary to set property values
-                                    pi.SetValue(item, Convert.ChangeType(val, pi.PropertyType), null);
+                                    try
+                                    {
+                                        pi.SetValue(item, Convert.ChangeType(val, pi.PropertyType), null);
+                                    }
+                                    catch 
+                                    {
+                                        pi.SetValue(item, Convert.ChangeType("0", pi.PropertyType), null);
+                                    }
                                 }
                             }
 
@@ -241,6 +256,10 @@ namespace StockApi
         public double BuyTarget { get; set; }
         public double SharesToSell { get; set; }
         public double SellTarget { get; set; }
+        public double Dividend { get; set; }
+        public double PastYearHigh { get; set; }
+        public double PastYearLow { get; set; }
+        public double TotalMetric { get; set; }
         public override string ToString()
         {
             return $"Symbol: {Symbol}, Quantity: {Quantity}";

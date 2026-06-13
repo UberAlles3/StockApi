@@ -37,7 +37,8 @@ namespace StockApi
         private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
         private static DataTable _positionsDataTable = null;
         private static DataTable _tradesDataTable = null;
-        public static List<string> AllOwnedTickers = new List<string>();
+        private static List<ExcelPositions> _positionsList;
+        public static List<string> AllOwnedTickers = new List<string>();  // TODO get list from PositionList
 
         // News
         private static string _news = "";
@@ -54,14 +55,10 @@ namespace StockApi
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
 
                     _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
+                    _positionsList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
 
-                    foreach (DataRow trade in _positionsDataTable.AsEnumerable())
-                    {
-                        // Fill tickers list
-                        AllOwnedTickers.Add(trade.ItemArray[(int)PC.Ticker].ToString());
-
-                    }
-                    AllOwnedTickers = AllOwnedTickers.OrderBy(x => x).ToList(); 
+                    // Fill tickers list
+                    AllOwnedTickers = _positionsList.Select(x => x.Symbol).OrderBy(x => x).ToList();
                 }
                 return _positionsDataTable;
             }
@@ -909,7 +906,7 @@ namespace StockApi
         {
             List<string> tickers = OffHighsForm.GetHighMetricTickers(PositionsDataTable);
 
-            OffHighsForm offHighs = new OffHighsForm(tickers, PositionsDataTable, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(_positionsList, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }
@@ -918,7 +915,7 @@ namespace StockApi
         {
             List<string> tickers = OffHighsForm.GetWatchListTickers(PositionsDataTable);
 
-            OffHighsForm offHighs = new OffHighsForm(tickers, PositionsDataTable, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(_positionsList, TradesDataTable);
             offHighs.Owner = this;
             offHighs.Show();
         }

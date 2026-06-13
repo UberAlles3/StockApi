@@ -18,14 +18,12 @@ namespace StockApi
     public partial class OffHighsForm : Form
     {
         private List<string> _tickers;
-        private DataTable _positionsDataTable;
         private DataTable _tradesDataTable;
 
-        public OffHighsForm(List<string> tickers, DataTable positionsDataTable, DataTable tradesDataTable)
+        public OffHighsForm(List<ExcelPositions> positionsList, DataTable tradesDataTable)
         {
             InitializeComponent();
-            _tickers = tickers.Where(x => x != "******").ToList();
-            _positionsDataTable = positionsDataTable;
+            _tickers = positionsList.Select(x => x.Symbol).ToList();
             _tradesDataTable = tradesDataTable;
         }
 
