@@ -21,8 +21,8 @@ namespace StockApi
         //    Metric = 33
         //}
 
-        public static string SymbolColumn = "Column0";
-        public static string QuantityColumn = "Column1";
+        public static string PositionSymbolColumn = "Column0";
+        public static string PositionQuantityColumn = "Column1";
 
         public enum TradeColumns : int
         {
@@ -183,6 +183,100 @@ namespace StockApi
             return dataList;
         }
 
+        public List<ExcelTrade> GetTradeListFromTradeTable(string filePath)
+        {
+            var dataList = new List<ExcelTrade>();
+            string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
+            File.Copy(filePath, importFilePath, true);
+
+
+            using (var stream = File.Open(importFilePath, FileMode.Open, FileAccess.Read))
+            {
+                var columnNames = new List<string>();
+                PropertyInfo pi;
+
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    string targetSheetName = "Trades";
+                    bool sheetFound = false;
+
+                    do
+                    {
+                        // reader.Name contains the current worksheet's name
+                        if (reader.Name == targetSheetName)
+                        {
+                            sheetFound = true;
+                            break;
+                        }
+                    } while (reader.NextResult()); // Moves to the next worksheet forward
+
+                    if (!sheetFound)
+                        throw new Exception("Sheet not found.");
+                    // Assuming the first row contains headers
+
+                    while (reader.Read())
+                    {
+                        if (columnNames.Count == 0) // First row is columm names
+                        {
+                            for (int i = 0; i < 10; i++)
+                            {
+                                columnNames.Add(reader.GetString(i));
+                            }
+                        }
+                        else
+                        {
+                            object val = null;
+                            var item = new ExcelTrade();
+                            for (int i = 0; i < 10; i++)
+                            {
+                                if (columnNames[i] != null)
+                                {
+                                    pi = item.GetType().GetProperty(SanitizeName(columnNames[i]));
+
+                                    if (pi == null)
+                                        continue;
+
+                                    val = reader.GetValue(i);
+
+                                    if (val == null || val.ToString().Trim() == "")
+                                    {
+                                        if (pi.PropertyType.IsValueType)
+                                        {
+                                            val = Activator.CreateInstance(pi.PropertyType); // For value types, get default instance
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (val.ToString().Contains("***") || val.ToString().Contains("Skip"))
+                                            break;
+                                    }
+
+                                    // Use reflection or a mapping dictionary to set property values
+                                    try
+                                    {
+                                        pi.SetValue(item, Convert.ChangeType(val, pi.PropertyType), null);
+                                    }
+                                    catch
+                                    {
+                                        pi.SetValue(item, Convert.ChangeType("0", pi.PropertyType), null);
+                                    }
+                                }
+                            }
+
+                            if (val.ToString().Contains("***") || val.ToString().Contains("Skip"))
+                                continue;
+
+                            if ((item.Symbol == null || item.Symbol.Trim() == "") && item.Symbol != "Skip")
+                                break;
+
+                            dataList.Add(item);
+                        }
+                    }
+                }
+            }
+
+            return dataList;
+        }
 
 
         public List<string> GetStockListFromPositionsTable(List<ExcelPosition> positionList)
@@ -264,6 +358,24 @@ namespace StockApi
         public override string ToString()
         {
             return $"Symbol: {Symbol}, Quantity: {Quantity}";
+        }
+    }
+
+    public class ExcelTrade
+    {
+        public DateTime TradeDate { get; set; }
+        public double DOW { get; set; }
+        public string BuySell { get; set; }
+        public double Quantity { get; set; }
+        public string Symbol { get; set; }
+        public double Price { get; set; }
+        public string Notes { get; set; }
+        public double Balance { get; set; }
+        public double BalanceAdjusted { get; set; }
+
+        public override string ToString()
+        {
+            return $"TradeDatel: {TradeDate}, BuySell: {BuySell}, Quantity: {Quantity}, Symbol: {Symbol}, Price: {Price}";
         }
     }
 }

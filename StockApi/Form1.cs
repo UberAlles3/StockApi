@@ -53,9 +53,9 @@ namespace StockApi
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
 
                     _positionsDataTable.AsEnumerable()
-                        .Where(row => row.Field<string>(ExcelManager.SymbolColumn).Contains("*")  // Symbol
-                                    || row.Field<string>(ExcelManager.SymbolColumn).Trim() == ""  // Symbol
-                                    || row.Field<double>(ExcelManager.QuantityColumn) == 0        // Quantiyy
+                        .Where(row => row.Field<string>(ExcelManager.PositionSymbolColumn).Contains("*")  // Symbol
+                                    || row.Field<string>(ExcelManager.PositionSymbolColumn).Trim() == ""  // Symbol
+                                    || row.Field<double>(ExcelManager.PositionQuantityColumn) == 0        // Quantiyy
                         )
                         .ToList().ForEach(row => row.Delete());
 
@@ -107,15 +107,34 @@ namespace StockApi
 
                 if (excelFileDateTime > _tradesImportDateTime)
                 {
-                    _tradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 1, 40);
+                    _tradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 1, 12);
                     _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                     _tradesImportDateTime = DateTime.Now; // Update when the last import took place
+
+                    _tradeList = (new ExcelManager()).GetTradeListFromTradeTable(_excelFilePath);
                 }
                 return _tradesDataTable;
             }
             set => _tradesDataTable = value; 
         }
 
+        private static List<ExcelTrade> _tradeList;
+        public static List<ExcelTrade> TradeList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                var dummy = TradesDataTable;
+
+                return _tradeList;
+            }
+            set => _tradeList = value;
+        }
+
+
+        /// <summary>
+        /// ////////////////////////////////////////////////////// Form1 Constructor and Events
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
