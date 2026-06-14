@@ -36,6 +36,8 @@ namespace StockApi
         private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
         private static DateTime _tradesImportDateTime = DateTime.Now.AddYears(-2);
         public static List<string> AllOwnedTickers = new List<string>();  // TODO get list from PositionList
+        public static string SymbolColumn = "Column0";
+        public static string QuantityColumn = "Column1";
 
         // News
         private static string _news = "";
@@ -53,9 +55,9 @@ namespace StockApi
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
 
                     _positionsDataTable.AsEnumerable()
-                        .Where(row => row.Field<string>("Column0").Contains("*")  // Symbol
-                                    || row.Field<string>("Column0").Trim() == ""  // Symbol
-                                    || row.Field<double>("Column1") == 0          // Quantiyy
+                        .Where(row => row.Field<string>(SymbolColumn).Contains("*")  // Symbol
+                                    || row.Field<string>(SymbolColumn).Trim() == ""  // Symbol
+                                    || row.Field<double>(QuantityColumn) == 0        // Quantiyy
                         )
                         .ToList().ForEach(row => row.Delete());
 
