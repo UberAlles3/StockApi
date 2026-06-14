@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using YahooLayer;
-using PC = StockApi.ExcelManager.PositionColumns;
+//using PC = StockApi.ExcelManager.PositionColumns;
 
 namespace StockApi
 {

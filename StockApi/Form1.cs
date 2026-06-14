@@ -14,7 +14,7 @@ using System.IO;
 using SqlLayer;
 using SqlLayer.SQL_Models;
 using YahooLayer;
-using PC = StockApi.ExcelManager.PositionColumns;
+//using PC = StockApi.ExcelManager.PositionColumns;
 
 namespace StockApi
 {
