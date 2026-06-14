@@ -938,7 +938,7 @@ namespace StockApi
             {
                 _markets.Dow = await _markets.GetMarketData("^DJI", true);
             }
-            performance.GetLatestBuyPerformance(_markets.Dow, PositionList, TradesDataTable);
+            performance.GetLatestBuyPerformance(_markets.Dow, PositionList, TradeList);
             performance.ShowPerformanceForm(this);  
         }
         private void latestSellsToolStripMenuItem_Click(object sender, EventArgs e)

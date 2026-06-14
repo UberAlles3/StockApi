@@ -24,7 +24,7 @@ namespace StockApi
             _stockSummary = stockSummary;
         }
 
-        public void GetLatestBuyPerformance(MarketData dowMarket, List<ExcelPosition> positionList, DataTable tradesDataTable)
+        public void GetLatestBuyPerformance(MarketData dowMarket, List<ExcelPosition> positionList, List<ExcelTrade> tradeList)
         {
             bool buyAndSold;
 
@@ -34,7 +34,9 @@ namespace StockApi
                 dowLast = Convert.ToInt32(dowMarket.CurrentLevel.NumericValue);
             else
             {
-                string dow = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.DowLevel].ToString().Trim() != "0" && x[(int)TC.DowLevel].ToString().Trim() != "").Last().ItemArray[(int)TC.DowLevel].ToString();
+                //string dow = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.DowLevel].ToString().Trim() != "0" && x[(int)TC.DowLevel].ToString().Trim() != "").Last().ItemArray[(int)TC.DowLevel].ToString();
+                string dow = tradeList.Last().DOW.ToString();
+
                 dowLast = 0;
                 if (dow._IsDecimal())
                 {
@@ -43,14 +45,14 @@ namespace StockApi
             }
 
             // Get last 25 buys
-            IEnumerable<DataRow> buyTrades = tradesDataTable.AsEnumerable().Where(x => (x[(int)TC.BuySell].ToString() == "Buy" || x[(int)TC.BuySell].ToString() == "Buy Shrt") && x[(int)TC.DowLevel].ToString().Trim() != "").OrderByDescending(x => x[(int)TC.TradeDate]).Take(40);
-            buyTrades = buyTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25).OrderBy(x => x[(int)TC.TradeDate]);
+            List<ExcelTrade> buyTrades = tradeList.Where(x => x.BuySell == "Buy" || x.BuySell == "Buy Shrt").OrderByDescending(x => x.TradeDate).Take(25).ToList();
+            buyTrades = buyTrades.OrderByDescending(x => x.TradeDate).Take(25).OrderBy(x => x.TradeDate).ToList();
 
             _performanceList.Clear();
-            foreach (DataRow trade in buyTrades)
+            foreach (ExcelTrade trade in buyTrades)
             {
                 // Search in positions for ticker to get current price 
-                string ticker = trade.ItemArray[(int)TC.Ticker].ToString();
+                string ticker = trade.Symbol;
 
                 // Search in positions for ticker to get current price 
                 if (positionList.Where(x => x.Symbol == ticker).Count() == 0)
@@ -74,7 +76,7 @@ namespace StockApi
                 decimal profit = currentPrice - (decimal)position.BuyPrice;
 
                 // Get the DOW level
-                string temp = trade.ItemArray[1].ToString();
+                string temp = trade.DOW.ToString();
                 int dowLevel = 0;
                 if (temp._IsDecimal())
                 {
@@ -83,7 +85,7 @@ namespace StockApi
 
                 PerformanceItem pi = new PerformanceItem()
                 {
-                    TradeDate = Convert.ToDateTime(trade.ItemArray[0].ToString()),
+                    TradeDate = trade.TradeDate,
                     Ticker = ticker,
                     Quantity = (int)position.BuyQuantity,
                     TradePrice = (decimal)position.BuyPrice,
