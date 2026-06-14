@@ -160,7 +160,7 @@ namespace StockApi
             return performanceList;
         }
 
-        public async Task<List<PerformanceItem>> GetLiquidationPerformance(DataTable positionsDataTable, DataTable tradesDataTable)
+        public async Task<List<PerformanceItem>> GetLiquidationPerformance(List<ExcelPosition> positionList, DataTable tradesDataTable)
         {
             StockHistory stockHistory = new StockHistory();
             List<PerformanceItem> performanceList = new List<PerformanceItem>();
@@ -177,7 +177,7 @@ namespace StockApi
                 string temp = trade.ItemArray[(int)TC.QuantityTraded].ToString();
                 int quantity = 0;
 
-                var count = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString() == ticker).Count();
+                var count = positionList.Where(x => x.Symbol == ticker).Count();
 
                 if (count > 0)
                     continue;
@@ -199,10 +199,10 @@ namespace StockApi
                     if (ex.Message.Contains("Not Found"))
                         continue;
                     else
-                    throw ex;
+                        throw ex;
                 }
-                
-                if(currentPrice == 0)
+
+                if (currentPrice == 0)
                 {
                     currentPrice = 999;
                 }
@@ -235,6 +235,7 @@ namespace StockApi
 
             return performanceList;
         }
+
         public void ShowLiquidationPerformanceForm(Form1 form1, List<PerformanceItem> performanceList, string title, int formType)
         {
             PerformanceFormLiquidations pf = new PerformanceFormLiquidations(performanceList);

@@ -725,16 +725,15 @@ namespace StockApi
 
             //////////////////// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ///// Not running for a while 5/27/2026
-            return;
 
-            int x = await metrics.DailyGetMetrics(PositionList, null, "", "", cts.Token);
+            //int x = await metrics.DailyGetMetrics(PositionList, null, "", "", cts.Token);
 
-            // Get news, earnings
-            GetNewsEarnings();
+            //// Get news, earnings
+            //GetNewsEarnings();
 
-            // Reset the timer for the next daily execution
-            SetNextDailyExecutionTime();
-            MetricsTimer.Start();
+            //// Reset the timer for the next daily execution
+            //SetNextDailyExecutionTime();
+            //MetricsTimer.Start();
         }
 
         //////////////////////////////
@@ -924,7 +923,7 @@ namespace StockApi
         private async void liquidationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(PositionsDataTable, TradesDataTable);
+            List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(PositionList, TradesDataTable);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Liquidation Performance", 1);
         }
 
