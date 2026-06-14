@@ -49,10 +49,19 @@ namespace StockApi
                 DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
                 if (excelFileDateTime > _positionsImportDateTime)
                 {
-                    _positionsDataTable = (new ExcelManager()).ImportExceelSheet(_excelFilePath, 0, 0, 36);
+                    _positionsDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 0, 0, 36);
                     _positionsImportDateTime = DateTime.Now; // Update when the last import took place
 
-                    _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
+                    _positionsDataTable.AsEnumerable()
+                        .Where(row => row.Field<string>("Column0").Contains("*")  // Symbol
+                                    || row.Field<string>("Column0").Trim() == ""  // Symbol
+                                    || row.Field<double>("Column1") == 0          // Quantiyy
+                        )
+                        .ToList().ForEach(row => row.Delete());
+
+                    _positionsDataTable.AcceptChanges();
+
+                    // old way // _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
 
                     _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
                     _watchPositionList = _positionList.Where(x => x.Quantity == 0).ToList();
@@ -98,7 +107,7 @@ namespace StockApi
 
                 if (excelFileDateTime > _tradesImportDateTime)
                 {
-                    _tradesDataTable = (new ExcelManager()).ImportExceelSheet(_excelFilePath, 1, 40);
+                    _tradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 1, 40);
                     _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                     _tradesImportDateTime = DateTime.Now; // Update when the last import took place
                 }

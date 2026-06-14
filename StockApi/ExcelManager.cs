@@ -39,7 +39,7 @@ namespace StockApi
 
         }
 
-        public DataTable ImportExceelSheet(string filePath, int sheetIdx, int startRow, int columns = 10)
+        public DataTable ImportExcelSheet(string filePath, int sheetIdx, int startRow, int columns = 10)
         {
             string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
 
