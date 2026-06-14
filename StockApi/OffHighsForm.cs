@@ -84,20 +84,20 @@ namespace StockApi
             return tickers;
         }
 
-        public static List<string> GetWatchListTickers(DataTable positionsDataTable)
-        {
-            List<string> tickers = new List<string>();
+        //public static List<string> GetWatchListTickers(DataTable positionsDataTable)
+        //{
+        //    List<string> tickers = new List<string>();
 
-            IEnumerable<DataRow> tickersDR = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.QuantityHeld].ToString() == "0" && (x[(int)PC.Metric].ToString().Contains("1.1") || x[(int)PC.Metric].ToString().Contains("1.2") || x[(int)PC.Metric].ToString().Contains("1.3")));
-            tickersDR = tickersDR.OrderBy(x => x[(int)PC.Ticker]);
+        //    IEnumerable<DataRow> tickersDR = positionsDataTable.AsEnumerable().Where(x => x[(int)PC.QuantityHeld].ToString() == "0" && (x[(int)PC.Metric].ToString().Contains("1.1") || x[(int)PC.Metric].ToString().Contains("1.2") || x[(int)PC.Metric].ToString().Contains("1.3")));
+        //    tickersDR = tickersDR.OrderBy(x => x[(int)PC.Ticker]);
 
-            foreach (DataRow trade in tickersDR)
-            {
-                // Fill tickers list
-                tickers.Add(trade.ItemArray[(int)PC.Ticker].ToString());
-            }
+        //    foreach (DataRow trade in tickersDR)
+        //    {
+        //        // Fill tickers list
+        //        tickers.Add(trade.ItemArray[(int)PC.Ticker].ToString());
+        //    }
 
-            return tickers;
-        }
+        //    return tickers;
+        //}
     }
 }
