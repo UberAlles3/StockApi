@@ -21,6 +21,9 @@ namespace StockApi
         //    Metric = 33
         //}
 
+        public static string SymbolColumn = "Column0";
+        public static string QuantityColumn = "Column1";
+
         public enum TradeColumns : int
         {
             TradeDate = 0,
