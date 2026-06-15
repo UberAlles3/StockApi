@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Linq;
 //using PC = StockApi.ExcelManager.PositionColumns;
-using TC = StockApi.ExcelManager.TradeColumns;
+//using TC = StockApi.ExcelManager.TradeColumns;
 using System.Threading.Tasks;
 using YahooLayer;
 using System.IO;

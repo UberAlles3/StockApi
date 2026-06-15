@@ -327,14 +327,14 @@ namespace StockApi
 
         private void ApplyStockSplits(DataTable TickerTradesDataTable)
         {
-            DataRow splitDR = TickerTradesDataTable.AsEnumerable().Where(r => r[(int)ExcelManager.TradeColumns.Splits].ToString().Contains("Split")).FirstOrDefault();
+            DataRow splitDR = TickerTradesDataTable.AsEnumerable().Where(r => r[(int)ExcelManager.TradeColumns.Notes].ToString().Contains("Split")).FirstOrDefault();
             if (splitDR != null)
             {
                 bool splitting = false;
                 int ratio = 1;
                 foreach (DataRow currentRow in TickerTradesDataTable.Rows)
                 {
-                    string sss = currentRow.ItemArray[(int)ExcelManager.TradeColumns.Splits].ToString();
+                    string sss = currentRow.ItemArray[(int)ExcelManager.TradeColumns.Notes].ToString();
                     if (sss.Contains("Split"))
                     {
                         splitting = true;

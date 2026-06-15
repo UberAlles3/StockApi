@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 //using PC = StockApi.ExcelManager.PositionColumns;
-using TC = StockApi.ExcelManager.TradeColumns;
+//using TC = StockApi.ExcelManager.TradeColumns;
 using YahooLayer;
 
 namespace StockApi

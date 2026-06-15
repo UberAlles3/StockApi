@@ -34,7 +34,7 @@ namespace StockApi
             TradePrice = 5,
             QuantityHeld = 6,
             AccountValue = 7,
-            Splits = 8
+            Notes = 8
         }
 
         public ExcelManager()
@@ -370,7 +370,8 @@ namespace StockApi
         public string Symbol { get; set; }
         public double Price { get; set; }
         public int QuantityHeld { get; set; }
-        public double Balance { get; set; }
+        public double AccountBalance { get; set; }
+        public string Notes { get; set; }
         public double BalanceAdjusted { get; set; }
 
         public override string ToString()
