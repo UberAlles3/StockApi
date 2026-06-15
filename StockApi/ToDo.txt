@@ -4,4 +4,6 @@ DONE Add 3 year trend
 Done Excel import get current price from buy or sell price.
 
 
-Make new list of Liquidated stock for the Off highs form
+Make new list of Liquidated stock for the Off highs form??
+
+Make Notes menu item StockNotes.txt on desktop??
