@@ -30,7 +30,7 @@ namespace StockApi
             DowLevel = 1,
             BuySell = 2,
             QuantityTraded = 3,
-            Ticker = 4,
+            //Ticker = 4,
             TradePrice = 5,
             QuantityHeld = 6,
             AccountValue = 7,

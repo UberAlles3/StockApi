@@ -269,7 +269,7 @@ namespace StockApi
 
                 if (tradesDataTable.Rows.Count > 0 && tickerTrades.Count() > 0)
                 {
-                    TickerTradesDataTable = tickerTrades.Where(r => r[3].ToString() != "0").CopyToDataTable();
+                    TickerTradesDataTable = tickerTrades.Where(r => r[(int)ExcelManager.TradeColumns.QuantityTraded].ToString() != "0").CopyToDataTable();
                     ApplyStockSplits(TickerTradesDataTable);
 
                     // bind data list to trades grid control
