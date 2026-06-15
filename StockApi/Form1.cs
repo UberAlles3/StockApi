@@ -35,7 +35,6 @@ namespace StockApi
         private static string _excelFilePath = "";
         private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
         private static DateTime _tradesImportDateTime = DateTime.Now.AddYears(-2);
-        public static List<string> AllOwnedTickers = new List<string>();  // TODO get list from PositionList
 
         // News
         private static string _news = "";
@@ -133,9 +132,9 @@ namespace StockApi
         }
 
 
-        /// <summary>
-        /// ////////////////////////////////////////////////////// Form1 Constructor and Events
-        /// </summary>
+        ///////////////////////////////////////////////////////////////////////////////////////
+        ///                           Form1 Constructor and Events
+        ///////////////////////////////////////////////////////////////////////////////////////
         public Form1()
         {
             InitializeComponent();
