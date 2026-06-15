@@ -107,20 +107,23 @@ namespace StockApi
             pf.Show();
         }
 
-        public List<PerformanceItem> GetLatestSellPerformance(List<ExcelPosition> positionList, DataTable tradesDataTable)
+        public List<PerformanceItem> GetLatestSellPerformance(List<ExcelPosition> positionList, List<ExcelTrade> tradeList)
         {
             StockHistory stockHistory = new StockHistory();
             List<PerformanceItem> performanceList = new List<PerformanceItem>();
             bool soldAndBought = false;
 
             // Get last 25 sells
-            IEnumerable<DataRow> sellTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
-            sellTrades = sellTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25).OrderBy(x => x[(int)TC.TradeDate]);
+            List<ExcelTrade> sellTrades = tradeList.Where(x => x.BuySell == "Sell" || x.BuySell == "Sell Shrt").OrderByDescending(x => x.TradeDate).Take(25).ToList();
+            sellTrades = sellTrades.OrderByDescending(x => x.TradeDate).Take(25).OrderBy(x => x.TradeDate).ToList();
+
+            //IEnumerable<DataRow> sellTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && x[(int)TC.QuantityHeld].ToString().Trim() != "0");
+            //sellTrades = sellTrades.OrderByDescending(x => x[(int)TC.TradeDate]).Take(25).OrderBy(x => x[(int)TC.TradeDate]);
 
             performanceList.Clear();
-            foreach (DataRow trade in sellTrades)
+            foreach (ExcelTrade trade in sellTrades)
             {
-                string ticker = trade.ItemArray[(int)TC.Ticker].ToString();
+                string ticker = trade.Symbol; 
 
                 // Search in positions for ticker to get current price 
                 if(positionList.Where(x => x.Symbol == ticker).Count() == 0)
@@ -145,7 +148,7 @@ namespace StockApi
 
                 PerformanceItem pi = new PerformanceItem()
                 {
-                    TradeDate = Convert.ToDateTime(trade.ItemArray[0].ToString()),
+                    TradeDate = trade.TradeDate,
                     Ticker = ticker,
                     Quantity = (int)position.SellQuantity,
                     TradePrice = (decimal)position.SellPrice,

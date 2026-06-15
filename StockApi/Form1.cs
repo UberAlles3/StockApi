@@ -108,6 +108,7 @@ namespace StockApi
                 if (excelFileDateTime > _tradesImportDateTime)
                 {
                     _tradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 1, 12);
+                    //_tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
                     _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                     _tradesImportDateTime = DateTime.Now; // Update when the last import took place
 
@@ -220,8 +221,7 @@ namespace StockApi
 
             DataTable tradesDataTable = TradesDataTable;
             // Trades
-            tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
-
+            
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
             try
@@ -944,7 +944,7 @@ namespace StockApi
         private void latestSellsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(PositionList, TradesDataTable);
+            List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(PositionList, TradeList);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Sell Performance", 0);
         }
 
