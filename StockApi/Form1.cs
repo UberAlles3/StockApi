@@ -959,7 +959,7 @@ namespace StockApi
         {
             List<ExcelPosition> positions = PositionList.Where(x => x.TotalMetric > 1.18).ToList(); // Get high metric stock symbols
 
-            OffHighsForm offHighs = new OffHighsForm(positions, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(positions);
             offHighs.Owner = this;
             offHighs.Show();
         }
@@ -968,7 +968,7 @@ namespace StockApi
         {
             List<ExcelPosition> positions = WatchPositionList.Where(x => x.TotalMetric > 1.10).ToList(); // Get watch list stock symbols
 
-            OffHighsForm offHighs = new OffHighsForm(positions, TradesDataTable);
+            OffHighsForm offHighs = new OffHighsForm(positions);
             offHighs.Owner = this;
             offHighs.Show();
         }

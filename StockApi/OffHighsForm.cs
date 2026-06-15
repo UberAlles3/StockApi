@@ -18,15 +18,13 @@ namespace StockApi
     public partial class OffHighsForm : Form
     {
         private List<string> _tickers;
-        private DataTable _tradesDataTable;
         private List<ExcelPosition> _positionsList;
 
-        public OffHighsForm(List<ExcelPosition> positionsList, DataTable tradesDataTable)
+        public OffHighsForm(List<ExcelPosition> positionsList)
         {
             InitializeComponent();
             _positionsList = positionsList;
             _tickers = positionsList.Select(x => x.Symbol).ToList(); // Get high mtric stock symbols
-            _tradesDataTable = tradesDataTable;
         }
 
         private async void OffHighs_Load(object sender, EventArgs e)
