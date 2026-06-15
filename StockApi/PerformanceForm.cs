@@ -82,17 +82,17 @@ namespace StockApi
             lblDowGain.Text = dowGain.ToString("N1") + "%";
 
             // Total Profit
-            decimal totProfit = _performanceList.Sum(x => x.TotalProfit);
+            double totProfit = _performanceList.Sum(x => x.TotalProfit);
             lblTotalProfit.Text = totProfit.ToString("0.00");
 
             // Total Cost
-            decimal totCost = _performanceList.Sum(x => (x.Quantity) * x.TradePrice);
+            double totCost = _performanceList.Sum(x => (x.Quantity) * x.TradePrice);
             lblCost.Text = totCost.ToString("N2");
             // Current Worth
-            decimal totWorth = _performanceList.Sum(x => (x.Quantity) * x.CurrentPrice);
+            double totWorth = _performanceList.Sum(x => (x.Quantity) * x.CurrentPrice);
             lblWorth.Text = totWorth.ToString("N2");
             // Buy Gain
-            decimal buyGain = ((totWorth - totCost) / totCost) * 100M;
+            double buyGain = ((totWorth - totCost) / totCost) * 100D;
             lblPortfolioGain.Text = buyGain.ToString("N1") + "%";
 
             // Color big gainers and losers

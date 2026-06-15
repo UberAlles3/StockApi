@@ -62,8 +62,8 @@ namespace StockApi
 
                 ExcelPosition position = positionList.Where(x => x.Symbol == ticker).First();
 
-                decimal currentPrice = 0;
-                currentPrice = (decimal)position.Price;
+                double currentPrice = 0;
+                currentPrice = position.Price;
 
                 // See if there was a later sell off and eliminate it
                 buyAndSold = false;
@@ -73,7 +73,7 @@ namespace StockApi
                 }
 
                 // profit/ loss   
-                decimal profit = currentPrice - (decimal)position.BuyPrice;
+                double profit = currentPrice - position.BuyPrice;
 
                 // Get the DOW level
                 string temp = trade.DOW.ToString();
@@ -88,10 +88,10 @@ namespace StockApi
                     TradeDate = trade.TradeDate,
                     Ticker = ticker,
                     Quantity = (int)position.BuyQuantity,
-                    TradePrice = (decimal)position.BuyPrice,
+                    TradePrice = position.BuyPrice,
                     CurrentPrice = currentPrice,
                     Profit = profit,
-                    TotalProfit = (decimal)position.BuyQuantity * profit,
+                    TotalProfit = position.BuyQuantity * profit,
                     DowLevel = dowLevel,
                     SoldAndBought = buyAndSold
                 };
@@ -132,9 +132,9 @@ namespace StockApi
                 }
 
                 ExcelPosition position = positionList.Where(x => x.Symbol == ticker).First();
-                
-                decimal currentPrice = 0;
-                currentPrice = (decimal)position.Price;
+
+                double currentPrice = 0;
+                currentPrice = position.Price;
 
                 // See if there was a later buyback and eliminate it
                 soldAndBought = false;
@@ -144,17 +144,17 @@ namespace StockApi
                 }
 
                 // profit/ loss   
-                decimal profit = (decimal)position.SellPrice - currentPrice;
+                double profit = position.SellPrice - currentPrice;
 
                 PerformanceItem pi = new PerformanceItem()
                 {
                     TradeDate = trade.TradeDate,
                     Ticker = ticker,
                     Quantity = (int)position.SellQuantity,
-                    TradePrice = (decimal)position.SellPrice,
+                    TradePrice = position.SellPrice,
                     CurrentPrice = currentPrice,
                     Profit = profit,
-                    TotalProfit = (decimal)position.SellQuantity * profit,
+                    TotalProfit = position.SellQuantity * profit,
                     DowLevel = 0,
                     SoldAndBought = soldAndBought
                 };
@@ -165,39 +165,36 @@ namespace StockApi
             return performanceList;
         }
 
-        public async Task<List<PerformanceItem>> GetLiquidationPerformance(List<ExcelPosition> positionList, DataTable tradesDataTable)
+        public async Task<List<PerformanceItem>> GetLiquidationPerformance(List<ExcelPosition> positionList, List<ExcelTrade> tradeList)
         {
             StockHistory stockHistory = new StockHistory();
             List<PerformanceItem> performanceList = new List<PerformanceItem>();
 
             // Get liquidations for this last year
-            IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && Convert.ToDateTime(x[(int)TC.TradeDate]) > DateTime.Now.AddYears(-1) && x[(int)TC.QuantityHeld].ToString().Trim() == "0").Skip(5);
-            tickerTrades = tickerTrades.OrderBy(x => x[(int)TC.TradeDate]).Take(25);
+            //List<ExcelTrade> tickerTrades = tradeList.Where(x => x.BuySell == "Sell" && x.QuantityHeld == 0).OrderByDescending(x => x.TradeDate).Skip(3).ToList();
+            List<ExcelTrade> tickerTrades = tradeList.Where(x => x.BuySell == "Sell" && x.QuantityHeld == 0 && x.TradeDate > DateTime.Now.AddYears(-1)).OrderByDescending(x => x.TradeDate).Skip(0).ToList();
+            tickerTrades = tickerTrades.OrderBy(x => x.TradeDate).ToList();
+
+            //IEnumerable<DataRow> tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[(int)TC.BuySell].ToString() == "Sell" && x[(int)TC.TradeDate].ToString().Trim() != "" && Convert.ToDateTime(x[(int)TC.TradeDate]) > DateTime.Now.AddYears(-1) && x[(int)TC.QuantityHeld].ToString().Trim() == "0").Skip(5);
+            //tickerTrades = tickerTrades.OrderBy(x => x[(int)TC.TradeDate]).Take(25);
 
             performanceList.Clear();
-            foreach (DataRow trade in tickerTrades)
+            foreach (ExcelTrade trade in tickerTrades)
             {
                 // Get current price 
-                string ticker = trade.ItemArray[(int)TC.Ticker].ToString();
-                string temp = trade.ItemArray[(int)TC.QuantityTraded].ToString();
-                int quantity = 0;
+                string ticker = trade.Symbol;
+                int quantity = (int)trade.Quantity;
 
                 var count = positionList.Where(x => x.Symbol == ticker).Count();
 
                 if (count > 0)
                     continue;
 
-                if (temp._IsInt())
-                {
-                    quantity = Convert.ToInt32(temp);
-                }
-
                 // Get current price for sold stock, some stock can get delisted
                 decimal currentPrice = 0;
                 try
                 {
                     currentPrice = await stockHistory.GetTodaysPrice(ticker);
-
                 }
                 catch (Exception ex)
                 {
@@ -213,23 +210,18 @@ namespace StockApi
                 }
 
                 // Get the price sold
-                temp = trade.ItemArray[(int)TC.TradePrice].ToString();
-                decimal soldPrice = 0;
-                if (temp._IsDecimal())
-                {
-                    soldPrice = Convert.ToDecimal(temp);
-                }
+                double soldPrice = trade.Price;
 
                 // profit/ loss   
-                decimal profit = soldPrice - currentPrice;
+                double profit = soldPrice - (double)currentPrice;
 
                 PerformanceItem pi = new PerformanceItem()
                 {
-                    TradeDate = Convert.ToDateTime(trade.ItemArray[0].ToString()),
+                    TradeDate = trade.TradeDate,
                     Ticker = ticker,
                     Quantity = quantity,
                     TradePrice = soldPrice,
-                    CurrentPrice = currentPrice,
+                    CurrentPrice = (double)currentPrice,
                     Profit = profit,
                     TotalProfit = quantity * profit,
                     DowLevel = 0
@@ -256,10 +248,10 @@ namespace StockApi
         public DateTime TradeDate { get; set; }
         public string   Ticker { get; set; }
         public int      Quantity { get; set; }
-        public decimal  TradePrice { get; set; }
-        public decimal  CurrentPrice { get; set; }
-        public decimal  Profit { get; set; }
-        public decimal  TotalProfit { get; set; }
+        public double TradePrice { get; set; }
+        public double CurrentPrice { get; set; }
+        public double Profit { get; set; }
+        public double TotalProfit { get; set; }
         public int      DowLevel { get; set; }
         public bool     SoldAndBought { get; set; }
     }

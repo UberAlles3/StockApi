@@ -68,21 +68,21 @@ namespace StockApi
             dataGridView2.Refresh();
 
             // Total Profit
-            decimal totProfit = _performanceList.Sum(x => x.TotalProfit);
+            double totProfit = _performanceList.Sum(x => x.TotalProfit);
             lblTotalProfit.Text = totProfit.ToString("0.00");
 
             // Total Cost
-            decimal totCost = _performanceList.Sum(x => (x.Quantity) * x.TradePrice);
+            double totCost = _performanceList.Sum(x => (x.Quantity) * x.TradePrice);
             lblCost.Text = totCost.ToString("N2");
             // Current Worth
-            decimal totWorth = _performanceList.Sum(x => (x.Quantity) * x.CurrentPrice);
+            double totWorth = _performanceList.Sum(x => (x.Quantity) * x.CurrentPrice);
             lblWorth.Text = totWorth.ToString("N2");
             // Buy Gain
-            
-            
-            
-            
-            decimal sellingGain = ((totCost - totWorth) / totCost) * 100M;
+
+
+
+
+            double sellingGain = ((totCost - totWorth) / totCost) * 100D;
             lblSellingGain.Text = sellingGain.ToString("N1") + "%";
 
             // Color big gainers and losers

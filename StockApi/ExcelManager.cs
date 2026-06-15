@@ -366,16 +366,16 @@ namespace StockApi
         public DateTime TradeDate { get; set; }
         public double DOW { get; set; }
         public string BuySell { get; set; }
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
         public string Symbol { get; set; }
         public double Price { get; set; }
-        public string Notes { get; set; }
+        public int QuantityHeld { get; set; }
         public double Balance { get; set; }
         public double BalanceAdjusted { get; set; }
 
         public override string ToString()
         {
-            return $"TradeDatel: {TradeDate}, BuySell: {BuySell}, Quantity: {Quantity}, Symbol: {Symbol}, Price: {Price}";
+            return $"TradeDatel: {TradeDate}, BuySell: {BuySell}, Quantity: {Quantity}, Symbol: {Symbol}, Price: {Price}, QuantityHeld: {QuantityHeld}";
         }
     }
 }
