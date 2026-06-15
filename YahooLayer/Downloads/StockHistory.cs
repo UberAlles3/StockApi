@@ -1,10 +1,8 @@
-﻿using log4net;
-using SqlLayer;
+﻿using SqlLayer;
 using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace YahooLayer
@@ -51,11 +49,11 @@ namespace YahooLayer
             {
                 // Today will be the last in the list
                 StockQuote stockQuote = quoteList.Last();
-                if(stockQuote.Close == 0)
+                if (stockQuote.Close == 0)
                 {
                     stockQuote.Close = stockQuote.Price; // for mutual funds or ETF
                 }
-                
+
                 return stockQuote.Close;
             }
             else
@@ -67,7 +65,7 @@ namespace YahooLayer
         public async Task<List<StockHistory.HistoricPriceData>> GetPriceHistoryFor3Year(string ticker, StockSummary summary)
         {
             Ticker = ticker;
-            
+
             /////// Get price history from 3 years ago
             List<StockQuote> quoteList = new List<StockQuote>();
 
@@ -173,7 +171,7 @@ namespace YahooLayer
                 else
                     hasSqlData = false; // only has 3 years ago price and not last years price
 
-                if(hasSqlData == false)
+                if (hasSqlData == false)
                 {
                     quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
 
@@ -237,7 +235,7 @@ namespace YahooLayer
 
             return theDate;
         }
-         
+
         public void SetTrends()
         {
             if (HistoricData3YearsAgo != null)

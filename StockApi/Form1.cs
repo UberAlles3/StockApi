@@ -1,18 +1,18 @@
-﻿using System;
+﻿using SqlLayer;
+using SqlLayer.SQL_Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.IO;
-using SqlLayer;
-using SqlLayer.SQL_Models;
 using YahooLayer;
 //using PC = StockApi.ExcelManager.PositionColumns;
 
@@ -21,7 +21,7 @@ namespace StockApi
     public partial class Form1 : Form
     {
         public static Color TextForeColor = Color.LightSteelBlue;
-        
+
         List<Setting> _settings = new List<Setting>();
         private static bool _tickerFound = false;
         private static StockDownloads _stockDownloads = new StockDownloads("");
@@ -30,7 +30,7 @@ namespace StockApi
 
         // Markets
         Markets _markets = new Markets();
-        
+
         // Excel files
         private static string _excelFilePath = "";
         private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
@@ -41,9 +41,9 @@ namespace StockApi
         private static DateTime newsDate = DateTime.Now.AddDays(-1);
 
         private static DataTable _positionsDataTable = null;
-        public static DataTable PositionsDataTable 
+        public static DataTable PositionsDataTable
         {
-            get 
+            get
             {
                 DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
                 if (excelFileDateTime > _positionsImportDateTime)
@@ -63,8 +63,8 @@ namespace StockApi
                     // old way // _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
 
                     _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
-                    _watchPositionList = _positionList.Where(x => x.Quantity == 0).ToList();
-                    _positionList = _positionList.Where(x => x.Quantity > 0).ToList(); 
+                    _watchPositionList = _positionList.Where(x => x.Quantity == 0 && x.SellQuantity > 0).ToList();
+                    _positionList = _positionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.SellQuantity == 0)).ToList();
                 }
                 return _positionsDataTable;
             }
@@ -98,7 +98,7 @@ namespace StockApi
         }
 
         private static DataTable _tradesDataTable = null;
-        public static DataTable TradesDataTable 
+        public static DataTable TradesDataTable
         {
             get
             {
@@ -115,7 +115,7 @@ namespace StockApi
                 }
                 return _tradesDataTable;
             }
-            set => _tradesDataTable = value; 
+            set => _tradesDataTable = value;
         }
 
         private static List<ExcelTrade> _tradeList;
@@ -153,7 +153,7 @@ namespace StockApi
             //Program.logger.Error("testing");
             this.menuStrip1.RenderMode = ToolStripRenderMode.Professional;
             this.menuStrip1.Renderer = new ToolStripProfessionalRenderer(new CustomColorTable());
- 
+
             panel1.BackColor = Color.FromArgb(100, 0, 0, 0);
             panel1.Visible = false;
             panel2.BackColor = panel1.BackColor;
@@ -204,7 +204,7 @@ namespace StockApi
         private async void btnGetOne_click(object sender, EventArgs e)
         {
             bool networkUp = NetworkInterface.GetIsNetworkAvailable();
-            if(networkUp == false)
+            if (networkUp == false)
             {
                 MessageBox.Show("Your network connection is unavailable.");
                 return;
@@ -220,7 +220,7 @@ namespace StockApi
 
             DataTable tradesDataTable = TradesDataTable;
             // Trades
-            
+
             PreSummaryWebCall(); // Sets the form display while the request is executing
 
             try
@@ -348,11 +348,11 @@ namespace StockApi
                     {
                         int quantity = Convert.ToInt32(currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityTraded]) / ratio;
                         decimal price = Convert.ToDecimal(currentRow.ItemArray[(int)ExcelManager.TradeColumns.TradePrice]) * ratio;
-                        
+
                         int totShares = 0;
                         if (currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityHeld] != System.DBNull.Value)
-                           totShares = Convert.ToInt32(currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityHeld]) / ratio;
-                        
+                            totShares = Convert.ToInt32(currentRow.ItemArray[(int)ExcelManager.TradeColumns.QuantityHeld]) / ratio;
+
                         currentRow[(int)ExcelManager.TradeColumns.QuantityTraded] = quantity;
                         currentRow[(int)ExcelManager.TradeColumns.TradePrice] = price;
                         currentRow[(int)ExcelManager.TradeColumns.QuantityHeld] = totShares;
@@ -566,7 +566,7 @@ namespace StockApi
                         // Revenue
                         lblFinRevTTM.Text = _stockDownloads.stockIncomeStatement.RevenueTtmString.NumericValue.ToString("N0");
                         lblFinRevTTM.ForeColor = _stockDownloads.stockIncomeStatement.RevenueTtmColor;
-                        lblFinRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue2String.NumericValue.ToString("N0"); 
+                        lblFinRev2YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue2String.NumericValue.ToString("N0");
                         lblFinRev2YearsAgo.ForeColor = _stockDownloads.stockIncomeStatement.Revenue2Color;
                         lblFinRev4YearsAgo.Text = _stockDownloads.stockIncomeStatement.Revenue4String.NumericValue.ToString("N0");
 
@@ -693,14 +693,14 @@ namespace StockApi
 
         private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
         {
-            analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text); 
+            analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
             analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
             analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
         }
 
-         private async void btnGetAllHistory_Click(object sender, EventArgs e)
+        private async void btnGetAllHistory_Click(object sender, EventArgs e)
         {
             UseWaitCursor = true;
             Application.DoEvents();
@@ -777,7 +777,7 @@ namespace StockApi
             StringBuilder sb = new StringBuilder();
             foreach (SqlSummary x in entities)
             {
-                if(PositionList.Any(z => z.Symbol.Contains(x.Ticker)))
+                if (PositionList.Any(z => z.Symbol.Contains(x.Ticker)))
                 {
 
                     // Delete sql data so the new earnings data can be refreshed
@@ -837,7 +837,7 @@ namespace StockApi
         //         Menu Items
         /////////////////////////////////
         ///////// Main 
- 
+
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -933,12 +933,12 @@ namespace StockApi
         private async void last20BuysToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            if(_markets.Dow == null)
+            if (_markets.Dow == null)
             {
                 _markets.Dow = await _markets.GetMarketData("^DJI", true);
             }
             performance.GetLatestBuyPerformance(_markets.Dow, PositionList, TradeList);
-            performance.ShowPerformanceForm(this);  
+            performance.ShowPerformanceForm(this);
         }
         private void latestSellsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -950,7 +950,7 @@ namespace StockApi
         private async void liquidationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            List<PerformanceItem> performanceList =  await performance.GetLiquidationPerformance(PositionList, TradeList);
+            List<PerformanceItem> performanceList = await performance.GetLiquidationPerformance(PositionList, TradeList);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Liquidation Performance", 1);
         }
 

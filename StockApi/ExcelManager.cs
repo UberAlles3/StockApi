@@ -161,7 +161,7 @@ namespace StockApi
                                     {
                                         pi.SetValue(item, Convert.ChangeType(val, pi.PropertyType), null);
                                     }
-                                    catch 
+                                    catch
                                     {
                                         pi.SetValue(item, Convert.ChangeType("0", pi.PropertyType), null);
                                     }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack.DataAnnotations;
+using System;
 
 namespace SqlLayer.SQL_Models
 {
@@ -16,7 +14,7 @@ namespace SqlLayer.SQL_Models
         public string Ticker { get; set; }
 
         public string PeriodType { get; set; }
-        
+
         public DateTime PriceDate { get; set; }
 
         public double Price { get; set; }

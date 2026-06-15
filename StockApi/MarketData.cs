@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using YahooLayer;
 
 namespace StockApi
 {
-    public class MarketData 
+    public class MarketData
     {
         public string Ticker { get; set; }
         public DateTime RetreivedDate { get; set; }
@@ -26,11 +22,11 @@ namespace StockApi
             get
             {
                 decimal change = 0;
-                
-                if(PreviousClose.NumericValue > 0 )
+
+                if (PreviousClose.NumericValue > 0)
                     change = ((CurrentLevel.NumericValue - PreviousClose.NumericValue) / PreviousClose.NumericValue) * 100;
-                
-                return change;  
+
+                return change;
             }
         }
 
@@ -75,7 +71,7 @@ namespace StockApi
                 Dow = await GetMarketData("^DJI", true);
                 SAndP = await GetMarketData("^IXIC", true);
             }
-            catch 
+            catch
             {
                 Dow.CurrentLevel.StringValue = "0";
                 Nasdaq.CurrentLevel.StringValue = "0";
@@ -88,7 +84,7 @@ namespace StockApi
         public async Task<MarketData> GetMarketData(string ticker, bool showMessageBox)
         {
             FpmAPI fpmAPI = new FpmAPI();
-          
+
             MarketData marketData = await fpmAPI.GetQuote(ticker, showMessageBox);
 
             return marketData;

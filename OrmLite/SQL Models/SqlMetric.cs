@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack.DataAnnotations;
+using System;
 
 namespace SqlLayer.SQL_Models
 {
@@ -43,7 +41,7 @@ namespace SqlLayer.SQL_Models
         public double Valuation { get; set; }
 
         public double CashFlow { get; set; }
-        
+
         public double FinalMetric { get; set; }
 
         public DateTime UpdateDate { get; set; }

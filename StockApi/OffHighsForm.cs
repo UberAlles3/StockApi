@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
 //using PC = StockApi.ExcelManager.PositionColumns;
 //using TC = StockApi.ExcelManager.TradeColumns;
-using System.Threading.Tasks;
 using YahooLayer;
-using System.IO;
-using ExcelDataReader;
 
 namespace StockApi
 {
@@ -53,11 +47,11 @@ namespace StockApi
                 decimal high = quotes.Max(x => x.Close);
 
                 txtTickerList.Text += $"{(ticker + "    ").Substring(0, 5)}";
-                if (position.Price < (double)high * .88D && position.Price < position.PastYearHigh *.8) // 20% drop
+                if (position.Price < (double)high * .88D && position.Price < position.PastYearHigh * .8) // 20% drop
                 {
                     txtTickerList.Text += $"     {(high).ToString("00.00").PadLeft(7, ' ')}     {(position.PastYearHigh).ToString("00.00").PadLeft(7, ' ')}    {position.Price.ToString("00.00").PadLeft(7, ' ')}    {(high * .88M).ToString(" 00.00").PadLeft(7, ' ')} ";
 
-                    if(position.BuySell == "Buy") // If already bought in the last 30 days
+                    if (position.BuySell == "Buy") // If already bought in the last 30 days
                     {
                         txtTickerList.Text += $" Bought {position.BuyPrice}";
                     }

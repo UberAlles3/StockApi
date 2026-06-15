@@ -25,7 +25,7 @@ namespace YahooLayer
             set { _ticker = value.ToUpper(); }
         }
 
-        public static List<SearchTerm> SearchTerms 
+        public static List<SearchTerm> SearchTerms
         {
             get
             {
@@ -36,7 +36,7 @@ namespace YahooLayer
                 return searchTerms;
             }
 
-            set => searchTerms = value; 
+            set => searchTerms = value;
         }
 
         public YahooFinanceBase()
@@ -182,7 +182,7 @@ namespace YahooLayer
             }
 
             loc2 = (parts[tagPosition] + "<").IndexOf("<");
-            if(loc2 == 0)
+            if (loc2 == 0)
             {
                 return defaultValue;
             }

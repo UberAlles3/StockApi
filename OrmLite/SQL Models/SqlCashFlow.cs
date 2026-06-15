@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack.DataAnnotations;
+using System;
 
 namespace SqlLayer.SQL_Models
 {
     [Alias("CashFlow")]
-    public class SqlCashFlow 
+    public class SqlCashFlow
     {
         public SqlCashFlow() { }
 
         [AutoIncrement]
         public int Id { get; set; }
-        
+
         public string Ticker { get; set; }
-        
+
         public int Year { get; set; }
-   
+
         public double FreeCashFlow { get; set; }
 
         public double OperatingCashFlow { get; set; }

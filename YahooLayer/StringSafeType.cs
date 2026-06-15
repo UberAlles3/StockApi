@@ -80,7 +80,7 @@ namespace YahooLayer
                         else
                         {
                             IsNumeric = true;
-                            if(HasAbbreviation)
+                            if (HasAbbreviation)
                                 _numericValue = (T)(object)Convert.ToDecimal(ExpandedString);
                             else
                                 _numericValue = (T)(object)Convert.ToDecimal(temp);
@@ -131,7 +131,7 @@ namespace YahooLayer
                 }
                 else
                     _stringValue = value.ToString();
-                
+
                 IsNumeric = true;
             }
         }
@@ -170,7 +170,7 @@ namespace YahooLayer
             }
             else
                 number = Convert.ToDecimal(value);
- 
+
             return number;
         }
 

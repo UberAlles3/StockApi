@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using YahooLayer;
@@ -138,7 +137,7 @@ namespace StockApi
                 cashDebtMetric = cashDebtMetric * .97M;
             else if (stockDownloads.stockStatistics.DebtEquityString.NumericValue > 200) // Over 120% D/E is bad
                 cashDebtMetric = cashDebtMetric * .96M;
-            
+
             output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".000")}");
 
             //////////////////////////////////////////////////////////////////////////////////
@@ -214,9 +213,9 @@ namespace StockApi
             output.AppendLine($"Valuation = {valuationMetric.ToString(".000")}");
 
             //// Calculate total metric
-            decimal finalMetric =    priceTrendMetric   * epsMetric     * ((targetPriceMetric + priceBookMetric) / 2) * 
-                    dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) * 
-                    cashDebtMetric * valuationMetric    * finalCashFlowMetric;
+            decimal finalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric + priceBookMetric) / 2) *
+                    dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) *
+                    cashDebtMetric * valuationMetric * finalCashFlowMetric;
 
             finalMetric = Decimal.Round(finalMetric, 3);
 

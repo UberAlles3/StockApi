@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 //using PC = StockApi.ExcelManager.PositionColumns;
 //using TC = StockApi.ExcelManager.TradeColumns;
 using YahooLayer;
@@ -123,10 +118,10 @@ namespace StockApi
             performanceList.Clear();
             foreach (ExcelTrade trade in sellTrades)
             {
-                string ticker = trade.Symbol; 
+                string ticker = trade.Symbol;
 
                 // Search in positions for ticker to get current price 
-                if(positionList.Where(x => x.Symbol == ticker).Count() == 0)
+                if (positionList.Where(x => x.Symbol == ticker).Count() == 0)
                 {
                     continue; // Sold a stock that has been liquidated and has no current price in the positions table
                 }
@@ -246,13 +241,13 @@ namespace StockApi
     public class PerformanceItem
     {
         public DateTime TradeDate { get; set; }
-        public string   Ticker { get; set; }
-        public int      Quantity { get; set; }
+        public string Ticker { get; set; }
+        public int Quantity { get; set; }
         public double TradePrice { get; set; }
         public double CurrentPrice { get; set; }
         public double Profit { get; set; }
         public double TotalProfit { get; set; }
-        public int      DowLevel { get; set; }
-        public bool     SoldAndBought { get; set; }
+        public int DowLevel { get; set; }
+        public bool SoldAndBought { get; set; }
     }
 }

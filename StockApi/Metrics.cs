@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
-using SqlLayer;
-using SqlLayer.SQL_Models;
 using YahooLayer;
 
 namespace StockApi
@@ -22,7 +20,7 @@ namespace StockApi
         private Analyze _analyze = new Analyze();
         private ExcelManager _excelManager = new ExcelManager();
         private string _applicationPath = System.Windows.Forms.Application.StartupPath;
-        
+
         public async Task<int> DailyGetMetrics(List<ExcelPosition> positionList, RichTextBox textBox, string startLetter, string endLetter, CancellationToken cancellationToken)
         {
             // Get all tickers from position table
@@ -32,7 +30,7 @@ namespace StockApi
             analyzeInputs.SharesOwned = 1;
             analyzeInputs.QuantityTraded = 1;
 
- 
+
 
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
             if (networkUp == false)
@@ -120,7 +118,7 @@ namespace StockApi
                 stockMetricString = await GetStockMetric(ticker, analyzeInputs);
                 builder.Append(stockMetricString);
                 Debug.Print(stockMetricString);
-                if(textBox != null)
+                if (textBox != null)
                     textBox.Text += ticker + "\r\n";
 
                 if (cancellationToken.IsCancellationRequested)
@@ -171,7 +169,7 @@ namespace StockApi
             decimal percent_diff = stockDownloads.stockSummary.PriceString.NumericValue / stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
 
             decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads, analyzeInputs, true);
-            if(ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMZN")
+            if (ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMZN")
             {
                 Debug.WriteLine(_analyze.AnalysisMetricsOutputText);
             }

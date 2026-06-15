@@ -1,12 +1,11 @@
-﻿using System;
+﻿using ServiceStack.OrmLite;
+using SqlLayer.SQL_Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using ServiceStack.OrmLite;
-using SqlLayer.SQL_Models;
 
 namespace SqlLayer
 {
@@ -19,7 +18,7 @@ namespace SqlLayer
         /// </summary>
         public static OrmLiteConnectionFactory FinancialStatementFactory()
         {
-            if(FactorySingleton == null)
+            if (FactorySingleton == null)
             {
                 string connectionString = ConfigurationManager.ConnectionStrings["StockDataConnection"].ConnectionString;
                 FactorySingleton = new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider);
@@ -138,7 +137,7 @@ namespace SqlLayer
 
                 foreach (SqlIncomeStatement row in sqlIncomeStatements)
                 {
-                  db.Insert<SqlIncomeStatement>(row);
+                    db.Insert<SqlIncomeStatement>(row);
                 }
             }
         }
@@ -239,8 +238,8 @@ namespace SqlLayer
 
                 foreach (SqlPriceHistory row in sqlPriceHistories)
                 {
-                    if(row != null)
-                       db.Insert<SqlPriceHistory>(row);
+                    if (row != null)
+                        db.Insert<SqlPriceHistory>(row);
                 }
             }
         }
@@ -306,8 +305,8 @@ namespace SqlLayer
             using (IDbConnection db = factory.OpenDbConnection())
             {
                 db.CreateTableIfNotExists<SqlMetric>();
-                if(ticker == null)
-                    sqlMetricList = db.Select<SqlMetric>(x => x.Year*100+x.Month >= minDate.Year*100+minDate.Month);
+                if (ticker == null)
+                    sqlMetricList = db.Select<SqlMetric>(x => x.Year * 100 + x.Month >= minDate.Year * 100 + minDate.Month);
                 else
                     sqlMetricList = db.Select<SqlMetric>(x => x.Year * 100 + x.Month >= minDate.Year * 100 + minDate.Month && x.Ticker == ticker);
             }
@@ -330,5 +329,5 @@ namespace SqlLayer
                 db.Insert<SqlMetric>(sqlMetric);
             }
         }
-     }
+    }
 }

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using log4net;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using Newtonsoft.Json;
-using log4net;
 
 namespace YahooLayer
 {
@@ -31,21 +31,21 @@ namespace YahooLayer
             {
                 double x = quotes.chart.result[0].meta.regularMarketPrice;
                 long xx = quotes.chart.result[0].meta.regularMarketVolume;
-                listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(x), Volume = Convert.ToInt32(xx)});
+                listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(x), Volume = Convert.ToInt32(xx) });
             }
             else
             {
                 foreach (string close in quotes.chart.result[0].indicators.quote[0].close)
                 {
-                    listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(close), QuoteDate = DateTime.Now});
+                    listQuotes.Add(new StockQuote() { Ticker = ticker, Close = Convert.ToDecimal(close), QuoteDate = DateTime.Now });
                 }
 
                 int i = 0;
                 foreach (int timestamp in quotes.chart.result[0].timestamp)
                 {
                     DateTime quoteDate = unixEpoch.AddSeconds(Convert.ToInt32(timestamp));
-                
-                    if(quoteDate.Date == DateTime.Now.Date)
+
+                    if (quoteDate.Date == DateTime.Now.Date)
                     {
                         listQuotes[i].Price = Convert.ToDecimal(quotes.chart.result[0].meta.regularMarketPrice.ToString("0.000"));
                     }
@@ -101,7 +101,7 @@ namespace YahooLayer
                         {
                             json = await content.ReadAsStringAsync();
                             QuoteRoot qr = null;
-                            
+
                             try
                             {
                                 qr = JsonConvert.DeserializeObject<QuoteRoot>(json);
@@ -111,7 +111,7 @@ namespace YahooLayer
                                 logger.Error($"{ex.Message}  {ex.StackTrace}");
                                 // MessageBox.Show($"JsonConvert.DeserializeObject {json} {ex.Message}");
                             }
-                            
+
                             return qr;
                         }
                         throw new GeneralExceptions().HandleJsonRequestExceptions(ticker, (int)response.StatusCode, await response.Content.ReadAsStringAsync(), requrestUri.ToString());

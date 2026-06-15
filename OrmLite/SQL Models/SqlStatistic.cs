@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack.DataAnnotations;
+using System;
 
 namespace SqlLayer.SQL_Models
 {
@@ -18,7 +16,7 @@ namespace SqlLayer.SQL_Models
         public double Cash { get; set; }
 
         public double Debt { get; set; }
-        
+
         public double DebtEquity { get; set; }
 
         public double ShortInterest { get; set; }

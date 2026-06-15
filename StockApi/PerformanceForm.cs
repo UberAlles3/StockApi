@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace StockApi
@@ -16,15 +14,15 @@ namespace StockApi
             TradeDate,
             Ticker,
             Quantity,
-            TradePrice, 
+            TradePrice,
             CurrentPrice,
             Profit,
             TotalProfit,
             DowLevel,
             SoldAndBought
         }
-        
-        
+
+
         List<PerformanceItem> _performanceList = null;
 
         public PerformanceForm(List<PerformanceItem> performanceList)
@@ -36,7 +34,7 @@ namespace StockApi
         private void PerformanceForm_Load(object sender, EventArgs e)
         {
             var bindingList = new BindingList<PerformanceItem>(_performanceList);
-            dataGridView2.DataSource = new BindingSource(bindingList, null); 
+            dataGridView2.DataSource = new BindingSource(bindingList, null);
 
             this.BackColor = dataGridView2.BackgroundColor;
             dataGridView2.DefaultCellStyle.ForeColor = Form1.TextForeColor;

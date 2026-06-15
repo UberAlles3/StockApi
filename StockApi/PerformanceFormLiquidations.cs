@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace StockApi
@@ -28,7 +26,7 @@ namespace StockApi
                 lblColorExplanation.Visible = false;
 
             var bindingList = new BindingList<PerformanceItem>(_performanceList);
-            dataGridView2.DataSource = new BindingSource(bindingList, null); 
+            dataGridView2.DataSource = new BindingSource(bindingList, null);
 
             this.BackColor = dataGridView2.BackgroundColor;
             dataGridView2.DefaultCellStyle.ForeColor = Form1.TextForeColor;

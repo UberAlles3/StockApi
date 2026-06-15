@@ -1,5 +1,4 @@
-﻿using log4net;
-using SqlLayer;
+﻿using SqlLayer;
 using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace YahooLayer 
+namespace YahooLayer
 {
     public class StockCashFlow : YahooFinanceBase
     {
@@ -31,9 +30,9 @@ namespace YahooLayer
         public StringSafeType<Decimal> OperatingCashFlowTtmString = new StringSafeType<decimal>("--");
         public Color OperatingCashFlowTtmColor = Color.White;
         public StringSafeType<Decimal> OperatingCashFlow2String = new StringSafeType<decimal>("--");
-        public Color OperatingCashFlow2Color = Color.White; 
+        public Color OperatingCashFlow2Color = Color.White;
         public StringSafeType<Decimal> OperatingCashFlow4String = new StringSafeType<decimal>("--");
-        public Color OperatingCashFlow4Color = Color.White; 
+        public Color OperatingCashFlow4Color = Color.White;
 
         /// End Cash Position 
         public StringSafeType<Decimal> EndCashPositionTtmString = new StringSafeType<decimal>("--", "N0");
@@ -60,7 +59,7 @@ namespace YahooLayer
         ///                Methods
         ////////////////////////////////////////////
         public override async Task<bool> GetStockData(string ticker)
-        { 
+        {
             Ticker = ticker;
             string html;
 

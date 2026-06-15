@@ -1,10 +1,5 @@
 ﻿using SqlLayer;
-using SqlLayer.SQL_Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace YahooLayer
@@ -31,7 +26,7 @@ namespace YahooLayer
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();
 
             found = await GetSummary();
-            if(found)
+            if (found)
             {
                 stockSummary.sqlTicker = _finacialStatement.GetTicker(_ticker);
 

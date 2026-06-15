@@ -6,7 +6,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -60,13 +59,13 @@ namespace YahooLayer
 
         public StockSummary()
         {
-            DividendColor      = _normalColor;
-            EPSColor           = _normalColor;
-            PriceBookColor     = _normalColor;
-            ProfitMarginColor  = _normalColor;
+            DividendColor = _normalColor;
+            EPSColor = _normalColor;
+            PriceBookColor = _normalColor;
+            ProfitMarginColor = _normalColor;
             OneYearTargetColor = _normalColor;
-            ForwardPEColor     = _normalColor;
-            EarningsDateColor  = _normalColor;
+            ForwardPEColor = _normalColor;
+            EarningsDateColor = _normalColor;
         }
 
         ////////////////////////////////////////////
@@ -181,7 +180,7 @@ namespace YahooLayer
 
                     int secFound = parts.Where(x => x.Contains("Sector<")).Count();
 
-                    if(secFound > 0)
+                    if (secFound > 0)
                     {
                         int sectorIndex = parts.Select((s, i) => new { i, s }).Where(x => x.s.Contains("Sector<")).Select(t => t.i).First();
                         sectorIndex -= 3;
@@ -234,7 +233,7 @@ namespace YahooLayer
                 ProfitMarginColor = Color.Lime;
             else
                 ProfitMarginColor = _normalColor;
-            
+
             if (PriceBookString.NumericValue > 5)
                 PriceBookColor = Color.Red;
             else if (PriceBookString.NumericValue < 1)
@@ -258,7 +257,7 @@ namespace YahooLayer
             if (EarningsDateString.IsDateTime)
             {
                 DateTime dt = (EarningsDateString.DateTimeValue ?? DateTime.Now).Date;
-                if (dt  == DateTime.Now.Date)
+                if (dt == DateTime.Now.Date)
                     EarningsDateColor = Color.Lime;
                 else if (dt == DateTime.Now.AddDays(1).Date)
                     EarningsDateColor = Color.LightGreen;

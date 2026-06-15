@@ -1,16 +1,14 @@
-﻿using SqlLayer.SQL_Models;
+﻿using SqlLayer;
+using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using YahooLayer;
-using SqlLayer;
-using System.Threading.Tasks;
 
 namespace StockApi
 {
@@ -212,7 +210,7 @@ namespace StockApi
                 last = r;
 
                 // only add first and last metric
-                if(comboBox1.SelectedIndex < 3 || first.UpdateDate.AddMonths(4) > DateTime.Now) // 1 month or 3 months or not enough history
+                if (comboBox1.SelectedIndex < 3 || first.UpdateDate.AddMonths(4) > DateTime.Now) // 1 month or 3 months or not enough history
                 {
                     if (r.FinalMetric > first.FinalMetric * 1.04 || r.FinalMetric < first.FinalMetric * .965)
                     {
@@ -253,9 +251,9 @@ namespace StockApi
                 {
                     ticker = r.Ticker;
                     previous = r.FinalMetric;
-                    if(i > 0)
+                    if (i > 0)
                     {
-//                        dataGridView1.Rows[i].Cells[17].Style.BackColor = currentColor;
+                        //                        dataGridView1.Rows[i].Cells[17].Style.BackColor = currentColor;
                         if (currentColor == Color.Black)
                         {
                             currentColor = altColor;
@@ -269,7 +267,7 @@ namespace StockApi
                     }
                 }
 
-                if (i < dataGridView1.Rows.Count-2)
+                if (i < dataGridView1.Rows.Count - 2)
                     dataGridView1.Rows[i].Cells[17].Style.BackColor = currentColor;
 
                 if (r.FinalMetric > previous * 1.032)

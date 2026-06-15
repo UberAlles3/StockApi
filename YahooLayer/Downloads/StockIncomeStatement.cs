@@ -18,19 +18,19 @@ namespace YahooLayer
         ////////////////////////////////////////////
         ///                Properties
         ////////////////////////////////////////////
-        public Color RevenueTtmColor       = Color.White;
-        public Color Revenue2Color         = Color.White;
-        public Color Revenue4Color         = Color.White;
+        public Color RevenueTtmColor = Color.White;
+        public Color Revenue2Color = Color.White;
+        public Color Revenue4Color = Color.White;
         public Color CostOfRevenueTtmColor = Color.White;
-        public Color CostOfRevenue2Color   = Color.White;
-        public Color CostOfRevenue4Color   = Color.White;
-        public Color BasicEpsTtmColor      = Color.White;
-        public Color BasicEps2Color        = Color.White;
-        public Color BasicEps4Color        = Color.White;
-        public Color ProfitTtmColor        = Color.White;
-        public Color Profit2YearsAgoColor  = Color.White;
-        public Color Profit4YearsAgoColor  = Color.White;
-                                          
+        public Color CostOfRevenue2Color = Color.White;
+        public Color CostOfRevenue4Color = Color.White;
+        public Color BasicEpsTtmColor = Color.White;
+        public Color BasicEps2Color = Color.White;
+        public Color BasicEps4Color = Color.White;
+        public Color ProfitTtmColor = Color.White;
+        public Color Profit2YearsAgoColor = Color.White;
+        public Color Profit4YearsAgoColor = Color.White;
+
 
         /// Revenue
         public StringSafeType<Decimal> RevenueTtmString = new StringSafeType<decimal>("--", "N0");
@@ -46,7 +46,7 @@ namespace YahooLayer
         public StringSafeType<Decimal> OperatingExpenseTtmString = new StringSafeType<decimal>("--", "N0");
         public StringSafeType<Decimal> OperatingExpense2String = new StringSafeType<decimal>("--", "N0");
         public StringSafeType<Decimal> OperatingExpense4String = new StringSafeType<decimal>("--", "N0");
-        
+
         /// Net Income
         public StringSafeType<Decimal> NetIncomeTtmString = new StringSafeType<decimal>("--", "N0");
         public StringSafeType<Decimal> NetIncome2String = new StringSafeType<decimal>("--", "N0");
@@ -64,24 +64,24 @@ namespace YahooLayer
 
         public StockIncomeStatement()
         {
-            RevenueTtmColor       = _normalColor;
-            Revenue2Color         = _normalColor;
-            Revenue4Color         = _normalColor;
+            RevenueTtmColor = _normalColor;
+            Revenue2Color = _normalColor;
+            Revenue4Color = _normalColor;
             CostOfRevenueTtmColor = _normalColor;
-            CostOfRevenue2Color   = _normalColor;
-            CostOfRevenue4Color   = _normalColor;
-            BasicEpsTtmColor      = _normalColor;
-            BasicEps2Color        = _normalColor;
-            BasicEps4Color        = _normalColor;
-            ProfitTtmColor        = _normalColor;
-            Profit2YearsAgoColor  = _normalColor;
-            Profit4YearsAgoColor  = _normalColor;
-    }
+            CostOfRevenue2Color = _normalColor;
+            CostOfRevenue4Color = _normalColor;
+            BasicEpsTtmColor = _normalColor;
+            BasicEps2Color = _normalColor;
+            BasicEps4Color = _normalColor;
+            ProfitTtmColor = _normalColor;
+            Profit2YearsAgoColor = _normalColor;
+            Profit4YearsAgoColor = _normalColor;
+        }
 
-    //////////////////////////
-    ///                Methods
-    ////////////////////////////////////////////
-    public override async Task<bool> GetStockData(string ticker)
+        //////////////////////////
+        ///                Methods
+        ////////////////////////////////////////////
+        public override async Task<bool> GetStockData(string ticker)
         {
             Ticker = ticker;
             string html;
@@ -146,7 +146,7 @@ namespace YahooLayer
                     //MessageBox.Show(ex.Source + ex.Message + "\n" + "GetIncomeStatementData() " + " " + ticker + "\n" + html.Substring(0, html.Length / 10));
                 }
             }
-            
+
             //////////////////////////////////////////
             /// Determine Profit
             if (RevenueTtmString.NumericValue > 0)
@@ -193,9 +193,9 @@ namespace YahooLayer
                 else
                     Profit2YearsAgoColor = _normalColor;
             }
-                
+
             // Set Colors for Basic EPS labels (if EPS decreasing by 10% every 2 years, a problem
-            if (BasicEpsTtmString.NumericValue > 0) 
+            if (BasicEpsTtmString.NumericValue > 0)
             {   // TTM
                 if (BasicEpsTtmString.NumericValue < BasicEps2String.NumericValue * .9M)
                     BasicEpsTtmColor = Color.Red;
@@ -214,7 +214,7 @@ namespace YahooLayer
                     BasicEpsTtmColor = _normalColor;
             }
             if (BasicEps2String.NumericValue > 0)
-            {   
+            {
                 // 2 years ago
                 if (BasicEps2String.NumericValue < (BasicEps4String.NumericValue * .9M))
                     BasicEps2Color = Color.Red;

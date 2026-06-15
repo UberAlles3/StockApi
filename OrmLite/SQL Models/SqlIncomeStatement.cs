@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack.DataAnnotations;
+using System;
 
 namespace SqlLayer.SQL_Models
 {
@@ -26,7 +24,7 @@ namespace SqlLayer.SQL_Models
         public double NetIncome { get; set; }
 
         public double BasicEPS { get; set; }
-        
+
         public DateTime UpdateDate { get; set; }
         public override string ToString()
         {

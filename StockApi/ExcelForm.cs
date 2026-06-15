@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -82,18 +80,18 @@ namespace StockApi
                         currentPrice = await stockHistory.GetTodaysPrice(cells[0]);
                         sb.Append(currentPrice.ToString("0.00") + "\t"); // fill Price
                     }
-                    catch 
+                    catch
                     {
                         sb.Append(cells[8].Replace("$", "") + "\t"); // fill Price
                     }
 
                     sb.Append(cells[4] + "\t"); // Buy/Sell
-                    if(cells[4].ToUpper() == "BUY")
+                    if (cells[4].ToUpper() == "BUY")
                     {
 
                         sb.Append(cells[5].Replace("Shares", "").Trim() + "\t"); // Shares bought
                         sb.Append(cells[8].Replace("$", "") + "\t"); // fill Price
-                        if(excelPosition.SellQuantity == 0)
+                        if (excelPosition.SellQuantity == 0)
                             sb.Append("" + "\t"); // Sell Quantity
                         else
                             sb.Append(excelPosition.SellQuantity.ToString() + "\t"); // Sell Quantity
@@ -113,7 +111,7 @@ namespace StockApi
                         sb.Append(cells[8].Replace("$", "")); // fill Price
                     }
 
-                    sb.Append("\r\n"); 
+                    sb.Append("\r\n");
                 }
             }
             sb.Append("\r\nTrades\r\n-------------------------------------------------------------\r\n");

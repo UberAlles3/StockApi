@@ -1,14 +1,11 @@
-﻿using System;
+﻿using SqlLayer;
+using SqlLayer.SQL_Models;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using SqlLayer;
-using SqlLayer.SQL_Models;
-using System.Linq;
-using System.Diagnostics;
-using YahooLayer;
 
 namespace YahooLayer
 {
@@ -16,10 +13,10 @@ namespace YahooLayer
     {
         private static readonly string _statisticsUrl = "https://finance.yahoo.com/quote/???/key-statistics/";
 
-        public Color TotalCashColor     = Color.White;
-        public Color TotalDebtColor     = Color.White;
+        public Color TotalCashColor = Color.White;
+        public Color TotalDebtColor = Color.White;
         public Color ShortInterestColor = Color.White;
-        public Color DebtEquityColor    = Color.White; 
+        public Color DebtEquityColor = Color.White;
 
         /////////////////// TotalCash
         private string totalCashString = NotApplicable;
@@ -81,10 +78,10 @@ namespace YahooLayer
 
         public StockStatistics()
         {
-            TotalCashColor     = _normalColor;
-            TotalDebtColor     = _normalColor;
+            TotalCashColor = _normalColor;
+            TotalDebtColor = _normalColor;
             ShortInterestColor = _normalColor;
-            DebtEquityColor    = _normalColor;
+            DebtEquityColor = _normalColor;
         }
 
         ////////////////////////////////////////////
@@ -194,7 +191,7 @@ namespace YahooLayer
             // Set Colors of Debt Equity
             if (ShortInterestString.NumericValue > 8)
                 ShortInterestColor = Color.Red;
-            else if (ShortInterestString.NumericValue < 2 && TotalDebt != 0 )
+            else if (ShortInterestString.NumericValue < 2 && TotalDebt != 0)
                 ShortInterestColor = Color.Lime;
             else
                 ShortInterestColor = _normalColor;
@@ -252,7 +249,7 @@ namespace YahooLayer
             //TotalCash = (decimal)source.Cash;
             //TotalDebt = (decimal)source.Debt;
             TotalCashString = DebtEquityString.AbbreviateNumeric((decimal)source.Cash);
-            TotalDebtString = DebtEquityString.AbbreviateNumeric((decimal)source.Debt); 
+            TotalDebtString = DebtEquityString.AbbreviateNumeric((decimal)source.Debt);
             DebtEquityString.NumericValue = (decimal)source.DebtEquity;
             ShortInterestString.NumericValue = (decimal)source.ShortInterest;
 
