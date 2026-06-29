@@ -19,8 +19,8 @@ namespace StockApi
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MetricsChartForm());
-            //Application.Run(new Form1());
+            //Application.Run(new MetricsChartForm("XOM"));
+            Application.Run(new Form1());
         }
     }
 }

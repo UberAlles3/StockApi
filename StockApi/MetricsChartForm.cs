@@ -16,9 +16,12 @@ namespace StockApi
 {
     public partial class MetricsChartForm : Form
     {
-        public MetricsChartForm()
+        string _ticker = "";
+        
+        public MetricsChartForm(string ticker)
         {
             InitializeComponent();
+            _ticker = ticker;
         }
 
         private void MetricsChartForm_Load(object sender, EventArgs e)
@@ -31,30 +34,46 @@ namespace StockApi
             //metricList.Add(new MetricsXY() { Month = 3, Value = 1.23 });
             //metricList.Add(new MetricsXY() { Month = 4, Value = 1.19 });
 
-            CreateChart("XOM");
-            this.Text += " for XOM";
+            this.Text += " for " + _ticker;
+            CreateChart(_ticker);
         }
 
         private void CreateChart(string ticker)
         {
-            string[] months = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+            string[] months = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun" };
+            int[] monthIndexes = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6 };
             string[] labelMonths = new string[6];
             List<SqlMetric> metrics = new List<SqlMetric>();
             List<MetricsXY> metricXYList = new List<MetricsXY>();
+            int startMonth = DateTime.Now.AddMonths(-5).Month;
 
             // Get All the metric rows
             SqlCrudOperations sqlCrudOperations = new SqlCrudOperations();
             metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-5), ticker);
 
-            int i = 0;
-            foreach (SqlMetric sm in metrics)
+            for (int i = startMonth - 1; i < startMonth + 5; i++)
             {
-                labelMonths[i++] = months[sm.Month - 1];
-                metricXYList.Add(new MetricsXY { Month = sm.Month, Value = sm.FinalMetric });
+                int monthIndex = monthIndexes[i];
+
+                // Find the sql metric row that matches the month number. 
+                bool found = false; 
+                foreach (SqlMetric sm in metrics)
+                {
+                    if (sm.Month == monthIndex)
+                    {
+                        metricXYList.Add(new MetricsXY { Month = sm.Month, Value = sm.FinalMetric });
+                        found = true;
+                    }
+                }
+                if(!found)
+                    metricXYList.Add(new MetricsXY { Month = i + 1, Value = double.NaN });
+
+                labelMonths[i] = months[startMonth + i - 1];
             }
 
-            double low = metricXYList.Min(x => x.Value);
-            double high = metricXYList.Max(x => x.Value);
+
+            double low = metricXYList.Where(x => x.Value > 0).Min(x => x.Value);
+            double high = metricXYList.Where(x => x.Value > 0).Max(x => x.Value);
 
             var bindingList = new BindingList<MetricsXY>(metricXYList);
             var source = new BindingSource(bindingList, null);
@@ -63,8 +82,6 @@ namespace StockApi
             {
                 Title = "Month",
                 Labels = labelMonths,
-                //MinWidth = 60,
-                //MaxWidth = 60,
                 LabelsRotation = 45
             }); ;
             cartesianChart1.AxisY.Add(new LiveCharts.Wpf.Axis
@@ -84,32 +101,16 @@ namespace StockApi
 
             cartesianChart1.Series.Clear();
             SeriesCollection series = new SeriesCollection();
-            //var years = (from x in metricList
-            //             select new { Year = x.Year }).Distinct();
 
-
-            //foreach (var year in years)
-            //{
             List<double> values = new List<double>();
-            for (i = 0; i < 6; i++)
+            for (int i = 0; i < metricXYList.Count; i++)
             {
-                //double value = 0;
-                //var data = from x in metricList
-                //           where x.Month.Equals(month)
-                //           //orderby x.Month ascending
-                //           select new { x.Value, x.Month };
-                //if (data.SingleOrDefault() != null)
-                //    value = data.SingleOrDefault().Value;
                 values.Add(metricXYList[i].Value);
-
             }
             series.Add(new LineSeries() { Title = "Months", Values = new ChartValues<double>(values), LineSmoothness = 0 });
 
-            //}
             cartesianChart1.Series = series;
         }
-
-
     }
 
     public class MetricsXY

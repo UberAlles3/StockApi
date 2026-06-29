@@ -698,6 +698,14 @@ namespace StockApi
             form.Show();
         }
 
+        private void btnMetricChart_Click(object sender, EventArgs e)
+        {
+            MetricsChartForm form = new MetricsChartForm(txtStockTicker.Text);
+            form.Owner = this;
+            form.Show();
+        }
+
+
         private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
         {
             analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
