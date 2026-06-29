@@ -691,6 +691,13 @@ namespace StockApi
             lblSellPrice.Text = _analyze.SellPrice.ToString();
         }
 
+        private void btnGetMetricTrend_Click(object sender, EventArgs e)
+        {
+            MetricsForm form = new MetricsForm(txtStockTicker.Text);
+            form.Owner = this;
+            form.Show();
+        }
+
         private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
         {
             analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
@@ -1010,7 +1017,7 @@ namespace StockApi
         ////// Metrics 
         private void viewMetricsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MetricsForm f = new MetricsForm(txtStockTicker.Text);
+            MetricsForm f = new MetricsForm("");
             f.Owner = this;
             f.Icon = this.Icon;
             f.Show();

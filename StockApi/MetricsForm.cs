@@ -16,18 +16,17 @@ namespace StockApi
     {
         private static StockDownloads _stockDownloads = new StockDownloads("");
         private static Analyze _analyze = new Analyze();
-        //private string _ticker;
+        private string _ticker;
         private CancellationTokenSource cts = new CancellationTokenSource();
 
         public MetricsForm(string ticker)
         {
-            //_ticker = ticker;
+            _ticker = ticker;
             InitializeComponent();
         }
 
         private void MetricsForm_Load(object sender, EventArgs e)
         {
-            //txtTickerList.Text = _ticker;
             comboBox1.Items.Add("Lastest");
             comboBox1.Items.Add("Last 2 Months");
             comboBox1.Items.Add("Last 3 Months");
@@ -41,6 +40,13 @@ namespace StockApi
             dataGridView1.Width = panel1.Width - 2;
 
             btnCancelMetrics.Visible = false;
+
+            if(_ticker != "")
+            {
+                comboBox1.SelectedIndex = 3;
+                txtTicker.Text = _ticker;
+                btnSearch_Click(null, null);
+            }
         }
 
         private void MetricsForm_Paint(object sender, PaintEventArgs e)
