@@ -51,9 +51,9 @@ namespace StockApi
             SqlCrudOperations sqlCrudOperations = new SqlCrudOperations();
             metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-5), ticker);
 
-            for (int i = startMonth - 1; i < startMonth + 5; i++)
+            for (int i = 0; i < 6; i++)
             {
-                int monthIndex = monthIndexes[i];
+                int monthIndex = monthIndexes[startMonth + i - 1];
 
                 // Find the sql metric row that matches the month number. 
                 bool found = false; 
@@ -63,12 +63,13 @@ namespace StockApi
                     {
                         metricXYList.Add(new MetricsXY { Month = sm.Month, Value = sm.FinalMetric });
                         found = true;
+                        break;
                     }
                 }
                 if(!found)
                     metricXYList.Add(new MetricsXY { Month = i + 1, Value = double.NaN });
 
-                labelMonths[i] = months[startMonth + i - 1];
+                labelMonths[i] = months[monthIndex - 1];
             }
 
 
