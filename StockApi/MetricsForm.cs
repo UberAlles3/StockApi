@@ -99,25 +99,33 @@ namespace StockApi
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            DataGridViewCell tickerCell = null;
+            string ticker;
+
             // Ensure the click isn't on the header row
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 // Access the specific DataGridViewCell
                 DataGridViewCell clickedCell = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                // Retrieve the value of the cell
-                string cellValue = clickedCell.Value?.ToString();
-
                 // Optional: Do something specific if it's a particular column
                 if (dataGridView1.Columns[e.ColumnIndex].Name == "Chart")
                 {
-                    MessageBox.Show($"You clicked the {clickedCell.OwningColumn.Name} column. Value: {cellValue}");
+                    tickerCell = dataGridView1.Rows[e.RowIndex].Cells[1];
+                    // Retrieve the value of the cell
+                    ticker = tickerCell.Value?.ToString();
+
+                    MetricsChartForm form = new MetricsChartForm(ticker);
+                    form.Owner = this;
+                    form.Show();
                 }
             }
         }
 
         private void BindListToMetricGrid(List<SqlMetric> metrics)
         {
+            dataGridView1.Columns.Clear();
+
             var bindingList = new BindingList<SqlMetric>(metrics);
             var source = new BindingSource(bindingList, null);
             dataGridView1.DefaultCellStyle.ForeColor = Form1.TextForeColor;
@@ -127,8 +135,8 @@ namespace StockApi
             dataGridView1.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
             dataGridView1.DataSource = source.DataSource;
+            
             dataGridView1.Columns.Add("Chart", "Chart");
-
 
             dataGridView1.Columns[0].Visible = false;
             dataGridView1.Columns[1].HeaderText = "Ticker";
@@ -217,9 +225,6 @@ namespace StockApi
             }
 
             dataGridView1.Refresh();
-
-
-
         }
 
         private List<SqlMetric> GetBigMovers(List<SqlMetric> metrics)
