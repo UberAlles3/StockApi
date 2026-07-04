@@ -220,6 +220,7 @@ namespace StockApi
             this.openMetricsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.excelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.btnMetricChart = new System.Windows.Forms.Button();
             this.btnGetMetricTrend = new System.Windows.Forms.Button();
             this.label70 = new System.Windows.Forms.Label();
             this.lblSandP500 = new System.Windows.Forms.Label();
@@ -239,7 +240,9 @@ namespace StockApi
             this.panel4 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.btnMetricChart = new System.Windows.Forms.Button();
+            this.lblBuyTarget = new System.Windows.Forms.Label();
+            this.lblSellTarget = new System.Windows.Forms.Label();
+            this.label59 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -2105,7 +2108,7 @@ namespace StockApi
             this.label26.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label26.Location = new System.Drawing.Point(28, 592);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(233, 29);
+            this.label26.Size = new System.Drawing.Size(145, 29);
             this.label26.TabIndex = 20;
             this.label26.Text = "Next Trades";
             this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2431,6 +2434,9 @@ namespace StockApi
             // 
             this.panel3.BackColor = System.Drawing.Color.Transparent;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.label59);
+            this.panel3.Controls.Add(this.lblBuyTarget);
+            this.panel3.Controls.Add(this.lblSellTarget);
             this.panel3.Controls.Add(this.btnMetricChart);
             this.panel3.Controls.Add(this.btnGetMetricTrend);
             this.panel3.Controls.Add(this.txtAnalysisOutput);
@@ -2454,6 +2460,17 @@ namespace StockApi
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(380, 674);
             this.panel3.TabIndex = 23;
+            // 
+            // btnMetricChart
+            // 
+            this.btnMetricChart.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnMetricChart.Location = new System.Drawing.Point(205, 552);
+            this.btnMetricChart.Name = "btnMetricChart";
+            this.btnMetricChart.Size = new System.Drawing.Size(115, 24);
+            this.btnMetricChart.TabIndex = 51;
+            this.btnMetricChart.Text = "Metric Chart";
+            this.btnMetricChart.UseVisualStyleBackColor = true;
+            this.btnMetricChart.Click += new System.EventHandler(this.btnMetricChart_Click);
             // 
             // btnGetMetricTrend
             // 
@@ -2679,16 +2696,40 @@ namespace StockApi
             this.label7.Text = "Markets";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // btnMetricChart
+            // lblBuyTarget
             // 
-            this.btnMetricChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnMetricChart.Location = new System.Drawing.Point(205, 552);
-            this.btnMetricChart.Name = "btnMetricChart";
-            this.btnMetricChart.Size = new System.Drawing.Size(115, 24);
-            this.btnMetricChart.TabIndex = 51;
-            this.btnMetricChart.Text = "Metric Chart";
-            this.btnMetricChart.UseVisualStyleBackColor = true;
-            this.btnMetricChart.Click += new System.EventHandler(this.btnMetricChart_Click);
+            this.lblBuyTarget.BackColor = System.Drawing.Color.Transparent;
+            this.lblBuyTarget.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBuyTarget.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblBuyTarget.Location = new System.Drawing.Point(274, 622);
+            this.lblBuyTarget.Name = "lblBuyTarget";
+            this.lblBuyTarget.Size = new System.Drawing.Size(46, 15);
+            this.lblBuyTarget.TabIndex = 52;
+            this.lblBuyTarget.Text = "0.00";
+            this.lblBuyTarget.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblSellTarget
+            // 
+            this.lblSellTarget.BackColor = System.Drawing.Color.Transparent;
+            this.lblSellTarget.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblSellTarget.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblSellTarget.Location = new System.Drawing.Point(274, 643);
+            this.lblSellTarget.Name = "lblSellTarget";
+            this.lblSellTarget.Size = new System.Drawing.Size(46, 15);
+            this.lblSellTarget.TabIndex = 53;
+            this.lblSellTarget.Text = "0.00";
+            this.lblSellTarget.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label59
+            // 
+            this.label59.BackColor = System.Drawing.Color.Transparent;
+            this.label59.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label59.Location = new System.Drawing.Point(258, 586);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(62, 29);
+            this.label59.TabIndex = 54;
+            this.label59.Text = "Targets";
+            this.label59.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Form1
             // 
@@ -2963,6 +3004,9 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem openMetricsToolStripMenuItem;
         private System.Windows.Forms.Button btnGetMetricTrend;
         private System.Windows.Forms.Button btnMetricChart;
+        private System.Windows.Forms.Label label59;
+        private System.Windows.Forms.Label lblBuyTarget;
+        private System.Windows.Forms.Label lblSellTarget;
     }
 }
 

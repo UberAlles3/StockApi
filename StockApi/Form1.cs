@@ -480,6 +480,8 @@ namespace StockApi
                     lblBuyPrice.Text = "0.00";
                     lblSellQuantity.Text = "0";
                     lblSellPrice.Text = "0.00";
+                    lblBuyTarget.Text = "0.00";
+                    lblSellTarget.Text = "0.00";
                     errorPlace = "Setting labels #2";
                     /////////  Market Data
                     DisplayMarketData();
@@ -689,6 +691,14 @@ namespace StockApi
             lblBuyPrice.Text = _analyze.BuyPrice.ToString();
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
             lblSellPrice.Text = _analyze.SellPrice.ToString();
+
+            // Current targets from spreadsheet
+            ExcelPosition excelPosition = PositionList.Where(x => x.Symbol == txtStockTicker.Text).FirstOrDefault();
+            if(excelPosition != null)
+            {
+                lblBuyTarget.Text = excelPosition.BuyTarget.ToString("0.00");
+                lblSellTarget.Text = excelPosition.SellTarget.ToString("0.00");
+            }
         }
 
         private void btnGetMetricTrend_Click(object sender, EventArgs e)
