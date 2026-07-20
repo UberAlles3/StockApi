@@ -512,7 +512,9 @@ namespace StockApi
                         lbl52WeekArrow.Visible = true;
                         int w52 = lbl52WeekHighArrow.Left - lbl52WeekLowArrow.Left; // distance between controls 
                         decimal range52 = _stockDownloads.stockSummary.YearsRangeHigh.NumericValue - _stockDownloads.stockSummary.YearsRangeLow.NumericValue; // total price range
-                        decimal perc52 = (_stockDownloads.stockSummary.PriceString.NumericValue - _stockDownloads.stockSummary.YearsRangeLow.NumericValue) / range52; // percent above low
+                        decimal perc52 = .001M;
+                        if (range52 > .05M)
+                            perc52 = (_stockDownloads.stockSummary.PriceString.NumericValue - _stockDownloads.stockSummary.YearsRangeLow.NumericValue) / range52; // percent above low
                         lbl52WeekArrow.Left = lbl52WeekLowArrow.Left + (int)(perc52 * w52) - 4; // set left of arrow current price
                     }
                     else
