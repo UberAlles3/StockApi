@@ -131,7 +131,6 @@ namespace YahooLayer
                 OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 4).Trim();
                 if (OneYearTargetPriceString.NumericValue == 0)
                 {
-
                     // Get MarketBeat data
                     try
                     {
