@@ -21,6 +21,7 @@ namespace YahooLayer
         }
 
         private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
+        private static readonly string _summaryMarketBeatUrl = "https://www.marketbeat.com/stocks/NYSE/???/";
 
         public Color DividendColor = Color.White;
         public Color EPSColor = Color.White;
@@ -31,6 +32,7 @@ namespace YahooLayer
         public Color EarningsDateColor = Color.White;
 
         public string _html = "";
+        public string _marketBeatHtml = "";
         private string companyName = "";
         public string CompanyOverview = "";
         public string Sector = "";
@@ -128,7 +130,21 @@ namespace YahooLayer
                 searchTerm = SearchTerms.Find(x => x.Name == "One Year Target").Term;
                 OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 4).Trim();
                 if (OneYearTargetPriceString.NumericValue == 0)
-                    OneYearTargetPriceString.StringValue = PriceString.StringValue;
+                {
+
+                    // Get MarketBeat data
+                    try
+                    {
+                        _marketBeatHtml = await GetHtmlForTicker(_summaryMarketBeatUrl, Ticker);
+                        searchTerm = "Average Price Target for";
+                        OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(_marketBeatHtml, searchTerm, YahooFinanceBase.NotApplicable, 4).Trim().Replace("$", "");
+
+                    }
+                    catch
+                    {
+                        OneYearTargetPriceString.StringValue = PriceString.StringValue;
+                    }
+                }
 
                 // Price / Book
                 searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;

@@ -82,7 +82,14 @@ namespace YahooLayer
                     if (ex.Message.Contains("Data doesn't exist for startDate"))
                     {
                         // try a year ago
-                        quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
+                        try
+                        {
+                            quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-1).AddDays(-4), 4, "1d");
+                        }
+                        catch
+                        {
+                            quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddMonths(-1).AddDays(-2), 4, "1d");
+                        }
                     }
                     else
                     {

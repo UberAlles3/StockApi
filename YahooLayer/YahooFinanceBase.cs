@@ -173,7 +173,14 @@ namespace YahooLayer
                 return defaultValue;
             }
 
-            string htmlSnippet = html.Substring(loc1 + 1, 250);
+            string htmlSnippet = html.Substring(loc1 + 1, 350);
+
+            if(htmlSnippet.Contains(searchText))
+            {
+                loc1 = htmlSnippet.IndexOf(searchText);
+                htmlSnippet = htmlSnippet.Substring(loc1 + 1, htmlSnippet.Length - loc1 - 5);
+            }
+
             string[] parts = htmlSnippet.Split(">");
 
             if (parts.Length < 3)
