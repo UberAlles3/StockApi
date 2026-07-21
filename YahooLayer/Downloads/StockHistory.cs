@@ -3,6 +3,7 @@ using SqlLayer.SQL_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace YahooLayer
@@ -76,6 +77,11 @@ namespace YahooLayer
                 {
                     // Some stocks didn't exist 3 years ago
                     quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4, "1d");
+                    if(quoteList.Count == 0)
+                    {
+                        Thread.Sleep(1000);
+                        quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddYears(-3).AddDays(-4), 4, "1d");
+                    }
                 }
                 catch (Exception ex)
                 {
