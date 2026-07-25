@@ -37,6 +37,8 @@ namespace SqlLayer.SQL_Models
         public double BasicEps { get; set; }
 
         public double CashDebt { get; set; }
+        
+        public double PegRatio { get; set; }
 
         public double Valuation { get; set; }
 

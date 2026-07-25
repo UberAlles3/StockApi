@@ -19,6 +19,8 @@ namespace SqlLayer.SQL_Models
 
         public double DebtEquity { get; set; }
 
+        public double PegRatio { get; set; }
+
         public double ShortInterest { get; set; }
 
         public DateTime UpdateDate { get; set; }

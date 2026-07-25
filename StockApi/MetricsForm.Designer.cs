@@ -91,7 +91,7 @@ namespace StockApi
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(1061, 577);
+            this.dataGridView1.Size = new System.Drawing.Size(1108, 577);
             this.dataGridView1.TabIndex = 18;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -150,7 +150,7 @@ namespace StockApi
             // 
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label4.Location = new System.Drawing.Point(1087, 27);
+            this.label4.Location = new System.Drawing.Point(1150, 27);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(156, 16);
             this.label4.TabIndex = 52;
@@ -158,7 +158,7 @@ namespace StockApi
             // 
             // txtBeginLetter
             // 
-            this.txtBeginLetter.Location = new System.Drawing.Point(1087, 47);
+            this.txtBeginLetter.Location = new System.Drawing.Point(1150, 47);
             this.txtBeginLetter.Name = "txtBeginLetter";
             this.txtBeginLetter.Size = new System.Drawing.Size(62, 23);
             this.txtBeginLetter.TabIndex = 53;
@@ -168,7 +168,7 @@ namespace StockApi
             // 
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label3.Location = new System.Drawing.Point(1170, 52);
+            this.label3.Location = new System.Drawing.Point(1233, 52);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 16);
             this.label3.TabIndex = 54;
@@ -176,7 +176,7 @@ namespace StockApi
             // 
             // txtEndLetter
             // 
-            this.txtEndLetter.Location = new System.Drawing.Point(1087, 76);
+            this.txtEndLetter.Location = new System.Drawing.Point(1150, 76);
             this.txtEndLetter.Name = "txtEndLetter";
             this.txtEndLetter.Size = new System.Drawing.Size(62, 23);
             this.txtEndLetter.TabIndex = 55;
@@ -184,7 +184,7 @@ namespace StockApi
             // 
             // btnRunMetrics
             // 
-            this.btnRunMetrics.Location = new System.Drawing.Point(1087, 124);
+            this.btnRunMetrics.Location = new System.Drawing.Point(1150, 124);
             this.btnRunMetrics.Name = "btnRunMetrics";
             this.btnRunMetrics.Size = new System.Drawing.Size(75, 27);
             this.btnRunMetrics.TabIndex = 56;
@@ -197,7 +197,7 @@ namespace StockApi
             this.txtTickerList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(16)))), ((int)(((byte)(32)))));
             this.txtTickerList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTickerList.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.txtTickerList.Location = new System.Drawing.Point(1087, 162);
+            this.txtTickerList.Location = new System.Drawing.Point(1150, 162);
             this.txtTickerList.Margin = new System.Windows.Forms.Padding(8);
             this.txtTickerList.Name = "txtTickerList";
             this.txtTickerList.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
@@ -208,7 +208,7 @@ namespace StockApi
             // 
             // btnCancelMetrics
             // 
-            this.btnCancelMetrics.Location = new System.Drawing.Point(1181, 124);
+            this.btnCancelMetrics.Location = new System.Drawing.Point(1244, 124);
             this.btnCancelMetrics.Name = "btnCancelMetrics";
             this.btnCancelMetrics.Size = new System.Drawing.Size(75, 27);
             this.btnCancelMetrics.TabIndex = 58;
@@ -222,7 +222,7 @@ namespace StockApi
             this.panel1.Controls.Add(this.dataGridView1);
             this.panel1.Location = new System.Drawing.Point(12, 84);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1049, 595);
+            this.panel1.Size = new System.Drawing.Size(1111, 595);
             this.panel1.TabIndex = 59;
             // 
             // MetricsForm
@@ -230,7 +230,7 @@ namespace StockApi
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(48)))), ((int)(((byte)(96)))));
-            this.ClientSize = new System.Drawing.Size(1297, 696);
+            this.ClientSize = new System.Drawing.Size(1358, 696);
             this.Controls.Add(this.btnCancelMetrics);
             this.Controls.Add(this.txtTickerList);
             this.Controls.Add(this.btnRunMetrics);

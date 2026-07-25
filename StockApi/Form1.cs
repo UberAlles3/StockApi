@@ -631,6 +631,9 @@ namespace StockApi
                         // Total Debt
                         lblFinTotalDebt.Text = _stockDownloads.stockStatistics.TotalDebtString;
                         lblFinTotalDebt.ForeColor = _stockDownloads.stockStatistics.TotalDebtColor;
+                        // Peg Ratio
+                        lblPegRatio.Text = _stockDownloads.stockStatistics.PegRatioString.StringValue;
+                        lblPegRatio.ForeColor = _stockDownloads.stockStatistics.PegRatioColor;
                         // Debt Equity Ratio
                         lblFinDebtEquity.Text = _stockDownloads.stockStatistics.DebtEquityString.StringValue;
                         lblFinDebtEquity.ForeColor = _stockDownloads.stockStatistics.DebtEquityColor;

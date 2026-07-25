@@ -17,6 +17,7 @@ namespace YahooLayer
         public Color TotalDebtColor = Color.White;
         public Color ShortInterestColor = Color.White;
         public Color DebtEquityColor = Color.White;
+        public Color PegRatioColor = Color.White;
 
         /////////////////// TotalCash
         private string totalCashString = NotApplicable;
@@ -74,6 +75,8 @@ namespace YahooLayer
         public StringSafeType<Decimal> ShortInterestString = new StringSafeType<decimal>("--");
         /// Debt Equity
         public StringSafeType<Decimal> DebtEquityString = new StringSafeType<decimal>("--");
+        /// Peg Ratio
+        public StringSafeType<Decimal> PegRatioString = new StringSafeType<decimal>("--");
 
 
         public StockStatistics()
@@ -82,6 +85,7 @@ namespace YahooLayer
             TotalDebtColor = _normalColor;
             ShortInterestColor = _normalColor;
             DebtEquityColor = _normalColor;
+            PegRatioColor = _normalColor;
         }
 
         ////////////////////////////////////////////
@@ -123,10 +127,14 @@ namespace YahooLayer
                     // Total Debt
                     searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Total Debt").Term;
                     TotalDebtString = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 2);
+
                     // Debt/Equity Ratio
                     searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
                     DebtEquityString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 2);
 
+                    // Peg Ratio
+                    searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Peg Ratio").Term;
+                    PegRatioString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 4);
 
                     // Short Interest
                     searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Short Interest").Term;
@@ -164,7 +172,15 @@ namespace YahooLayer
             else
                 DebtEquityColor = _normalColor;
 
-            // Set Colors of Debt Equity
+            // Set Colors of Peg Ratio
+            if (PegRatioString.NumericValue < .7M)
+                PegRatioColor = Color.Red;
+            else if (PegRatioString.NumericValue > 1.5M)
+                PegRatioColor = Color.Lime;
+            else
+                PegRatioColor = _normalColor;
+
+            // Set Colors of Short Interest
             if (ShortInterestString.NumericValue > 8)
                 ShortInterestColor = Color.Red;
             else if (ShortInterestString.NumericValue < 2 && TotalDebt != 0)
@@ -179,22 +195,6 @@ namespace YahooLayer
                 TotalDebtColor = Color.Lime;
             else
                 TotalDebtColor = _normalColor;
-
-            // Set Colors of Debt Equity
-            if (DebtEquityString.NumericValue > 60)
-                DebtEquityColor = Color.Red;
-            else if (DebtEquityString.NumericValue < 35 && TotalDebt != 0)
-                DebtEquityColor = Color.Lime;
-            else
-                DebtEquityColor = _normalColor;
-
-            // Set Colors of Debt Equity
-            if (ShortInterestString.NumericValue > 8)
-                ShortInterestColor = Color.Red;
-            else if (ShortInterestString.NumericValue < 2 && TotalDebt != 0)
-                ShortInterestColor = Color.Lime;
-            else
-                ShortInterestColor = _normalColor;
 
             return true;
         }
@@ -236,6 +236,7 @@ namespace YahooLayer
             sqlStatistic.Cash = (double)source.TotalCash;
             sqlStatistic.Debt = (double)source.TotalDebt;
             sqlStatistic.DebtEquity = (double)source.DebtEquityString.NumericValue;
+            sqlStatistic.PegRatio = (double)source.PegRatioString.NumericValue;
             sqlStatistic.ShortInterest = (double)source.ShortInterestString.NumericValue;
             sqlStatistic.UpdateDate = DateTime.Now;
 
@@ -251,6 +252,7 @@ namespace YahooLayer
             TotalCashString = DebtEquityString.AbbreviateNumeric((decimal)source.Cash);
             TotalDebtString = DebtEquityString.AbbreviateNumeric((decimal)source.Debt);
             DebtEquityString.NumericValue = (decimal)source.DebtEquity;
+            PegRatioString.NumericValue = (decimal)source.PegRatio;
             ShortInterestString.NumericValue = (decimal)source.ShortInterest;
 
             return;

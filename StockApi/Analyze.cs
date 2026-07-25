@@ -133,12 +133,21 @@ namespace StockApi
             else if (stockDownloads.stockStatistics.TotalCash > stockDownloads.stockStatistics.TotalDebt * 2) // lots of cash compared to debt
                 cashDebtMetric = 1.03M;
 
+            /////////// Peg Ratio
+            decimal pegRatioMetric = 1M;
+            if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 1.8M) 
+                pegRatioMetric = 1.011M;
+            else if (stockDownloads.stockStatistics.PegRatioString.NumericValue < .6M)
+                pegRatioMetric = .99M;
+
+
             if (stockDownloads.stockStatistics.DebtEquityString.NumericValue > 130) // Over 120% D/E is bad
                 cashDebtMetric = cashDebtMetric * .97M;
             else if (stockDownloads.stockStatistics.DebtEquityString.NumericValue > 200) // Over 120% D/E is bad
                 cashDebtMetric = cashDebtMetric * .96M;
 
             output.AppendLine($"Cash, Debt Metric = {cashDebtMetric.ToString(".000")}");
+            output.AppendLine($"PEG Ratio Metric = {pegRatioMetric.ToString(".000")}");
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                             Cash Flow Metrics
@@ -215,7 +224,7 @@ namespace StockApi
             //// Calculate total metric
             decimal finalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric + priceBookMetric) / 2) *
                     dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) *
-                    cashDebtMetric * valuationMetric * finalCashFlowMetric;
+                    cashDebtMetric * valuationMetric * finalCashFlowMetric * pegRatioMetric;
 
             finalMetric = Decimal.Round(finalMetric, 3);
 
@@ -224,6 +233,7 @@ namespace StockApi
             SqlMetric sqlMetric = new SqlMetric();
             sqlMetric.BasicEps = (double)basicEpsMetric;
             sqlMetric.CashDebt = (double)cashDebtMetric;
+            sqlMetric.PegRatio = (double)pegRatioMetric;
             sqlMetric.CashFlow = (double)finalCashFlowMetric;
             sqlMetric.Dividend = (double)dividendMetric;
             sqlMetric.EarningsPerShare = (double)epsMetric;
