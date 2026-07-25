@@ -134,7 +134,9 @@ namespace YahooLayer
 
                     // Peg Ratio
                     searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Peg Ratio").Term;
-                    PegRatioString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 4);
+                    PegRatioString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, "1", 2);
+                    if (PegRatioString.IsNumeric == false)
+                        PegRatioString.StringValue = "1";
 
                     // Short Interest
                     searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Short Interest").Term;
@@ -173,10 +175,10 @@ namespace YahooLayer
                 DebtEquityColor = _normalColor;
 
             // Set Colors of Peg Ratio
-            if (PegRatioString.NumericValue < .7M)
-                PegRatioColor = Color.Red;
-            else if (PegRatioString.NumericValue > 1.5M)
+            if (PegRatioString.NumericValue < .75M)
                 PegRatioColor = Color.Lime;
+            else if (PegRatioString.NumericValue > 1.5M)
+                PegRatioColor = Color.Red;
             else
                 PegRatioColor = _normalColor;
 
