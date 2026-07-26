@@ -137,14 +137,14 @@ namespace StockApi
             decimal pegRatioMetric = 1M;
             if(stockDownloads.stockStatistics.PegRatioString.NumericValue != 0)
             {
-                if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 2.2M)
-                    pegRatioMetric = .985M; // Much Overvalued
-                else if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 1.8M)
-                    pegRatioMetric = .99M; // Overvalued
+                if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 2.6M)
+                    pegRatioMetric = .986M; // Much Overvalued
+                else if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 1.9M)
+                    pegRatioMetric = .992M; // Overvalued
                 else if (stockDownloads.stockStatistics.PegRatioString.NumericValue < .3M)
-                    pegRatioMetric = 1.015M; // Undervalued
-                else if (stockDownloads.stockStatistics.PegRatioString.NumericValue < .6M)
-                    pegRatioMetric = 1.011M; // Much Undervalued
+                    pegRatioMetric = 1.013M; // Much Undervalued
+                else if (stockDownloads.stockStatistics.PegRatioString.NumericValue < .65M)
+                    pegRatioMetric = 1.01M; // Undervalued
             }
 
             if (stockDownloads.stockStatistics.DebtEquityString.NumericValue > 130) // Over 120% D/E is bad
