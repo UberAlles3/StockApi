@@ -137,13 +137,13 @@ namespace StockApi
             decimal pegRatioMetric = 1M;
             if(stockDownloads.stockStatistics.PegRatioString.NumericValue != 0)
             {
-                if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 2.6M)
+                if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 2.8M)
                     pegRatioMetric = .986M; // Much Overvalued
                 else if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 1.9M)
                     pegRatioMetric = .992M; // Overvalued
-                else if (stockDownloads.stockStatistics.PegRatioString.NumericValue < .3M)
+                else if (stockDownloads.stockStatistics.PegRatioString.NumericValue < .32M)
                     pegRatioMetric = 1.013M; // Much Undervalued
-                else if (stockDownloads.stockStatistics.PegRatioString.NumericValue < .65M)
+                else if (stockDownloads.stockStatistics.PegRatioString.NumericValue < .68M)
                     pegRatioMetric = 1.01M; // Undervalued
             }
 
