@@ -293,6 +293,14 @@ namespace StockApi
             Color currentForeColor = Form1.TextForeColor;
             Color altColor = Color.FromArgb(0, 0, 48);
             Color altForeColor = Color.White;
+            int finalMetricColumnIndex = 0;
+
+            // find final metric column;
+            foreach(DataGridViewColumn column in dataGridView1.Columns)
+            {
+                if (column.HeaderText == "Final Metric") 
+                    finalMetricColumnIndex = column.Index;
+            }
 
             foreach (SqlMetric r in metrics)
             {
@@ -317,23 +325,23 @@ namespace StockApi
                 }
 
                 if (i < dataGridView1.Rows.Count - 2)
-                    dataGridView1.Rows[i].Cells[17].Style.BackColor = currentColor;
+                    dataGridView1.Rows[i].Cells[finalMetricColumnIndex + 1].Style.BackColor = currentColor;
 
                 if (r.FinalMetric > previous * 1.032)
                 {
-                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.Lime;
+                    dataGridView1.Rows[i].Cells[finalMetricColumnIndex].Style.ForeColor = Color.Lime;
                 }
                 else if (r.FinalMetric > previous * 1.01)
                 {
-                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.FromArgb(205, 242, 202);
+                    dataGridView1.Rows[i].Cells[finalMetricColumnIndex].Style.ForeColor = Color.FromArgb(205, 242, 202);
                 }
                 else if (r.FinalMetric < previous * .97)
                 {
-                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.Red;
+                    dataGridView1.Rows[i].Cells[finalMetricColumnIndex].Style.ForeColor = Color.Red;
                 }
                 else if (r.FinalMetric < previous * .99)
                 {
-                    dataGridView1.Rows[i].Cells[16].Style.ForeColor = Color.FromArgb(242, 202, 202);
+                    dataGridView1.Rows[i].Cells[finalMetricColumnIndex].Style.ForeColor = Color.FromArgb(242, 202, 202);
                 }
 
                 i++;
