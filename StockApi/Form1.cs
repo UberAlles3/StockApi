@@ -925,14 +925,21 @@ namespace StockApi
             OpenHyperlink($"https://finance.yahoo.com/quote/{txtStockTicker.Text}/");
         }
 
+        private void toolStripMenuItemWarrenBuffett_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink($"https://www.cnbc.com/berkshire-hathaway-portfolio/");
+        }
+
         private void finvizToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenHyperlink($"https://finviz.com/");
+            //OpenHyperlink("https://finviz.com/screener?v=171&f=cap_largeover,fa_eps3years_o5,fa_eps5years_o5,fa_estltgrowth_o5,fa_grossmargin_o5,fa_netmargin_o5,fa_opermargin_o5,fa_pe_u30,fa_sales3years_o5,sh_avgvol_o1000,ta_perf_3y10o,targetprice_a5&ft=4&o=high52w");
+            OpenHyperlink("https://finviz.com/screener?v=171&f=cap_largeover");
         }
         private void apeWisdomToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenHyperlink($"https://apewisdom.io/");
         }
+
         //////////////////// Individual Stock Links  
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {

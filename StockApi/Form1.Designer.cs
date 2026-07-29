@@ -41,6 +41,8 @@ namespace StockApi
             this.label2 = new System.Windows.Forms.Label();
             this.lblVolatility = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblPegRatio = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
             this.btnGetHtml = new System.Windows.Forms.Button();
             this.lblEarningsDate = new System.Windows.Forms.Label();
             this.lblCalculatedPE = new System.Windows.Forms.Label();
@@ -243,8 +245,7 @@ namespace StockApi
             this.panel4 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.lblPegRatio = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
+            this.toolStripMenuItemWarrenBuffett = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -372,6 +373,28 @@ namespace StockApi
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(375, 674);
             this.panel1.TabIndex = 6;
+            // 
+            // lblPegRatio
+            // 
+            this.lblPegRatio.BackColor = System.Drawing.Color.Transparent;
+            this.lblPegRatio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblPegRatio.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.lblPegRatio.Location = new System.Drawing.Point(109, 245);
+            this.lblPegRatio.Name = "lblPegRatio";
+            this.lblPegRatio.Size = new System.Drawing.Size(57, 22);
+            this.lblPegRatio.TabIndex = 84;
+            this.lblPegRatio.Text = "0.00";
+            this.lblPegRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label38
+            // 
+            this.label38.BackColor = System.Drawing.Color.Transparent;
+            this.label38.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.label38.Location = new System.Drawing.Point(15, 245);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(79, 22);
+            this.label38.TabIndex = 83;
+            this.label38.Text = "PEG Ratio";
             // 
             // btnGetHtml
             // 
@@ -2204,6 +2227,7 @@ namespace StockApi
             this.toolStripMenuItem1,
             this.yahooMarketsToolStripMenuItem,
             this.finvizToolStripMenuItem,
+            this.toolStripMenuItemWarrenBuffett,
             this.apeWisdomToolStripMenuItem});
             this.lINKSToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.lINKSToolStripMenuItem.Name = "lINKSToolStripMenuItem";
@@ -2735,27 +2759,14 @@ namespace StockApi
             this.label7.Text = "Markets";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblPegRatio
+            // toolStripMenuItemWarrenBuffett
             // 
-            this.lblPegRatio.BackColor = System.Drawing.Color.Transparent;
-            this.lblPegRatio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblPegRatio.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.lblPegRatio.Location = new System.Drawing.Point(109, 245);
-            this.lblPegRatio.Name = "lblPegRatio";
-            this.lblPegRatio.Size = new System.Drawing.Size(57, 22);
-            this.lblPegRatio.TabIndex = 84;
-            this.lblPegRatio.Text = "0.00";
-            this.lblPegRatio.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label38
-            // 
-            this.label38.BackColor = System.Drawing.Color.Transparent;
-            this.label38.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            this.label38.Location = new System.Drawing.Point(15, 245);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(79, 22);
-            this.label38.TabIndex = 83;
-            this.label38.Text = "PEG Ratio";
+            this.toolStripMenuItemWarrenBuffett.BackColor = System.Drawing.Color.Black;
+            this.toolStripMenuItemWarrenBuffett.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItemWarrenBuffett.Name = "toolStripMenuItemWarrenBuffett";
+            this.toolStripMenuItemWarrenBuffett.Size = new System.Drawing.Size(195, 22);
+            this.toolStripMenuItemWarrenBuffett.Text = "Warren Buffett Trades";
+            this.toolStripMenuItemWarrenBuffett.Click += new System.EventHandler(this.toolStripMenuItemWarrenBuffett_Click);
             // 
             // Form1
             // 
@@ -3035,6 +3046,7 @@ namespace StockApi
         private System.Windows.Forms.Label lblSellTarget;
         private System.Windows.Forms.Label lblPegRatio;
         private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWarrenBuffett;
     }
 }
 
