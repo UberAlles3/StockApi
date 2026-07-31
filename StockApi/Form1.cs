@@ -64,7 +64,7 @@ namespace StockApi
 
                     _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
                     _watchPositionList = _positionList.Where(x => x.Quantity == 0 && x.SellQuantity > 0).ToList();
-                    _positionList = _positionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.SellQuantity == 0)).ToList();
+                    _positionList = _positionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.BuyQuantity == 0)).ToList();
                 }
                 return _positionsDataTable;
             }
