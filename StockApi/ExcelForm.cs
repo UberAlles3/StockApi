@@ -65,10 +65,8 @@ namespace StockApi
                     }
                     else
                     {
-                        excelPosition = new ExcelPosition();
-                        q = Convert.ToDouble(cells[5].Replace("Shares", ""));
-                        MessageBox.Show("First add the new stock to the positions sheet. Exiting.");
-                        return;
+                        // First time buy
+                        q = Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
                     }
 
                     sb.Append(cells[0] + "\t"); // Ticker
@@ -88,18 +86,25 @@ namespace StockApi
                     sb.Append(cells[4] + "\t"); // Buy/Sell
                     if (cells[4].ToUpper() == "BUY")
                     {
-
                         sb.Append(cells[5].Replace("Shares", "").Trim() + "\t"); // Shares bought
                         sb.Append(cells[8].Replace("$", "") + "\t"); // fill Price
-                        if (excelPosition.SellQuantity == 0)
-                            sb.Append("" + "\t"); // Sell Quantity
-                        else
-                            sb.Append(excelPosition.SellQuantity.ToString() + "\t"); // Sell Quantity
 
-                        if (excelPosition.SellPrice == 0)
-                            sb.Append("" + "\t"); // Sell Quantity
+                        if (excelPosition != null)
+                        {
+                            if (excelPosition.SellQuantity == 0)
+                                sb.Append("" + "\t"); // Sell Quantity
+                            else
+                                sb.Append(excelPosition.SellQuantity.ToString() + "\t"); // Sell Quantity
+
+                            if (excelPosition.SellPrice == 0)
+                                sb.Append("" + "\t"); // Sell Quantity
+                            else
+                                sb.Append(excelPosition.SellPrice.ToString()); // Sell Price
+                        }
                         else
-                            sb.Append(excelPosition.SellPrice.ToString()); // Sell Price
+                        {
+                            sb.Append("" + "\t\t"); // Sell Quantity
+                        }
                     }
                     else
                     {
@@ -122,16 +127,24 @@ namespace StockApi
                 cells = line.Split("\t");
                 if (cells.GetLength(0) > 5)
                 {
-                    excelPosition = _positions.Where(x => x.Symbol.ToUpper().Trim() == cells[0].Trim()).First();
-                    if (cells[4].ToUpper() == "BUY")
+                    excelPosition = _positions.Where(x => x.Symbol.ToUpper().Trim() == cells[0].Trim()).FirstOrDefault();
+                    if (excelPosition != null)
                     {
-                        q = excelPosition.Quantity + Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+
+                        if (cells[4].ToUpper() == "BUY")
+                        {
+                            q = excelPosition.Quantity + Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+                        }
+                        else
+                        {
+                            q = excelPosition.Quantity - Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+                        }
                     }
                     else
                     {
-                        q = excelPosition.Quantity - Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
+                        // First time buy
+                        q = Convert.ToDouble(cells[5].Replace("Shares", "").Trim()); // Shares bought added existing quantity
                     }
-
                     sb.Append(cells[4] + "\t"); // Buy/Sell
                     sb.Append(cells[5].Replace("Shares", "").Trim() + "\t"); // Quantity
                     sb.Append(cells[0] + "\t"); // Ticker
