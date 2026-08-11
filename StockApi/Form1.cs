@@ -954,6 +954,10 @@ namespace StockApi
             OpenHyperlink($"https://www.marketbeat.com/stocks/NASDAQ/{txtStockTicker.Text}/");
         }
 
+        private void stockAnalysisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHyperlink($"https://stockanalysis.com/stocks/{txtStockTicker.Text}/");
+        }
         private static void OpenHyperlink(string url)
         {
             try
