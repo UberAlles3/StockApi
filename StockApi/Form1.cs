@@ -111,7 +111,7 @@ namespace StockApi
                     _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                     _tradesImportDateTime = DateTime.Now; // Update when the last import took place
 
-                    _tradeList = (new ExcelManager()).GetTradeListFromTradeTable(_excelFilePath);
+                    _tradeList = (new ExcelManager()).GetTradeListFromTradeTable(_excelFilePath, "Trades");
                 }
                 return _tradesDataTable;
             }
@@ -129,6 +129,40 @@ namespace StockApi
                 return _tradeList;
             }
             set => _tradeList = value;
+        }
+
+        private static DataTable _jointTradesDataTable = null;
+        public static DataTable JointTradesDataTable
+        {
+            get
+            {
+                DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
+
+                if (excelFileDateTime > _tradesImportDateTime || _jointTradesDataTable == null)
+                {
+                    _jointTradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 3, 2);
+                    //_tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
+                    _jointTradesDataTable = _jointTradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
+                    _tradesImportDateTime = DateTime.Now; // Update when the last import took place
+
+                    _jointTradeList = (new ExcelManager()).GetTradeListFromTradeTable(_excelFilePath, "JointTrades");
+                }
+                return _jointTradesDataTable;
+            }
+            set => _jointTradesDataTable = value;
+        }
+
+        private static List<ExcelTrade> _jointTradeList;
+        public static List<ExcelTrade> JointTradeList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                var dummy = JointTradesDataTable;
+
+                return _jointTradeList;
+            }
+            set => _jointTradeList = value;
         }
 
 
@@ -190,6 +224,7 @@ namespace StockApi
 
             var primeThePositionsDataTable = PositionsDataTable;
             //(new ExcelManager()).GenerateClassCodeFromExcelSheet(_excelFilePath);
+            //var j = JointTradeList;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -860,6 +895,38 @@ namespace StockApi
             ChartForm chartForm = new ChartForm(txtStockTicker.Text, period);
             chartForm.Owner = this;
             chartForm.Show();
+        }
+
+        private void btnJointTrades_Click(object sender, EventArgs e)
+        {
+            TickerTradesDataTable = new DataTable();
+            int DateColumn = 0;
+            DateTime outDate = DateTime.Now;
+            EnumerableRowCollection<DataRow> tickerTrades;
+
+            DataTable tradesDataTable = JointTradesDataTable;
+
+            // filter on stock ticker then order by date descending
+            tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
+            tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
+
+            TickerTradesDataTable = tickerTrades.Where(r => r[(int)ExcelManager.TradeColumns.QuantityTraded].ToString() != "0").CopyToDataTable();
+            ApplyStockSplits(TickerTradesDataTable);
+
+            // bind data list to trades grid control
+            BindingSource tradeSource = new BindingSource();
+            tradeSource.DataSource = TickerTradesDataTable;
+            dataGridView2.DataSource = tradeSource.DataSource;
+
+            ////////////////////////////// Setup trade grid columns with formatting info
+            Form1Grid.SetupTradeGridColumns(dataGridView2, dataGridView1.DefaultCellStyle.ForeColor, dataGridView1.BackgroundColor);
+            //////////////////////////////
+            ///
+            dataGridView2.Refresh();
+            
+            ////////////////////////////// Color trades high and low prices
+            Form1Grid.ColorTradeGrid(dataGridView2, TickerTradesDataTable);
+            //////////////////////////////
         }
 
 

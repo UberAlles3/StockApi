@@ -183,7 +183,7 @@ namespace StockApi
             return dataList;
         }
 
-        public List<ExcelTrade> GetTradeListFromTradeTable(string filePath)
+        public List<ExcelTrade> GetTradeListFromTradeTable(string filePath, string targetSheetName)
         {
             var dataList = new List<ExcelTrade>();
             string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
@@ -197,7 +197,7 @@ namespace StockApi
 
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
-                    string targetSheetName = "Trades";
+                    //string targetSheetName = "Trades";
                     bool sheetFound = false;
 
                     do
