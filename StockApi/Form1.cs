@@ -62,7 +62,7 @@ namespace StockApi
 
                     // old way // _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
 
-                    _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath);
+                    _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath, "balancesandpositions", 34);
                     _watchPositionList = _positionList.Where(x => x.Quantity == 0 && x.SellQuantity > 0).ToList();
                     _positionList = _positionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.BuyQuantity == 0)).ToList();
                 }
@@ -140,7 +140,7 @@ namespace StockApi
 
                 if (excelFileDateTime > _tradesImportDateTime || _jointTradesDataTable == null)
                 {
-                    _jointTradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 3, 2);
+                    _jointTradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 4, 2);
                     //_tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
                     _jointTradesDataTable = _jointTradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
                     _tradesImportDateTime = DateTime.Now; // Update when the last import took place
@@ -224,7 +224,7 @@ namespace StockApi
 
             var primeThePositionsDataTable = PositionsDataTable;
             //(new ExcelManager()).GenerateClassCodeFromExcelSheet(_excelFilePath);
-            //var j = JointTradeList;
+            var j = ExcelManager.JointPositionList;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)

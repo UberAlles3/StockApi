@@ -23,6 +23,13 @@ namespace StockApi
 
         public static string PositionSymbolColumn = "Column0";
         public static string PositionQuantityColumn = "Column1";
+        List<Setting> _settings = new List<Setting>();
+
+        // Excel files
+        private static string _excelFilePath = "";
+        private static DateTime _jointPositionsImportDateTime = DateTime.Now.AddYears(-2);
+        private static DateTime _jointTradesImportDateTime = DateTime.Now.AddYears(-2);
+
 
         public enum TradeColumns : int
         {
@@ -37,9 +44,51 @@ namespace StockApi
             Notes = 8
         }
 
+        private static DataTable _jointPositionsDataTable = null;
+        public static DataTable JointPositionsDataTable
+        {
+            get
+            {
+                DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
+                if (excelFileDateTime > _jointPositionsImportDateTime)
+                {
+                    _jointPositionsDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 3, 0, 18);
+                    _jointPositionsImportDateTime = DateTime.Now; // Update when the last import took place
+
+                    _jointPositionsDataTable.AsEnumerable()
+                        .Where(row => row.Field<string>(ExcelManager.PositionSymbolColumn).Contains("*")  // Symbol
+                                    || row.Field<string>(ExcelManager.PositionSymbolColumn).Trim() == ""  // Symbol
+                                    || row.Field<double>(ExcelManager.PositionQuantityColumn) == 0        // Quantiyy
+                        )
+                        .ToList().ForEach(row => row.Delete());
+
+                    _jointPositionsDataTable.AcceptChanges();
+
+                    // old way // _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
+
+                    _jointPositionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath, "JointPositions", 17);
+                    _jointPositionList = _jointPositionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.BuyQuantity == 0)).ToList();
+                }
+                return _jointPositionsDataTable;
+            }
+            set => _jointPositionsDataTable = value;
+        }
+
+        private static List<ExcelPosition> _jointPositionList;
+        public static List<ExcelPosition> JointPositionList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                var dummy = JointPositionsDataTable;
+
+                return _jointPositionList;
+            }
+            set => _jointPositionList = value;
+        }
         public ExcelManager()
         {
-
+            _excelFilePath = AppConfig.Settings.Find(x => x.Name == "ExcelTradesPath").Value;
         }
 
         public DataTable ImportExcelSheet(string filePath, int sheetIdx, int startRow, int columns = 10)
@@ -100,7 +149,7 @@ namespace StockApi
             }
         }
 
-        public List<ExcelPosition> GetPositionsListFromPositionsTable(string filePath)
+        public List<ExcelPosition> GetPositionsListFromPositionsTable(string filePath, string targetSheetName, int columnCount)
         {
             var dataList = new List<ExcelPosition>();
             string importFilePath = Path.Combine(Path.GetDirectoryName(filePath) + "\\Import.xlsx");
@@ -115,12 +164,26 @@ namespace StockApi
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
                     // Assuming the first row contains headers
+                    bool sheetFound = false;
+
+                    do
+                    {
+                        // reader.Name contains the current worksheet's name
+                        if (reader.Name == targetSheetName)
+                        {
+                            sheetFound = true;
+                            break;
+                        }
+                    } while (reader.NextResult()); // Moves to the next worksheet forward
+
+                    if (!sheetFound)
+                        throw new Exception("Sheet not found.");
 
                     while (reader.Read())
                     {
                         if (columnNames.Count == 0) // First row is columm names
                         {
-                            for (int i = 0; i < 34; i++)
+                            for (int i = 0; i < columnCount; i++)
                             {
                                 columnNames.Add(reader.GetString(i));
                             }
@@ -129,7 +192,7 @@ namespace StockApi
                         {
                             object val = null;
                             var item = new ExcelPosition();
-                            for (int i = 0; i < 34; i++)
+                            for (int i = 0; i < columnCount; i++)
                             {
                                 if (i > 18 && i < 30)
                                     continue;
