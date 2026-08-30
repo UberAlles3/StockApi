@@ -585,10 +585,11 @@ namespace StockApi
         public double AccountBalance { get; set; }
         public string Notes { get; set; }
         public double BalanceAdjusted { get; set; }
+        public double Metric { get; set; }
 
         public override string ToString()
         {
-            return $"TradeDatel: {TradeDate}, BuySell: {BuySell}, Quantity: {Quantity}, Symbol: {Symbol}, Price: {Price}, QuantityHeld: {QuantityHeld}";
+            return $"TradeDate: {TradeDate}, BuySell: {BuySell}, Quantity: {Quantity}, Symbol: {Symbol}, Price: {Price}, QuantityHeld: {QuantityHeld}";
         }
     }
 }

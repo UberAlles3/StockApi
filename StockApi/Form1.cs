@@ -99,6 +99,9 @@ namespace StockApi
             var primeThePositionsDataTable = ExcelManager.PositionsDataTable;
             //(new ExcelManager()).GenerateClassCodeFromExcelSheet(_excelFilePath);
             //var j = ExcelManager.JointPositionList;
+            JointTradeForm frm = new JointTradeForm();
+            frm.Show();
+
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -1049,8 +1052,6 @@ namespace StockApi
 
     public class CustomColorTable : ProfessionalColorTable
     {
-        //a bunch of other overrides...
-
         public override Color ToolStripBorder
         {
             get { return Color.FromArgb(0, 0, 0); }
