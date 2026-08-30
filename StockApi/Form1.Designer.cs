@@ -154,6 +154,7 @@ namespace StockApi
             this.picSpinner = new System.Windows.Forms.PictureBox();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnJointTrades = new System.Windows.Forms.Button();
             this.btn5YearChart = new System.Windows.Forms.Button();
             this.btn10DayChart = new System.Windows.Forms.Button();
             this.btn3YearChart = new System.Windows.Forms.Button();
@@ -247,7 +248,7 @@ namespace StockApi
             this.panel4 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.btnJointTrades = new System.Windows.Forms.Button();
+            this.jointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -1742,6 +1743,18 @@ namespace StockApi
             this.panel2.Size = new System.Drawing.Size(406, 674);
             this.panel2.TabIndex = 14;
             // 
+            // btnJointTrades
+            // 
+            this.btnJointTrades.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnJointTrades.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnJointTrades.Location = new System.Drawing.Point(291, 349);
+            this.btnJointTrades.Name = "btnJointTrades";
+            this.btnJointTrades.Size = new System.Drawing.Size(98, 23);
+            this.btnJointTrades.TabIndex = 83;
+            this.btnJointTrades.Text = "Joint Trades";
+            this.btnJointTrades.UseVisualStyleBackColor = true;
+            this.btnJointTrades.Click += new System.EventHandler(this.btnJointTrades_Click);
+            // 
             // btn5YearChart
             // 
             this.btn5YearChart.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -2196,7 +2209,8 @@ namespace StockApi
             this.refreshToolStripMenuItem,
             this.earningDatesToolStripMenuItem,
             this.stockMetricsToolStripMenuItem,
-            this.excelToolStripMenuItem});
+            this.excelToolStripMenuItem,
+            this.jointToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1444, 24);
@@ -2781,17 +2795,13 @@ namespace StockApi
             this.label7.Text = "Markets";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // btnJointTrades
+            // jointToolStripMenuItem
             // 
-            this.btnJointTrades.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnJointTrades.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnJointTrades.Location = new System.Drawing.Point(291, 349);
-            this.btnJointTrades.Name = "btnJointTrades";
-            this.btnJointTrades.Size = new System.Drawing.Size(98, 23);
-            this.btnJointTrades.TabIndex = 83;
-            this.btnJointTrades.Text = "Joint Trades";
-            this.btnJointTrades.UseVisualStyleBackColor = true;
-            this.btnJointTrades.Click += new System.EventHandler(this.btnJointTrades_Click);
+            this.jointToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.jointToolStripMenuItem.Name = "jointToolStripMenuItem";
+            this.jointToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.jointToolStripMenuItem.Text = "Joint";
+            this.jointToolStripMenuItem.Click += new System.EventHandler(this.jointToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -3074,6 +3084,7 @@ namespace StockApi
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWarrenBuffett;
         private System.Windows.Forms.ToolStripMenuItem stockAnalysisToolStripMenuItem;
         private System.Windows.Forms.Button btnJointTrades;
+        private System.Windows.Forms.ToolStripMenuItem jointToolStripMenuItem;
     }
 }
 

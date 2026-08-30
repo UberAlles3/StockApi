@@ -99,9 +99,6 @@ namespace StockApi
             var primeThePositionsDataTable = ExcelManager.PositionsDataTable;
             //(new ExcelManager()).GenerateClassCodeFromExcelSheet(_excelFilePath);
             //var j = ExcelManager.JointPositionList;
-            JointTradeForm frm = new JointTradeForm();
-            frm.Show();
-
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -1045,6 +1042,12 @@ namespace StockApi
         private void excelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ExcelForm f = new ExcelForm();
+            f.Show();
+        }
+
+        private void jointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            JointTradeForm f = new JointTradeForm();
             f.Owner = this;
             f.Show();
         }
