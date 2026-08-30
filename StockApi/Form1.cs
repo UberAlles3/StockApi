@@ -1041,7 +1041,7 @@ namespace StockApi
         ////// Excel 
         private void excelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExcelForm f = new ExcelForm(ExcelManager.PositionList);
+            ExcelForm f = new ExcelForm();
             f.Owner = this;
             f.Show();
         }

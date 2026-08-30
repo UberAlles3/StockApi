@@ -12,14 +12,29 @@ namespace StockApi
     public partial class ExcelForm : Form
     {
         List<ExcelPosition> _positions;
-        public ExcelForm(List<ExcelPosition> positions)
+
+        ///============================================================
+        ///  Contructor
+        ///============================================================
+        public ExcelForm()
         {
-            _positions = positions;
+            _positions = ExcelManager.PositionList;
             InitializeComponent();
         }
 
+        ///============================================================
+        ///  Form Events
+        ///============================================================
         private void ExeclForm_Load(object sender, EventArgs e)
         {
+        }
+
+        private void radAccount1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(radAccount1.Checked == true)
+                _positions = ExcelManager.PositionList;
+            else
+                _positions = ExcelManager.JointPositionList;
         }
 
         ////V VISA INC CLASS                  A Filled  Buy	1 Shares Limit $323.85	Day	$323.65 
