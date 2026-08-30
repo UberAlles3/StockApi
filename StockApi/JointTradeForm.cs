@@ -60,7 +60,9 @@ namespace StockApi
             {
                 // skip if the first trade isn't over a year old
                 ExcelTrade firstTradeRow = firstTrade.Where(x => x.Symbol == jointPosition.Symbol).FirstOrDefault();
-                if(firstTradeRow == null)
+                ExcelTrade lastTradeRow = lastTrade.Where(x => x.Symbol == jointPosition.Symbol).FirstOrDefault();
+
+                if (firstTradeRow == null)
                 {
                     //txtTickerList.Text += "First trade not found.\r\n";
                     continue;
@@ -72,9 +74,28 @@ namespace StockApi
                     continue;
                 }
 
-                txtTickerList.Text += jointPosition.Symbol.PadRight(5) + " " + firstTradeRow.TradeDate.ToShortDateString().PadRight(12);
+                txtTickerList.Text += jointPosition.Symbol.PadRight(7) + firstTradeRow.Metric.ToString("0.00").PadLeft(4) + firstTradeRow.TradeDate.ToShortDateString().PadLeft(11) + " ";
 
+                // Is the current price 20% down or 35% up from last trade? Metric will adjust.
+                if(jointPosition.Price > lastTradeRow.Price * (1.35 * ((lastTradeRow.Metric + 4) / 5)))
+                {
+                    txtTickerList.Text += jointPosition.Price.ToString().PadLeft(10) + lastTradeRow.Price.ToString().PadLeft(10)
+                       + (((jointPosition.Price / lastTradeRow.Price) - 1) * 100).ToString("###").PadLeft(6) + "%     ";
 
+                    if (jointPosition.Quantity < 2)
+                        txtTickerList.Text += "Only 1 share. No sale.";
+                    else
+                        txtTickerList.Text += "Sell " + (jointPosition.Quantity / 5).ToString("##");
+                }
+
+                // Is the current price 20% down or 35% up from last trade? Metric will adjust.
+                if (jointPosition.Price < lastTradeRow.Price * (.7 * ((lastTradeRow.Metric + 1) / 2)))
+                {
+                    txtTickerList.Text += jointPosition.Price.ToString().PadLeft(10) + lastTradeRow.Price.ToString().PadLeft(10)
+                       + (((jointPosition.Price / lastTradeRow.Price) - 1) * 100).ToString("###").PadLeft(6) + "%     ";
+
+                    txtTickerList.Text += "Buy " + (jointPosition.Quantity / 4).ToString("##");
+                }
 
 
                 txtTickerList.Text += "\r\n";
