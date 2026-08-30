@@ -131,40 +131,7 @@ namespace StockApi
             set => _tradeList = value;
         }
 
-        private static DataTable _jointTradesDataTable = null;
-        public static DataTable JointTradesDataTable
-        {
-            get
-            {
-                DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
-
-                if (excelFileDateTime > _tradesImportDateTime || _jointTradesDataTable == null)
-                {
-                    _jointTradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 4, 2);
-                    //_tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
-                    _jointTradesDataTable = _jointTradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
-                    _tradesImportDateTime = DateTime.Now; // Update when the last import took place
-
-                    _jointTradeList = (new ExcelManager()).GetTradeListFromTradeTable(_excelFilePath, "JointTrades");
-                }
-                return _jointTradesDataTable;
-            }
-            set => _jointTradesDataTable = value;
-        }
-
-        private static List<ExcelTrade> _jointTradeList;
-        public static List<ExcelTrade> JointTradeList
-        {
-            get
-            {
-                // Refresh this list if underlying Excel file was updated.
-                var dummy = JointTradesDataTable;
-
-                return _jointTradeList;
-            }
-            set => _jointTradeList = value;
-        }
-
+ 
 
         ///////////////////////////////////////////////////////////////////////////////////////
         ///                           Form1 Constructor and Events
@@ -224,7 +191,7 @@ namespace StockApi
 
             var primeThePositionsDataTable = PositionsDataTable;
             //(new ExcelManager()).GenerateClassCodeFromExcelSheet(_excelFilePath);
-            var j = ExcelManager.JointPositionList;
+            //var j = ExcelManager.JointPositionList;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -904,7 +871,7 @@ namespace StockApi
             DateTime outDate = DateTime.Now;
             EnumerableRowCollection<DataRow> tickerTrades;
 
-            DataTable tradesDataTable = JointTradesDataTable;
+            DataTable tradesDataTable = ExcelManager.JointTradesDataTable;
 
             // filter on stock ticker then order by date descending
             tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());

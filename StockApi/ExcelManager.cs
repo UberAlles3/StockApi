@@ -27,9 +27,7 @@ namespace StockApi
 
         // Excel files
         private static string _excelFilePath = "";
-        private static DateTime _jointPositionsImportDateTime = DateTime.Now.AddYears(-2);
-        private static DateTime _jointTradesImportDateTime = DateTime.Now.AddYears(-2);
-
+        private static DateTime _excelImportDateTime = DateTime.Now.AddYears(-2);
 
         public enum TradeColumns : int
         {
@@ -49,11 +47,11 @@ namespace StockApi
         {
             get
             {
-                DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
-                if (excelFileDateTime > _jointPositionsImportDateTime)
+                RefreshExcelData();
+
+                if (_jointPositionsDataTable == null)
                 {
                     _jointPositionsDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 3, 0, 18);
-                    _jointPositionsImportDateTime = DateTime.Now; // Update when the last import took place
 
                     _jointPositionsDataTable.AsEnumerable()
                         .Where(row => row.Field<string>(ExcelManager.PositionSymbolColumn).Contains("*")  // Symbol
@@ -63,8 +61,6 @@ namespace StockApi
                         .ToList().ForEach(row => row.Delete());
 
                     _jointPositionsDataTable.AcceptChanges();
-
-                    // old way // _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
 
                     _jointPositionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath, "JointPositions", 17);
                     _jointPositionList = _jointPositionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.BuyQuantity == 0)).ToList();
@@ -80,15 +76,69 @@ namespace StockApi
             get
             {
                 // Refresh this list if underlying Excel file was updated.
-                var dummy = JointPositionsDataTable;
+                if (_jointPositionsDataTable == null)
+                    _ = JointPositionsDataTable;
 
                 return _jointPositionList;
             }
             set => _jointPositionList = value;
         }
+
+        private static DataTable _jointTradesDataTable = null;
+        public static DataTable JointTradesDataTable
+        {
+            get
+            {
+                RefreshExcelData();
+
+                if(_jointTradesDataTable == null)
+                {
+                    _jointTradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 4, 2);
+                    _jointTradesDataTable = _jointTradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
+                    _jointTradeList = (new ExcelManager()).GetTradeListFromTradeTable(_excelFilePath, "JointTrades");
+                }
+
+                return _jointTradesDataTable;
+            }
+            set => _jointTradesDataTable = value;
+        }
+
+        private static List<ExcelTrade> _jointTradeList;
+        public static List<ExcelTrade> JointTradeList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                if (_jointTradesDataTable == null)
+                    _ = JointTradesDataTable;
+
+                return _jointTradeList;
+            }
+            set => _jointTradeList = value;
+        }
+
+        ///================================================================
+        ///                             Constructor
+        ///================================================================
         public ExcelManager()
         {
             _excelFilePath = AppConfig.Settings.Find(x => x.Name == "ExcelTradesPath").Value;
+        }
+
+        ///================================================================
+        ///                              Methods
+        ///================================================================
+        public static void RefreshExcelData()
+        {
+            DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
+
+            if (excelFileDateTime > _excelImportDateTime)
+            {
+                _jointTradesDataTable = null;
+                _jointPositionsDataTable = null;
+            }
+
+            _excelImportDateTime = DateTime.Now; // Update when the last import took place
         }
 
         public DataTable ImportExcelSheet(string filePath, int sheetIdx, int startRow, int columns = 10)
