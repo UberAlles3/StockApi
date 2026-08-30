@@ -84,7 +84,7 @@ namespace StockApi
             if (comboBox1.SelectedIndex == 4)
                 metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-11), ticker);
 
-            metrics = metrics.Where(metrics => Form1.PositionList.Select(x => x.Symbol).Contains(metrics.Ticker)).ToList();
+            metrics = metrics.Where(metrics => ExcelManager.PositionList.Select(x => x.Symbol).Contains(metrics.Ticker)).ToList();
 
             metrics = metrics.OrderBy(x => x.Ticker).ThenBy(x => x.Year).ThenBy(x => x.Month).ToList();
 
@@ -359,7 +359,7 @@ namespace StockApi
             // Allow cancelling DailyMetrics with the Cancel button
             try
             {
-                int x = await metrics.DailyGetMetrics(Form1.PositionList, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
+                int x = await metrics.DailyGetMetrics(ExcelManager.PositionList, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
             }
             catch (OperationCanceledException)
             {

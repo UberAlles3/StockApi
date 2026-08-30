@@ -40,99 +40,6 @@ namespace StockApi
         private static string _news = "";
         private static DateTime newsDate = DateTime.Now.AddDays(-1);
 
-        private static DataTable _positionsDataTable = null;
-        public static DataTable PositionsDataTable
-        {
-            get
-            {
-                DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
-                if (excelFileDateTime > _positionsImportDateTime)
-                {
-                    _positionsDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 0, 0, 36);
-                    _positionsImportDateTime = DateTime.Now; // Update when the last import took place
-
-                    _positionsDataTable.AsEnumerable()
-                        .Where(row => row.Field<string>(ExcelManager.PositionSymbolColumn).Contains("*")  // Symbol
-                                    || row.Field<string>(ExcelManager.PositionSymbolColumn).Trim() == ""  // Symbol
-                                    || row.Field<double>(ExcelManager.PositionQuantityColumn) == 0        // Quantiyy
-                        )
-                        .ToList().ForEach(row => row.Delete());
-
-                    _positionsDataTable.AcceptChanges();
-
-                    // old way // _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
-
-                    _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath, "balancesandpositions", 34);
-                    _watchPositionList = _positionList.Where(x => x.Quantity == 0 && x.SellQuantity > 0).ToList();
-                    _positionList = _positionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.BuyQuantity == 0)).ToList();
-                }
-                return _positionsDataTable;
-            }
-            set => _positionsDataTable = value;
-        }
-
-        private static List<ExcelPosition> _positionList;
-        public static List<ExcelPosition> PositionList
-        {
-            get
-            {
-                // Refresh this list if underlying Excel file was updated.
-                var dummy = PositionsDataTable;
-
-                return _positionList;
-            }
-            set => _positionList = value;
-        }
-
-        private static List<ExcelPosition> _watchPositionList;
-        public static List<ExcelPosition> WatchPositionList
-        {
-            get
-            {
-                // Refresh this list if underlying Excel file was updated.
-                var dummy = PositionsDataTable;
-
-                return _watchPositionList;
-            }
-            set => _watchPositionList = value;
-        }
-
-        private static DataTable _tradesDataTable = null;
-        public static DataTable TradesDataTable
-        {
-            get
-            {
-                DateTime excelFileDateTime = System.IO.File.GetLastWriteTime(_excelFilePath);
-
-                if (excelFileDateTime > _tradesImportDateTime)
-                {
-                    _tradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 1, 12);
-                    //_tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
-                    _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
-                    _tradesImportDateTime = DateTime.Now; // Update when the last import took place
-
-                    _tradeList = (new ExcelManager()).GetTradeListFromTradeTable(_excelFilePath, "Trades");
-                }
-                return _tradesDataTable;
-            }
-            set => _tradesDataTable = value;
-        }
-
-        private static List<ExcelTrade> _tradeList;
-        public static List<ExcelTrade> TradeList
-        {
-            get
-            {
-                // Refresh this list if underlying Excel file was updated.
-                var dummy = TradesDataTable;
-
-                return _tradeList;
-            }
-            set => _tradeList = value;
-        }
-
- 
-
         ///////////////////////////////////////////////////////////////////////////////////////
         ///                           Form1 Constructor and Events
         ///////////////////////////////////////////////////////////////////////////////////////
@@ -189,7 +96,7 @@ namespace StockApi
             await _markets.GetAllMarketData();
             DisplayMarketData();
 
-            var primeThePositionsDataTable = PositionsDataTable;
+            var primeThePositionsDataTable = ExcelManager.PositionsDataTable;
             //(new ExcelManager()).GenerateClassCodeFromExcelSheet(_excelFilePath);
             //var j = ExcelManager.JointPositionList;
         }
@@ -220,7 +127,7 @@ namespace StockApi
                 return;
             }
 
-            DataTable tradesDataTable = TradesDataTable;
+            DataTable tradesDataTable = ExcelManager.TradesDataTable;
             // Trades
 
             PreSummaryWebCall(); // Sets the form display while the request is executing
@@ -700,7 +607,7 @@ namespace StockApi
             lblSellPrice.Text = _analyze.SellPrice.ToString();
 
             // Current targets from spreadsheet
-            ExcelPosition excelPosition = PositionList.Where(x => x.Symbol == txtStockTicker.Text).FirstOrDefault();
+            ExcelPosition excelPosition = ExcelManager.PositionList.Where(x => x.Symbol == txtStockTicker.Text).FirstOrDefault();
             if(excelPosition != null)
             {
                 lblBuyTarget.Text = excelPosition.BuyTarget.ToString("0.00");
@@ -809,7 +716,7 @@ namespace StockApi
             StringBuilder sb = new StringBuilder();
             foreach (SqlSummary x in entities)
             {
-                if (PositionList.Any(z => z.Symbol.Contains(x.Ticker)))
+                if (ExcelManager.PositionList.Any(z => z.Symbol.Contains(x.Ticker)))
                 {
 
                     // Delete sql data so the new earnings data can be refreshed
@@ -1012,26 +919,26 @@ namespace StockApi
             {
                 _markets.Dow = await _markets.GetMarketData("^DJI", true);
             }
-            performance.GetLatestBuyPerformance(_markets.Dow, PositionList, TradeList);
+            performance.GetLatestBuyPerformance(_markets.Dow, ExcelManager.PositionList, ExcelManager.TradeList);
             performance.ShowPerformanceForm(this);
         }
         private void latestSellsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(PositionList, TradeList);
+            List<PerformanceItem> performanceList = performance.GetLatestSellPerformance(ExcelManager.PositionList, ExcelManager.TradeList);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Sell Performance", 0);
         }
 
         private async void liquidationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Performance performance = new Performance(_stockDownloads.stockSummary);
-            List<PerformanceItem> performanceList = await performance.GetLiquidationPerformance(PositionList, TradeList);
+            List<PerformanceItem> performanceList = await performance.GetLiquidationPerformance(ExcelManager.PositionList, ExcelManager.TradeList);
             performance.ShowLiquidationPerformanceForm(this, performanceList, "Liquidation Performance", 1);
         }
 
         private void offHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<ExcelPosition> positions = PositionList.Where(x => x.TotalMetric > 1.18).ToList(); // Get high metric stock symbols
+            List<ExcelPosition> positions = ExcelManager.PositionList.Where(x => x.TotalMetric > 1.18).ToList(); // Get high metric stock symbols
 
             OffHighsForm offHighs = new OffHighsForm(positions);
             offHighs.Owner = this;
@@ -1040,7 +947,7 @@ namespace StockApi
 
         private void watchOffHighsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<ExcelPosition> positions = WatchPositionList.Where(x => x.TotalMetric > 1.10).ToList(); // Get watch list stock symbols
+            List<ExcelPosition> positions = ExcelManager.WatchPositionList.Where(x => x.TotalMetric > 1.10).ToList(); // Get watch list stock symbols
 
             OffHighsForm offHighs = new OffHighsForm(positions);
             offHighs.Owner = this;
@@ -1134,7 +1041,7 @@ namespace StockApi
         ////// Excel 
         private void excelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExcelForm f = new ExcelForm(PositionList);
+            ExcelForm f = new ExcelForm(ExcelManager.PositionList);
             f.Owner = this;
             f.Show();
         }

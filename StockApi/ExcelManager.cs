@@ -42,6 +42,103 @@ namespace StockApi
             Notes = 8
         }
 
+        /// ===============================================
+        ///                Rollover Excel Data
+        /// ===============================================
+        private static DataTable _positionsDataTable = null;
+        public static DataTable PositionsDataTable
+        {
+            get
+            {
+                RefreshExcelData();
+
+                if (_positionsDataTable == null)
+                {
+                    _positionsDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 0, 0, 36);
+
+                    _positionsDataTable.AsEnumerable()
+                        .Where(row => row.Field<string>(ExcelManager.PositionSymbolColumn).Contains("*")  // Symbol
+                                    || row.Field<string>(ExcelManager.PositionSymbolColumn).Trim() == ""  // Symbol
+                                    || row.Field<double>(ExcelManager.PositionQuantityColumn) == 0        // Quantiyy
+                        )
+                        .ToList().ForEach(row => row.Delete());
+
+                    _positionsDataTable.AcceptChanges();
+
+                    // old way // _positionsDataTable = _positionsDataTable.AsEnumerable().Where(x => x[(int)PC.Ticker].ToString().Trim() != "" && !x[(int)PC.Ticker].ToString().Contains("*") && x[(int)PC.QuantityHeld].ToString().Trim() != "" && x[(int)PC.QuantityHeld].ToString().Trim() != "0").CopyToDataTable();
+
+                    _positionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath, "balancesandpositions", 34);
+                    _watchPositionList = _positionList.Where(x => x.Quantity == 0 && x.SellQuantity > 0).ToList();
+                    _positionList = _positionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.BuyQuantity == 0)).ToList();
+                }
+                return _positionsDataTable;
+            }
+            set => _positionsDataTable = value;
+        }
+
+        private static List<ExcelPosition> _positionList;
+        public static List<ExcelPosition> PositionList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                var dummy = PositionsDataTable;
+
+                return _positionList;
+            }
+            set => _positionList = value;
+        }
+
+        private static List<ExcelPosition> _watchPositionList;
+        public static List<ExcelPosition> WatchPositionList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                var dummy = PositionsDataTable;
+
+                return _watchPositionList;
+            }
+            set => _watchPositionList = value;
+        }
+
+        private static DataTable _tradesDataTable = null;
+        public static DataTable TradesDataTable
+        {
+            get
+            {
+                RefreshExcelData();
+
+                if (_tradesDataTable == null)
+                {
+                    _tradesDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 1, 12);
+                    //_tradesDataTable.Columns[0].DataType = System.Type.GetType("System.DateTime");
+                    _tradesDataTable = _tradesDataTable.Rows.Cast<DataRow>().Where(row => row.ItemArray[0].ToString().Trim() != "").CopyToDataTable();
+
+                    _tradeList = (new ExcelManager()).GetTradeListFromTradeTable(_excelFilePath, "Trades");
+                }
+                return _tradesDataTable;
+            }
+            set => _tradesDataTable = value;
+        }
+
+        private static List<ExcelTrade> _tradeList;
+        public static List<ExcelTrade> TradeList
+        {
+            get
+            {
+                // Refresh this list if underlying Excel file was updated.
+                if (_tradesDataTable == null)
+                    _ = TradesDataTable;
+
+                return _tradeList;
+            }
+            set => _tradeList = value;
+        }
+
+        /// ===============================================
+        ///                Joint Excel Data
+        /// ===============================================
         private static DataTable _jointPositionsDataTable = null;
         public static DataTable JointPositionsDataTable
         {
@@ -120,7 +217,7 @@ namespace StockApi
         ///================================================================
         ///                             Constructor
         ///================================================================
-        public ExcelManager()
+        static ExcelManager()
         {
             _excelFilePath = AppConfig.Settings.Find(x => x.Name == "ExcelTradesPath").Value;
         }
@@ -134,8 +231,10 @@ namespace StockApi
 
             if (excelFileDateTime > _excelImportDateTime)
             {
-                _jointTradesDataTable = null;
+                _positionsDataTable = null;
+                _tradesDataTable = null;
                 _jointPositionsDataTable = null;
+                _jointTradesDataTable = null;
             }
 
             _excelImportDateTime = DateTime.Now; // Update when the last import took place
