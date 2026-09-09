@@ -137,7 +137,10 @@ namespace YahooLayer
                         _marketBeatHtml = await GetHtmlForTicker(_summaryMarketBeatUrl, Ticker);
                         searchTerm = "Average Price Target for";
                         OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(_marketBeatHtml, searchTerm, YahooFinanceBase.NotApplicable, 4).Trim().Replace("$", "");
-
+                        if(OneYearTargetPriceString.StringValue == "--")
+                        {
+                            OneYearTargetPriceString.StringValue = PriceString.StringValue;
+                        }
                     }
                     catch
                     {
