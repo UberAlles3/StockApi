@@ -150,12 +150,14 @@ namespace StockApi
                 {
                     _jointPositionsDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 3, 0, 18);
 
-                    _jointPositionsDataTable.AsEnumerable()
+                    List<DataRow> rows = _jointPositionsDataTable.AsEnumerable()
                         .Where(row => row.Field<string>(ExcelManager.PositionSymbolColumn).Contains("*")  // Symbol
                                     || row.Field<string>(ExcelManager.PositionSymbolColumn).Trim() == ""  // Symbol
                                     || row.Field<double>(ExcelManager.PositionQuantityColumn) == 0        // Quantiyy
                         )
-                        .ToList().ForEach(row => row.Delete());
+                        .ToList();
+
+                    rows.ForEach(row => row.Delete());
 
                     _jointPositionsDataTable.AcceptChanges();
 
