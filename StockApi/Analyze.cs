@@ -455,6 +455,15 @@ namespace StockApi
             return finalMetric;
         }
 
+        public void JointTradeTargets(StockDownloads stockDownloads)
+        {
+            double Metrics = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault().TotalMetric;
+
+
+
+
+        }
+
         public class AnalyzeInputs
         {
             public int SharesOwned;

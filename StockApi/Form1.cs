@@ -1051,6 +1051,16 @@ namespace StockApi
             f.Owner = this;
             f.Show();
         }
+
+        private void radJointTrade_CheckedChanged(object sender, EventArgs e)
+        {
+            _analyze.JointTradeTargets(_stockDownloads);
+        }
+
+        private void radRolloverTrade_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class CustomColorTable : ProfessionalColorTable
