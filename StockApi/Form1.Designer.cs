@@ -2057,7 +2057,7 @@ namespace StockApi
             this.txtAnalysisOutput.Multiline = true;
             this.txtAnalysisOutput.Name = "txtAnalysisOutput";
             this.txtAnalysisOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAnalysisOutput.Size = new System.Drawing.Size(344, 331);
+            this.txtAnalysisOutput.Size = new System.Drawing.Size(344, 356);
             this.txtAnalysisOutput.TabIndex = 33;
             this.txtAnalysisOutput.Text = "Hello World 123";
             // 
@@ -2153,7 +2153,7 @@ namespace StockApi
             // 
             this.label26.BackColor = System.Drawing.Color.Transparent;
             this.label26.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label26.Location = new System.Drawing.Point(26, 562);
+            this.label26.Location = new System.Drawing.Point(26, 580);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(50, 29);
             this.label26.TabIndex = 20;
@@ -2544,7 +2544,7 @@ namespace StockApi
             // 
             this.label37.BackColor = System.Drawing.Color.Transparent;
             this.label37.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label37.Location = new System.Drawing.Point(155, 565);
+            this.label37.Location = new System.Drawing.Point(155, 583);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(50, 29);
             this.label37.TabIndex = 57;
@@ -2554,7 +2554,7 @@ namespace StockApi
             // radJointTrade
             // 
             this.radJointTrade.AutoSize = true;
-            this.radJointTrade.Location = new System.Drawing.Point(81, 578);
+            this.radJointTrade.Location = new System.Drawing.Point(81, 596);
             this.radJointTrade.Name = "radJointTrade";
             this.radJointTrade.Size = new System.Drawing.Size(50, 19);
             this.radJointTrade.TabIndex = 56;
@@ -2566,7 +2566,7 @@ namespace StockApi
             // 
             this.radRolloverTrade.AutoSize = true;
             this.radRolloverTrade.Checked = true;
-            this.radRolloverTrade.Location = new System.Drawing.Point(81, 562);
+            this.radRolloverTrade.Location = new System.Drawing.Point(81, 580);
             this.radRolloverTrade.Name = "radRolloverTrade";
             this.radRolloverTrade.Size = new System.Drawing.Size(68, 19);
             this.radRolloverTrade.TabIndex = 55;
@@ -2613,7 +2613,7 @@ namespace StockApi
             // btnMetricChart
             // 
             this.btnMetricChart.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnMetricChart.Location = new System.Drawing.Point(205, 517);
+            this.btnMetricChart.Location = new System.Drawing.Point(205, 542);
             this.btnMetricChart.Name = "btnMetricChart";
             this.btnMetricChart.Size = new System.Drawing.Size(115, 24);
             this.btnMetricChart.TabIndex = 51;
@@ -2624,7 +2624,7 @@ namespace StockApi
             // btnGetMetricTrend
             // 
             this.btnGetMetricTrend.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnGetMetricTrend.Location = new System.Drawing.Point(58, 517);
+            this.btnGetMetricTrend.Location = new System.Drawing.Point(58, 542);
             this.btnGetMetricTrend.Name = "btnGetMetricTrend";
             this.btnGetMetricTrend.Size = new System.Drawing.Size(115, 24);
             this.btnGetMetricTrend.TabIndex = 50;

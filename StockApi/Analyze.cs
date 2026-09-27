@@ -457,28 +457,77 @@ namespace StockApi
 
         public string JointTradeTargets(StockDownloads stockDownloads)
         {
+            double finalFactor = 1.0D;
+            double percentToApply = 35;
+
             StringBuilder output = new StringBuilder();
 
-            double Metrics = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault().TotalMetric;
+            var position = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
+            double metric = position.TotalMetric;
+            string lastBuyorSell = position.BuySell.Substring(0, 3).ToLower();
+            double lastTradePrice;
+            if(lastBuyorSell == "buy")
+            {
+                lastTradePrice = position.BuyPrice;
+            }
+            else  // sell
+            {
+                lastTradePrice = position.SellPrice;
+            }
 
             // Look for price trends. Topping out or bottoming out. 1 year to 3 months. Last 3 months to today.
             // Slope of 1 year to 3 months ago.
-            decimal yearSlope = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price / stockDownloads.stockHistory.HistoricDataYearAgo.Price;
-            decimal months3Slope = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
+            decimal priceYear = stockDownloads.stockHistory.HistoricDataYearAgo.Price;
+            decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
+            decimal priceToday   = stockDownloads.stockHistory.HistoricDataToday.Price;
 
-            output.AppendLine($"Year ago:     {stockDownloads.stockHistory.HistoricDataYearAgo.Price.ToString("##.##")}");
-            output.AppendLine($"3 months ago: {stockDownloads.stockHistory.HistoricData3MonthsAgo.Price.ToString("##.##")}");
-            output.AppendLine($"Latest:       {stockDownloads.stockHistory.HistoricDataToday.Price.ToString("##.##")}");
+            decimal yearMonthlyGain = (((price3Months - priceYear) / 9) / price3Months) * 100;
+            decimal threeMonthsMonthlyGain = (((priceToday - price3Months) / 3) / priceToday * 100);
 
-            output.AppendLine($"Year slope:     {yearSlope.ToString("0.00")}");
-            output.AppendLine($"3 month slope:  {months3Slope.ToString("0.00")}");
+            output.AppendLine($"Price year ago:         {priceYear.ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Price 3 months ago:     {price3Months.ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Price today:            {priceToday.ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Monthly gain year:     {yearMonthlyGain.ToString("0.00").PadLeft(6)}%");
+            output.AppendLine($"Monthly gain 3 months: {threeMonthsMonthlyGain.ToString("0.00").PadLeft(6)}%");
 
-            if (months3Slope < yearSlope) // slope is decreasing. Gains are slowing
+            // Are both gains above 2%
+            if (threeMonthsMonthlyGain > 2 && yearMonthlyGain > 2)
             {
-
-            
+                finalFactor += .1;
+                output.AppendLine($"Both gains above 2%");
             }
-            
+
+            // Is the latest 3 month gains better the the previous 9 month gains?
+            if (threeMonthsMonthlyGain > yearMonthlyGain * 1.2M)
+            {
+                finalFactor += .1;
+                output.AppendLine($"Gains are rising        {finalFactor.ToString("0.00").PadLeft(6)}");
+            }
+
+            output.AppendLine($"Stock Metric:           {metric.ToString("0.00").PadLeft(6)}");
+
+            finalFactor += ((metric - 1.02) / 2);
+            output.AppendLine($"Final Factor:           {finalFactor.ToString("0.00").PadLeft(6)}");
+
+            decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
+            volitilityFactor = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
+            output.AppendLine($"Volitility Factor:      {volitilityFactor.ToString("0.00").PadLeft(6)}");
+
+            percentToApply *= (double)volitilityFactor;
+            output.AppendLine($"Percent to apply:       {percentToApply.ToString("0.00").PadLeft(6)}");
+
+            ////////// One Year Target - Not a very valuable metric. 
+            decimal targetPriceMetric = 1M;
+            targetPriceMetric = stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue / stockDownloads.stockSummary.PriceString.NumericValue;
+            targetPriceMetric = AdjustMetric(targetPriceMetric, -10M);
+            targetPriceMetric = SoftLimit(targetPriceMetric, .9M, 1.01M);
+            output.AppendLine($"One year target metric: {targetPriceMetric.ToString("0.00").PadLeft(6)}");
+
+            output.AppendLine($"Last traded price:      {lastTradePrice.ToString("0.00").PadLeft(6)}");
+
+            //decimal buyPrice = analyzeInputs.SharesTradedPrice * lowerMovementMultiplier;
+            //decimal sellPrice = analyzeInputs.SharesTradedPrice * upperMovementMultiplier;
+
             return output.ToString();
         }
 
