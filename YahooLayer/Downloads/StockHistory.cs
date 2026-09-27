@@ -27,6 +27,7 @@ namespace YahooLayer
         public HistoricPriceData HistoricDataToday;
         public HistoricPriceData HistoricDataWeekAgo;
         public HistoricPriceData HistoricDataMonthAgo;
+        public HistoricPriceData HistoricData3MonthsAgo;
         public HistoricPriceData HistoricDataYearAgo;
         public HistoricPriceData HistoricData3YearsAgo;
         public TrendEnum WeekTrend = TrendEnum.Sideways;
@@ -151,8 +152,9 @@ namespace YahooLayer
 
             HistoricDataWeekAgo = null;
             HistoricDataMonthAgo = null;
+            HistoricData3MonthsAgo = null;
             HistoricDataYearAgo = null;
-            quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddMonths(-1).AddDays(-1), 34, "1d");
+            quoteList = await _yahooFinanceAPI.GetQuotes(ticker, DateTime.Now.AddMonths(-3).AddDays(-1), 94, "1d");
 
             if (quoteList.Count > 0)
             {
@@ -168,12 +170,20 @@ namespace YahooLayer
                     HistoricDataWeekAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "W");
                 }
 
-                //// Last Month (really 31 days ago)
+                //// Last Month
                 findDate = GetMondayIfWeekend(DateTime.Now.AddMonths(-1).Date);
                 stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(2));
                 if (stockQuote != null)
                 {
                     HistoricDataMonthAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "M");
+                }
+
+                //// 3 Months Ago
+                findDate = GetMondayIfWeekend(DateTime.Now.AddMonths(-3).Date);
+                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(2));
+                if (stockQuote != null)
+                {
+                    HistoricData3MonthsAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "3M");
                 }
 
                 /////// Get price history for a year ago to determine long trend
@@ -218,6 +228,11 @@ namespace YahooLayer
             {
                 HistoricDataMonthAgo.Ticker = Ticker;
                 HistoricDisplayList.Add(HistoricDataMonthAgo);
+            }
+            if (HistoricData3MonthsAgo != null)
+            {
+                HistoricData3MonthsAgo.Ticker = Ticker;
+                HistoricDisplayList.Add(HistoricData3MonthsAgo);
             }
             if (HistoricDataYearAgo != null)
             {
@@ -396,6 +411,16 @@ namespace YahooLayer
                     HistoricDataYearAgo.Volume = (decimal)row.Volume;
                 }
 
+                if (row.PeriodType == "3M")
+                {
+                    HistoricData3MonthsAgo = new HistoricPriceData();
+                    HistoricData3MonthsAgo.Ticker = row.Ticker;
+                    HistoricData3MonthsAgo.PeriodType = row.PeriodType;
+                    HistoricData3MonthsAgo.PriceDate = row.PriceDate;
+                    HistoricData3MonthsAgo.Price = (decimal)row.Price;
+                    HistoricData3MonthsAgo.Volume = (decimal)row.Volume;
+                }
+
                 if (row.PeriodType == "M")
                 {
                     HistoricDataMonthAgo = new HistoricPriceData();
@@ -405,6 +430,7 @@ namespace YahooLayer
                     HistoricDataMonthAgo.Price = (decimal)row.Price;
                     HistoricDataMonthAgo.Volume = (decimal)row.Volume;
                 }
+
                 if (row.PeriodType == "W")
                 {
                     HistoricDataWeekAgo = new HistoricPriceData();

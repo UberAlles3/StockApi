@@ -1052,9 +1052,13 @@ namespace StockApi
             f.Show();
         }
 
-        private void radJointTrade_CheckedChanged(object sender, EventArgs e)
+        private async void radJointTrade_CheckedChanged(object sender, EventArgs e)
         {
-            _analyze.JointTradeTargets(_stockDownloads);
+            if(_stockDownloads.stockHistory.HistoricDataMonthAgo == null)
+                await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary);
+
+
+            txtAnalysisOutput.Text = _analyze.JointTradeTargets(_stockDownloads);
         }
 
         private void radRolloverTrade_CheckedChanged(object sender, EventArgs e)

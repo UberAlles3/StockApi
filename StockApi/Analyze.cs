@@ -455,13 +455,31 @@ namespace StockApi
             return finalMetric;
         }
 
-        public void JointTradeTargets(StockDownloads stockDownloads)
+        public string JointTradeTargets(StockDownloads stockDownloads)
         {
+            StringBuilder output = new StringBuilder();
+
             double Metrics = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault().TotalMetric;
 
+            // Look for price trends. Topping out or bottoming out. 1 year to 3 months. Last 3 months to today.
+            // Slope of 1 year to 3 months ago.
+            decimal yearSlope = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price / stockDownloads.stockHistory.HistoricDataYearAgo.Price;
+            decimal months3Slope = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
 
+            output.AppendLine($"Year ago:     {stockDownloads.stockHistory.HistoricDataYearAgo.Price.ToString("##.##")}");
+            output.AppendLine($"3 months ago: {stockDownloads.stockHistory.HistoricData3MonthsAgo.Price.ToString("##.##")}");
+            output.AppendLine($"Latest:       {stockDownloads.stockHistory.HistoricDataToday.Price.ToString("##.##")}");
 
+            output.AppendLine($"Year slope:     {yearSlope.ToString("0.00")}");
+            output.AppendLine($"3 month slope:  {months3Slope.ToString("0.00")}");
 
+            if (months3Slope < yearSlope) // slope is decreasing. Gains are slowing
+            {
+
+            
+            }
+            
+            return output.ToString();
         }
 
         public class AnalyzeInputs
