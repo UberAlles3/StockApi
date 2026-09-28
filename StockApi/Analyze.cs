@@ -457,28 +457,31 @@ namespace StockApi
 
         public string JointTradeTargets(StockDownloads stockDownloads)
         {
-            double finalFactor = 1.0D;
-            double percentToApply = 35;
+            decimal finalFactor = 1.0M;
+            decimal percentToApply = 35;
 
             StringBuilder output = new StringBuilder();
 
             var position = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
-            double metric = position.TotalMetric;
-            string lastBuyorSell = position.BuySell.Substring(0, 3).ToLower();
-            double lastTradePrice;
+            var jointPosition = ExcelManager.JointPositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
+            decimal metric = (decimal)position.TotalMetric;
+            string lastBuyorSell = jointPosition.BuySell.Substring(0, 3).ToLower();
+            decimal lastTradePrice;
             if(lastBuyorSell == "buy")
             {
-                lastTradePrice = position.BuyPrice;
+                lastTradePrice = (decimal)jointPosition.BuyPrice;
             }
             else  // sell
             {
-                lastTradePrice = position.SellPrice;
+                lastTradePrice = (decimal)jointPosition.SellPrice;
             }
 
             // Look for price trends. Topping out or bottoming out. 1 year to 3 months. Last 3 months to today.
             // Slope of 1 year to 3 months ago.
-            decimal priceYear = stockDownloads.stockHistory.HistoricDataYearAgo.Price;
+            decimal priceYear    = stockDownloads.stockHistory.HistoricDataYearAgo.Price;
             decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
+            decimal priceMonth   = stockDownloads.stockHistory.HistoricDataMonthAgo.Price;
+            decimal priceWeek    = stockDownloads.stockHistory.HistoricDataWeekAgo.Price;
             decimal priceToday   = stockDownloads.stockHistory.HistoricDataToday.Price;
 
             decimal yearMonthlyGain = (((price3Months - priceYear) / 9) / price3Months) * 100;
@@ -493,28 +496,31 @@ namespace StockApi
             // Are both gains above 2%
             if (threeMonthsMonthlyGain > 2 && yearMonthlyGain > 2)
             {
-                finalFactor += .1;
+                finalFactor += .1M;
                 output.AppendLine($"Both gains above 2%");
             }
 
             // Is the latest 3 month gains better the the previous 9 month gains?
             if (threeMonthsMonthlyGain > yearMonthlyGain * 1.2M)
             {
-                finalFactor += .1;
+                finalFactor += .1M;
                 output.AppendLine($"Gains are rising        {finalFactor.ToString("0.00").PadLeft(6)}");
             }
 
             output.AppendLine($"Stock Metric:           {metric.ToString("0.00").PadLeft(6)}");
 
-            finalFactor += ((metric - 1.02) / 2);
+            finalFactor += ((metric - 1.02M) / 2M);
             output.AppendLine($"Final Factor:           {finalFactor.ToString("0.00").PadLeft(6)}");
 
             decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
             volitilityFactor = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
             output.AppendLine($"Volitility Factor:      {volitilityFactor.ToString("0.00").PadLeft(6)}");
 
-            percentToApply *= (double)volitilityFactor;
+            percentToApply *= volitilityFactor;
             output.AppendLine($"Percent to apply:       {percentToApply.ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Buy Percent:            {(percentToApply / finalFactor).ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Sell Percent:           {(percentToApply * finalFactor).ToString("0.00").PadLeft(6)}");
+
 
             ////////// One Year Target - Not a very valuable metric. 
             decimal targetPriceMetric = 1M;
@@ -525,8 +531,19 @@ namespace StockApi
 
             output.AppendLine($"Last traded price:      {lastTradePrice.ToString("0.00").PadLeft(6)}");
 
-            //decimal buyPrice = analyzeInputs.SharesTradedPrice * lowerMovementMultiplier;
-            //decimal sellPrice = analyzeInputs.SharesTradedPrice * upperMovementMultiplier;
+            decimal highest3MonthPrice = Math.Max(Math.Max(price3Months, priceMonth), priceWeek);
+            output.AppendLine($"Highest Price 3M:       {highest3MonthPrice.ToString("0.00").PadLeft(6)}");
+
+            BuyPrice = lastTradePrice * 1 / (1 + ((percentToApply / finalFactor) / 100));
+            SellPrice = lastTradePrice * (1 + ((percentToApply * finalFactor) / 100));
+
+            output.AppendLine($"Raw Buy Price:          {BuyPrice.ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Raw Sell Price:         {SellPrice.ToString("0.00").PadLeft(6)}");
+
+            if (highest3MonthPrice > lastTradePrice)
+            {
+                BuyPrice = lastTradePrice * 1 / (1 + ((percentToApply / finalFactor) / 100)) + (highest3MonthPrice - lastTradePrice);
+            }
 
             return output.ToString();
         }

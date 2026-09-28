@@ -606,6 +606,10 @@ namespace StockApi
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
             lblSellPrice.Text = _analyze.SellPrice.ToString();
 
+
+            // TODO
+
+
             // Current targets from spreadsheet
             ExcelPosition excelPosition = ExcelManager.PositionList.Where(x => x.Symbol == txtStockTicker.Text).FirstOrDefault();
             if(excelPosition != null)
@@ -1059,6 +1063,8 @@ namespace StockApi
 
 
             txtAnalysisOutput.Text = _analyze.JointTradeTargets(_stockDownloads);
+            lblBuyPrice.Text  = _analyze.BuyPrice.ToString();
+            lblSellPrice.Text = _analyze.SellPrice.ToString();
         }
 
         private void radRolloverTrade_CheckedChanged(object sender, EventArgs e)
