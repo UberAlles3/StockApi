@@ -1058,9 +1058,8 @@ namespace StockApi
 
         private async void radJointTrade_CheckedChanged(object sender, EventArgs e)
         {
-            if(_stockDownloads.stockHistory.HistoricDataMonthAgo == null)
+            if(_stockDownloads.stockHistory.HistoricDataMonthAgo == null || _stockDownloads.stockHistory.HistoricData3MonthsAgo == null)
                 await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary);
-
 
             txtAnalysisOutput.Text = _analyze.JointTradeTargets(_stockDownloads);
             lblBuyPrice.Text  = _analyze.BuyPrice.ToString();

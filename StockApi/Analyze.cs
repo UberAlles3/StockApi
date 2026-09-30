@@ -465,6 +465,23 @@ namespace StockApi
             var position = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
             var jointPosition = ExcelManager.JointPositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
             decimal metric = (decimal)position.TotalMetric;
+            if(jointPosition.BuySell == null)
+            {
+                // get buy sell from joint trades
+                var jointTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).LastOrDefault();
+                jointPosition.BuySell = jointTrade.BuySell;
+                if(jointPosition.BuySell == "Buy")
+                {
+                    jointPosition.BuyPrice = jointTrade.Price;
+                    jointPosition.BuyQuantity = jointTrade.Quantity;
+                }
+                else
+                {
+                    jointPosition.SellPrice = jointTrade.Price;
+                    jointPosition.SellQuantity = jointTrade.Quantity;
+                }
+            }
+
             string lastBuyorSell = jointPosition.BuySell.Substring(0, 3).ToLower();
             decimal lastTradePrice;
             if(lastBuyorSell == "buy")
@@ -480,6 +497,7 @@ namespace StockApi
             // Slope of 1 year to 3 months ago.
             decimal priceYear    = stockDownloads.stockHistory.HistoricDataYearAgo.Price;
             decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
+            
             decimal priceMonth   = stockDownloads.stockHistory.HistoricDataMonthAgo.Price;
             decimal priceWeek    = stockDownloads.stockHistory.HistoricDataWeekAgo.Price;
             decimal priceToday   = stockDownloads.stockHistory.HistoricDataToday.Price;
