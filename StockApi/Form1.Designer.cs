@@ -252,6 +252,7 @@ namespace StockApi
             this.panel4 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.jointOffHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -2402,7 +2403,8 @@ namespace StockApi
             this.tradeMonitorToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(32)))), ((int)(((byte)(64)))));
             this.tradeMonitorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.offHighsToolStripMenuItem,
-            this.watchOffHighsToolStripMenuItem});
+            this.watchOffHighsToolStripMenuItem,
+            this.jointOffHighsToolStripMenuItem});
             this.tradeMonitorToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.tradeMonitorToolStripMenuItem.Name = "tradeMonitorToolStripMenuItem";
             this.tradeMonitorToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
@@ -2845,6 +2847,15 @@ namespace StockApi
             this.label7.Text = "Markets";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // jointOffHighsToolStripMenuItem
+            // 
+            this.jointOffHighsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.jointOffHighsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.jointOffHighsToolStripMenuItem.Name = "jointOffHighsToolStripMenuItem";
+            this.jointOffHighsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.jointOffHighsToolStripMenuItem.Text = "Joint Off Highs";
+            this.jointOffHighsToolStripMenuItem.Click += new System.EventHandler(this.jointOffHighsToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -3130,6 +3141,7 @@ namespace StockApi
         private System.Windows.Forms.RadioButton radJointTrade;
         private System.Windows.Forms.RadioButton radRolloverTrade;
         private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.ToolStripMenuItem jointOffHighsToolStripMenuItem;
     }
 }
 

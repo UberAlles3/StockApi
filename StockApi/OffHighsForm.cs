@@ -24,6 +24,8 @@ namespace StockApi
         private async void OffHighs_Load(object sender, EventArgs e)
         {
             ExcelPosition position;
+            ExcelTrade lastTrade1;
+            ExcelTrade lastTrade2;
 
             // Read the trades table and find all tickers the have a metric of over 1.2
             YahooFinanceAPI yahooFinanceAPI = new YahooFinanceAPI();
@@ -51,9 +53,19 @@ namespace StockApi
                 {
                     txtTickerList.Text += $"     {(high).ToString("00.00").PadLeft(7, ' ')}     {(position.PastYearHigh).ToString("00.00").PadLeft(7, ' ')}    {position.Price.ToString("00.00").PadLeft(7, ' ')}    {(high * .88M).ToString(" 00.00").PadLeft(7, ' ')} ";
 
-                    if (position.BuySell == "Buy") // If already bought in the last 30 days
+                    if (position.BuySell == "Buy") // If already bought in the last 20 days
                     {
-                        txtTickerList.Text += $" Bought {position.BuyPrice}";
+                        lastTrade1 = ExcelManager.TradeList.Where(x => x.Symbol == position.Symbol).LastOrDefault();
+                        lastTrade2 = ExcelManager.JointTradeList.Where(x => x.Symbol == position.Symbol).LastOrDefault();
+
+                        // Get latest trade date for this stock in either roll over or joint
+                        if (lastTrade1.TradeDate < lastTrade2.TradeDate)
+                            lastTrade1.TradeDate = lastTrade2.TradeDate;
+
+                        if(lastTrade1.TradeDate < DateTime.Now.AddDays(-20))
+                            txtTickerList.Text += $" *** BUY **** last buy 20+ days ago {position.BuyPrice}";
+                        else
+                           txtTickerList.Text += $" Bought {position.BuyPrice}";
                     }
                     else
                     {

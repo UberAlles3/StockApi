@@ -464,8 +464,11 @@ namespace StockApi
 
             var position = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
             var jointPosition = ExcelManager.JointPositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
-            decimal metric = (decimal)position.TotalMetric;
-            if(jointPosition.BuySell == null)
+            decimal metric = 1;
+            if(position != null)
+                metric = (decimal)position.TotalMetric;
+
+            if (jointPosition.BuySell == null)
             {
                 // get buy sell from joint trades
                 var jointTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).LastOrDefault();

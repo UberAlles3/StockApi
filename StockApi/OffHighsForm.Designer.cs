@@ -41,7 +41,7 @@ namespace StockApi
             this.txtTickerList.Multiline = true;
             this.txtTickerList.Name = "txtTickerList";
             this.txtTickerList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtTickerList.Size = new System.Drawing.Size(610, 640);
+            this.txtTickerList.Size = new System.Drawing.Size(741, 640);
             this.txtTickerList.TabIndex = 12;
             // 
             // label1
@@ -58,7 +58,7 @@ namespace StockApi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 681);
+            this.ClientSize = new System.Drawing.Size(765, 681);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtTickerList);
             this.Name = "OffHighsForm";

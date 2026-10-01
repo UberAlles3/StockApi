@@ -148,7 +148,7 @@ namespace StockApi
 
                 if (_jointPositionsDataTable == null)
                 {
-                    _jointPositionsDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 3, 0, 18);
+                    _jointPositionsDataTable = (new ExcelManager()).ImportExcelSheet(_excelFilePath, 3, 0, 36);
 
                     List<DataRow> rows = _jointPositionsDataTable.AsEnumerable()
                         .Where(row => row.Field<string>(ExcelManager.PositionSymbolColumn).Contains("*")  // Symbol
@@ -161,8 +161,18 @@ namespace StockApi
 
                     _jointPositionsDataTable.AcceptChanges();
 
-                    _jointPositionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath, "JointPositions", 17);
+                    _jointPositionList = (new ExcelManager()).GetPositionsListFromPositionsTable(_excelFilePath, "JointPositions", 34);
                     _jointPositionList = _jointPositionList.Where(x => x.Quantity > 0 || (x.Quantity == 0 && x.BuyQuantity == 0)).ToList();
+
+                    foreach (ExcelPosition jointPosition in _jointPositionList)
+                    {
+                        ExcelPosition position = _positionList.Where(x => x.Symbol == jointPosition.Symbol).FirstOrDefault();
+
+                        if(position != null)
+                        {
+                            jointPosition.PastYearHigh = position.PastYearHigh;
+                        }
+                    }
                 }
                 return _jointPositionsDataTable;
             }

@@ -112,6 +112,20 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
+            //decimal quantity = 0;
+            //string positionOutput = "";
+            //foreach (ExcelPosition position in ExcelManager.JointPositionList)
+            //{
+            //    // get the latest buy and sell trades for this symbol
+            //    ExcelPosition position2 = ExcelManager.PositionList.Where(x => x.Symbol == position.Symbol).FirstOrDefault();
+            //    if(position2 != null)
+            //        positionOutput = position2.TotalMetric + "\t";
+            //    else
+            //        positionOutput = "?\t";
+
+            //    Debug.WriteLine(positionOutput);
+            //}
+
             bool networkUp = NetworkInterface.GetIsNetworkAvailable();
             if (networkUp == false)
             {
@@ -958,6 +972,15 @@ namespace StockApi
             offHighs.Show();
         }
 
+        private void jointOffHighsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<ExcelPosition> positions = ExcelManager.JointPositionList.Where(x => x.TotalMetric > 1.22).ToList(); // Get high metric stock symbols
+
+            OffHighsForm offHighs = new OffHighsForm(positions);
+            offHighs.Owner = this;
+            offHighs.Show();
+        }
+
         private void summaryToolStripMenuItem_Click(object sender, EventArgs e)
         {
         }
@@ -1113,3 +1136,45 @@ namespace StockApi
         }
     }
 }
+
+
+// go through joint positions 
+//foreach (var position in ExcelManager.JointPositionList)
+//{
+//    // get the latest buy and sell trades for this symbol
+//    ExcelTrade firstBuyTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == position.Symbol && x.BuySell == "Buy").OrderBy(x => x.TradeDate).FirstOrDefault();
+//    ExcelTrade lastBuyTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == position.Symbol && x.BuySell == "Buy").OrderBy(x => x.TradeDate).LastOrDefault();
+//    ExcelTrade lastSellTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == position.Symbol && x.BuySell == "Sell").LastOrDefault();
+//    ExcelTrade lastTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == position.Symbol).LastOrDefault();
+
+//    string positionOutput = position.Symbol + "\t" + position.Quantity + "\t" + position.Price + "\t" + lastTrade.BuySell + "\t";
+//    if (lastBuyTrade != null)
+//    {
+//        positionOutput += lastBuyTrade.Quantity + "\t" + lastBuyTrade.Price + "\t";
+//    }
+//    if (lastSellTrade != null)
+//    {
+//        positionOutput += lastSellTrade.Quantity + "\t" + lastSellTrade.Price + "\t";
+//    }
+//    else
+//        positionOutput += "\t" + "\t";
+
+//    //positionOutput += Environment.NewLine;
+//    Debug.WriteLine(positionOutput);
+//}            // go through joint positions 
+
+//decimal quantity = 0;
+//foreach (var position in ExcelManager.JointPositionList)
+//{
+//    // get the latest buy and sell trades for this symbol
+//    ExcelTrade firstBuyTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == position.Symbol && x.BuySell == "Buy").OrderBy(x => x.TradeDate).FirstOrDefault();
+//    ExcelTrade firstSellTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == position.Symbol && x.BuySell == "Sell").OrderBy(x => x.TradeDate).FirstOrDefault();
+//    quantity = firstBuyTrade.Quantity;
+
+//    //if (firstSellTrade != null && firstBuyTrade.TradeDate == firstSellTrade.TradeDate)
+//    //    quantity = firstBuyTrade.Quantity - firstSellTrade.Quantity;
+
+//    string positionOutput = firstBuyTrade.TradeDate.ToShortDateString() + "\t" + quantity; 
+//    //positionOutput += Environment.NewLine;
+//    Debug.WriteLine(positionOutput);
+//}
