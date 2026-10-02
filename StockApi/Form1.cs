@@ -112,16 +112,27 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-            //decimal quantity = 0;
+            decimal quantity = 0;
             //string positionOutput = "";
+
+            //SqlCrudOperations sqlCrudOperations = new SqlCrudOperations();
+            //List<SqlMetric> metrics;
             //foreach (ExcelPosition position in ExcelManager.JointPositionList)
             //{
-            //    // get the latest buy and sell trades for this symbol
             //    ExcelPosition position2 = ExcelManager.PositionList.Where(x => x.Symbol == position.Symbol).FirstOrDefault();
-            //    if(position2 != null)
+            //    if (position2 != null)
+            //    {
             //        positionOutput = position2.TotalMetric + "\t";
+            //    }
             //    else
-            //        positionOutput = "?\t";
+            //    {
+            //        metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddDays(-30), position.Symbol);
+            //        if(metrics.Count() > 0)
+            //        {
+            //            SqlMetric sm = metrics.OrderBy(x => x.UpdateDate).Last();
+            //            positionOutput = sm.FinalMetric + "\t";
+            //        }
+            //    }
 
             //    Debug.WriteLine(positionOutput);
             //}
