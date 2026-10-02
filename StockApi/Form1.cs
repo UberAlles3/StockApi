@@ -383,8 +383,8 @@ namespace StockApi
                     lblVolatility.Text = _stockDownloads.stockSummary.VolatilityString.StringValue;
                     lblEPS.Text = _stockDownloads.stockSummary.EarningsPerShareString.NumericValue.ToString("####.00");
                     lblEPS.ForeColor = _stockDownloads.stockSummary.EPSColor;
-                    lblPriceBook.Text = _stockDownloads.stockSummary.PriceBookString.NumericValue.ToString();
-                    lblPriceBook.ForeColor = _stockDownloads.stockSummary.PriceBookColor;
+                    lblPriceBook.Text = _stockDownloads.stockStatistics.PriceBookString.NumericValue.ToString();
+                    lblPriceBook.ForeColor = _stockDownloads.stockStatistics.PriceBookColor;
                     lblDividend.Text = _stockDownloads.stockSummary.DividendString.NumericValue.ToString() + "%";
                     lblDividend.ForeColor = _stockDownloads.stockSummary.DividendColor;
                     lblProfitMargin.Text = _stockDownloads.stockSummary.ProfitMarginString.StringValue.ToString() + "%";
@@ -393,8 +393,10 @@ namespace StockApi
                     lblOneYearTarget.ForeColor = _stockDownloads.stockSummary.OneYearTargetColor;
                     lbl52WeekLow.Text = _stockDownloads.stockSummary.YearsRangeLow.StringValue;
                     lbl52WeekHigh.Text = _stockDownloads.stockSummary.YearsRangeHigh.StringValue;
-                    lblForwardPE.Text = _stockDownloads.stockSummary.ForwardPEString.NumericValue.ToString();
-                    lblForwardPE.ForeColor = _stockDownloads.stockSummary.ForwardPEColor;
+                    //lblForwardPE.Text = _stockDownloads.stockSummary.ForwardPEString.NumericValue.ToString();
+                    //lblForwardPE.ForeColor = _stockDownloads.stockSummary.ForwardPEColor;
+                    lblForwardPE.Text = _stockDownloads.stockStatistics.ForwardPEString.NumericValue.ToString();
+                    lblForwardPE.ForeColor = _stockDownloads.stockStatistics.ForwardPEColor;
                     lblEarningsDate.Text = _stockDownloads.stockSummary.EarningsDateString.DateTimeValue.ToString();
                     lblEarningsDate.ForeColor = _stockDownloads.stockSummary.EarningsDateColor;
                     lblSector.Text = _stockDownloads.stockSummary.Sector;
@@ -411,7 +413,7 @@ namespace StockApi
 
                     // Calculated PE can only be figured after both summary and finacial data is combined
                     _stockDownloads.stockSummary.SetCalculatedPE(_stockDownloads);
-                    lblCalculatedPE.Text = _stockDownloads.stockSummary.CalculatedPEString.StringValue;
+                    lblCalculatedPE.Text = _stockDownloads.stockStatistics.CalculatedPEString.StringValue;
 
                     if (_stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
                     {

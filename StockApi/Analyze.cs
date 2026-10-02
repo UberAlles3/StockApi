@@ -65,9 +65,9 @@ namespace StockApi
 
             ////////// Price / Book
             decimal priceBookMetric = 1M;
-            if (stockDownloads.stockSummary.PriceBookString.NumericValue > 5)
+            if (stockDownloads.stockStatistics.PriceBookString.NumericValue > 5)
                 priceBookMetric = .99M;
-            else if (stockDownloads.stockSummary.PriceBookString.NumericValue < 1)
+            else if (stockDownloads.stockStatistics.PriceBookString.NumericValue < 1)
                 priceBookMetric = 1.01M;
 
             output.AppendLine($"Price Book Metric = {priceBookMetric.ToString(".000")}");
@@ -218,10 +218,10 @@ namespace StockApi
             else if (stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.UnderValued)
                 valuationMetric = 1.02M;
 
-            if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.8M) // Over valued
+            if (stockDownloads.stockStatistics.CalculatedPEString.NumericValue > 0 && stockDownloads.stockStatistics.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.8M) // Over valued
                 valuationMetric = .975M;
 
-            if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .6M) // Under valued
+            if (stockDownloads.stockStatistics.CalculatedPEString.NumericValue > 0 && stockDownloads.stockStatistics.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .6M) // Under valued
                 valuationMetric = 1.025M;
 
 

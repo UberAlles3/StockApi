@@ -25,10 +25,9 @@ namespace YahooLayer
 
         public Color DividendColor = Color.White;
         public Color EPSColor = Color.White;
-        public Color PriceBookColor = Color.White;
         public Color ProfitMarginColor = Color.White;
         public Color OneYearTargetColor = Color.White;
-        public Color ForwardPEColor = Color.White;
+        //public Color ForwardPEColor = Color.White;
         public Color EarningsDateColor = Color.White;
 
         public string _html = "";
@@ -47,14 +46,14 @@ namespace YahooLayer
         public StringSafeType<Decimal> DividendString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> EarningsPerShareString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> ProfitMarginString = new StringSafeType<decimal>("--");
-        public StringSafeType<Decimal> PriceBookString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> OneYearTargetPriceString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> PriceString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> VolatilityString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> YearsRangeLow = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> YearsRangeHigh = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> ForwardPEString = new StringSafeType<decimal>("--");
-        public StringSafeType<Decimal> CalculatedPEString = new StringSafeType<decimal>("--");
+        // moved to statictics
+        //public StringSafeType<Decimal> CalculatedPEString = new StringSafeType<decimal>("--");
         public StringSafeType<DateTime> EarningsDateString = new StringSafeType<DateTime>("--");
 
         public SqlTicker sqlTicker = new SqlTicker();
@@ -63,10 +62,9 @@ namespace YahooLayer
         {
             DividendColor = _normalColor;
             EPSColor = _normalColor;
-            PriceBookColor = _normalColor;
+            //PriceBookColor = _normalColor;
             ProfitMarginColor = _normalColor;
             OneYearTargetColor = _normalColor;
-            ForwardPEColor = _normalColor;
             EarningsDateColor = _normalColor;
         }
 
@@ -148,9 +146,9 @@ namespace YahooLayer
                     }
                 }
 
-                // Price / Book
-                searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
-                PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 2);
+                //// Price / Book
+                //searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
+                //PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 2);
 
                 //Profit Margin %
                 searchTerm = SearchTerms.Find(x => x.Name == "Profit Margin").Term;
@@ -252,26 +250,27 @@ namespace YahooLayer
             else
                 ProfitMarginColor = _normalColor;
 
-            if (PriceBookString.NumericValue > 5)
-                PriceBookColor = Color.Red;
-            else if (PriceBookString.NumericValue < 1)
-                PriceBookColor = Color.Lime;
-            else
-                PriceBookColor = _normalColor;
+            //if (PriceBookString.NumericValue > 5)
+            //    PriceBookColor = Color.Red;
+            //else if (PriceBookString.NumericValue < 1)
+            //    PriceBookColor = Color.Lime;
+            //else
+            //    PriceBookColor = _normalColor;
+
             OneYearTargetColor = _normalColor;
             if (OneYearTargetPriceString.NumericValue < PriceString.NumericValue * .9M)
                 OneYearTargetColor = Color.Red;
             else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
                 OneYearTargetColor = Color.Lime;
 
-            if (ForwardPEString.NumericValue > 50)
-                ForwardPEColor = Color.Red;
-            else if (ForwardPEString.NumericValue < 15)
-                ForwardPEColor = Color.Lime;
-            else
-                ForwardPEColor = _normalColor;
+            //if (ForwardPEString.NumericValue > 50)
+            //    ForwardPEColor = Color.Red;
+            //else if (ForwardPEString.NumericValue < 15)
+            //    ForwardPEColor = Color.Lime;
+            //else
+            //    ForwardPEColor = _normalColor;
 
-            ForwardPEColor = _normalColor;
+            EarningsDateColor = _normalColor;
             if (EarningsDateString.IsDateTime)
             {
                 DateTime dt = (EarningsDateString.DateTimeValue ?? DateTime.Now).Date;
@@ -288,13 +287,13 @@ namespace YahooLayer
         {
             // Combine profit growth and margin into a number
             decimal marginFactor = 1 + (stockDownloads.stockSummary.ProfitMarginString.NumericValue / 100M);
-            stockDownloads.stockSummary.CalculatedPEString.StringValue = (stockDownloads.stockSummary.ForwardPEString.NumericValue / (marginFactor * stockDownloads.stockIncomeStatement.ProfitGrowth)).ToString("0.00");
+            stockDownloads.stockStatistics.CalculatedPEString.StringValue = (stockDownloads.stockStatistics.ForwardPEString.NumericValue / (marginFactor * stockDownloads.stockIncomeStatement.ProfitGrowth)).ToString("0.00");
             stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.FairValue;
 
             //if (_stockSummary.CalculatedPEString.NumericValue > 0 && _stockSummary.CalculatedPEString.NumericValue > (decimal)_stockSummary.AverageSectorPE * 1.3M) // Over valued
-            if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.35M) // Over valued
+            if (stockDownloads.stockStatistics.CalculatedPEString.NumericValue > 0 && stockDownloads.stockStatistics.CalculatedPEString.NumericValue > (decimal)stockDownloads.stockSummary.AverageSectorPE * 1.35M) // Over valued
                 stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.OverValued;
-            else if (stockDownloads.stockSummary.CalculatedPEString.NumericValue > 0 && stockDownloads.stockSummary.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .70M) // Under valued
+            else if (stockDownloads.stockStatistics.CalculatedPEString.NumericValue > 0 && stockDownloads.stockStatistics.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .70M) // Under valued
                 stockDownloads.stockSummary.Valuation = StockSummary.ValuationEnum.UnderValued;
         }
 
@@ -332,7 +331,7 @@ namespace YahooLayer
             sqlSummary.Dividend = (double)source.DividendString.NumericValue;
             sqlSummary.EarningsPerShare = (double)source.EarningsPerShareString.NumericValue;
             sqlSummary.ProfitMargin = (double)source.ProfitMarginString.NumericValue;
-            sqlSummary.PriceBook = (double)source.PriceBookString.NumericValue;
+            //sqlSummary.PriceBook = (double)source.PriceBookString.NumericValue;
             sqlSummary.OneYearTargetPrice = (double)source.OneYearTargetPriceString.NumericValue;
             sqlSummary.Price = (double)source.PriceString.NumericValue;
             sqlSummary.Volatility = (double)source.VolatilityString.NumericValue;
@@ -352,7 +351,7 @@ namespace YahooLayer
             DividendString.NumericValue = (decimal)source.Dividend;
             EarningsPerShareString.NumericValue = (decimal)source.EarningsPerShare;
             ProfitMarginString.NumericValue = (decimal)source.ProfitMargin;
-            PriceBookString.NumericValue = (decimal)source.PriceBook;
+            //PriceBookString.NumericValue = (decimal)source.PriceBook;
             OneYearTargetPriceString.NumericValue = (decimal)source.OneYearTargetPrice;
             PriceString.NumericValue = (decimal)source.Price;
             VolatilityString.NumericValue = (decimal)source.Volatility;

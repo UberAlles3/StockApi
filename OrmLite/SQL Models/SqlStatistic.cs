@@ -19,6 +19,10 @@ namespace SqlLayer.SQL_Models
 
         public double DebtEquity { get; set; }
 
+        public double ForwardPE { get; set; }
+
+        public double PriceBook { get; set; }
+
         public double PegRatio { get; set; }
 
         public double ShortInterest { get; set; }

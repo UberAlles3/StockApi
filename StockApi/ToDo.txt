@@ -7,3 +7,5 @@ Done Excel import get current price from buy or sell price.
 Make new list of Liquidated stock for the Off highs form??
 
 Make Notes menu item StockNotes.txt on desktop??
+
+Add a metric for PE ratio increasing decreasing over time 

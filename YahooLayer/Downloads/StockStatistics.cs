@@ -17,6 +17,8 @@ namespace YahooLayer
         public Color TotalDebtColor = Color.White;
         public Color ShortInterestColor = Color.White;
         public Color DebtEquityColor = Color.White;
+        public Color PriceBookColor = Color.White;
+        public Color ForwardPEColor = Color.White;
         public Color PegRatioColor = Color.White;
 
         /////////////////// TotalCash
@@ -75,6 +77,12 @@ namespace YahooLayer
         public StringSafeType<Decimal> ShortInterestString = new StringSafeType<decimal>("--");
         /// Debt Equity
         public StringSafeType<Decimal> DebtEquityString = new StringSafeType<decimal>("--");
+        /// Forward PE
+        public StringSafeType<Decimal> ForwardPEString = new StringSafeType<decimal>("--");
+        /// Calculated PE
+        public StringSafeType<Decimal> CalculatedPEString = new StringSafeType<decimal>("--");
+        /// Price Book
+        public StringSafeType<Decimal> PriceBookString = new StringSafeType<decimal>("--");
         /// Peg Ratio
         public StringSafeType<Decimal> PegRatioString = new StringSafeType<decimal>("--");
 
@@ -85,6 +93,8 @@ namespace YahooLayer
             TotalDebtColor = _normalColor;
             ShortInterestColor = _normalColor;
             DebtEquityColor = _normalColor;
+            ForwardPEColor = _normalColor;
+            PriceBookColor = _normalColor;
             PegRatioColor = _normalColor;
         }
 
@@ -132,6 +142,18 @@ namespace YahooLayer
                     searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Debt/Equity").Term;
                     DebtEquityString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, YahooFinanceBase.NotApplicable, 2);
 
+                    // Forward P/E
+                    searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Forward P/E").Term;
+                    ForwardPEString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, "1", 2);
+                    if (ForwardPEString.IsNumeric == false)
+                        ForwardPEString.StringValue = "20";
+
+                    // Price / Book
+                    searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
+                    PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, "2", 2);
+                    if (PriceBookString.IsNumeric == false)
+                        PriceBookString.StringValue = "2";
+
                     // Peg Ratio
                     searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == "Peg Ratio").Term;
                     PegRatioString.StringValue = GetValueFromHtmlBySearchTerm(html, searchTerm, "1", 2);
@@ -173,6 +195,21 @@ namespace YahooLayer
                 DebtEquityColor = Color.Lime;
             else
                 DebtEquityColor = _normalColor;
+
+            // Set Colors of Forward PE
+            if (ForwardPEString.NumericValue < 15)
+                ForwardPEColor = Color.Lime;
+            else if (ForwardPEString.NumericValue > 45)
+                ForwardPEColor = Color.Red;
+            else
+                ForwardPEColor = _normalColor;
+
+            if (PriceBookString.NumericValue > 5)
+                PriceBookColor = Color.Red;
+            else if (PriceBookString.NumericValue < 1)
+                PriceBookColor = Color.Lime;
+            else
+                PriceBookColor = _normalColor;
 
             // Set Colors of Peg Ratio
             if (PegRatioString.NumericValue < .75M)
@@ -238,6 +275,8 @@ namespace YahooLayer
             sqlStatistic.Cash = (double)source.TotalCash;
             sqlStatistic.Debt = (double)source.TotalDebt;
             sqlStatistic.DebtEquity = (double)source.DebtEquityString.NumericValue;
+            sqlStatistic.ForwardPE = (double)source.ForwardPEString.NumericValue;
+            sqlStatistic.PriceBook = (double)source.PriceBookString.NumericValue;
             sqlStatistic.PegRatio = (double)source.PegRatioString.NumericValue;
             sqlStatistic.ShortInterest = (double)source.ShortInterestString.NumericValue;
             sqlStatistic.UpdateDate = DateTime.Now;
@@ -254,6 +293,8 @@ namespace YahooLayer
             TotalCashString = DebtEquityString.AbbreviateNumeric((decimal)source.Cash);
             TotalDebtString = DebtEquityString.AbbreviateNumeric((decimal)source.Debt);
             DebtEquityString.NumericValue = (decimal)source.DebtEquity;
+            ForwardPEString.NumericValue = (decimal)source.ForwardPE;
+            PriceBookString.NumericValue = (decimal)source.PriceBook;
             PegRatioString.NumericValue = (decimal)source.PegRatio;
             ShortInterestString.NumericValue = (decimal)source.ShortInterest;
 
