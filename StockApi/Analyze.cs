@@ -499,6 +499,9 @@ namespace StockApi
             // Look for price trends. Topping out or bottoming out. 1 year to 3 months. Last 3 months to today.
             // Slope of 1 year to 3 months ago.
             decimal priceYear    = stockDownloads.stockHistory.HistoricDataYearAgo.Price;
+
+            if (stockDownloads.stockHistory.HistoricDataMonthAgo == null || stockDownloads.stockHistory.HistoricData3MonthsAgo == null)
+                stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(stockDownloads.stockSummary.Ticker, stockDownloads.stockSummary);
             decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
             
             decimal priceMonth   = stockDownloads.stockHistory.HistoricDataMonthAgo.Price;

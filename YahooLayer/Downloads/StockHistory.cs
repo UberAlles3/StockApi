@@ -164,7 +164,7 @@ namespace YahooLayer
 
                 // Last Week
                 findDate = GetMondayIfWeekend(DateTime.Now.AddDays(-7).Date);
-                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1));
+                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(-1));
                 if (stockQuote != null)
                 {
                     HistoricDataWeekAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "W");
@@ -172,7 +172,7 @@ namespace YahooLayer
 
                 //// Last Month
                 findDate = GetMondayIfWeekend(DateTime.Now.AddMonths(-1).Date);
-                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(2));
+                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(-1) || x.QuoteDate.Date == findDate.AddDays(2));
                 if (stockQuote != null)
                 {
                     HistoricDataMonthAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "M");
@@ -180,7 +180,7 @@ namespace YahooLayer
 
                 //// 3 Months Ago
                 findDate = GetMondayIfWeekend(DateTime.Now.AddMonths(-3).Date);
-                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(2));
+                stockQuote = quoteList.Find(x => x.QuoteDate.Date == findDate.Date || x.QuoteDate.Date == findDate.AddDays(1) || x.QuoteDate.Date == findDate.AddDays(-1) || x.QuoteDate.Date == findDate.AddDays(2));
                 if (stockQuote != null)
                 {
                     HistoricData3MonthsAgo = HistoricPriceData.MapFromApiStockQuote(stockQuote, "3M");
