@@ -59,7 +59,9 @@ namespace StockApi
                         lastTrade2 = ExcelManager.JointTradeList.Where(x => x.Symbol == position.Symbol).LastOrDefault();
 
                         // Get latest trade date for this stock in either roll over or joint
-                        if (lastTrade1.TradeDate < lastTrade2.TradeDate)
+                        if(lastTrade2 == null)
+                            lastTrade2 = lastTrade1;
+                        else if (lastTrade1.TradeDate < lastTrade2.TradeDate)
                             lastTrade1.TradeDate = lastTrade2.TradeDate;
 
                         if(lastTrade1.TradeDate < DateTime.Now.AddDays(-20))
