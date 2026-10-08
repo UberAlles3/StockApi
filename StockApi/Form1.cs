@@ -229,7 +229,6 @@ namespace StockApi
             }
 
             PostSummaryWebCall(); // displays the data returned
-
         }
 
         private void btnGetHtml_Click(object sender, EventArgs e)
@@ -376,6 +375,7 @@ namespace StockApi
             pnlNoFinancials.Visible = false;
 
             lblShortInterest.Text = "...";
+            btnJointTrades.Visible = true;
 
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -494,6 +494,9 @@ namespace StockApi
                         txtSharesTraded.Text = "1";
                         txtSharesTradePrice.Text = _stockDownloads.stockSummary.PriceString.NumericValue.ToString("0.00");
                     }
+
+                    if (ExcelManager.JointTradeList.Where(x => x.Symbol == txtStockTicker.Text).Count() < 1)
+                        btnJointTrades.Visible = false;
 
                     if (_stockDownloads.stockSummary.sqlTicker.IsFund == false && _stockDownloads.stockSummary.sqlTicker.IsFund == false)
                     {
@@ -814,6 +817,9 @@ namespace StockApi
             // filter on stock ticker then order by date descending
             tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
             tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
+
+            if (tickerTrades.Count() < 1)
+                return;
 
             TickerTradesDataTable = tickerTrades.Where(r => r[(int)ExcelManager.TradeColumns.QuantityTraded].ToString() != "0").CopyToDataTable();
             ApplyStockSplits(TickerTradesDataTable);
