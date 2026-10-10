@@ -40,7 +40,6 @@ namespace SqlLayer.SQL_Models
 
         public double YearsRangeHigh { get; set; }
 
-        public double ForwardPE { get; set; }
         public DateTime? EarningsDate { get; set; }
 
         public DateTime UpdateDate { get; set; }

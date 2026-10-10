@@ -27,7 +27,6 @@ namespace YahooLayer
         public Color EPSColor = Color.White;
         public Color ProfitMarginColor = Color.White;
         public Color OneYearTargetColor = Color.White;
-        //public Color ForwardPEColor = Color.White;
         public Color EarningsDateColor = Color.White;
 
         public string _html = "";
@@ -51,7 +50,7 @@ namespace YahooLayer
         public StringSafeType<Decimal> VolatilityString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> YearsRangeLow = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> YearsRangeHigh = new StringSafeType<decimal>("--");
-        public StringSafeType<Decimal> ForwardPEString = new StringSafeType<decimal>("--");
+        public StringSafeType<Decimal> ForwardPEString = new StringSafeType<decimal>("--"); // TODO
         // moved to statictics
         //public StringSafeType<Decimal> CalculatedPEString = new StringSafeType<decimal>("--");
         public StringSafeType<DateTime> EarningsDateString = new StringSafeType<DateTime>("--");
@@ -145,10 +144,6 @@ namespace YahooLayer
                         OneYearTargetPriceString.StringValue = PriceString.StringValue;
                     }
                 }
-
-                //// Price / Book
-                //searchTerm = SearchTerms.Find(x => x.Name == "Price/Book").Term;
-                //PriceBookString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 2);
 
                 //Profit Margin %
                 searchTerm = SearchTerms.Find(x => x.Name == "Profit Margin").Term;
@@ -250,25 +245,11 @@ namespace YahooLayer
             else
                 ProfitMarginColor = _normalColor;
 
-            //if (PriceBookString.NumericValue > 5)
-            //    PriceBookColor = Color.Red;
-            //else if (PriceBookString.NumericValue < 1)
-            //    PriceBookColor = Color.Lime;
-            //else
-            //    PriceBookColor = _normalColor;
-
             OneYearTargetColor = _normalColor;
             if (OneYearTargetPriceString.NumericValue < PriceString.NumericValue * .9M)
                 OneYearTargetColor = Color.Red;
             else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
                 OneYearTargetColor = Color.Lime;
-
-            //if (ForwardPEString.NumericValue > 50)
-            //    ForwardPEColor = Color.Red;
-            //else if (ForwardPEString.NumericValue < 15)
-            //    ForwardPEColor = Color.Lime;
-            //else
-            //    ForwardPEColor = _normalColor;
 
             EarningsDateColor = _normalColor;
             if (EarningsDateString.IsDateTime)
@@ -331,13 +312,11 @@ namespace YahooLayer
             sqlSummary.Dividend = (double)source.DividendString.NumericValue;
             sqlSummary.EarningsPerShare = (double)source.EarningsPerShareString.NumericValue;
             sqlSummary.ProfitMargin = (double)source.ProfitMarginString.NumericValue;
-            //sqlSummary.PriceBook = (double)source.PriceBookString.NumericValue;
             sqlSummary.OneYearTargetPrice = (double)source.OneYearTargetPriceString.NumericValue;
             sqlSummary.Price = (double)source.PriceString.NumericValue;
             sqlSummary.Volatility = (double)source.VolatilityString.NumericValue;
             sqlSummary.YearsRangeLow = (double)source.YearsRangeLow.NumericValue;
             sqlSummary.YearsRangeHigh = (double)source.YearsRangeHigh.NumericValue;
-            sqlSummary.ForwardPE = (double)source.ForwardPEString.NumericValue;
             sqlSummary.EarningsDate = source.EarningsDateString.DateTimeValue;
             sqlSummary.UpdateDate = DateTime.Now.Date;
 
@@ -351,13 +330,11 @@ namespace YahooLayer
             DividendString.NumericValue = (decimal)source.Dividend;
             EarningsPerShareString.NumericValue = (decimal)source.EarningsPerShare;
             ProfitMarginString.NumericValue = (decimal)source.ProfitMargin;
-            //PriceBookString.NumericValue = (decimal)source.PriceBook;
             OneYearTargetPriceString.NumericValue = (decimal)source.OneYearTargetPrice;
             PriceString.NumericValue = (decimal)source.Price;
             VolatilityString.NumericValue = (decimal)source.Volatility;
             YearsRangeLow.NumericValue = (decimal)source.YearsRangeLow;
             YearsRangeHigh.NumericValue = (decimal)source.YearsRangeHigh;
-            ForwardPEString.NumericValue = (decimal)source.ForwardPE;
             EarningsDateString.DateTimeValue = source.EarningsDate;
 
             return;

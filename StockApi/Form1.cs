@@ -402,10 +402,9 @@ namespace StockApi
                     lblProfitMargin.ForeColor = _stockDownloads.stockSummary.ProfitMarginColor;
                     lblOneYearTarget.Text = _stockDownloads.stockSummary.OneYearTargetPriceString.StringValue;
                     lblOneYearTarget.ForeColor = _stockDownloads.stockSummary.OneYearTargetColor;
+                    
                     lbl52WeekLow.Text = _stockDownloads.stockSummary.YearsRangeLow.StringValue;
                     lbl52WeekHigh.Text = _stockDownloads.stockSummary.YearsRangeHigh.StringValue;
-                    //lblForwardPE.Text = _stockDownloads.stockSummary.ForwardPEString.NumericValue.ToString();
-                    //lblForwardPE.ForeColor = _stockDownloads.stockSummary.ForwardPEColor;
                     lblForwardPE.Text = _stockDownloads.stockStatistics.ForwardPEString.NumericValue.ToString();
                     lblForwardPE.ForeColor = _stockDownloads.stockStatistics.ForwardPEColor;
                     lblEarningsDate.Text = _stockDownloads.stockSummary.EarningsDateString.DateTimeValue.ToString();
