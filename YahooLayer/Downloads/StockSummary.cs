@@ -59,12 +59,11 @@ namespace YahooLayer
 
         public StockSummary()
         {
-            DividendColor = _normalColor;
-            EPSColor = _normalColor;
-            //PriceBookColor = _normalColor;
-            ProfitMarginColor = _normalColor;
+            DividendColor      = _normalColor;
+            EPSColor           = _normalColor;
+            ProfitMarginColor  = _normalColor;
             OneYearTargetColor = _normalColor;
-            EarningsDateColor = _normalColor;
+            EarningsDateColor  = _normalColor;
         }
 
         ////////////////////////////////////////////
@@ -134,7 +133,7 @@ namespace YahooLayer
                         _marketBeatHtml = await GetHtmlForTicker(_summaryMarketBeatUrl, Ticker);
                         searchTerm = "Average Price Target for";
                         OneYearTargetPriceString.StringValue = GetValueFromHtmlBySearchTerm(_marketBeatHtml, searchTerm, YahooFinanceBase.NotApplicable, 4).Trim().Replace("$", "");
-                        if(OneYearTargetPriceString.StringValue == "--")
+                        if (OneYearTargetPriceString.StringValue == "--")
                         {
                             OneYearTargetPriceString.StringValue = PriceString.StringValue;
                         }
