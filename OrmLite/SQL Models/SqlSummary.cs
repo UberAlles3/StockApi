@@ -28,8 +28,6 @@ namespace SqlLayer.SQL_Models
 
         public double ProfitMargin { get; set; }
 
-        public double PriceBook { get; set; }
-
         public double OneYearTargetPrice { get; set; }
 
         public double Price { get; set; }
