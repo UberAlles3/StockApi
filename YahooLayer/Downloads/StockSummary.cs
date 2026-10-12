@@ -9,9 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
+// Code insync winform/web
 namespace YahooLayer
 {
-    public class StockSummary : YahooFinanceBase
+    public class StockSummary : YahooFinanceBase 
     {
         public enum ValuationEnum
         {
@@ -23,11 +24,11 @@ namespace YahooLayer
         private static readonly string _summaryUrl = "https://finance.yahoo.com/quote/???";
         private static readonly string _summaryMarketBeatUrl = "https://www.marketbeat.com/stocks/NYSE/???/";
 
-        public Color DividendColor = Color.White;
-        public Color EPSColor = Color.White;
-        public Color ProfitMarginColor = Color.White;
-        public Color OneYearTargetColor = Color.White;
-        public Color EarningsDateColor = Color.White;
+        public Color DividendColor      = YahooFinanceBase.ForeColor;
+        public Color EPSColor           = YahooFinanceBase.ForeColor;
+        public Color ProfitMarginColor  = YahooFinanceBase.ForeColor;
+        public Color OneYearTargetColor = YahooFinanceBase.ForeColor;
+        public Color EarningsDateColor  = YahooFinanceBase.ForeColor;
 
         public string _html = "";
         public string _marketBeatHtml = "";
@@ -50,9 +51,6 @@ namespace YahooLayer
         public StringSafeType<Decimal> VolatilityString = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> YearsRangeLow = new StringSafeType<decimal>("--");
         public StringSafeType<Decimal> YearsRangeHigh = new StringSafeType<decimal>("--");
-        public StringSafeType<Decimal> ForwardPEString = new StringSafeType<decimal>("--"); // TODO
-        // moved to statictics
-        //public StringSafeType<Decimal> CalculatedPEString = new StringSafeType<decimal>("--");
         public StringSafeType<DateTime> EarningsDateString = new StringSafeType<DateTime>("--");
 
         public SqlTicker sqlTicker = new SqlTicker();
@@ -168,10 +166,6 @@ namespace YahooLayer
                     YearsRangeHigh.StringValue = PriceString.StringValue;
                 }
 
-                // Forward P/E
-                searchTerm = SearchTerms.Find(x => x.Name == "Forward P/E").Term;
-                ForwardPEString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 2);
-
                 // Earnings Date
                 searchTerm = SearchTerms.Find(x => x.Name == "Earnings Date").Term;
                 EarningsDateString.StringValue = GetValueFromHtmlBySearchTerm(_html, searchTerm, YahooFinanceBase.NotApplicable, 3);
@@ -207,8 +201,11 @@ namespace YahooLayer
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"{ex.Message}  {ex.StackTrace}");
-                    Debug.WriteLine($"GetStockData() {ex.Message}");
+                    Error = $"******ERROR **********\r\nGetStockData()\r\n  {ticker} {searchTerm}\r\n  { ex.StackTrace}\r\n";
+                    logger.Error(Error);
+                    LastException = ex;
+                    Debug.WriteLine(Error);
+                    throw ex;
                 }
 
                 CompanyOverview = longest._TrimSuffix("</");
@@ -220,10 +217,11 @@ namespace YahooLayer
             }
             catch (Exception ex)
             {
-                logger.Error($"******ERROR**********\r\n   {ex.StackTrace}\r\n   {ex.StackTrace}\r\n");
+                Error = $"******ERROR **********\r\nGetStockData()\r\n  {ticker} {searchTerm}\r\n  { ex.StackTrace}\r\n";
+                logger.Error(Error);
                 LastException = ex;
-                Error = "GetSummaryData() " + ticker + " " + searchTerm;
-                Debug.WriteLine("Error!");
+                Debug.WriteLine(Error);
+                throw ex;
             }
 
             //*******************

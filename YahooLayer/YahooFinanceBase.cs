@@ -12,11 +12,12 @@ namespace YahooLayer
 {
     public class YahooFinanceBase
     {
+        public static Color ForeColor = Color.White; // WebWinFormDiff
+        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinanceBase)); // WebWinFormDiff
+
         public static string NotApplicable = "N/A";
-        //private static readonly object syncObj = new object();
         private static string _ticker;
         private static List<SearchTerm> searchTerms = null; // singleton instance, load once
-        public static readonly ILog logger = LogManager.GetLogger(typeof(YahooFinanceBase));
         protected static Color _normalColor = Color.LightSteelBlue;
 
         public string Ticker
