@@ -17,8 +17,8 @@ namespace StockApi
 
         public string UrlSC10Day = "https://stockcharts.com/c-sc/sc?s=?ticker?&p=D&b=1&g=100&yr=1&mn=0&dy=0&i=p45662470291";
         public string UrlSC1Year = "https://stockcharts.com/c-sc/sc?s=?ticker?&p=D&b=1&g=2&yr=1&mn=0&dy=0&i=p45662470291";
-        public string UrlSC3Year = "https://stockcharts.com/c-sc/sc?s=?ticker?&p=D&b=1&g=1&yr=1&mn=0&dy=0&i=p45662470291";
-        public string UrlSC5Year = "https://charts2.finviz.com/chart.ashx?t=?ticker?&ty=c&ta=0&p=m&s=l";
+        public string UrlSC3Year = "https://stockcharts.com/c-sc/sc?s=?ticker?&p=D&b=1&g=0&yr=1&mn=0&dy=0&i=p45662470291";
+        public string UrlSC15Year = "https://stockcharts.com/c-sc/sc?s=?ticker?&p=W&b=1&g=0&yr=1&mn=0&dy=0&i=p45662470291";
 
 
         // finviz https://charts2.finviz.com/chart.ashx?t=aapl&ty=l&ta=0&p=d&s=l
@@ -88,7 +88,7 @@ namespace StockApi
             }
             else if (Period == 3)
             {
-                Url = UrlSC5Year.Replace("?ticker?", Ticker);
+                Url = UrlSC15Year.Replace("?ticker?", Ticker);
             }
 
             this.Width = 1000;
