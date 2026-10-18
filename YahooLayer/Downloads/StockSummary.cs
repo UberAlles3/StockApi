@@ -176,7 +176,6 @@ namespace YahooLayer
                 string htmlSnippet = GetPartialHtmlFromHtmlBySearchTerm(_html, searchTerm, 6000);
                 htmlSnippet = HttpUtility.HtmlDecode(htmlSnippet);
                 string[] parts = htmlSnippet.Split('>');
-                string longest = parts.OrderByDescending(s => s.Length).First();
 
                 try
                 {
@@ -207,6 +206,12 @@ namespace YahooLayer
                     Debug.WriteLine(Error);
                     throw ex;
                 }
+
+                parts = parts.Where(x => x.Substring(0, 1) != "<").ToArray<string>();
+                parts = parts.Where(x => x.Substring(0, 2) != " <").ToArray<string>();
+                parts = parts.Where(x => x.Substring(0, 3) != "  <").ToArray<string>();
+                parts = parts.Where(x => x.Substring(0, 4) != "   <").ToArray<string>();
+                string longest = parts.OrderByDescending(s => s.Length).First();
 
                 CompanyOverview = longest._TrimSuffix("</");
 
