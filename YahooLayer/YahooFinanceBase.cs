@@ -391,6 +391,10 @@ namespace YahooLayer
     {
         public string Name { get; set; }
         public string Term { get; set; }
+        public override string ToString()
+        {
+            return $"Name: {Name}, Term: {Term}";
+        }
     }
 }
 
