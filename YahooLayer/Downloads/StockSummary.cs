@@ -207,11 +207,14 @@ namespace YahooLayer
                     throw ex;
                 }
 
+                parts = parts.Where(x => x.Length > 5).ToArray<string>();
                 parts = parts.Where(x => x.Substring(0, 1) != "<").ToArray<string>();
                 parts = parts.Where(x => x.Substring(0, 2) != " <").ToArray<string>();
                 parts = parts.Where(x => x.Substring(0, 3) != "  <").ToArray<string>();
                 parts = parts.Where(x => x.Substring(0, 4) != "   <").ToArray<string>();
-                string longest = parts.OrderByDescending(s => s.Length).First();
+                string longest = "No company description";
+                if (parts.Length > 0)
+                    longest = parts.OrderByDescending(s => s.Length).First();
 
                 CompanyOverview = longest._TrimSuffix("</");
 
