@@ -648,6 +648,22 @@ namespace StockApi
             }
         }
 
+
+
+
+
+        private void btnPriceTrendData_Click(object sender, EventArgs e)
+        {
+
+
+
+
+
+
+
+
+        }
+
         private void btnGetMetricTrend_Click(object sender, EventArgs e)
         {
             MetricsForm form = new MetricsForm(txtStockTicker.Text);
@@ -810,8 +826,20 @@ namespace StockApi
             int DateColumn = 0;
             DateTime outDate = DateTime.Now;
             EnumerableRowCollection<DataRow> tickerTrades;
+            DataTable tradesDataTable = null;
 
-            DataTable tradesDataTable = ExcelManager.JointTradesDataTable;
+            if (btnJointTrades.Text == "Joint Trades")
+            {
+                tradesDataTable = ExcelManager.JointTradesDataTable;
+                btnJointTrades.Text = "Rollover Trades";
+                lblTrades.Text = "Joint Trades";
+            }
+            else
+            {
+                tradesDataTable = ExcelManager.TradesDataTable;
+                btnJointTrades.Text = "Joint Trades";
+                lblTrades.Text = "Rollover Trades";
+            }
 
             // filter on stock ticker then order by date descending
             tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());

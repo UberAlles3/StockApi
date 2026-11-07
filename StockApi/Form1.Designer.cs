@@ -30,11 +30,11 @@ namespace StockApi
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnGetOne = new System.Windows.Forms.Button();
             this.txtStockTicker = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -167,7 +167,7 @@ namespace StockApi
             this.label40 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
             this.label42 = new System.Windows.Forms.Label();
-            this.label43 = new System.Windows.Forms.Label();
+            this.lblTrades = new System.Windows.Forms.Label();
             this.label45 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.txtMovementTargetPercent = new System.Windows.Forms.TextBox();
@@ -216,6 +216,7 @@ namespace StockApi
             this.tradeMonitorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.offHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.watchOffHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jointOffHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.incomeStatementToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -226,6 +227,7 @@ namespace StockApi
             this.excelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.btnPriceTrendData = new System.Windows.Forms.Button();
             this.label37 = new System.Windows.Forms.Label();
             this.radJointTrade = new System.Windows.Forms.RadioButton();
             this.radRolloverTrade = new System.Windows.Forms.RadioButton();
@@ -252,7 +254,6 @@ namespace StockApi
             this.panel4 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.jointOffHighsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panelFinancials.SuspendLayout();
             this.pnlNoFinancials.SuspendLayout();
@@ -1602,25 +1603,25 @@ namespace StockApi
             this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridView1.Location = new System.Drawing.Point(10, 69);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -1693,9 +1694,9 @@ namespace StockApi
             // btnAnalyze
             // 
             this.btnAnalyze.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAnalyze.Location = new System.Drawing.Point(96, 144);
+            this.btnAnalyze.Location = new System.Drawing.Point(16, 143);
             this.btnAnalyze.Name = "btnAnalyze";
-            this.btnAnalyze.Size = new System.Drawing.Size(179, 28);
+            this.btnAnalyze.Size = new System.Drawing.Size(157, 28);
             this.btnAnalyze.TabIndex = 12;
             this.btnAnalyze.Text = "Analyze for Next Trades";
             this.btnAnalyze.UseVisualStyleBackColor = true;
@@ -1727,7 +1728,7 @@ namespace StockApi
             this.panel2.Controls.Add(this.label41);
             this.panel2.Controls.Add(this.pic3YearTrend);
             this.panel2.Controls.Add(this.label42);
-            this.panel2.Controls.Add(this.label43);
+            this.panel2.Controls.Add(this.lblTrades);
             this.panel2.Controls.Add(this.label45);
             this.panel2.Controls.Add(this.dataGridView1);
             this.panel2.Controls.Add(this.picMonthTrend);
@@ -1854,25 +1855,25 @@ namespace StockApi
             this.dataGridView2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(13)))), ((int)(((byte)(20)))));
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.ColumnHeadersVisible = false;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridView2.Location = new System.Drawing.Point(8, 407);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 25;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -1909,16 +1910,16 @@ namespace StockApi
             this.label42.TabIndex = 38;
             this.label42.Text = "Date";
             // 
-            // label43
+            // lblTrades
             // 
-            this.label43.BackColor = System.Drawing.Color.Transparent;
-            this.label43.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label43.Location = new System.Drawing.Point(10, 347);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(383, 29);
-            this.label43.TabIndex = 40;
-            this.label43.Text = "Trades";
-            this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTrades.BackColor = System.Drawing.Color.Transparent;
+            this.lblTrades.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTrades.Location = new System.Drawing.Point(10, 347);
+            this.lblTrades.Name = "lblTrades";
+            this.lblTrades.Size = new System.Drawing.Size(280, 29);
+            this.lblTrades.TabIndex = 40;
+            this.lblTrades.Text = "Rollover Trades";
+            this.lblTrades.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label45
             // 
@@ -2428,6 +2429,15 @@ namespace StockApi
             this.watchOffHighsToolStripMenuItem.Text = "Watch List Off Highs";
             this.watchOffHighsToolStripMenuItem.Click += new System.EventHandler(this.watchOffHighsToolStripMenuItem_Click);
             // 
+            // jointOffHighsToolStripMenuItem
+            // 
+            this.jointOffHighsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
+            this.jointOffHighsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.jointOffHighsToolStripMenuItem.Name = "jointOffHighsToolStripMenuItem";
+            this.jointOffHighsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.jointOffHighsToolStripMenuItem.Text = "Joint Off Highs";
+            this.jointOffHighsToolStripMenuItem.Click += new System.EventHandler(this.jointOffHighsToolStripMenuItem_Click);
+            // 
             // refreshToolStripMenuItem
             // 
             this.refreshToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -2512,6 +2522,7 @@ namespace StockApi
             // 
             this.panel3.BackColor = System.Drawing.Color.Transparent;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.btnPriceTrendData);
             this.panel3.Controls.Add(this.label37);
             this.panel3.Controls.Add(this.radJointTrade);
             this.panel3.Controls.Add(this.radRolloverTrade);
@@ -2541,6 +2552,17 @@ namespace StockApi
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(380, 674);
             this.panel3.TabIndex = 23;
+            // 
+            // btnPriceTrendData
+            // 
+            this.btnPriceTrendData.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnPriceTrendData.Location = new System.Drawing.Point(204, 143);
+            this.btnPriceTrendData.Name = "btnPriceTrendData";
+            this.btnPriceTrendData.Size = new System.Drawing.Size(157, 28);
+            this.btnPriceTrendData.TabIndex = 58;
+            this.btnPriceTrendData.Text = "Price Trend Data";
+            this.btnPriceTrendData.UseVisualStyleBackColor = true;
+            this.btnPriceTrendData.Click += new System.EventHandler(this.btnPriceTrendData_Click);
             // 
             // label37
             // 
@@ -2847,15 +2869,6 @@ namespace StockApi
             this.label7.Text = "Markets";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // jointOffHighsToolStripMenuItem
-            // 
-            this.jointOffHighsToolStripMenuItem.BackColor = System.Drawing.Color.Black;
-            this.jointOffHighsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.jointOffHighsToolStripMenuItem.Name = "jointOffHighsToolStripMenuItem";
-            this.jointOffHighsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
-            this.jointOffHighsToolStripMenuItem.Text = "Joint Off Highs";
-            this.jointOffHighsToolStripMenuItem.Click += new System.EventHandler(this.jointOffHighsToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AcceptButton = this.btnGetOne;
@@ -3001,7 +3014,7 @@ namespace StockApi
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label lblTrades;
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label47;
@@ -3142,6 +3155,7 @@ namespace StockApi
         private System.Windows.Forms.RadioButton radRolloverTrade;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.ToolStripMenuItem jointOffHighsToolStripMenuItem;
+        private System.Windows.Forms.Button btnPriceTrendData;
     }
 }
 

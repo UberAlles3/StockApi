@@ -40,7 +40,8 @@ namespace StockApi
             this.textBox1.Location = new System.Drawing.Point(12, 83);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(776, 504);
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.Size = new System.Drawing.Size(776, 605);
             this.textBox1.TabIndex = 0;
             // 
             // btnParse
@@ -84,7 +85,7 @@ namespace StockApi
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(64)))), ((int)(((byte)(128)))));
-            this.ClientSize = new System.Drawing.Size(800, 599);
+            this.ClientSize = new System.Drawing.Size(800, 700);
             this.Controls.Add(this.radAccount2);
             this.Controls.Add(this.radAccount1);
             this.Controls.Add(this.btnParse);
