@@ -237,31 +237,31 @@ namespace YahooLayer
             //*******************
             DividendColor = _normalColor;
             if (DividendString.NumericValue > 1.5M)
-                DividendColor = Color.Lime;
+                DividendColor = _goodColor;
             EPSColor = _normalColor;
             if (EarningsPerShareString.NumericValue < -1)
-                EPSColor = Color.Red;
+                EPSColor = _badColor;
             else if (EarningsPerShareString.NumericValue > 1)
-                EPSColor = Color.Lime;
+                EPSColor = _goodColor;
             if (ProfitMarginString.NumericValue < -2)
-                ProfitMarginColor = Color.Red;
+                ProfitMarginColor = _badColor;
             else if (ProfitMarginString.NumericValue > 2)
-                ProfitMarginColor = Color.Lime;
+                ProfitMarginColor = _goodColor;
             else
                 ProfitMarginColor = _normalColor;
 
             OneYearTargetColor = _normalColor;
             if (OneYearTargetPriceString.NumericValue < PriceString.NumericValue * .9M)
-                OneYearTargetColor = Color.Red;
+                OneYearTargetColor = _badColor;
             else if (OneYearTargetPriceString.NumericValue > PriceString.NumericValue * 1.1M)
-                OneYearTargetColor = Color.Lime;
+                OneYearTargetColor = _goodColor;
 
             EarningsDateColor = _normalColor;
             if (EarningsDateString.IsDateTime)
             {
                 DateTime dt = (EarningsDateString.DateTimeValue ?? DateTime.Now).Date;
                 if (dt == DateTime.Now.Date)
-                    EarningsDateColor = Color.Lime;
+                    EarningsDateColor = _goodColor;
                 else if (dt == DateTime.Now.AddDays(1).Date)
                     EarningsDateColor = Color.LightGreen;
             }

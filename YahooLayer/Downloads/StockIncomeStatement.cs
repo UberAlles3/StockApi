@@ -163,16 +163,16 @@ namespace YahooLayer
             //                   Set Colors
             // Set Colors of Revenue (if revenue decreasing by 5% every 2 years, a problem
             if (RevenueTtmString.NumericValue < (Revenue2String.NumericValue * .95M))
-                RevenueTtmColor = Color.Red;
+                RevenueTtmColor = _badColor;
             else if (RevenueTtmString.NumericValue > (Revenue2String.NumericValue * 1.05M))
-                RevenueTtmColor = Color.Lime;
+                RevenueTtmColor = _goodColor;
             else
                 RevenueTtmColor = _normalColor;
 
             if (Revenue2String.NumericValue < (Revenue4String.NumericValue * .95M))
-                Revenue2Color = Color.Red;
+                Revenue2Color = _badColor;
             else if (Revenue2String.NumericValue > (Revenue4String.NumericValue * 1.05M))
-                Revenue2Color = Color.Lime;
+                Revenue2Color = _goodColor;
             else
                 Revenue2Color = _normalColor;
 
@@ -180,16 +180,16 @@ namespace YahooLayer
             if (RevenueTtmString.NumericValue > 0) // && CostOfRevenueTtmString.NumericValue > 0 && CostOfRevenue4String.NumericValue > 0 <-- Why was this in there?
             {
                 if (ProfitTtmString.NumericValue < Profit2String.NumericValue * .9M)
-                    ProfitTtmColor = Color.Red;
+                    ProfitTtmColor = _badColor;
                 else if (ProfitTtmString.NumericValue > (Profit2String.NumericValue * 1.11M))
-                    ProfitTtmColor = Color.Lime;
+                    ProfitTtmColor = _goodColor;
                 else
                     ProfitTtmColor = _normalColor;
 
                 if (Profit2String.NumericValue < (Profit4String.NumericValue * .9M))
-                    Profit2YearsAgoColor = Color.Red;
+                    Profit2YearsAgoColor = _badColor;
                 else if (Profit2String.NumericValue > (Profit4String.NumericValue * 1.11M))
-                    Profit2YearsAgoColor = Color.Lime;
+                    Profit2YearsAgoColor = _goodColor;
                 else
                     Profit2YearsAgoColor = _normalColor;
             }
@@ -198,18 +198,18 @@ namespace YahooLayer
             if (BasicEpsTtmString.NumericValue > 0)
             {   // TTM
                 if (BasicEpsTtmString.NumericValue < BasicEps2String.NumericValue * .9M)
-                    BasicEpsTtmColor = Color.Red;
+                    BasicEpsTtmColor = _badColor;
                 else if (BasicEpsTtmString.NumericValue > (BasicEps2String.NumericValue * 1.11M))
-                    BasicEpsTtmColor = Color.Lime;
+                    BasicEpsTtmColor = _goodColor;
                 else
                     BasicEpsTtmColor = _normalColor;
             }
             else
             {
                 if ((BasicEpsTtmString.NumericValue + 10) < (BasicEps2String.NumericValue + 10) * .96M)
-                    BasicEpsTtmColor = Color.Red;
+                    BasicEpsTtmColor = _badColor;
                 else if ((BasicEpsTtmString.NumericValue + 10) > (BasicEps2String.NumericValue + 10) * 1.04M)
-                    BasicEpsTtmColor = Color.Lime;
+                    BasicEpsTtmColor = _goodColor;
                 else
                     BasicEpsTtmColor = _normalColor;
             }
@@ -217,18 +217,18 @@ namespace YahooLayer
             {
                 // 2 years ago
                 if (BasicEps2String.NumericValue < (BasicEps4String.NumericValue * .9M))
-                    BasicEps2Color = Color.Red;
+                    BasicEps2Color = _badColor;
                 else if (BasicEps2String.NumericValue > (BasicEps4String.NumericValue * 1.11M))
-                    BasicEps2Color = Color.Lime;
+                    BasicEps2Color = _goodColor;
                 else
                     BasicEps2Color = _normalColor;
             }
             else
             {
                 if ((BasicEps2String.NumericValue + 10) < (BasicEps4String.NumericValue + 10) * .96M)
-                    BasicEps2Color = Color.Red;
+                    BasicEps2Color = _badColor;
                 else if ((BasicEps2String.NumericValue + 10) > (BasicEps4String.NumericValue + 10) * 1.04M)
-                    BasicEps2Color = Color.Lime;
+                    BasicEps2Color = _goodColor;
                 else
                     BasicEps2Color = _normalColor;
             }

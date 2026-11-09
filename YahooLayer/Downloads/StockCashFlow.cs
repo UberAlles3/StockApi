@@ -114,16 +114,16 @@ namespace YahooLayer
             //                   Set Colors
             // Set Colors of Revenue (if revenue decreasing by 5% every 2 years, a problem
             if (FreeCashFlowTtmString.NumericValue < (FreeCashFlow2String.NumericValue * .95M))
-                FreeCashFlowTtmColor = Color.Red;
+                FreeCashFlowTtmColor = _badColor;
             else if (FreeCashFlowTtmString.NumericValue > (FreeCashFlow2String.NumericValue * 1.05M))
-                FreeCashFlowTtmColor = Color.Lime;
+                FreeCashFlowTtmColor = _goodColor;
             else
                 FreeCashFlowTtmColor = _normalColor;
 
             if (FreeCashFlow2String.NumericValue < (FreeCashFlow4String.NumericValue * .95M))
-                FreeCashFlow2Color = Color.Red;
+                FreeCashFlow2Color = _badColor;
             else if (FreeCashFlow2String.NumericValue > (FreeCashFlow4String.NumericValue * 1.05M))
-                FreeCashFlow2Color = Color.Lime;
+                FreeCashFlow2Color = _goodColor;
             else
                 FreeCashFlow2Color = _normalColor;
 
@@ -131,16 +131,16 @@ namespace YahooLayer
             if (FreeCashFlowTtmString.NumericValue > 0) // && CostOfRevenueTtmString.NumericValue > 0 && CostOfRevenue4String.NumericValue > 0 <-- Why was this in there?
             {
                 if (EndCashPositionTtmString.NumericValue < EndCashPosition2String.NumericValue * .9M)
-                    EndCashPositionTtmColor = Color.Red;
+                    EndCashPositionTtmColor = _badColor;
                 else if (EndCashPositionTtmString.NumericValue > (EndCashPosition2String.NumericValue * 1.11M))
-                    EndCashPositionTtmColor = Color.Lime;
+                    EndCashPositionTtmColor = _goodColor;
                 else
                     EndCashPositionTtmColor = _normalColor;
 
                 if (EndCashPosition2String.NumericValue < (EndCashPosition4String.NumericValue * .9M))
-                    EndCashPosition2Color = Color.Red;
+                    EndCashPosition2Color = _badColor;
                 else if (EndCashPosition2String.NumericValue > (EndCashPosition4String.NumericValue * 1.11M))
-                    EndCashPosition2Color = Color.Lime;
+                    EndCashPosition2Color = _goodColor;
                 else
                     EndCashPosition2Color = _normalColor;
             }
@@ -149,18 +149,18 @@ namespace YahooLayer
             if (OperatingCashFlowTtmString.NumericValue > 0)
             {   // TTM
                 if (OperatingCashFlowTtmString.NumericValue < OperatingCashFlow2String.NumericValue * .9M)
-                    OperatingCashFlowTtmColor = Color.Red;
+                    OperatingCashFlowTtmColor = _badColor;
                 else if (OperatingCashFlowTtmString.NumericValue > (OperatingCashFlow2String.NumericValue * 1.11M))
-                    OperatingCashFlowTtmColor = Color.Lime;
+                    OperatingCashFlowTtmColor = _goodColor;
                 else
                     OperatingCashFlowTtmColor = _normalColor;
             }
             else
             {
                 if ((OperatingCashFlowTtmString.NumericValue + 10) < (OperatingCashFlow2String.NumericValue + 10) * .96M)
-                    OperatingCashFlowTtmColor = Color.Red;
+                    OperatingCashFlowTtmColor = _badColor;
                 else if ((OperatingCashFlowTtmString.NumericValue + 10) > (OperatingCashFlow2String.NumericValue + 10) * 1.04M)
-                    OperatingCashFlowTtmColor = Color.Lime;
+                    OperatingCashFlowTtmColor = _goodColor;
                 else
                     OperatingCashFlowTtmColor = _normalColor;
             }
@@ -168,18 +168,18 @@ namespace YahooLayer
             {
                 // 2 years ago
                 if (OperatingCashFlow2String.NumericValue < (OperatingCashFlow4String.NumericValue * .9M))
-                    OperatingCashFlow2Color = Color.Red;
+                    OperatingCashFlow2Color = _badColor;
                 else if (OperatingCashFlow2String.NumericValue > (OperatingCashFlow4String.NumericValue * 1.11M))
-                    OperatingCashFlow2Color = Color.Lime;
+                    OperatingCashFlow2Color = _goodColor;
                 else
                     OperatingCashFlow2Color = _normalColor;
             }
             else
             {
                 if ((OperatingCashFlow2String.NumericValue + 10) < (OperatingCashFlow4String.NumericValue + 10) * .96M)
-                    OperatingCashFlow2Color = Color.Red;
+                    OperatingCashFlow2Color = _badColor;
                 else if ((OperatingCashFlow2String.NumericValue + 10) > (OperatingCashFlow4String.NumericValue + 10) * 1.04M)
-                    OperatingCashFlow2Color = Color.Lime;
+                    OperatingCashFlow2Color = _goodColor;
                 else
                     OperatingCashFlow2Color = _normalColor;
             }

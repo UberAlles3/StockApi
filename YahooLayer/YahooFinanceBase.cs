@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ namespace YahooLayer
         private static string _ticker;
         private static List<SearchTerm> searchTerms = null; // singleton instance, load once
         protected static Color _normalColor = Color.LightSteelBlue;
+        protected static Color _goodColor = Color.Lime;
+        protected static Color _badColor = Color.Red;
 
         public string Ticker
         {
@@ -147,13 +150,15 @@ namespace YahooLayer
         protected static List<string> GetNumbersFromHtml(string partial)
         {
             var numbers = new List<string>();
-            string[] split = partial.Split(">");
-            string num;
+            string[] split = GetTextValuesFromHtml(partial); string num;
+            split = split.Where(s => !string.IsNullOrEmpty(s.Trim())).ToArray();
+
+
             foreach (string s in split)
             {
-                if (s.Length > 1 && "-0123456789.".IndexOf(s.Substring(0, 1)) > -1 && "0123456789.,".IndexOf(s.Substring(1, 1)) > -1)
+                if (s.Length > 1 && "-0123456789.".IndexOf(s.TrimStart().Substring(0, 1)) > -1 && "0123456789.,".IndexOf(s.TrimStart().Substring(1, 1)) > -1)
                 {
-                    num = s.Substring(0, s.IndexOf("<"));
+                    num = s.TrimStart();
                     numbers.Add(num);
                 }
                 if (numbers.Count > 5)
@@ -162,6 +167,21 @@ namespace YahooLayer
 
             return numbers;
         }
+
+        private static string[] GetTextValuesFromHtml(string partial)
+        {
+
+            string[] split = partial.Split(">");
+            string[] t = new string[10];
+
+            for (int i = 0; i < split.Length; i++)
+            {
+                split[i] = split[i]._TrimSuffix("<");
+            }
+
+            return split;
+        }
+
 
         protected static string GetValueFromHtmlBySearchTerm(string html, string searchText, string defaultValue, int tagPosition)
         {
@@ -214,7 +234,7 @@ namespace YahooLayer
             List<string> numbers;
 
             searchTerm = YahooFinanceBase.SearchTerms.Find(x => x.Name == searchTerm).Term;
-            partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 320);
+            partial = GetPartialHtmlFromHtmlBySearchTerm(html, searchTerm, 640);
 
             if (partial.Length < 100) // Some stocks like Vangaurd don't have cash flow, exit
             {

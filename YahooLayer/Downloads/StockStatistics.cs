@@ -182,56 +182,56 @@ namespace YahooLayer
 
             // Set Colors of Total Debt
             if (TotalDebt > TotalCash * 1.6M)
-                TotalDebtColor = Color.Red;
+                TotalDebtColor = _badColor;
             else if (TotalDebt < TotalCash * .6M)
-                TotalDebtColor = Color.Lime;
+                TotalDebtColor = _goodColor;
             else
                 TotalDebtColor = _normalColor;
 
             // Set Colors of Debt Equity
             if (DebtEquityString.NumericValue > 60)
-                DebtEquityColor = Color.Red;
+                DebtEquityColor = _badColor;
             else if (DebtEquityString.NumericValue < 35)
-                DebtEquityColor = Color.Lime;
+                DebtEquityColor = _goodColor;
             else
                 DebtEquityColor = _normalColor;
 
             // Set Colors of Forward PE
             if (ForwardPEString.NumericValue < 15)
-                ForwardPEColor = Color.Lime;
+                ForwardPEColor = _goodColor;
             else if (ForwardPEString.NumericValue > 45)
-                ForwardPEColor = Color.Red;
+                ForwardPEColor = _badColor;
             else
                 ForwardPEColor = _normalColor;
 
             if (PriceBookString.NumericValue > 5)
-                PriceBookColor = Color.Red;
+                PriceBookColor = _badColor;
             else if (PriceBookString.NumericValue < 1)
-                PriceBookColor = Color.Lime;
+                PriceBookColor = _goodColor;
             else
                 PriceBookColor = _normalColor;
 
             // Set Colors of Peg Ratio
             if (PegRatioString.NumericValue < .75M)
-                PegRatioColor = Color.Lime;
+                PegRatioColor = _goodColor;
             else if (PegRatioString.NumericValue > 1.5M)
-                PegRatioColor = Color.Red;
+                PegRatioColor = _badColor;
             else
                 PegRatioColor = _normalColor;
 
             // Set Colors of Short Interest
             if (ShortInterestString.NumericValue > 8)
-                ShortInterestColor = Color.Red;
+                ShortInterestColor = _badColor;
             else if (ShortInterestString.NumericValue < 2 && TotalDebt != 0)
-                ShortInterestColor = Color.Lime;
+                ShortInterestColor = _goodColor;
             else
                 ShortInterestColor = _normalColor;
 
             // Set Colors of Total Debt
             if (TotalDebt > TotalCash * 1.6M)
-                TotalDebtColor = Color.Red;
+                TotalDebtColor = _badColor;
             else if (TotalDebt < TotalCash * .6M)
-                TotalDebtColor = Color.Lime;
+                TotalDebtColor = _goodColor;
             else
                 TotalDebtColor = _normalColor;
 
