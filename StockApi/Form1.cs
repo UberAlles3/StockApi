@@ -1045,6 +1045,13 @@ namespace StockApi
             btnGetOne_click(null, null);
         }
 
+        private void cashFlowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SqlCrudOperations _finacialStatement = new SqlCrudOperations();
+            _finacialStatement.DeleteCashFlow(txtStockTicker.Text);
+            btnGetOne_click(null, null);
+        }
+
         private void earningDatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();

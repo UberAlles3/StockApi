@@ -204,6 +204,20 @@ namespace SqlLayer
             return;
         }
 
+        public void DeleteCashFlow(string ticker)
+        {
+            Debug.WriteLine("DeleteCashFlow()");
+
+            var factory = FinancialStatementFactory();
+            using (IDbConnection db = factory.OpenDbConnection())
+            {
+                db.CreateTableIfNotExists<SqlCashFlow>();
+                db.Delete<SqlCashFlow>(x => x.Ticker == ticker);
+            }
+
+            return;
+        }
+
         //////////////////////////////////////////////////////////////
         ///                        Price History
         public List<SqlPriceHistory> GetPriceHistoryList(string ticker)
