@@ -244,14 +244,14 @@ namespace StockApi
             ///////////////////////////////////
             ///      Save to SQL Server
             SqlMetric sqlMetric = new SqlMetric();
-            sqlMetric.BasicEps = (double)BasicEpsMetric;
-            sqlMetric.CashDebt = (double)CashDebtMetric;
-            sqlMetric.PegRatio = (double)PegRatioMetric;
-            sqlMetric.CashFlow = (double)FinalCashFlowMetric;
-            sqlMetric.Dividend = (double)DividendMetric;
+            sqlMetric.BasicEps     = (double)BasicEpsMetric;
+            sqlMetric.CashDebt     = (double)CashDebtMetric;
+            sqlMetric.PegRatio     = (double)PegRatioMetric;
+            sqlMetric.CashFlow     = (double)FinalCashFlowMetric;
+            sqlMetric.Dividend     = (double)DividendMetric;
             sqlMetric.EarningsPerShare = (double)EarningsPerShareMetric;
-            sqlMetric.FinalMetric = (double)FinalMetric;
-            sqlMetric.Month = DateTime.Now.Month;
+            sqlMetric.FinalMetric  = (double)FinalMetric;
+            sqlMetric.Month        = DateTime.Now.Month;
             sqlMetric.PriceBook    = (double)PriceBookMetric;
             sqlMetric.PriceTrend   = (double)PriceTrendMetric;
             sqlMetric.Profit       = (double)ProfitMetric;
