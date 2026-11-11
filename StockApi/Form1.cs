@@ -376,6 +376,8 @@ namespace StockApi
 
             lblShortInterest.Text = "...";
             btnJointTrades.Visible = true;
+            btnJointTrades.Text = "Joint Trades";
+            lblTrades.Text = "Rollover Trades";
 
             Cursor.Current = Cursors.WaitCursor;
         }

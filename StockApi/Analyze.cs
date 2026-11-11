@@ -27,6 +27,10 @@ namespace StockApi
         public string AnalysisMetricsOutputText;
         private static string _ticker = "";
 
+        public decimal PriceTrendMetric = 1M;
+        public decimal TargetPriceMetric = 1M;
+        public decimal EarningsPerShareMetric = 1M;
+
         public decimal AnalyzeStockData(StockDownloads stockDownloads, AnalyzeInputs analyzeInputs, bool forMetricOnly)
         {
             _buyless = false;
@@ -37,31 +41,29 @@ namespace StockApi
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Summary Metrics
+            
             ///////// Long Term Price Trend
-            decimal priceTrendMetric = 1M;
-            priceTrendMetric = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3YearsAgo.Price;
-            priceTrendMetric = SoftLimit(priceTrendMetric, .5M, 2M);
-            priceTrendMetric = AdjustMetric(priceTrendMetric, -18M);
+            PriceTrendMetric = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3YearsAgo.Price;
+            PriceTrendMetric = SoftLimit(PriceTrendMetric, .5M, 2M);
+            PriceTrendMetric = AdjustMetric(PriceTrendMetric, -18M);
 
             if (stockDownloads.stockStatistics.ForwardPEString.NumericValue > 100) // Color.FromArgb(205, 232, 202);Overvalued stocks get downgraded
-                priceTrendMetric = priceTrendMetric - .01M;
+                PriceTrendMetric = PriceTrendMetric - .01M;
 
-            output.AppendLine($"Price Trend Metric = {priceTrendMetric.ToString(".000")}");
+            output.AppendLine($"Price Trend Metric = {PriceTrendMetric.ToString(".000")}");
 
             ////////// One Year Target - Not a very valuable metric. 
-            decimal targetPriceMetric = 1M;
-            targetPriceMetric = stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue / stockDownloads.stockSummary.PriceString.NumericValue;
-            targetPriceMetric = AdjustMetric(targetPriceMetric, -10M);
-            targetPriceMetric = SoftLimit(targetPriceMetric, .9M, 1.01M);
+            TargetPriceMetric = stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue / stockDownloads.stockSummary.PriceString.NumericValue;
+            TargetPriceMetric = AdjustMetric(TargetPriceMetric, -10M);
+            TargetPriceMetric = SoftLimit(TargetPriceMetric, .9M, 1.01M);
 
-            output.AppendLine($"One Year Target Metric = {targetPriceMetric.ToString(".000")}");
+            output.AppendLine($"One Year Target Metric = {TargetPriceMetric.ToString(".000")}");
 
             ////////// Earnings Per Share
-            decimal epsMetric = 1M;
-            epsMetric = AdjustMetric((1 + (stockDownloads.stockSummary.EarningsPerShareString.NumericValue / 100M)), -1.2M);
-            epsMetric = HardLimit(epsMetric, .97M, 1.06M);
+            EarningsPerShareMetric = AdjustMetric((1 + (stockDownloads.stockSummary.EarningsPerShareString.NumericValue / 100M)), -1.2M);
+            EarningsPerShareMetric = HardLimit(EarningsPerShareMetric, .97M, 1.06M);
 
-            output.AppendLine($"Earnings Metric = {epsMetric}");
+            output.AppendLine($"Earnings Metric = {EarningsPerShareMetric}");
 
             ////////// Price / Book
             decimal priceBookMetric = 1M;
@@ -87,7 +89,7 @@ namespace StockApi
             dividendMetric = SoftLimit(dividendMetric, .97M, 1.07M);
             dividendMetric = SoftLimit(dividendMetric, .97M, 1.08M);
 
-            if (priceTrendMetric < .92M && dividendMetric > 1.04M)
+            if (PriceTrendMetric < .92M && dividendMetric > 1.04M)
                 dividendMetric = (1M + dividendMetric) / 2M; // if the price is going steeply down, who cares about a high dividend
 
             output.AppendLine($"Dividend Metric = {dividendMetric.ToString(".000")}");
@@ -228,7 +230,7 @@ namespace StockApi
             output.AppendLine($"Valuation = {valuationMetric.ToString(".000")}");
 
             //// Calculate total metric
-            decimal finalMetric = priceTrendMetric * epsMetric * ((targetPriceMetric + priceBookMetric) / 2) *
+            decimal finalMetric = PriceTrendMetric * EarningsPerShareMetric * ((TargetPriceMetric + priceBookMetric) / 2) *
                     dividendMetric * profitMarginMetric * revenueMetric * ((profitMetric + basicEpsMetric) / 2) *
                     cashDebtMetric * valuationMetric * finalCashFlowMetric * pegRatioMetric;
 
@@ -242,16 +244,16 @@ namespace StockApi
             sqlMetric.PegRatio = (double)pegRatioMetric;
             sqlMetric.CashFlow = (double)finalCashFlowMetric;
             sqlMetric.Dividend = (double)dividendMetric;
-            sqlMetric.EarningsPerShare = (double)epsMetric;
+            sqlMetric.EarningsPerShare = (double)EarningsPerShareMetric;
             sqlMetric.FinalMetric = (double)finalMetric;
             sqlMetric.Month = DateTime.Now.Month;
             sqlMetric.PriceBook = (double)priceBookMetric;
-            sqlMetric.PriceTrend = (double)priceTrendMetric;
+            sqlMetric.PriceTrend = (double)PriceTrendMetric;
             sqlMetric.Profit = (double)profitMetric;
             sqlMetric.ProfitMargin = (double)profitMarginMetric;
             sqlMetric.Revenue = (double)revenueMetric;
             sqlMetric.Ticker = _ticker;
-            sqlMetric.TargetPrice = (double)targetPriceMetric;
+            sqlMetric.TargetPrice = (double)TargetPriceMetric;
             sqlMetric.UpdateDate = DateTime.Now;
             sqlMetric.Valuation = (double)valuationMetric;
             sqlMetric.Year = DateTime.Now.Year;
@@ -399,7 +401,7 @@ namespace StockApi
             }
 
             // Dividend 
-            if (stockDownloads.stockSummary.DividendString.NumericValue > 8 && priceTrendMetric > .92M)
+            if (stockDownloads.stockSummary.DividendString.NumericValue > 8 && PriceTrendMetric > .92M)
             {
                 buyQuantity = buyQuantity * 1.2M;
                 sellQuantity = sellQuantity / 1.2M;
