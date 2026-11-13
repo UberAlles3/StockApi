@@ -631,15 +631,11 @@ namespace StockApi
             SetUpAnalyzeInputs(analyzeInputs);
             _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, false);
 
-            txtAnalysisOutput.Text = _analyze.AnalysisMetricsOutputText;
+            txtAnalysisOutput.Text = _analyze.FormatMetricData();
             lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
             lblBuyPrice.Text = _analyze.BuyPrice.ToString();
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
             lblSellPrice.Text = _analyze.SellPrice.ToString();
-
-
-            // TODO
-
 
             // Current targets from spreadsheet
             ExcelPosition excelPosition = ExcelManager.PositionList.Where(x => x.Symbol == txtStockTicker.Text).FirstOrDefault();

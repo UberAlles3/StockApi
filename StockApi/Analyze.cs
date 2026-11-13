@@ -27,7 +27,7 @@ namespace StockApi
         public string AnalysisMetricsOutputText;
         private static string _ticker = "";
 
-        // Public metric values
+        // Public Metric Values
         public decimal PriceTrendMetric = 1M;
         public decimal TargetPriceMetric = 1M;
         public decimal EarningsPerShareMetric = 1M;
@@ -65,20 +65,15 @@ namespace StockApi
             if (stockDownloads.stockStatistics.ForwardPEString.NumericValue > 100) // Color.FromArgb(205, 232, 202);Overvalued stocks get downgraded
                 PriceTrendMetric = PriceTrendMetric - .01M;
 
-            output.AppendLine($"Price Trend Metric = {PriceTrendMetric.ToString(".000")}");
 
             ////////// One Year Target - Not a very valuable metric. 
             TargetPriceMetric = stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue / stockDownloads.stockSummary.PriceString.NumericValue;
             TargetPriceMetric = AdjustMetric(TargetPriceMetric, -10M);
             TargetPriceMetric = SoftLimit(TargetPriceMetric, .9M, 1.01M);
 
-            output.AppendLine($"One Year Target Metric = {TargetPriceMetric.ToString(".000")}");
-
             ////////// Earnings Per Share
             EarningsPerShareMetric = AdjustMetric((1 + (stockDownloads.stockSummary.EarningsPerShareString.NumericValue / 100M)), -1.2M);
             EarningsPerShareMetric = HardLimit(EarningsPerShareMetric, .97M, 1.06M);
-
-            output.AppendLine($"Earnings Metric = {EarningsPerShareMetric}");
 
             ////////// Price / Book
             if (stockDownloads.stockStatistics.PriceBookString.NumericValue > 5)
@@ -86,15 +81,11 @@ namespace StockApi
             else if (stockDownloads.stockStatistics.PriceBookString.NumericValue < 1)
                 PriceBookMetric = 1.01M;
 
-            output.AppendLine($"Price Book Metric = {PriceBookMetric.ToString(".000")}");
-
             ////////// Profit Margin Metric
             ProfitMarginMetric = ((stockDownloads.stockSummary.ProfitMarginString.NumericValue + 280) / 280);
             ProfitMarginMetric = AdjustMetric(ProfitMarginMetric, -1);
             ProfitMarginMetric = SoftLimit(ProfitMarginMetric, .97M, 1.035M);
             ProfitMarginMetric = SoftLimit(ProfitMarginMetric, .96M, 1.045M);
-
-            output.AppendLine($"Profit Margin Metric = {ProfitMarginMetric.ToString(".000")}");
 
             /////////// Dividend Metric
             DividendMetric = ((stockDownloads.stockSummary.DividendString.NumericValue + 120M) / 120M) - .005M;
@@ -103,8 +94,6 @@ namespace StockApi
 
             if (PriceTrendMetric < .92M && DividendMetric > 1.04M)
                 DividendMetric = (1M + DividendMetric) / 2M; // if the price is going steeply down, who cares about a high dividend
-
-            output.AppendLine($"Dividend Metric = {DividendMetric.ToString(".000")}");
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Income Statement Metrics
@@ -115,15 +104,9 @@ namespace StockApi
             {
                 /////////// Revenue 
                 RevenueMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Revenue4String, stockDownloads.stockIncomeStatement.Revenue2String, stockDownloads.stockIncomeStatement.RevenueTtmString, 0);
-                output.AppendLine($"Revenue Metric = {RevenueMetric.ToString(".000")}");
 
                 /////////// Profit - Revenue - Cost of Revenue
                 ProfitMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.Profit4String, stockDownloads.stockIncomeStatement.Profit2String, stockDownloads.stockIncomeStatement.ProfitTtmString, 0);
-
-                if (RevenueMetric * ProfitMetric < .87M)
-                    output.AppendLine($"Profit Metric = {ProfitMetric.ToString(".000")}         * Financials are Bad *");
-                else
-                    output.AppendLine($"Profit Metric = {ProfitMetric.ToString(".000")}");
 
                 /////////// Basic earnings per share growth
                 BasicEpsMetric = SetYearOverYearTrend(stockDownloads.stockIncomeStatement.BasicEps4String, stockDownloads.stockIncomeStatement.BasicEps2String, stockDownloads.stockIncomeStatement.BasicEpsTtmString, -2);
@@ -133,8 +116,6 @@ namespace StockApi
             // All negative earnings, downgrade the earnings metric
             if (stockDownloads.stockIncomeStatement.BasicEpsTtmString.NumericValue < 0 && stockDownloads.stockIncomeStatement.BasicEps2String.NumericValue < 0 && stockDownloads.stockIncomeStatement.BasicEps4String.NumericValue < 0 && BasicEpsMetric > 1.02M)
                 BasicEpsMetric -= .02M;
-
-            output.AppendLine($"Basic EPS Metric = {BasicEpsMetric.ToString(".000")}");
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Statistics Metrics
@@ -162,26 +143,20 @@ namespace StockApi
             else if (stockDownloads.stockStatistics.DebtEquityString.NumericValue > 200) // Over 120% D/E is bad
                 CashDebtMetric = CashDebtMetric * .96M;
 
-            output.AppendLine($"Cash, Debt Metric = {CashDebtMetric.ToString(".000")}");
-            output.AppendLine($"PEG Ratio Metric = {PegRatioMetric.ToString(".000")}");
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                             Cash Flow Metrics
             ////////// Operationg Cash Flow
 
-
             if (stockDownloads.stockSummary.sqlTicker.IsFund == false) // fund or ETFs don't have cash flow data
             {
                 OperatingCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.OperatingCashFlow4String, stockDownloads.stockCashFlow.OperatingCashFlow2String, stockDownloads.stockCashFlow.OperatingCashFlowTtmString, -2);
-                output.AppendLine($"Oper. Cash Flow Metric = {OperatingCashFlowMetric.ToString(".000")}");
 
                 ////////// Free Cash Flow
                 FreeCashFlowMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.FreeCashFlow4String, stockDownloads.stockCashFlow.FreeCashFlow2String, stockDownloads.stockCashFlow.FreeCashFlowTtmString, -2);
-                output.AppendLine($"Free Cash Flow Metric = {FreeCashFlowMetric.ToString(".000")}");
 
                 /////////// End Cash Position
                 EndCashMetric = SetYearOverYearTrend(stockDownloads.stockCashFlow.EndCashPosition4String, stockDownloads.stockCashFlow.EndCashPosition2String, stockDownloads.stockCashFlow.EndCashPositionTtmString, -2);
-                output.AppendLine($"End Cash Metric = {EndCashMetric.ToString(".000")}");
             }
 
             FinalCashFlowMetric = (OperatingCashFlowMetric + FreeCashFlowMetric + EndCashMetric) / 3;
@@ -216,8 +191,6 @@ namespace StockApi
 
             FinalCashFlowMetric = Decimal.Round(FinalCashFlowMetric, 3);
 
-            output.AppendLine($"Final Cash Flow Metric = {FinalCashFlowMetric.ToString(".00")}");
-
             //////////////////////////////////////////
             ///   Valuation based on PE and sector
             if (stockDownloads.stockSummary.Valuation == StockSummary.ValuationEnum.OverValued)
@@ -230,9 +203,6 @@ namespace StockApi
 
             if (stockDownloads.stockStatistics.CalculatedPEString.NumericValue > 0 && stockDownloads.stockStatistics.CalculatedPEString.NumericValue < (decimal)stockDownloads.stockSummary.AverageSectorPE * .6M) // Under valued
                 ValuationMetric = 1.025M;
-
-
-            output.AppendLine($"Valuation = {ValuationMetric.ToString(".000")}");
 
             //// Calculate total metric
             FinalMetric = PriceTrendMetric * EarningsPerShareMetric * ((TargetPriceMetric + PriceBookMetric) / 2) *
@@ -266,31 +236,12 @@ namespace StockApi
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();
             _finacialStatement.SaveMetrics(sqlMetric);
 
-            ///////////////////////////////////
-            ///        Display Metrics
-            output.AppendLine($"----------------------------------------------------");
-            string totalMetricString = $"Total Metric = {FinalMetric.ToString(".000")}";
-            if (FinalMetric < .78M)
-            {
-                FinalMetric = .78M;
-                totalMetricString += $"  low end limited to {FinalMetric.ToString(".00")}";
-                output.AppendLine($"Liquidate this stock!!!!!");
-            }
-            if (FinalMetric > 1.32M)
-            {
-                FinalMetric = 1.32M;
-                totalMetricString += $"  high end limited to {FinalMetric.ToString(".00")}";
-            }
-            output.AppendLine(totalMetricString);
-
             FinalMetric = Math.Round(FinalMetric, 2);
             if (forMetricOnly == true)
             {
                 AnalysisMetricsOutputText = output.ToString();
                 return FinalMetric; //========================>>>>>>>>>>>>>>>>>>>>  Get out
             }
-
-            output.AppendLine("");
 
             ///////////////////////////////////////////////////////////////
             ///                     BUY and SELL
@@ -461,6 +412,62 @@ namespace StockApi
 
             return FinalMetric;
         }
+
+
+
+
+
+
+        public string FormatMetricData()
+        {
+            StringBuilder output = new StringBuilder();
+            
+            output.AppendLine($"Price Trend Metric     {PriceTrendMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"One Year Target Metric {TargetPriceMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Earnings Metric        {EarningsPerShareMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Price Book Metric      {PriceBookMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Profit Margin Metric   {ProfitMarginMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Dividend Metric        {DividendMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Revenue Metric         {RevenueMetric.ToString("0.000").Replace("0.", " .")}");
+
+            if (RevenueMetric * ProfitMetric < .87M)
+            output.AppendLine($"Profit Metric          {ProfitMetric.ToString("0.000").Replace("0.", " .")}         * Financials are Bad *");
+            else
+            output.AppendLine($"Profit Metric          {ProfitMetric.ToString("0.000").Replace("0.", " .")}");
+
+            output.AppendLine($"Basic EPS Metric       {BasicEpsMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Cash, Debt Metric      {CashDebtMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"PEG Ratio Metric       {PegRatioMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Oper. Cash Flow        {OperatingCashFlowMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Free Cash Flow         {FreeCashFlowMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"End Cash Metric        {EndCashMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Final Cash Flow Metric {FinalCashFlowMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"Valuation              {ValuationMetric.ToString("0.000").Replace("0.", " .")}");
+            output.AppendLine($"----------------------------------------------------");
+
+            string totalMetricString = $"Total Metric           {FinalMetric.ToString(".000").Replace("0.", " .")}";
+            if (FinalMetric < .78M)
+            {
+                FinalMetric = .78M;
+                totalMetricString += $"  low end limited to {FinalMetric.ToString(".00")}";
+                output.AppendLine($"Liquidate this stock!!!!!");
+            }
+            if (FinalMetric > 1.32M)
+            {
+                FinalMetric = 1.32M;
+                totalMetricString += $"  high end limited to {FinalMetric.ToString(".00")}";
+            }
+            output.AppendLine(totalMetricString);
+            output.AppendLine("");
+
+            return output.ToString();
+        }
+
+
+
+
+
+
 
         public string JointTradeTargets(StockDownloads stockDownloads)
         {

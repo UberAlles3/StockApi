@@ -171,7 +171,7 @@ namespace StockApi
             decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads, analyzeInputs, true);
             if (ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMZN")
             {
-                Debug.WriteLine(_analyze.AnalysisMetricsOutputText);
+                Debug.WriteLine(_analyze.FormatMetricData());
             }
 
             //stockMetricString = $"{stockDownloads.stockSummary.Ticker}, {stockDownloads.stockSummary.VolatilityString.NumericValue}, {stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue},"
