@@ -8,28 +8,29 @@ namespace StockApi
 {
     public class Form1Grid
     {
-        public static void SetupPriceHistoryGridColumns(DataGridView dataGridView1, Color foreColor, Color backgroundColor)
-        {
-            dataGridView1.DefaultCellStyle.ForeColor = Form1.TextForeColor;
-            dataGridView1.DefaultCellStyle.SelectionForeColor = dataGridView1.DefaultCellStyle.ForeColor;
-            dataGridView1.DefaultCellStyle.BackColor = dataGridView1.BackgroundColor;
-            dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView1.BackgroundColor;
-            dataGridView1.Columns[0].Visible = false;
-            dataGridView1.Columns[1].Visible = false;
-            dataGridView1.Columns[2].HeaderText = "Date";
-            dataGridView1.Columns[3].Width = 120;
-            dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
-            dataGridView1.Columns[3].DefaultCellStyle.Format = "N2";
-            dataGridView1.Columns[4].Width = 120;
-            dataGridView1.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
-        }
+        // TODO take out
+        //public static void SetupPriceHistoryGridColumns()
+        //{
+        //    dataGridView1.DefaultCellStyle.ForeColor = Form1.TextForeColor;
+        //    dataGridView1.DefaultCellStyle.SelectionForeColor = Color.LightGray;
+        //    dataGridView1.DefaultCellStyle.BackColor = Color.Transparent;
+        //    dataGridView1.DefaultCellStyle.SelectionBackColor = Color.Black;
+        //    dataGridView1.Columns[0].Visible = false;
+        //    dataGridView1.Columns[1].Visible = false;
+        //    dataGridView1.Columns[2].HeaderText = "Date";
+        //    dataGridView1.Columns[3].Width = 120;
+        //    dataGridView1.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+        //    dataGridView1.Columns[3].DefaultCellStyle.Format = "N2";
+        //    dataGridView1.Columns[4].Width = 120;
+        //    dataGridView1.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+        //}
 
-        public static void SetupTradeGridColumns(DataGridView dataGridView2, Color foreColor, Color backgroundColor)
+        public static void SetupTradeGridColumns(DataGridView dataGridView2)
         {
             dataGridView2.DefaultCellStyle.ForeColor = Form1.TextForeColor;
-            dataGridView2.DefaultCellStyle.SelectionForeColor = foreColor;
-            dataGridView2.DefaultCellStyle.BackColor = backgroundColor;
-            dataGridView2.DefaultCellStyle.SelectionBackColor = backgroundColor;
+            dataGridView2.DefaultCellStyle.SelectionForeColor = Color.LightGray;
+            dataGridView2.DefaultCellStyle.BackColor = Color.Black;
+            dataGridView2.DefaultCellStyle.SelectionBackColor = Color.Black;
             dataGridView2.Columns[0].HeaderText = "Date";
             dataGridView2.Columns[1].Visible = false;
             dataGridView2.Columns[2].HeaderText = "Buy/Sell";

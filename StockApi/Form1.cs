@@ -105,7 +105,6 @@ namespace StockApi
 
         private async void btnGetOne_click(object sender, EventArgs e)
         {
-            decimal quantity = 0;
             //string positionOutput = "";
 
             //SqlCrudOperations sqlCrudOperations = new SqlCrudOperations();
@@ -190,8 +189,9 @@ namespace StockApi
                 tickerTrades = tradesDataTable.AsEnumerable().Where(x => x[4].ToString().ToLower() == txtStockTicker.Text.ToLower());
                 tickerTrades = tickerTrades.OrderByDescending(x => x[DateColumn]);
 
-                // bind data list to grid control
-                BindListToHistoricPriceGrid(_stockDownloads.stockHistory.HistoricDisplayList);
+                // TODO take out
+                //// bind data list to grid control
+                //BindListToHistoricPriceGrid(_stockDownloads.stockHistory.HistoricDisplayList);
 
                 if (tradesDataTable.Rows.Count > 0 && tickerTrades.Count() > 0)
                 {
@@ -204,7 +204,7 @@ namespace StockApi
                     dataGridView2.DataSource = tradeSource.DataSource;
 
                     ////////////////////////////// Setup trade grid columns with formatting info
-                    Form1Grid.SetupTradeGridColumns(dataGridView2, dataGridView1.DefaultCellStyle.ForeColor, dataGridView1.BackgroundColor);
+                    Form1Grid.SetupTradeGridColumns(dataGridView2);
                     //////////////////////////////
                     ///
                     dataGridView2.Refresh();
@@ -296,73 +296,30 @@ namespace StockApi
             panel1.Visible = panel2.Visible = panel3.Visible = pnlNoFinancials.Visible = false;
         }
 
-        private void SetHistoricPriceTrendImages()
-        {
-            if (_stockDownloads.stockHistory.ThreeYearTrend != StockHistory.TrendEnum.Unknown)
-            {
-                pic3YearTrend.Visible = true;
-                pic3YearTrend.Image = _stockDownloads.stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockDownloads.stockHistory.ThreeYearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-            }
-            else
-                pic3YearTrend.Visible = false;
+        // TODO take out
+        //private void BindListToHistoricPriceGrid(List<StockHistory.HistoricPriceData> historicDisplayList)
+        //{
+        //    var bindingList = new BindingList<StockHistory.HistoricPriceData>(historicDisplayList);
+        //    var source = new BindingSource(bindingList, null);
+        //    dataGridView1.DataSource = source.DataSource;
 
-            if (_stockDownloads.stockHistory.YearTrend != StockHistory.TrendEnum.Unknown)
-            {
-                picYearTrend.Visible = true;
-                picYearTrend.Image = _stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-            }
-            else
-                picYearTrend.Visible = false;
+        //    // TODO take out
+        //    ////////////////////////////// Setup price history grid columns with formatting info
+        //    // Form1Grid.SetupPriceHistoryGridColumns(dataGridView1, dataGridView1.DefaultCellStyle.ForeColor, dataGridView1.BackgroundColor);
+        //    //////////////////////////////
 
-
-            if (_stockDownloads.stockHistory.MonthTrend != StockHistory.TrendEnum.Unknown)
-            {
-                picMonthTrend.Visible = true;
-                picMonthTrend.Image = _stockDownloads.stockHistory.MonthTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockDownloads.stockHistory.MonthTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-            }
-            else
-                picMonthTrend.Visible = false;
-
-            if (_stockDownloads.stockHistory.WeekTrend != StockHistory.TrendEnum.Unknown)
-            {
-                picWeekTrend.Visible = true;
-                picWeekTrend.Image = _stockDownloads.stockHistory.WeekTrend == StockHistory.TrendEnum.Up ? picUpTrend.Image : _stockDownloads.stockHistory.WeekTrend == StockHistory.TrendEnum.Down ? picDownTrend.Image : picSidewaysTrend.Image;
-            }
-            else
-                picWeekTrend.Visible = false;
-        }
-
-        private void BindListToHistoricPriceGrid(List<StockHistory.HistoricPriceData> historicDisplayList)
-        {
-            var bindingList = new BindingList<StockHistory.HistoricPriceData>(historicDisplayList);
-            var source = new BindingSource(bindingList, null);
-            dataGridView1.DataSource = source.DataSource;
-
-            ////////////////////////////// Setup price history grid columns with formatting info
-            Form1Grid.SetupPriceHistoryGridColumns(dataGridView1, dataGridView1.DefaultCellStyle.ForeColor, dataGridView1.BackgroundColor);
-            //////////////////////////////
-
-            dataGridView1.Refresh();
-        }
-
+        //    dataGridView1.Refresh();
+        //}
 
         private void PreSummaryWebCall()
         {
             _stockDownloads.stockSummary = new StockSummary(); // set values to zero
-            btnGetAllHistory.Visible = true;
             txtAnalysisOutput.Text = "";
             lblValuation.Text = "";
-            pic3YearTrend.Image = picSidewaysTrend.Image;
-            picYearTrend.Image = picSidewaysTrend.Image;
-            picMonthTrend.Image = picSidewaysTrend.Image;
-            picWeekTrend.Image = picSidewaysTrend.Image;
 
             btnGetOne.Enabled = false;
             btnAnalyze.Enabled = false;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
-            picYearTrend.Visible = false;
-            picMonthTrend.Visible = false;
-            picWeekTrend.Visible = false;
             picSpinner.Visible = true;
             panelFinancials.Visible = false;
             pnlNoFinancials.Visible = false;
@@ -454,19 +411,17 @@ namespace StockApi
                         lbl52WeekArrow.Visible = false;
                     }
 
-                    // Historic Price Trends
-                    SetHistoricPriceTrendImages();
-
                     //////////  Ticker Trades
                     if (TickerTradesDataTable != null && TickerTradesDataTable.Rows.Count > 0)
                     {
                         errorPlace = "Ticker trades";
                         DataRow latestRow = TickerTradesDataTable.Rows[0];
-                        txtSharesOwned.Text = latestRow.ItemArray[6].ToString();      // Total Shares
-                        if (txtSharesOwned.Text.Trim() == "")
-                            txtSharesOwned.Text = "1";
-                        if (txtSharesTraded.Text.Trim() == "")
-                            txtSharesTraded.Text = "1";
+                        // TODO take out
+                        //if (txtSharesOwned.Text.Trim() == "")
+                        //    txtSharesOwned.Text = "1";
+                        //if (txtSharesTraded.Text.Trim() == "")
+                        //    txtSharesTraded.Text = "1";
+                        
                         txtSharesTraded.Text = latestRow.ItemArray[3].ToString();     // Quan. Traded
                         txtSharesTradePrice.Text = ((double)latestRow.ItemArray[5]).ToString("0.00"); // Price
                         if (latestRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
@@ -486,7 +441,8 @@ namespace StockApi
                     }
                     else
                     {
-                        txtSharesOwned.Text = "1";
+                        // TODO take out
+                        //txtSharesOwned.Text = "1";
                         txtSharesTraded.Text = "1";
                         txtSharesTradePrice.Text = _stockDownloads.stockSummary.PriceString.NumericValue.ToString("0.00");
                     }
@@ -674,24 +630,23 @@ namespace StockApi
 
         private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
         {
-            analyzeInputs.SharesOwned = Convert.ToInt32(txtSharesOwned.Text);
+            analyzeInputs.SharesOwned = (int)ExcelManager.CurrentRolloverPosition.Quantity;
             analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
             analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
             analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
             analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
         }
 
-        private async void btnGetAllHistory_Click(object sender, EventArgs e)
-        {
-            UseWaitCursor = true;
-            Application.DoEvents();
-            btnGetAllHistory.Visible = false;
-            await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary);
-            BindListToHistoricPriceGrid(_stockDownloads.stockHistory.HistoricDisplayList);
-            // Trends
-            SetHistoricPriceTrendImages();
-            UseWaitCursor = false;
-        }
+        // TODO take out
+        //private async void btnGetAllHistory_Click(object sender, EventArgs e)
+        //{
+        //    UseWaitCursor = true;
+        //    Application.DoEvents();
+        //    await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary);
+        //    BindListToHistoricPriceGrid(_stockDownloads.stockHistory.HistoricDisplayList);
+        //    // Trends
+        //    UseWaitCursor = false;
+        //}
 
         private void lnkCompanyOverview_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -850,7 +805,7 @@ namespace StockApi
             dataGridView2.DataSource = tradeSource.DataSource;
 
             ////////////////////////////// Setup trade grid columns with formatting info
-            Form1Grid.SetupTradeGridColumns(dataGridView2, dataGridView1.DefaultCellStyle.ForeColor, dataGridView1.BackgroundColor);
+            Form1Grid.SetupTradeGridColumns(dataGridView2);
             //////////////////////////////
             ///
             dataGridView2.Refresh();
@@ -1139,6 +1094,7 @@ namespace StockApi
         {
 
         }
+
     }
 
     public class CustomColorTable : ProfessionalColorTable

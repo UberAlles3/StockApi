@@ -50,6 +50,13 @@ namespace StockApi
         public static void SetCurrentExcelDataForTicker(string ticker)
         {
             CurrentRolloverPosition = PositionList.FirstOrDefault(x => x.Symbol == ticker);
+            if(CurrentRolloverPosition == null) // dummy up
+            {
+                CurrentRolloverPosition = new ExcelPosition();
+                CurrentRolloverPosition.Quantity = 1;
+                CurrentRolloverPosition.BuySell = "Buy";
+            }
+
             CurrentJointPosition    = JointPositionList.FirstOrDefault(x => x.Symbol == ticker);
             CurrentRolloverTrade    = TradeList.LastOrDefault(x => x.Symbol == ticker);
             CurrentJointTrade       = JointTradeList.LastOrDefault(x => x.Symbol == ticker);
