@@ -384,6 +384,8 @@ namespace StockApi
                 lblCompanyNameAndTicker.Text = _stockDownloads.stockSummary.CompanyName;
                 if (_tickerFound)
                 {
+                    ExcelManager.SetCurrentExcelDataForTicker(txtStockTicker.Text);
+
                     errorPlace = "Setting labels #1";
                     lblPrice.Text = _stockDownloads.stockSummary.PriceString.NumericValue.ToString("####.00");
                     lblVolatility.Text = _stockDownloads.stockSummary.VolatilityString.StringValue;

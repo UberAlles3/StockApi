@@ -21,14 +21,6 @@ namespace StockApi
         //    Metric = 33
         //}
 
-        public static string PositionSymbolColumn = "Column0";
-        public static string PositionQuantityColumn = "Column1";
-        List<Setting> _settings = new List<Setting>();
-
-        // Excel files
-        private static string _excelFilePath = "";
-        private static DateTime _excelImportDateTime = DateTime.Now.AddYears(-2);
-
         public enum TradeColumns : int
         {
             TradeDate = 0,
@@ -40,6 +32,27 @@ namespace StockApi
             QuantityHeld = 6,
             AccountValue = 7,
             Notes = 8
+        }
+
+        public static string PositionSymbolColumn = "Column0";
+        public static string PositionQuantityColumn = "Column1";
+        List<Setting> _settings = new List<Setting>();
+
+        // Excel files
+        private static string _excelFilePath = "";
+        private static DateTime _excelImportDateTime = DateTime.Now.AddYears(-2);
+
+        public static ExcelPosition CurrentRolloverPosition = null;
+        public static ExcelPosition CurrentJointPosition    = null;
+        public static ExcelTrade CurrentRolloverTrade    = null;  // Last Trade
+        public static ExcelTrade CurrentJointTrade       = null;  // Last Trade
+
+        public static void SetCurrentExcelDataForTicker(string ticker)
+        {
+            CurrentRolloverPosition = PositionList.FirstOrDefault(x => x.Symbol == ticker);
+            CurrentJointPosition    = JointPositionList.FirstOrDefault(x => x.Symbol == ticker);
+            CurrentRolloverTrade    = TradeList.LastOrDefault(x => x.Symbol == ticker);
+            CurrentJointTrade       = JointTradeList.LastOrDefault(x => x.Symbol == ticker);
         }
 
         /// ===============================================
