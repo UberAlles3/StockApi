@@ -31,11 +31,6 @@ namespace StockApi
         // Markets
         Markets _markets = new Markets();
 
-        // Excel files
-        private static string _excelFilePath = "";
-        private static DateTime _positionsImportDateTime = DateTime.Now.AddYears(-2);
-        private static DateTime _tradesImportDateTime = DateTime.Now.AddYears(-2);
-
         // News
         private static string _news = "";
         private static DateTime newsDate = DateTime.Now.AddDays(-1);
@@ -87,8 +82,6 @@ namespace StockApi
             // Revenue year labels TTM, 2 years ago, 4 years ago
             lblFin2YearsAgo.Text = DateTime.Now.AddYears(-2).ToString("yyyy");
             lblFin4YearsAgo.Text = DateTime.Now.AddYears(-4).ToString("yyyy");
-
-            _excelFilePath = _settings.Find(x => x.Name == "ExcelTradesPath").Value;
 
             GetNewsEarnings();
 
