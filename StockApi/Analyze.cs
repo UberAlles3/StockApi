@@ -24,7 +24,6 @@ namespace StockApi
         public decimal BuyPrice;
         public int SellQuantity;
         public decimal SellPrice = 0;
-        public string AnalysisMetricsOutputText;
         private static string _ticker = "";
 
         // Public Metric Values
@@ -46,17 +45,16 @@ namespace StockApi
         public decimal ValuationMetric = 1M;
         public decimal FinalMetric = 0;
 
-        public decimal AnalyzeStockData(StockDownloads stockDownloads, AnalyzeInputs analyzeInputs, bool forMetricOnly)
+        public decimal AnalyzeStockData(StockDownloads stockDownloads)
         {
             _buyless = false;
             _ticker = stockDownloads.stockSummary.Ticker;
-            StringBuilder output = new StringBuilder();
 
             Debug.WriteLine(_ticker);
 
             //////////////////////////////////////////////////////////////////////////////////
             ///                            Summary Metrics
-            
+
             ///////// Long Term Price Trend
             PriceTrendMetric = stockDownloads.stockHistory.HistoricDataToday.Price / stockDownloads.stockHistory.HistoricData3YearsAgo.Price;
             PriceTrendMetric = SoftLimit(PriceTrendMetric, .5M, 2M);
@@ -126,7 +124,7 @@ namespace StockApi
                 CashDebtMetric = 1.03M;
 
             /////////// Peg Ratio
-            if(stockDownloads.stockStatistics.PegRatioString.NumericValue != 0)
+            if (stockDownloads.stockStatistics.PegRatioString.NumericValue != 0)
             {
                 if (stockDownloads.stockStatistics.PegRatioString.NumericValue > 2.8M)
                     PegRatioMetric = .986M; // Much Overvalued
@@ -214,208 +212,206 @@ namespace StockApi
             ///////////////////////////////////
             ///      Save to SQL Server
             SqlMetric sqlMetric = new SqlMetric();
-            sqlMetric.BasicEps     = (double)BasicEpsMetric;
-            sqlMetric.CashDebt     = (double)CashDebtMetric;
-            sqlMetric.PegRatio     = (double)PegRatioMetric;
-            sqlMetric.CashFlow     = (double)FinalCashFlowMetric;
-            sqlMetric.Dividend     = (double)DividendMetric;
+            sqlMetric.BasicEps = (double)BasicEpsMetric;
+            sqlMetric.CashDebt = (double)CashDebtMetric;
+            sqlMetric.PegRatio = (double)PegRatioMetric;
+            sqlMetric.CashFlow = (double)FinalCashFlowMetric;
+            sqlMetric.Dividend = (double)DividendMetric;
             sqlMetric.EarningsPerShare = (double)EarningsPerShareMetric;
-            sqlMetric.FinalMetric  = (double)FinalMetric;
-            sqlMetric.Month        = DateTime.Now.Month;
-            sqlMetric.PriceBook    = (double)PriceBookMetric;
-            sqlMetric.PriceTrend   = (double)PriceTrendMetric;
-            sqlMetric.Profit       = (double)ProfitMetric;
+            sqlMetric.FinalMetric = (double)FinalMetric;
+            sqlMetric.Month = DateTime.Now.Month;
+            sqlMetric.PriceBook = (double)PriceBookMetric;
+            sqlMetric.PriceTrend = (double)PriceTrendMetric;
+            sqlMetric.Profit = (double)ProfitMetric;
             sqlMetric.ProfitMargin = (double)ProfitMarginMetric;
-            sqlMetric.Revenue      = (double)RevenueMetric;
-            sqlMetric.Ticker       = _ticker;
-            sqlMetric.TargetPrice  = (double)TargetPriceMetric;
-            sqlMetric.UpdateDate   = DateTime.Now;
-            sqlMetric.Valuation    = (double)ValuationMetric;
-            sqlMetric.Year         = DateTime.Now.Year;
+            sqlMetric.Revenue = (double)RevenueMetric;
+            sqlMetric.Ticker = _ticker;
+            sqlMetric.TargetPrice = (double)TargetPriceMetric;
+            sqlMetric.UpdateDate = DateTime.Now;
+            sqlMetric.Valuation = (double)ValuationMetric;
+            sqlMetric.Year = DateTime.Now.Year;
 
             SqlCrudOperations _finacialStatement = new SqlCrudOperations();
             _finacialStatement.SaveMetrics(sqlMetric);
 
             FinalMetric = Math.Round(FinalMetric, 2);
-            if (forMetricOnly == true)
-            {
-                AnalysisMetricsOutputText = output.ToString();
-                return FinalMetric; //========================>>>>>>>>>>>>>>>>>>>>  Get out
-            }
+            return FinalMetric; //========================>>>>>>>>>>>>>>>>>>>>  Get out
+        }
 
-            ///////////////////////////////////////////////////////////////
-            ///                     BUY and SELL
-            ///////////////////////////////////////////////////////////////
-
-            // Consecutive buys or sells
-            decimal buySellMetric = 1M;
-            if (forMetricOnly == false)
-            {
-                List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
-                int buys = 0;
-                int sells = 0;
-                foreach (DataRow dr in drList)
-                {
-                    if (dr.ItemArray[2].ToString() == "Buy")
-                    {
-                        if (sells > 0)
-                            break;
-                        buys++;
-                    }
-                    if (dr.ItemArray[2].ToString() == "Sell")
-                    {
-                        if (buys > 0)
-                            break;
-                        sells++;
-                    }
-                }
-
-                if (buys == 2)
-                    buySellMetric = .98M;
-                if (buys == 3)
-                    buySellMetric = .96M;
-                if (sells == 2)
-                    buySellMetric = 1.02M;
-                if (sells == 3)
-                    buySellMetric = 1.04M;
-            }
-
-            output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
-
-            // Adjust based on series of buys or sells
-            FinalMetric = FinalMetric * buySellMetric;
-
-            // Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
-            decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
-
-            volitilityFactor = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
-
-            output.AppendLine($"Volitility Factor = { volitilityFactor.ToString("##.##")}");
-
-            analyzeInputs.MovementTargetPercent *= volitilityFactor; // Applying volatility
-            output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}%");
-
-            // if stock is like XOM where your not sell a large percentage of shares owned
-            // Make the lower and upper movement less
-            if (analyzeInputs.QuantityTraded < analyzeInputs.SharesOwned / 4)
-            {
-                analyzeInputs.MovementTargetPercent = analyzeInputs.MovementTargetPercent * .9M;
-                output.AppendLine($"Movement reduced, low share quantity = {analyzeInputs.MovementTargetPercent.ToString("##.##")}");
-            }
-
-            decimal lowerMovementMultiplier = ((100M - (analyzeInputs.MovementTargetPercent * .7M)) / 100M); // if movement is 20% will assign .88 because a down percentage is greater than an up
-            decimal upperMovementMultiplier = ((100M + analyzeInputs.MovementTargetPercent) / 100M); // if movement is 20% will assign 1.2
-
-            // Calculate future buy or sells based on how much it moves and what our target movement is. 
-            decimal buyPrice = analyzeInputs.SharesTradedPrice * lowerMovementMultiplier;
-            decimal sellPrice = analyzeInputs.SharesTradedPrice * upperMovementMultiplier;
-
-            output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
-            output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
-
-            buyPrice = buyPrice * ((FinalMetric + 1) / 2);
-            sellPrice = sellPrice * ((FinalMetric + 1) / 2);
-
-            if (sellPrice < analyzeInputs.SharesTradedPrice)
-                sellPrice = analyzeInputs.SharesTradedPrice * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.
-            if (buyPrice > analyzeInputs.SharesTradedPrice * .88M)
-            {
-                _buyless = true;
-                buyPrice = analyzeInputs.SharesTradedPrice * .88M; // Next buy can't so near the current price, but buy less
-            }
-
-            output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
-            output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
-
-            ///////// Limit price so it's with a range
-            decimal limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * lowerMovementMultiplier) * .5M; // lower buy limit price too low
-            if (buyPrice < limitPrice)
-                buyPrice = limitPrice;
-            limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * upperMovementMultiplier) * 1.4M; // upper sell limit
-            if (sellPrice > limitPrice)
-                sellPrice = limitPrice;
-
-            BuyPrice = buyPrice;
-            SellPrice = sellPrice;
+        // TODO take out
+        //    return CalculateBuySell(stockDownloads, analyzeInputs, forMetricOnly, output);
+        //}
 
 
-            //////////////////////////////////
-            //      Quantity to Buy/Sell
-            //////////////////////////////////
-            decimal buyQuantity = 0M;
-            decimal sellQuantity = 0M;
+        ///////////////////////////////////////////////////////////////
+        ///                     BUY and SELL
+        ///////////////////////////////////////////////////////////////
+        private decimal CalculateBuySell(StockDownloads stockDownloads)
+        {
+            StringBuilder output = new StringBuilder();
 
-            if (analyzeInputs.LastTradeBuySell == BuyOrSell.Buy)
-            {
-                buyQuantity = analyzeInputs.QuantityTraded * .8M; // Buy less if you just bought
-                sellQuantity = analyzeInputs.QuantityTraded * 1.08M; // Sell more if you just bought
-            }
-            else
-            {
-                buyQuantity = analyzeInputs.QuantityTraded * 1.08M; // Buy more if you just sold
-                sellQuantity = analyzeInputs.QuantityTraded * .8M; // Sell less if you just sold
-            }
+            //// Consecutive buys or sells
+            //decimal buySellMetric = 1M;
+            //List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
+            //int buys = 0;
+            //int sells = 0;
+            //foreach (DataRow dr in drList)
+            //{
+            //    if (dr.ItemArray[2].ToString() == "Buy")
+            //    {
+            //        if (sells > 0)
+            //            break;
+            //        buys++;
+            //    }
+            //    if (dr.ItemArray[2].ToString() == "Sell")
+            //    {
+            //        if (buys > 0)
+            //            break;
+            //        sells++;
+            //    }
+            //}
 
-            // Dividend 
-            if (stockDownloads.stockSummary.DividendString.NumericValue > 8 && PriceTrendMetric > .92M)
-            {
-                buyQuantity = buyQuantity * 1.2M;
-                sellQuantity = sellQuantity / 1.2M;
-                output.AppendLine($"Great dividend. Buy more or sell less. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
-            }
-            else if (stockDownloads.stockSummary.DividendString.NumericValue > 4)
-            {
-                buyQuantity = buyQuantity * 1.1M;
-                sellQuantity = sellQuantity / 1.1M;
-            }
-            else if (stockDownloads.stockSummary.DividendString.NumericValue > 2)
-            {
-                buyQuantity = buyQuantity * 1.05M;
-                sellQuantity = sellQuantity / 1.05M;
-            }
+            //if (buys == 2)
+            //    buySellMetric = .98M;
+            //if (buys == 3)
+            //    buySellMetric = .96M;
+            //if (sells == 2)
+            //    buySellMetric = 1.02M;
+            //if (sells == 3)
+            //    buySellMetric = 1.04M;
 
-            if (_buyless)
-            {
-                buyQuantity = buyQuantity * .8M;
-                output.AppendLine($"Accumulate this stock slowly.");
-            }
+            //output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
 
-            // Year price trend. Lower and Raise based on that.
-            if (stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Up)
-            {
-                buyQuantity = buyQuantity * 1.05M;
-                sellQuantity = sellQuantity / 1.05M;
-                output.AppendLine($"Year up trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
-            }
-            if (stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Down)
-            {
-                buyQuantity = buyQuantity * .95M;
-                sellQuantity = sellQuantity / .95M;
-                output.AppendLine($"Year down trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
-            }
+            //// Adjust based on series of buys or sells
+            //FinalMetric = FinalMetric * buySellMetric;
 
-            BuyQuantity = Math.Max(1, Convert.ToInt32(buyQuantity));
-            SellQuantity = Math.Max(1, Convert.ToInt32(sellQuantity));
+            //// Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
+            //decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
 
-            if (SellQuantity > 1 && SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.4F)) // Don't sell close to more than half your shares
-                SellQuantity = Convert.ToInt16((analyzeInputs.SharesOwned / 2.4F) + .5F);
+            //volitilityFactor = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
 
-            // Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
-            decimal profit = (SellPrice - stockDownloads.stockSummary.PriceString.NumericValue) * SellQuantity;
-            if (profit < 20M && FinalMetric > .91M) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
-            {
-                SellPrice = (20M / (SellQuantity + 3)) + stockDownloads.stockSummary.PriceString.NumericValue;
-                output.AppendLine($"Minimum profit set to $20. Sell Price: {SellPrice.ToString("##.##")}");
-            }
+            //output.AppendLine($"Volitility Factor = { volitilityFactor.ToString("##.##")}");
 
-            AnalysisMetricsOutputText = output.ToString();
+            //analyzeInputs.MovementTargetPercent *= volitilityFactor; // Applying volatility
+            //output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}%");
+
+            //// if stock is like XOM where your not sell a large percentage of shares owned
+            //// Make the lower and upper movement less
+            //if (analyzeInputs.QuantityTraded < analyzeInputs.SharesOwned / 4)
+            //{
+            //    analyzeInputs.MovementTargetPercent = analyzeInputs.MovementTargetPercent * .9M;
+            //    output.AppendLine($"Movement reduced, low share quantity = {analyzeInputs.MovementTargetPercent.ToString("##.##")}");
+            //}
+
+            //decimal lowerMovementMultiplier = ((100M - (analyzeInputs.MovementTargetPercent * .7M)) / 100M); // if movement is 20% will assign .88 because a down percentage is greater than an up
+            //decimal upperMovementMultiplier = ((100M + analyzeInputs.MovementTargetPercent) / 100M); // if movement is 20% will assign 1.2
+
+            //// Calculate future buy or sells based on how much it moves and what our target movement is. 
+            //decimal buyPrice = analyzeInputs.SharesTradedPrice * lowerMovementMultiplier;
+            //decimal sellPrice = analyzeInputs.SharesTradedPrice * upperMovementMultiplier;
+
+            //output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
+            //output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
+
+            //buyPrice = buyPrice * ((FinalMetric + 1) / 2);
+            //sellPrice = sellPrice * ((FinalMetric + 1) / 2);
+
+            //if (sellPrice < analyzeInputs.SharesTradedPrice)
+            //    sellPrice = analyzeInputs.SharesTradedPrice * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.
+            //if (buyPrice > analyzeInputs.SharesTradedPrice * .88M)
+            //{
+            //    _buyless = true;
+            //    buyPrice = analyzeInputs.SharesTradedPrice * .88M; // Next buy can't so near the current price, but buy less
+            //}
+
+            //output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
+            //output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
+
+            /////////// Limit price so it's with a range
+            //decimal limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * lowerMovementMultiplier) * .5M; // lower buy limit price too low
+            //if (buyPrice < limitPrice)
+            //    buyPrice = limitPrice;
+            //limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * upperMovementMultiplier) * 1.4M; // upper sell limit
+            //if (sellPrice > limitPrice)
+            //    sellPrice = limitPrice;
+
+            //BuyPrice = buyPrice;
+            //SellPrice = sellPrice;
+
+
+            ////////////////////////////////////
+            ////      Quantity to Buy/Sell
+            ////////////////////////////////////
+            //decimal buyQuantity = 0M;
+            //decimal sellQuantity = 0M;
+
+            //if (analyzeInputs.LastTradeBuySell == BuyOrSell.Buy)
+            //{
+            //    buyQuantity = analyzeInputs.QuantityTraded * .8M; // Buy less if you just bought
+            //    sellQuantity = analyzeInputs.QuantityTraded * 1.08M; // Sell more if you just bought
+            //}
+            //else
+            //{
+            //    buyQuantity = analyzeInputs.QuantityTraded * 1.08M; // Buy more if you just sold
+            //    sellQuantity = analyzeInputs.QuantityTraded * .8M; // Sell less if you just sold
+            //}
+
+            //// Dividend 
+            //if (stockDownloads.stockSummary.DividendString.NumericValue > 8 && PriceTrendMetric > .92M)
+            //{
+            //    buyQuantity = buyQuantity * 1.2M;
+            //    sellQuantity = sellQuantity / 1.2M;
+            //    output.AppendLine($"Great dividend. Buy more or sell less. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
+            //}
+            //else if (stockDownloads.stockSummary.DividendString.NumericValue > 4)
+            //{
+            //    buyQuantity = buyQuantity * 1.1M;
+            //    sellQuantity = sellQuantity / 1.1M;
+            //}
+            //else if (stockDownloads.stockSummary.DividendString.NumericValue > 2)
+            //{
+            //    buyQuantity = buyQuantity * 1.05M;
+            //    sellQuantity = sellQuantity / 1.05M;
+            //}
+
+            //if (_buyless)
+            //{
+            //    buyQuantity = buyQuantity * .8M;
+            //    output.AppendLine($"Accumulate this stock slowly.");
+            //}
+
+            //// Year price trend. Lower and Raise based on that.
+            //if (stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Up)
+            //{
+            //    buyQuantity = buyQuantity * 1.05M;
+            //    sellQuantity = sellQuantity / 1.05M;
+            //    output.AppendLine($"Year up trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
+            //}
+            //if (stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Down)
+            //{
+            //    buyQuantity = buyQuantity * .95M;
+            //    sellQuantity = sellQuantity / .95M;
+            //    output.AppendLine($"Year down trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
+            //}
+
+            //BuyQuantity = Math.Max(1, Convert.ToInt32(buyQuantity));
+            //SellQuantity = Math.Max(1, Convert.ToInt32(sellQuantity));
+
+            //if (SellQuantity > 1 && SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.4F)) // Don't sell close to more than half your shares
+            //    SellQuantity = Convert.ToInt16((analyzeInputs.SharesOwned / 2.4F) + .5F);
+
+            //// Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
+            //decimal profit = (SellPrice - stockDownloads.stockSummary.PriceString.NumericValue) * SellQuantity;
+            //if (profit < 20M && FinalMetric > .91M) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
+            //{
+            //    SellPrice = (20M / (SellQuantity + 3)) + stockDownloads.stockSummary.PriceString.NumericValue;
+            //    output.AppendLine($"Minimum profit set to $20. Sell Price: {SellPrice.ToString("##.##")}");
+            //}
+
+            //AnalysisMetricsOutputText = output.ToString();
 
             return FinalMetric;
         }
-
-
-
-
 
 
         public string FormatMetricData()
@@ -462,9 +458,6 @@ namespace StockApi
 
             return output.ToString();
         }
-
-
-
 
 
 
@@ -584,15 +577,6 @@ namespace StockApi
             }
 
             return output.ToString();
-        }
-
-        public class AnalyzeInputs
-        {
-            public int SharesOwned;
-            public BuyOrSell LastTradeBuySell;
-            public int QuantityTraded;
-            public decimal SharesTradedPrice;
-            public decimal MovementTargetPercent;
         }
     }
 }

@@ -26,11 +26,6 @@ namespace StockApi
             // Get all tickers from position table
             List<string> stockList = new List<string>();
             StringBuilder builder = new StringBuilder();
-            Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
-            analyzeInputs.SharesOwned = 1;
-            analyzeInputs.QuantityTraded = 1;
-
-
 
             bool networkUp = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
             if (networkUp == false)
@@ -115,7 +110,7 @@ namespace StockApi
                 if (cancellationToken.IsCancellationRequested)
                     cancellationToken.ThrowIfCancellationRequested();
 
-                stockMetricString = await GetStockMetric(ticker, analyzeInputs);
+                stockMetricString = await GetStockMetric(ticker);
                 builder.Append(stockMetricString);
                 Debug.Print(stockMetricString);
                 if (textBox != null)
@@ -145,7 +140,7 @@ namespace StockApi
             return 0;
         }
 
-        public async Task<string> GetStockMetric(string ticker, Analyze.AnalyzeInputs analyzeInputs)
+        public async Task<string> GetStockMetric(string ticker)
         {
             bool _tickerFound;
             string stockMetricString;
@@ -168,7 +163,7 @@ namespace StockApi
 
             decimal percent_diff = stockDownloads.stockSummary.PriceString.NumericValue / stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
 
-            decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads, analyzeInputs, true);
+            decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads);
             if (ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMZN")
             {
                 Debug.WriteLine(_analyze.FormatMetricData());

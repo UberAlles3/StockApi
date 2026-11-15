@@ -290,7 +290,6 @@ namespace StockApi
         private void ResetFormControls()
         {
             btnGetOne.Enabled = true;
-            btnAnalyze.Enabled = true;
             picSpinner.Visible = false;
             Cursor.Current = Cursors.Default;
             panel1.Visible = panel2.Visible = panel3.Visible = pnlNoFinancials.Visible = false;
@@ -318,7 +317,6 @@ namespace StockApi
             lblValuation.Text = "";
 
             btnGetOne.Enabled = false;
-            btnAnalyze.Enabled = false;
             panel1.Visible = panel2.Visible = panel3.Visible = false;
             picSpinner.Visible = true;
             panelFinancials.Visible = false;
@@ -540,6 +538,10 @@ namespace StockApi
                     }
                     panel1.Visible = panel2.Visible = panel3.Visible = true;
 
+                    /////////////////////////////
+                    DisplayMetrics();
+                    /////////////////////////////
+
                 } // Ticker found.
                 else // Ticker not found.
                 {
@@ -576,13 +578,11 @@ namespace StockApi
             lblNasdaqPercChange.ForeColor = _markets.Nasdaq.MarketColor;
         }
 
-        private void btnAnalyze_Click(object sender, EventArgs e)
+        private void DisplayMetrics()
         {
-            Analyze.AnalyzeInputs analyzeInputs = new Analyze.AnalyzeInputs();
-            SetUpAnalyzeInputs(analyzeInputs);
-            _analyze.AnalyzeStockData(_stockDownloads, analyzeInputs, false);
-
+            _analyze.AnalyzeStockData(_stockDownloads);
             txtAnalysisOutput.Text = _analyze.FormatMetricData();
+
             lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
             lblBuyPrice.Text = _analyze.BuyPrice.ToString();
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
@@ -628,14 +628,15 @@ namespace StockApi
         }
 
 
-        private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
-        {
-            analyzeInputs.SharesOwned = (int)ExcelManager.CurrentRolloverPosition.Quantity;
-            analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
-            analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
-            analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
-            analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
-        }
+        // TODO take out
+        //private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
+        //{
+        //    analyzeInputs.SharesOwned = (int)ExcelManager.CurrentRolloverPosition.Quantity;
+        //    analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
+        //    analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
+        //    analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
+        //    analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
+        //}
 
         // TODO take out
         //private async void btnGetAllHistory_Click(object sender, EventArgs e)
