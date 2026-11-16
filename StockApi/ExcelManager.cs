@@ -58,8 +58,34 @@ namespace StockApi
             }
 
             CurrentJointPosition    = JointPositionList.FirstOrDefault(x => x.Symbol == ticker);
-            CurrentRolloverTrade    = TradeList.LastOrDefault(x => x.Symbol == ticker);
-            CurrentJointTrade       = JointTradeList.LastOrDefault(x => x.Symbol == ticker);
+
+            if (CurrentJointPosition == null) // dummy up
+            {
+                CurrentJointPosition = new ExcelPosition();
+                CurrentJointPosition.Quantity = 1;
+                CurrentJointPosition.BuySell = "Buy";
+            }
+
+            CurrentRolloverTrade = TradeList.LastOrDefault(x => x.Symbol == ticker);
+            
+            if (CurrentRolloverTrade == null) // dummy up
+            {
+                CurrentRolloverTrade = new ExcelTrade();
+                CurrentRolloverTrade.Quantity = 1;
+                CurrentRolloverTrade.BuySell = "Buy";
+                CurrentRolloverTrade.Price = 1;
+                CurrentRolloverTrade.QuantityHeld = 1;
+            }
+
+            CurrentJointTrade = JointTradeList.LastOrDefault(x => x.Symbol == ticker);
+            if (CurrentJointTrade == null) // dummy up
+            {
+                CurrentJointTrade = new ExcelTrade();
+                CurrentJointTrade.Quantity = 1;
+                CurrentJointTrade.BuySell = "Buy";
+                CurrentJointTrade.Price = 1;
+                CurrentJointTrade.QuantityHeld = 1;
+            }
         }
 
         /// ===============================================

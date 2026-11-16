@@ -1091,11 +1091,24 @@ namespace StockApi
             lblSellPrice.Text = _analyze.SellPrice.ToString();
         }
 
-        private void radRolloverTrade_CheckedChanged(object sender, EventArgs e)
+
+
+        
+        
+        private void btnGetNextTradeTargets_Click(object sender, EventArgs e)
         {
+            bool rollover = lblTrades.Text.IndexOf("Rollover") > -1;
+
+            _analyze.GetNextTradeTargets(rollover, _stockDownloads, Convert.ToDecimal(txtMovementTargetPercent.Text));
+
 
         }
+    
 
+
+    
+    
+    
     }
 
     public class CustomColorTable : ProfessionalColorTable

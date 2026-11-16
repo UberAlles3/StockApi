@@ -45,6 +45,14 @@ namespace StockApi
         public decimal ValuationMetric = 1M;
         public decimal FinalMetric = 0;
 
+        // Public Buy Sell Values
+
+        public decimal MovementPercent = 24;
+        public string  MovementNotes = "";
+        public decimal BuySellMetric = 1M;
+        public decimal VolitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
+
+
         public decimal AnalyzeStockData(StockDownloads stockDownloads)
         {
             _buyless = false;
@@ -246,72 +254,86 @@ namespace StockApi
         ///////////////////////////////////////////////////////////////
         ///                     BUY and SELL
         ///////////////////////////////////////////////////////////////
-        private decimal CalculateBuySell(StockDownloads stockDownloads)
+        public string GetNextTradeTargets(bool rollover, StockDownloads stockDownloads, decimal movementPercent)
         {
             StringBuilder output = new StringBuilder();
+            List<ExcelTrade> excelTrades = new List<ExcelTrade>();
+            ExcelPosition position = null;
+            ExcelTrade lastTrade = null;
 
-            //// Consecutive buys or sells
-            //decimal buySellMetric = 1M;
-            //List<DataRow> drList = Form1.TickerTradesDataTable.Select().Take(3).ToList();
-            //int buys = 0;
-            //int sells = 0;
-            //foreach (DataRow dr in drList)
-            //{
-            //    if (dr.ItemArray[2].ToString() == "Buy")
-            //    {
-            //        if (sells > 0)
-            //            break;
-            //        buys++;
-            //    }
-            //    if (dr.ItemArray[2].ToString() == "Sell")
-            //    {
-            //        if (buys > 0)
-            //            break;
-            //        sells++;
-            //    }
-            //}
+            if (rollover)
+            {
+                excelTrades = ExcelManager.TradeList.Where(x => x.Symbol == _ticker).OrderByDescending(x => x.TradeDate).Take(3).ToList();
+                excelTrades = excelTrades.OrderBy(x => x.TradeDate).ToList();
+                position = ExcelManager.CurrentRolloverPosition;
+                lastTrade = ExcelManager.CurrentRolloverTrade;
+            }
+            else
+            {
+                excelTrades = ExcelManager.TradeList.Where(x => x.Symbol == _ticker).OrderByDescending(x => x.TradeDate).Take(3).ToList();
+                excelTrades = excelTrades.OrderBy(x => x.TradeDate).ToList();
+                position  = ExcelManager.CurrentJointPosition;
+                lastTrade = ExcelManager.CurrentJointTrade;
+            }
 
-            //if (buys == 2)
-            //    buySellMetric = .98M;
-            //if (buys == 3)
-            //    buySellMetric = .96M;
-            //if (sells == 2)
-            //    buySellMetric = 1.02M;
-            //if (sells == 3)
-            //    buySellMetric = 1.04M;
+            // Consecutive buys or sells
+            int buys = 0;
+            int sells = 0;
+            foreach (ExcelTrade trade in excelTrades)
+            {
+                if (trade.BuySell == "Buy")
+                {
+                    if (sells > 0)
+                        break;
+                    buys++;
+                }
+                if (trade.BuySell == "Sell")
+                {
+                    if (buys > 0)
+                        break;
+                    sells++;
+                }
+            }
 
-            //output.AppendLine($"Buys Sells Metric = {buySellMetric.ToString(".00")}");
+            if (buys == 2)
+                BuySellMetric = .98M;
+            if (buys == 3)
+                BuySellMetric = .96M;
+            if (sells == 2)
+                BuySellMetric = 1.02M;
+            if (sells == 3)
+                BuySellMetric = 1.04M;
 
-            //// Adjust based on series of buys or sells
-            //FinalMetric = FinalMetric * buySellMetric;
 
-            //// Gets the volatility number closer to 1, less exxtreme. 2.6 becomes 1.5
-            //decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
+            // TODO move lower and just apply to buy and sell price
+            // Adjust based on series of buys or sells
 
-            //volitilityFactor = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
+            //TODO Apply BuySellMetric later on.
+            //FinalMetric = FinalMetric * BuySellMetric;
 
-            //output.AppendLine($"Volitility Factor = { volitilityFactor.ToString("##.##")}");
+            // Adjust movement with the stocks volatility
+            MovementPercent *= (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M; // Applying volatility
 
-            //analyzeInputs.MovementTargetPercent *= volitilityFactor; // Applying volatility
-            //output.AppendLine($"Movement % w/ Volatility = { analyzeInputs.MovementTargetPercent.ToString("##.##")}%");
+            // if stock is like XOM where your not sell a large percentage of shares owned
+            // Make the lower and upper movement less
+            if (lastTrade.Quantity < position.Quantity / 4)
+            {
+                MovementPercent = MovementPercent * .9M;
+                output.AppendLine($"Movement reduced, low share quantity = {MovementPercent.ToString("##.##")}");
+            }
 
-            //// if stock is like XOM where your not sell a large percentage of shares owned
-            //// Make the lower and upper movement less
-            //if (analyzeInputs.QuantityTraded < analyzeInputs.SharesOwned / 4)
-            //{
-            //    analyzeInputs.MovementTargetPercent = analyzeInputs.MovementTargetPercent * .9M;
-            //    output.AppendLine($"Movement reduced, low share quantity = {analyzeInputs.MovementTargetPercent.ToString("##.##")}");
-            //}
+            decimal lowerMovementMultiplier = ((100M - (MovementPercent * .7M)) / 100M); // if movement is 20% will assign .88 because a down percentage is greater than an up
+            decimal upperMovementMultiplier = ((100M + MovementPercent) / 100M);         // if movement is 20% will assign 1.2
 
-            //decimal lowerMovementMultiplier = ((100M - (analyzeInputs.MovementTargetPercent * .7M)) / 100M); // if movement is 20% will assign .88 because a down percentage is greater than an up
-            //decimal upperMovementMultiplier = ((100M + analyzeInputs.MovementTargetPercent) / 100M); // if movement is 20% will assign 1.2
+            // Calculate future buy or sells based on how much it moves and what our target movement is. 
+            decimal buyPrice = (decimal)lastTrade.Price * lowerMovementMultiplier;
+            decimal sellPrice = (decimal)lastTrade.Price * upperMovementMultiplier;
 
-            //// Calculate future buy or sells based on how much it moves and what our target movement is. 
-            //decimal buyPrice = analyzeInputs.SharesTradedPrice * lowerMovementMultiplier;
-            //decimal sellPrice = analyzeInputs.SharesTradedPrice * upperMovementMultiplier;
-
-            //output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
-            //output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
+            output.AppendLine($"Buys Sells Metric = {BuySellMetric.ToString(".00")}");
+            output.AppendLine($"Volitility Factor = {VolitilityFactor.ToString("##.##")}");
+            output.AppendLine($"Movement % w/ Volatility = {MovementPercent.ToString("##.##")}%");
+            output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
 
             //buyPrice = buyPrice * ((FinalMetric + 1) / 2);
             //sellPrice = sellPrice * ((FinalMetric + 1) / 2);
@@ -410,8 +432,20 @@ namespace StockApi
 
             //AnalysisMetricsOutputText = output.ToString();
 
-            return FinalMetric;
+            return output.ToString(); 
         }
+
+        public string FormatNextTradeData()
+        {
+            StringBuilder output = new StringBuilder();
+
+            output.AppendLine($"Buys Sells Metric = {BuySellMetric.ToString(".00")}");
+            output.AppendLine($"Volitility Factor = {VolitilityFactor.ToString("##.##")}");
+            output.AppendLine($"Movement % w/ Volatility = {MovementPercent.ToString("##.##")}%");
+
+            return "";
+        }
+
 
 
         public string FormatMetricData()
@@ -460,8 +494,6 @@ namespace StockApi
         }
 
 
-
-
         public string JointTradeTargets(StockDownloads stockDownloads)
         {
             decimal finalFactor = 1.0M;
@@ -469,112 +501,112 @@ namespace StockApi
 
             StringBuilder output = new StringBuilder();
 
-            var position = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
-            var jointPosition = ExcelManager.JointPositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
-            decimal metric = 1;
-            if(position != null)
-                metric = (decimal)position.TotalMetric;
+            //var position = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
+            //var jointPosition = ExcelManager.JointPositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
+            //decimal metric = 1;
+            //if(position != null)
+            //    metric = (decimal)position.TotalMetric;
 
-            if (jointPosition.BuySell == null)
-            {
-                // get buy sell from joint trades
-                var jointTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).LastOrDefault();
-                jointPosition.BuySell = jointTrade.BuySell;
-                if(jointPosition.BuySell == "Buy")
-                {
-                    jointPosition.BuyPrice = jointTrade.Price;
-                    jointPosition.BuyQuantity = jointTrade.Quantity;
-                }
-                else
-                {
-                    jointPosition.SellPrice = jointTrade.Price;
-                    jointPosition.SellQuantity = jointTrade.Quantity;
-                }
-            }
+            //if (jointPosition.BuySell == null)
+            //{
+            //    // get buy sell from joint trades
+            //    var jointTrade = ExcelManager.JointTradeList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).LastOrDefault();
+            //    jointPosition.BuySell = jointTrade.BuySell;
+            //    if(jointPosition.BuySell == "Buy")
+            //    {
+            //        jointPosition.BuyPrice = jointTrade.Price;
+            //        jointPosition.BuyQuantity = jointTrade.Quantity;
+            //    }
+            //    else
+            //    {
+            //        jointPosition.SellPrice = jointTrade.Price;
+            //        jointPosition.SellQuantity = jointTrade.Quantity;
+            //    }
+            //}
 
-            string lastBuyorSell = jointPosition.BuySell.Substring(0, 3).ToLower();
-            decimal lastTradePrice;
-            if(lastBuyorSell == "buy")
-            {
-                lastTradePrice = (decimal)jointPosition.BuyPrice;
-            }
-            else  // sell
-            {
-                lastTradePrice = (decimal)jointPosition.SellPrice;
-            }
+            //string lastBuyorSell = jointPosition.BuySell.Substring(0, 3).ToLower();
+            //decimal lastTradePrice;
+            //if(lastBuyorSell == "buy")
+            //{
+            //    lastTradePrice = (decimal)jointPosition.BuyPrice;
+            //}
+            //else  // sell
+            //{
+            //    lastTradePrice = (decimal)jointPosition.SellPrice;
+            //}
 
-            // Look for price trends. Topping out or bottoming out. 1 year to 3 months. Last 3 months to today.
-            // Slope of 1 year to 3 months ago.
-            decimal priceYear    = stockDownloads.stockHistory.HistoricDataYearAgo.Price;
+            //// Look for price trends. Topping out or bottoming out. 1 year to 3 months. Last 3 months to today.
+            //// Slope of 1 year to 3 months ago.
+            //decimal priceYear    = stockDownloads.stockHistory.HistoricDataYearAgo.Price;
 
-            if (stockDownloads.stockHistory.HistoricDataMonthAgo == null || stockDownloads.stockHistory.HistoricData3MonthsAgo == null)
-                stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(stockDownloads.stockSummary.Ticker, stockDownloads.stockSummary);
-            decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
+            //if (stockDownloads.stockHistory.HistoricDataMonthAgo == null || stockDownloads.stockHistory.HistoricData3MonthsAgo == null)
+            //    stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(stockDownloads.stockSummary.Ticker, stockDownloads.stockSummary);
+            //decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
             
-            decimal priceMonth   = stockDownloads.stockHistory.HistoricDataMonthAgo.Price;
-            decimal priceWeek    = stockDownloads.stockHistory.HistoricDataWeekAgo.Price;
-            decimal priceToday   = stockDownloads.stockHistory.HistoricDataToday.Price;
+            //decimal priceMonth   = stockDownloads.stockHistory.HistoricDataMonthAgo.Price;
+            //decimal priceWeek    = stockDownloads.stockHistory.HistoricDataWeekAgo.Price;
+            //decimal priceToday   = stockDownloads.stockHistory.HistoricDataToday.Price;
 
-            decimal yearMonthlyGain = (((price3Months - priceYear) / 9) / price3Months) * 100;
-            decimal threeMonthsMonthlyGain = (((priceToday - price3Months) / 3) / priceToday * 100);
+            //decimal yearMonthlyGain = (((price3Months - priceYear) / 9) / price3Months) * 100;
+            //decimal threeMonthsMonthlyGain = (((priceToday - price3Months) / 3) / priceToday * 100);
 
-            output.AppendLine($"Price year ago:         {priceYear.ToString("0.00").PadLeft(6)}");
-            output.AppendLine($"Price 3 months ago:     {price3Months.ToString("0.00").PadLeft(6)}");
-            output.AppendLine($"Price today:            {priceToday.ToString("0.00").PadLeft(6)}");
-            output.AppendLine($"Monthly gain year:     {yearMonthlyGain.ToString("0.00").PadLeft(6)}%");
-            output.AppendLine($"Monthly gain 3 months: {threeMonthsMonthlyGain.ToString("0.00").PadLeft(6)}%");
+            //output.AppendLine($"Price year ago:         {priceYear.ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Price 3 months ago:     {price3Months.ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Price today:            {priceToday.ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Monthly gain year:     {yearMonthlyGain.ToString("0.00").PadLeft(6)}%");
+            //output.AppendLine($"Monthly gain 3 months: {threeMonthsMonthlyGain.ToString("0.00").PadLeft(6)}%");
 
-            // Are both gains above 2%
-            if (threeMonthsMonthlyGain > 2 && yearMonthlyGain > 2)
-            {
-                finalFactor += .1M;
-                output.AppendLine($"Both gains above 2%");
-            }
+            //// Are both gains above 2%
+            //if (threeMonthsMonthlyGain > 2 && yearMonthlyGain > 2)
+            //{
+            //    finalFactor += .1M;
+            //    output.AppendLine($"Both gains above 2%");
+            //}
 
-            // Is the latest 3 month gains better the the previous 9 month gains?
-            if (threeMonthsMonthlyGain > yearMonthlyGain * 1.2M)
-            {
-                finalFactor += .1M;
-                output.AppendLine($"Gains are rising        {finalFactor.ToString("0.00").PadLeft(6)}");
-            }
+            //// Is the latest 3 month gains better the the previous 9 month gains?
+            //if (threeMonthsMonthlyGain > yearMonthlyGain * 1.2M)
+            //{
+            //    finalFactor += .1M;
+            //    output.AppendLine($"Gains are rising        {finalFactor.ToString("0.00").PadLeft(6)}");
+            //}
 
-            output.AppendLine($"Stock Metric:           {metric.ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Stock Metric:           {metric.ToString("0.00").PadLeft(6)}");
 
-            finalFactor += ((metric - 1.02M) / 2M);
-            output.AppendLine($"Final Factor:           {finalFactor.ToString("0.00").PadLeft(6)}");
+            //finalFactor += ((metric - 1.02M) / 2M);
+            //output.AppendLine($"Final Factor:           {finalFactor.ToString("0.00").PadLeft(6)}");
 
-            decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
-            volitilityFactor = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
-            output.AppendLine($"Volitility Factor:      {volitilityFactor.ToString("0.00").PadLeft(6)}");
+            //decimal volitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
+            //volitilityFactor = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
+            //output.AppendLine($"Volitility Factor:      {volitilityFactor.ToString("0.00").PadLeft(6)}");
 
-            percentToApply *= volitilityFactor;
-            output.AppendLine($"Percent to apply:       {percentToApply.ToString("0.00").PadLeft(6)}");
-            output.AppendLine($"Buy Percent:            {(percentToApply / finalFactor).ToString("0.00").PadLeft(6)}");
-            output.AppendLine($"Sell Percent:           {(percentToApply * finalFactor).ToString("0.00").PadLeft(6)}");
+            //percentToApply *= volitilityFactor;
+            //output.AppendLine($"Percent to apply:       {percentToApply.ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Buy Percent:            {(percentToApply / finalFactor).ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Sell Percent:           {(percentToApply * finalFactor).ToString("0.00").PadLeft(6)}");
 
 
-            ////////// One Year Target - Not a very valuable metric. 
-            decimal targetPriceMetric = 1M;
-            targetPriceMetric = stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue / stockDownloads.stockSummary.PriceString.NumericValue;
-            targetPriceMetric = AdjustMetric(targetPriceMetric, -10M);
-            targetPriceMetric = SoftLimit(targetPriceMetric, .9M, 1.01M);
-            output.AppendLine($"One year target metric: {targetPriceMetric.ToString("0.00").PadLeft(6)}");
+            //////////// One Year Target - Not a very valuable metric. 
+            //decimal targetPriceMetric = 1M;
+            //targetPriceMetric = stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue / stockDownloads.stockSummary.PriceString.NumericValue;
+            //targetPriceMetric = AdjustMetric(targetPriceMetric, -10M);
+            //targetPriceMetric = SoftLimit(targetPriceMetric, .9M, 1.01M);
+            //output.AppendLine($"One year target metric: {targetPriceMetric.ToString("0.00").PadLeft(6)}");
 
-            output.AppendLine($"Last traded price:      {lastTradePrice.ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Last traded price:      {lastTradePrice.ToString("0.00").PadLeft(6)}");
 
-            decimal highest3MonthPrice = Math.Max(Math.Max(price3Months, priceMonth), priceWeek);
-            output.AppendLine($"Highest Price 3M:       {highest3MonthPrice.ToString("0.00").PadLeft(6)}");
+            //decimal highest3MonthPrice = Math.Max(Math.Max(price3Months, priceMonth), priceWeek);
+            //output.AppendLine($"Highest Price 3M:       {highest3MonthPrice.ToString("0.00").PadLeft(6)}");
 
-            BuyPrice = lastTradePrice * 1 / (1 + ((percentToApply / finalFactor) / 100));
-            SellPrice = lastTradePrice * (1 + ((percentToApply * finalFactor) / 100));
+            //BuyPrice = lastTradePrice * 1 / (1 + ((percentToApply / finalFactor) / 100));
+            //SellPrice = lastTradePrice * (1 + ((percentToApply * finalFactor) / 100));
 
-            output.AppendLine($"Raw Buy Price:          {BuyPrice.ToString("0.00").PadLeft(6)}");
-            output.AppendLine($"Raw Sell Price:         {SellPrice.ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Raw Buy Price:          {BuyPrice.ToString("0.00").PadLeft(6)}");
+            //output.AppendLine($"Raw Sell Price:         {SellPrice.ToString("0.00").PadLeft(6)}");
 
-            if (highest3MonthPrice > lastTradePrice)
-            {
-                BuyPrice = lastTradePrice * 1 / (1 + ((percentToApply / finalFactor) / 100)) + (highest3MonthPrice - lastTradePrice);
-            }
+            //if (highest3MonthPrice > lastTradePrice)
+            //{
+            //    BuyPrice = lastTradePrice * 1 / (1 + ((percentToApply / finalFactor) / 100)) + (highest3MonthPrice - lastTradePrice);
+            //}
 
             return output.ToString();
         }

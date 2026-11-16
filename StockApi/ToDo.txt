@@ -9,3 +9,6 @@ Make new list of Liquidated stock for the Off highs form??
 Make Notes menu item StockNotes.txt on desktop??
 
 Add a metric for PE ratio increasing decreasing over time 
+
+Add valuation from either Yahoo or the other site?
+
