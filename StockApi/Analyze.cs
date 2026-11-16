@@ -304,6 +304,7 @@ namespace StockApi
             if (sells == 3)
                 BuySellMetric = 1.04M;
 
+            output.AppendLine($"Buy or Sell Streak Metric = {BuySellMetric.ToString(".00")}");
 
             // TODO move lower and just apply to buy and sell price
             // Adjust based on series of buys or sells
@@ -329,36 +330,36 @@ namespace StockApi
             decimal buyPrice = (decimal)lastTrade.Price * lowerMovementMultiplier;
             decimal sellPrice = (decimal)lastTrade.Price * upperMovementMultiplier;
 
-            output.AppendLine($"Buys Sells Metric = {BuySellMetric.ToString(".00")}");
             output.AppendLine($"Volitility Factor = {VolitilityFactor.ToString("##.##")}");
             output.AppendLine($"Movement % w/ Volatility = {MovementPercent.ToString("##.##")}%");
             output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
 
-            //buyPrice = buyPrice * ((FinalMetric + 1) / 2);
-            //sellPrice = sellPrice * ((FinalMetric + 1) / 2);
+            buyPrice = buyPrice * ((FinalMetric + 1) / 2);
+            sellPrice = sellPrice * ((FinalMetric + 1) / 2);
 
-            //if (sellPrice < analyzeInputs.SharesTradedPrice)
-            //    sellPrice = analyzeInputs.SharesTradedPrice * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.
-            //if (buyPrice > analyzeInputs.SharesTradedPrice * .88M)
-            //{
-            //    _buyless = true;
-            //    buyPrice = analyzeInputs.SharesTradedPrice * .88M; // Next buy can't so near the current price, but buy less
-            //}
+            if (sellPrice < (decimal)lastTrade.Price)
+                sellPrice = (decimal)lastTrade.Price * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.
+            if (buyPrice > (decimal)lastTrade.Price * .88M)
+            {
+                _buyless = true;
+                buyPrice = (decimal)lastTrade.Price * .88M; // Next buy can't so near the current price, but buy less
+            }
 
-            //output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
-            //output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
+            output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
 
-            /////////// Limit price so it's with a range
-            //decimal limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * lowerMovementMultiplier) * .5M; // lower buy limit price too low
-            //if (buyPrice < limitPrice)
-            //    buyPrice = limitPrice;
-            //limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * upperMovementMultiplier) * 1.4M; // upper sell limit
-            //if (sellPrice > limitPrice)
-            //    sellPrice = limitPrice;
+            ///////// Limit price so it's with a range 
+            /// TODO Why aren't we using lastTrade price?
+            decimal limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * lowerMovementMultiplier) * .5M; // lower buy limit price too low
+            if (buyPrice < limitPrice)
+                buyPrice = limitPrice;
+            limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * upperMovementMultiplier) * 1.4M; // upper sell limit
+            if (sellPrice > limitPrice)
+                sellPrice = limitPrice;
 
-            //BuyPrice = buyPrice;
-            //SellPrice = sellPrice;
+            BuyPrice = buyPrice;
+            SellPrice = sellPrice;
 
 
             ////////////////////////////////////
