@@ -714,9 +714,9 @@ namespace StockApi
                 btnJointTrades.Text = "Rollover";
                 lblTrades.Text = "Joint";
 
-                txtSharesTraded.Text     = ExcelManager.CurrentRolloverTrade.Quantity.ToString();        // Quan. Traded
-                txtSharesTradePrice.Text = ExcelManager.CurrentRolloverTrade.Price.ToString("0.00"); // Price
-                txtSharesOwned.Text      = ExcelManager.CurrentRolloverTrade.QuantityHeld.ToString();     // Owned
+                txtSharesTraded.Text = ExcelManager.CurrentJointTrade.Quantity.ToString();     // Quan. Traded
+                txtSharesTradePrice.Text = ExcelManager.CurrentJointTrade.Price.ToString("0.00");  // Price
+                txtSharesOwned.Text = ExcelManager.CurrentJointTrade.QuantityHeld.ToString(); // Owned
             }
             else
             {
@@ -724,9 +724,9 @@ namespace StockApi
                 btnJointTrades.Text = "Joint";
                 lblTrades.Text = "Rollover";
 
-                txtSharesTraded.Text     = ExcelManager.CurrentJointTrade.Quantity.ToString();        // Quan. Traded
-                txtSharesTradePrice.Text = ExcelManager.CurrentJointTrade.Price.ToString("0.00"); // Price
-                txtSharesOwned.Text      = ExcelManager.CurrentJointTrade.QuantityHeld.ToString();     // Owned
+                txtSharesTraded.Text = ExcelManager.CurrentRolloverTrade.Quantity.ToString();     // Quan. Traded
+                txtSharesTradePrice.Text = ExcelManager.CurrentRolloverTrade.Price.ToString("0.00");  // Price
+                txtSharesOwned.Text = ExcelManager.CurrentRolloverTrade.QuantityHeld.ToString(); // Owned
             }
 
             // filter on stock ticker then order by date descending
