@@ -324,8 +324,8 @@ namespace StockApi
 
             lblShortInterest.Text = "...";
             btnJointTrades.Visible = true;
-            btnJointTrades.Text = "Joint Trades";
-            lblTrades.Text = "Rollover Trades";
+            btnJointTrades.Text = "Joint";
+            lblTrades.Text = "Rollover";
 
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -414,14 +414,10 @@ namespace StockApi
                     {
                         errorPlace = "Ticker trades";
                         DataRow latestRow = TickerTradesDataTable.Rows[0];
-                        // TODO take out
-                        //if (txtSharesOwned.Text.Trim() == "")
-                        //    txtSharesOwned.Text = "1";
-                        //if (txtSharesTraded.Text.Trim() == "")
-                        //    txtSharesTraded.Text = "1";
                         
-                        txtSharesTraded.Text = latestRow.ItemArray[3].ToString();     // Quan. Traded
+                        txtSharesTraded.Text = latestRow.ItemArray[3].ToString();                     // Quan. Traded
                         txtSharesTradePrice.Text = ((double)latestRow.ItemArray[5]).ToString("0.00"); // Price
+                        txtSharesOwned.Text = latestRow.ItemArray[6].ToString();                      // Owned
                         if (latestRow.ItemArray[2].ToString().Trim().ToLower() == "buy")
                         {
                             radBuy.Checked = true;
@@ -440,7 +436,7 @@ namespace StockApi
                     else
                     {
                         // TODO take out
-                        //txtSharesOwned.Text = "1";
+                        txtSharesOwned.Text = "1";
                         txtSharesTraded.Text = "1";
                         txtSharesTradePrice.Text = _stockDownloads.stockSummary.PriceString.NumericValue.ToString("0.00");
                     }
@@ -592,107 +588,9 @@ namespace StockApi
             }
         }
 
-
-
-
-
-        private void btnPriceTrendData_Click(object sender, EventArgs e)
-        {
-
-
-
-
-
-
-
-
-        }
-
-        private void btnGetMetricTrend_Click(object sender, EventArgs e)
-        {
-            MetricsForm form = new MetricsForm(txtStockTicker.Text);
-            form.Owner = this;
-            form.Show();
-        }
-
-        private void btnMetricChart_Click(object sender, EventArgs e)
-        {
-            MetricsChartForm form = new MetricsChartForm(txtStockTicker.Text);
-            form.Owner = this;
-            form.Show();
-        }
-
-
-        // TODO take out
-        //private void SetUpAnalyzeInputs(Analyze.AnalyzeInputs analyzeInputs)
-        //{
-        //    analyzeInputs.SharesOwned = (int)ExcelManager.CurrentRolloverPosition.Quantity;
-        //    analyzeInputs.LastTradeBuySell = radBuy.Checked ? Analyze.BuyOrSell.Buy : Analyze.BuyOrSell.Sell;
-        //    analyzeInputs.QuantityTraded = Convert.ToInt32(txtSharesTraded.Text);
-        //    analyzeInputs.SharesTradedPrice = Convert.ToDecimal(txtSharesTradePrice.Text);
-        //    analyzeInputs.MovementTargetPercent = Convert.ToInt32(txtMovementTargetPercent.Text);
-        //}
-
-        // TODO take out
-        //private async void btnGetAllHistory_Click(object sender, EventArgs e)
-        //{
-        //    UseWaitCursor = true;
-        //    Application.DoEvents();
-        //    await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary);
-        //    BindListToHistoricPriceGrid(_stockDownloads.stockHistory.HistoricDisplayList);
-        //    // Trends
-        //    UseWaitCursor = false;
-        //}
-
         private void lnkCompanyOverview_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             MessageBox.Show(_stockDownloads.stockSummary.CompanyOverview, "Company Overview", MessageBoxButtons.OK);
-        }
-
-        //////////////////////////////
-        //      Metrics Timer
-        //////////////////////////////
-        private void SetupDailyTimer()
-        {
-            MetricsTimer.Tick += MetricsTimer_Tick;
-            SetNextDailyExecutionTime();
-            MetricsTimer.Start();
-        }
-        private void SetNextDailyExecutionTime()
-        {
-            DateTime now = DateTime.Now;
-            DateTime targetTime = new DateTime(now.Year, now.Month, now.Day, 7, 0, 0); // Example: 7:00 AM
-            //DateTime targetTime = DateTime.Now.AddSeconds(15); // Example: 8:00 AM
-
-            if (now > targetTime)
-            {
-                targetTime = targetTime.AddDays(1); // If target time has passed today, set for tomorrow
-            }
-
-            TimeSpan timeUntilExecution = targetTime - now;
-            MetricsTimer.Interval = (int)timeUntilExecution.TotalMilliseconds;
-        }
-
-        private async void MetricsTimer_Tick(object sender, EventArgs e)
-        {
-            // Stop the timer to prevent immediate re-triggering
-            MetricsTimer.Stop();
-
-            // Execute your daily function here
-            Metrics metrics = new Metrics();
-            CancellationTokenSource cts = new CancellationTokenSource();
-
-            //////////////////// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            ///// Not running for a while 5/27/2026
-
-            //int x = await metrics.DailyGetMetrics(PositionList, null, "", "", cts.Token);
-
-            //// Get news, earnings
-            //GetNewsEarnings();
-
-            //// Reset the timer for the next daily execution
-            //SetNextDailyExecutionTime();
-            //MetricsTimer.Start();
         }
 
         //////////////////////////////
@@ -734,6 +632,41 @@ namespace StockApi
             _news = txtMessages.Text = sb.ToString();
         }
 
+        /////////////////////////////////
+        //          2nd Panel 
+        /////////////////////////////////
+        private void btnGetMetricTrend_Click(object sender, EventArgs e)
+        {
+            MetricsForm form = new MetricsForm(txtStockTicker.Text);
+            form.Owner = this;
+            form.Show();
+        }
+
+        private void btnMetricChart_Click(object sender, EventArgs e)
+        {
+            MetricsChartForm form = new MetricsChartForm(txtStockTicker.Text);
+            form.Owner = this;
+            form.Show();
+        }
+
+        private void btnPriceTrendData_Click(object sender, EventArgs e)
+        {
+
+
+
+
+        }
+
+        // TODO take out
+        //private async void btnGetAllHistory_Click(object sender, EventArgs e)
+        //{
+        //    UseWaitCursor = true;
+        //    Application.DoEvents();
+        //    await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(txtStockTicker.Text, _stockDownloads.stockSummary);
+        //    BindListToHistoricPriceGrid(_stockDownloads.stockHistory.HistoricDisplayList);
+        //    // Trends
+        //    UseWaitCursor = false;
+        //}
 
         //////////////////////////////
         //         Charting
@@ -764,6 +697,9 @@ namespace StockApi
             chartForm.Show();
         }
 
+        /////////////////////////////////
+        //          3rd Panel 
+        /////////////////////////////////
         private void btnJointTrades_Click(object sender, EventArgs e)
         {
             TickerTradesDataTable = new DataTable();
@@ -772,17 +708,25 @@ namespace StockApi
             EnumerableRowCollection<DataRow> tickerTrades;
             DataTable tradesDataTable = null;
 
-            if (btnJointTrades.Text == "Joint Trades")
+            if (btnJointTrades.Text == "Joint")
             {
                 tradesDataTable = ExcelManager.JointTradesDataTable;
-                btnJointTrades.Text = "Rollover Trades";
-                lblTrades.Text = "Joint Trades";
+                btnJointTrades.Text = "Rollover";
+                lblTrades.Text = "Joint";
+
+                txtSharesTraded.Text     = ExcelManager.CurrentRolloverTrade.Quantity.ToString();        // Quan. Traded
+                txtSharesTradePrice.Text = ExcelManager.CurrentRolloverTrade.Price.ToString("0.00"); // Price
+                txtSharesOwned.Text      = ExcelManager.CurrentRolloverTrade.QuantityHeld.ToString();     // Owned
             }
             else
             {
                 tradesDataTable = ExcelManager.TradesDataTable;
-                btnJointTrades.Text = "Joint Trades";
-                lblTrades.Text = "Rollover Trades";
+                btnJointTrades.Text = "Joint";
+                lblTrades.Text = "Rollover";
+
+                txtSharesTraded.Text     = ExcelManager.CurrentJointTrade.Quantity.ToString();        // Quan. Traded
+                txtSharesTradePrice.Text = ExcelManager.CurrentJointTrade.Price.ToString("0.00"); // Price
+                txtSharesOwned.Text      = ExcelManager.CurrentJointTrade.QuantityHeld.ToString();     // Owned
             }
 
             // filter on stock ticker then order by date descending
@@ -811,12 +755,74 @@ namespace StockApi
             //////////////////////////////
         }
 
+        private void btnGetNextTradeTargets_Click(object sender, EventArgs e)
+        {
+            bool rollover = lblTrades.Text.IndexOf("Rollover") > -1;
+
+            txtAnalysisOutput.Text = _analyze.GetNextTradeTargets(rollover, _stockDownloads, Convert.ToDecimal(txtMovementTargetPercent.Text));
+
+            lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
+            lblBuyPrice.Text = _analyze.BuyPrice.ToString();
+            lblSellQuantity.Text = _analyze.SellQuantity.ToString();
+            lblSellPrice.Text = _analyze.SellPrice.ToString();
+        }
+
+        /////////////////////////////////
+        //         Misc. Events
+        /////////////////////////////////
+
+        //////////////////////////////
+        //      Metrics Timer
+        //////////////////////////////
+        private async void MetricsTimer_Tick(object sender, EventArgs e)
+        {
+            // Stop the timer to prevent immediate re-triggering
+            MetricsTimer.Stop();
+
+            // Execute your daily function here
+            Metrics metrics = new Metrics();
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            //////////////////// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            ///// Not running for a while 5/27/2026
+
+            //int x = await metrics.DailyGetMetrics(PositionList, null, "", "", cts.Token);
+
+            //// Get news, earnings
+            //GetNewsEarnings();
+
+            //// Reset the timer for the next daily execution
+            //SetNextDailyExecutionTime();
+            //MetricsTimer.Start();
+        }
+
+        private void SetupDailyTimer()
+        {
+            MetricsTimer.Tick += MetricsTimer_Tick;
+            SetNextDailyExecutionTime();
+            MetricsTimer.Start();
+        }
+        private void SetNextDailyExecutionTime()
+        {
+            DateTime now = DateTime.Now;
+            DateTime targetTime = new DateTime(now.Year, now.Month, now.Day, 7, 0, 0); // Example: 7:00 AM
+            //DateTime targetTime = DateTime.Now.AddSeconds(15); // Example: 8:00 AM
+
+            if (now > targetTime)
+            {
+                targetTime = targetTime.AddDays(1); // If target time has passed today, set for tomorrow
+            }
+
+            TimeSpan timeUntilExecution = targetTime - now;
+            MetricsTimer.Interval = (int)timeUntilExecution.TotalMilliseconds;
+        }
+
 
         /////////////////////////////////
         //         Menu Items
         /////////////////////////////////
-        ///////// Main 
 
+        ///////// Main 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -1083,22 +1089,6 @@ namespace StockApi
 
             txtAnalysisOutput.Text = _analyze.JointTradeTargets(_stockDownloads);
             lblBuyPrice.Text  = _analyze.BuyPrice.ToString();
-            lblSellPrice.Text = _analyze.SellPrice.ToString();
-        }
-
-
-
-        
-        
-        private void btnGetNextTradeTargets_Click(object sender, EventArgs e)
-        {
-            bool rollover = lblTrades.Text.IndexOf("Rollover") > -1;
-
-            txtAnalysisOutput.Text = _analyze.GetNextTradeTargets(rollover, _stockDownloads, Convert.ToDecimal(txtMovementTargetPercent.Text));
-
-            lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
-            lblBuyPrice.Text = _analyze.BuyPrice.ToString();
-            lblSellQuantity.Text = _analyze.SellQuantity.ToString();
             lblSellPrice.Text = _analyze.SellPrice.ToString();
         }
     }

@@ -431,8 +431,6 @@ namespace StockApi
                 output.AppendLine($"Minimum profit set to $20. Sell Price: {SellPrice.ToString("##.##")}");
             }
 
-            //AnalysisMetricsOutputText = output.ToString();
-
             return output.ToString(); 
         }
 
