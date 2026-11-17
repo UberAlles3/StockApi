@@ -583,11 +583,6 @@ namespace StockApi
             _analyze.AnalyzeStockData(_stockDownloads);
             txtAnalysisOutput.Text = _analyze.FormatMetricData();
 
-            lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
-            lblBuyPrice.Text = _analyze.BuyPrice.ToString();
-            lblSellQuantity.Text = _analyze.SellQuantity.ToString();
-            lblSellPrice.Text = _analyze.SellPrice.ToString();
-
             // Current targets from spreadsheet
             ExcelPosition excelPosition = ExcelManager.PositionList.Where(x => x.Symbol == txtStockTicker.Text).FirstOrDefault();
             if(excelPosition != null)
@@ -1099,16 +1094,13 @@ namespace StockApi
         {
             bool rollover = lblTrades.Text.IndexOf("Rollover") > -1;
 
-            _analyze.GetNextTradeTargets(rollover, _stockDownloads, Convert.ToDecimal(txtMovementTargetPercent.Text));
+            txtAnalysisOutput.Text = _analyze.GetNextTradeTargets(rollover, _stockDownloads, Convert.ToDecimal(txtMovementTargetPercent.Text));
 
-
+            lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
+            lblBuyPrice.Text = _analyze.BuyPrice.ToString();
+            lblSellQuantity.Text = _analyze.SellQuantity.ToString();
+            lblSellPrice.Text = _analyze.SellPrice.ToString();
         }
-    
-
-
-    
-    
-    
     }
 
     public class CustomColorTable : ProfessionalColorTable

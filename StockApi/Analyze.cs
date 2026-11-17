@@ -343,7 +343,7 @@ namespace StockApi
             if (buyPrice > (decimal)lastTrade.Price * .88M)
             {
                 _buyless = true;
-                buyPrice = (decimal)lastTrade.Price * .88M; // Next buy can't so near the current price, but buy less
+                buyPrice = (decimal)lastTrade.Price * .88M; // Next buy can't be so near the current price, but buy less
             }
 
             output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
@@ -362,24 +362,24 @@ namespace StockApi
             SellPrice = sellPrice;
 
 
-            ////////////////////////////////////
-            ////      Quantity to Buy/Sell
-            ////////////////////////////////////
-            //decimal buyQuantity = 0M;
-            //decimal sellQuantity = 0M;
+            //////////////////////////////////
+            //      Quantity to Buy/Sell
+            //////////////////////////////////
+            decimal buyQuantity = 0M;
+            decimal sellQuantity = 0M;
 
-            //if (analyzeInputs.LastTradeBuySell == BuyOrSell.Buy)
-            //{
-            //    buyQuantity = analyzeInputs.QuantityTraded * .8M; // Buy less if you just bought
-            //    sellQuantity = analyzeInputs.QuantityTraded * 1.08M; // Sell more if you just bought
-            //}
-            //else
-            //{
-            //    buyQuantity = analyzeInputs.QuantityTraded * 1.08M; // Buy more if you just sold
-            //    sellQuantity = analyzeInputs.QuantityTraded * .8M; // Sell less if you just sold
-            //}
+            if (lastTrade.BuySell == "Buy")
+            {
+                buyQuantity = lastTrade.Quantity * .8M; // Buy less if you just bought
+                sellQuantity = lastTrade.Quantity * 1.08M; // Sell more if you just bought
+            }
+            else
+            {
+                buyQuantity = lastTrade.Quantity * 1.08M; // Buy more if you just sold
+                sellQuantity = lastTrade.Quantity * .8M; // Sell less if you just sold
+            }
 
-            //// Dividend 
+            //// Dividend  *** Not important. Metric rules.
             //if (stockDownloads.stockSummary.DividendString.NumericValue > 8 && PriceTrendMetric > .92M)
             //{
             //    buyQuantity = buyQuantity * 1.2M;
@@ -397,39 +397,39 @@ namespace StockApi
             //    sellQuantity = sellQuantity / 1.05M;
             //}
 
-            //if (_buyless)
-            //{
-            //    buyQuantity = buyQuantity * .8M;
-            //    output.AppendLine($"Accumulate this stock slowly.");
-            //}
+            if (_buyless)
+            {
+                buyQuantity = buyQuantity * .8M;
+                output.AppendLine($"Accumulate this stock slowly.");
+            }
 
-            //// Year price trend. Lower and Raise based on that.
-            //if (stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Up)
-            //{
-            //    buyQuantity = buyQuantity * 1.05M;
-            //    sellQuantity = sellQuantity / 1.05M;
-            //    output.AppendLine($"Year up trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
-            //}
-            //if (stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Down)
-            //{
-            //    buyQuantity = buyQuantity * .95M;
-            //    sellQuantity = sellQuantity / .95M;
-            //    output.AppendLine($"Year down trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
-            //}
+            // Year price trend. Lower and Raise based on that.
+            if (stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Up)
+            {
+                buyQuantity = buyQuantity * 1.05M;
+                sellQuantity = sellQuantity / 1.05M;
+                output.AppendLine($"Year up trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
+            }
+            if (stockDownloads.stockHistory.YearTrend == StockHistory.TrendEnum.Down)
+            {
+                buyQuantity = buyQuantity * .95M;
+                sellQuantity = sellQuantity / .95M;
+                output.AppendLine($"Year down trend applied. {buyQuantity.ToString("##.##")} {sellQuantity.ToString("##.##")}");
+            }
 
-            //BuyQuantity = Math.Max(1, Convert.ToInt32(buyQuantity));
-            //SellQuantity = Math.Max(1, Convert.ToInt32(sellQuantity));
+            BuyQuantity = Math.Max(1, Convert.ToInt32(buyQuantity));
+            SellQuantity = Math.Max(1, Convert.ToInt32(sellQuantity));
 
-            //if (SellQuantity > 1 && SellQuantity > Convert.ToInt16(analyzeInputs.SharesOwned / 2.4F)) // Don't sell close to more than half your shares
-            //    SellQuantity = Convert.ToInt16((analyzeInputs.SharesOwned / 2.4F) + .5F);
+            if (SellQuantity > 1 && SellQuantity > Convert.ToInt16(lastTrade.QuantityHeld / 2.4F)) // Don't sell close to more than half your shares
+                SellQuantity = Convert.ToInt16((lastTrade.QuantityHeld / 2.4F) + .5F);
 
-            //// Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
-            //decimal profit = (SellPrice - stockDownloads.stockSummary.PriceString.NumericValue) * SellQuantity;
-            //if (profit < 20M && FinalMetric > .91M) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
-            //{
-            //    SellPrice = (20M / (SellQuantity + 3)) + stockDownloads.stockSummary.PriceString.NumericValue;
-            //    output.AppendLine($"Minimum profit set to $20. Sell Price: {SellPrice.ToString("##.##")}");
-            //}
+            // Minimum profit of $30. if selling 10 shares, sell at least $3 increase in price.
+            decimal profit = (SellPrice - stockDownloads.stockSummary.PriceString.NumericValue) * SellQuantity;
+            if (profit < 20M && FinalMetric > .91M) // if it's a bad stock we are liquidating and the $20 profit doesn't matter. 
+            {
+                SellPrice = (20M / (SellQuantity + 3)) + stockDownloads.stockSummary.PriceString.NumericValue;
+                output.AppendLine($"Minimum profit set to $20. Sell Price: {SellPrice.ToString("##.##")}");
+            }
 
             //AnalysisMetricsOutputText = output.ToString();
 
