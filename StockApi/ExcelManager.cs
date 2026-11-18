@@ -73,7 +73,7 @@ namespace StockApi
                 CurrentRolloverTrade = new ExcelTrade();
                 CurrentRolloverTrade.Quantity = 1;
                 CurrentRolloverTrade.BuySell = "Buy";
-                CurrentRolloverTrade.Price = 1;
+                CurrentRolloverTrade.Price = 0;
                 CurrentRolloverTrade.QuantityHeld = 1;
             }
 
@@ -83,7 +83,7 @@ namespace StockApi
                 CurrentJointTrade = new ExcelTrade();
                 CurrentJointTrade.Quantity = 1;
                 CurrentJointTrade.BuySell = "Buy";
-                CurrentJointTrade.Price = 1;
+                CurrentJointTrade.Price = 0;
                 CurrentJointTrade.QuantityHeld = 1;
             }
         }

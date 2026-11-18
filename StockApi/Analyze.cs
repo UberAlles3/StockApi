@@ -45,14 +45,6 @@ namespace StockApi
         public decimal ValuationMetric = 1M;
         public decimal FinalMetric = 0;
 
-        // Public Buy Sell Values
-
-        public decimal MovementPercent = 24;
-        public string  MovementNotes = "";
-        public decimal BuySellMetric = 1M;
-        public decimal VolitilityFactor = 1; // Math.Log((Math.Log10(stockDownloads.stockSummary.Volatility) + 1)) + 1; 
-
-
         public decimal AnalyzeStockData(StockDownloads stockDownloads)
         {
             _buyless = false;
@@ -260,6 +252,7 @@ namespace StockApi
             List<ExcelTrade> excelTrades = new List<ExcelTrade>();
             ExcelPosition position = null;
             ExcelTrade lastTrade = null;
+            decimal BuySellMetric = 1M;
 
             if (rollover)
             {
@@ -275,6 +268,16 @@ namespace StockApi
                 position  = ExcelManager.CurrentJointPosition;
                 lastTrade = ExcelManager.CurrentJointTrade;
             }
+            if (lastTrade.Price == 0)
+            {
+                lastTrade.Price = (double)stockDownloads.stockSummary.PriceString.NumericValue;
+                output.AppendLine($"Price = {(lastTrade.Price).ToString("0.00")}");
+            }
+            else
+                output.AppendLine($"Last Trade Price = {(lastTrade.Price).ToString("0.00")}");
+
+            output.AppendLine($"Current Metric = {FinalMetric.ToString("0.000")}");
+            output.AppendLine($"Movement Percent = {(movementPercent * 100).ToString("00")}%");
 
             // Consecutive buys or sells
             int buys = 0;
@@ -304,7 +307,13 @@ namespace StockApi
             if (sells == 3)
                 BuySellMetric = 1.04M;
 
-            output.AppendLine($"Buy or Sell Streak Metric = {BuySellMetric.ToString(".00")}");
+            if (buys > 1)
+                output.AppendLine($"Buys in a Row = {buys.ToString()}");
+            if (sells > 1)
+                output.AppendLine($"Buys in a Row = {sells.ToString()}");
+
+            if(buys > 1 || sells > 1)
+                output.AppendLine($"Buy or Sell Streak Metric = {BuySellMetric.ToString(".00")}");
 
             // TODO move lower and just apply to buy and sell price
             // Adjust based on series of buys or sells
@@ -313,25 +322,30 @@ namespace StockApi
             //FinalMetric = FinalMetric * BuySellMetric;
 
             // Adjust movement with the stocks volatility
-            MovementPercent *= (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M; // Applying volatility
-
-            // if stock is like XOM where your not sell a large percentage of shares owned
-            // Make the lower and upper movement less
-            if (lastTrade.Quantity < position.Quantity / 4)
+            decimal volatilityMetric = 1;
+            if(stockDownloads.stockSummary.VolatilityString.NumericValue < .9M || stockDownloads.stockSummary.VolatilityString.NumericValue > 1.1M )
             {
-                MovementPercent = MovementPercent * .9M;
-                output.AppendLine($"Movement reduced, low share quantity = {MovementPercent.ToString("##.##")}");
+                volatilityMetric = (decimal)AdjustMetric((double)stockDownloads.stockSummary.VolatilityString.NumericValue, -6D) - .01M;
+                output.AppendLine($"Volatility Metric = {volatilityMetric.ToString(".00")}");
+                movementPercent *= volatilityMetric; // Applying volatility
+                output.AppendLine($"Movement % w/ Volatility = {(movementPercent * 100).ToString("00")}%");
             }
 
-            decimal lowerMovementMultiplier = ((100M - (MovementPercent * .7M)) / 100M); // if movement is 20% will assign .88 because a down percentage is greater than an up
-            decimal upperMovementMultiplier = ((100M + MovementPercent) / 100M);         // if movement is 20% will assign 1.2
+            //// if stock is like XOM where your not sell a large percentage of shares owned
+            //// Make the lower and upper movement less
+            //if (lastTrade.Quantity < position.Quantity / 4)
+            //{
+            //    MovementPercent = MovementPercent * .9M;
+            //    output.AppendLine($"Movement reduced, low share quantity = {MovementPercent.ToString("##.##")}");
+            //}
+
+            //decimal lowerMovementMultiplier = ((100M - (MovementPercent * .7M)) / 100M); // if movement is 20% will assign .88 because a down percentage is greater than an up
+            //decimal upperMovementMultiplier = ((100M + MovementPercent) / 100M);         // if movement is 20% will assign 1.2
 
             // Calculate future buy or sells based on how much it moves and what our target movement is. 
-            decimal buyPrice = (decimal)lastTrade.Price * lowerMovementMultiplier;
-            decimal sellPrice = (decimal)lastTrade.Price * upperMovementMultiplier;
+            decimal buyPrice = (decimal)lastTrade.Price / (1 + movementPercent);
+            decimal sellPrice = (decimal)lastTrade.Price * (1 + movementPercent);
 
-            output.AppendLine($"Volitility Factor = {VolitilityFactor.ToString("##.##")}");
-            output.AppendLine($"Movement % w/ Volatility = {MovementPercent.ToString("##.##")}%");
             output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
 
@@ -351,10 +365,10 @@ namespace StockApi
 
             ///////// Limit price so it's with a range 
             /// TODO Why aren't we using lastTrade price?
-            decimal limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * lowerMovementMultiplier) * .5M; // lower buy limit price too low
+            decimal limitPrice = ((decimal)lastTrade.Price / movementPercent) * .75M; // lower buy limit price too low
             if (buyPrice < limitPrice)
                 buyPrice = limitPrice;
-            limitPrice = (stockDownloads.stockSummary.PriceString.NumericValue * upperMovementMultiplier) * 1.4M; // upper sell limit
+            limitPrice = ((decimal)lastTrade.Price * movementPercent) * 1.5M; // upper sell limit
             if (sellPrice > limitPrice)
                 sellPrice = limitPrice;
 
@@ -434,19 +448,6 @@ namespace StockApi
             return output.ToString(); 
         }
 
-        public string FormatNextTradeData()
-        {
-            StringBuilder output = new StringBuilder();
-
-            output.AppendLine($"Buys Sells Metric = {BuySellMetric.ToString(".00")}");
-            output.AppendLine($"Volitility Factor = {VolitilityFactor.ToString("##.##")}");
-            output.AppendLine($"Movement % w/ Volatility = {MovementPercent.ToString("##.##")}%");
-
-            return "";
-        }
-
-
-
         public string FormatMetricData()
         {
             StringBuilder output = new StringBuilder();
@@ -495,10 +496,10 @@ namespace StockApi
 
         public string JointTradeTargets(StockDownloads stockDownloads)
         {
-            decimal finalFactor = 1.0M;
-            decimal percentToApply = 35;
+            //decimal finalFactor = 1.0M;
+            //decimal percentToApply = 35;
 
-            StringBuilder output = new StringBuilder();
+            //StringBuilder output = new StringBuilder();
 
             //var position = ExcelManager.PositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
             //var jointPosition = ExcelManager.JointPositionList.Where(x => x.Symbol == stockDownloads.stockSummary.Ticker).FirstOrDefault();
@@ -541,7 +542,7 @@ namespace StockApi
             //if (stockDownloads.stockHistory.HistoricDataMonthAgo == null || stockDownloads.stockHistory.HistoricData3MonthsAgo == null)
             //    stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(stockDownloads.stockSummary.Ticker, stockDownloads.stockSummary);
             //decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
-            
+
             //decimal priceMonth   = stockDownloads.stockHistory.HistoricDataMonthAgo.Price;
             //decimal priceWeek    = stockDownloads.stockHistory.HistoricDataWeekAgo.Price;
             //decimal priceToday   = stockDownloads.stockHistory.HistoricDataToday.Price;
@@ -607,7 +608,7 @@ namespace StockApi
             //    BuyPrice = lastTradePrice * 1 / (1 + ((percentToApply / finalFactor) / 100)) + (highest3MonthPrice - lastTradePrice);
             //}
 
-            return output.ToString();
+            return "";// output.ToString();
         }
     }
 }

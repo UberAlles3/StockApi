@@ -326,6 +326,7 @@ namespace StockApi
             btnJointTrades.Visible = true;
             btnJointTrades.Text = "Joint";
             lblTrades.Text = "Rollover";
+            lblMetricBuySell.Text = "Metrics";
 
             Cursor.Current = Cursors.WaitCursor;
         }
@@ -759,8 +760,9 @@ namespace StockApi
         {
             bool rollover = lblTrades.Text.IndexOf("Rollover") > -1;
 
-            txtAnalysisOutput.Text = _analyze.GetNextTradeTargets(rollover, _stockDownloads, Convert.ToDecimal(txtMovementTargetPercent.Text));
+            txtAnalysisOutput.Text = _analyze.GetNextTradeTargets(rollover, _stockDownloads, Convert.ToDecimal(txtMovementTargetPercent.Text)/100);
 
+            lblMetricBuySell.Text = "Buy/Sell";
             lblBuyQuantity.Text = _analyze.BuyQuantity.ToString();
             lblBuyPrice.Text = _analyze.BuyPrice.ToString();
             lblSellQuantity.Text = _analyze.SellQuantity.ToString();
