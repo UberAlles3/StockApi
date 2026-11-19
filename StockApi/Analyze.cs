@@ -18,8 +18,6 @@ namespace StockApi
             Sell
         }
 
-        private bool _buyless = false;
-
         public int BuyQuantity;
         public decimal BuyPrice;
         public int SellQuantity;
@@ -47,7 +45,6 @@ namespace StockApi
 
         public decimal AnalyzeStockData(StockDownloads stockDownloads)
         {
-            _buyless = false;
             _ticker = stockDownloads.stockSummary.Ticker;
 
             Debug.WriteLine(_ticker);
@@ -346,31 +343,24 @@ namespace StockApi
             decimal buyPrice = (decimal)lastTrade.Price / (1 + movementPercent);
             decimal sellPrice = (decimal)lastTrade.Price * (1 + movementPercent);
 
-            output.AppendLine($"Buy price  applying movement% = {buyPrice.ToString("##.##")}");
-            output.AppendLine($"Sell price applying movement% = {sellPrice.ToString("##.##")}");
+            output.AppendLine($"Buy price  = {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price = {sellPrice.ToString("##.##")}");
 
-            buyPrice = buyPrice * ((FinalMetric + 1) / 2);
-            sellPrice = sellPrice * ((FinalMetric + 1) / 2);
+            buyPrice  = buyPrice  * ((FinalMetric + 1) / 2);  // Adjusted so less affect
+            sellPrice = sellPrice * ((FinalMetric + 1) / 2);  // Adjusted so less affect
 
-            if (sellPrice < (decimal)lastTrade.Price)
-                sellPrice = (decimal)lastTrade.Price * 1.05M; // Sell a bad stock at a 5% profit if it ever gets there.
-            if (buyPrice > (decimal)lastTrade.Price * .88M)
-            {
-                _buyless = true;
-                buyPrice = (decimal)lastTrade.Price * .88M; // Next buy can't be so near the current price, but buy less
-            }
-
-            output.AppendLine($"Buy price  applying total metric = {buyPrice.ToString("##.##")}");
-            output.AppendLine($"Sell price applying total metric = {sellPrice.ToString("##.##")}");
+            output.AppendLine($"Buy price applying stock's metric  = {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price applying stock's metric = {sellPrice.ToString("##.##")}");
 
             ///////// Limit price so it's with a range 
-            /// TODO Why aren't we using lastTrade price?
             decimal limitPrice = ((decimal)lastTrade.Price / movementPercent) * .75M; // lower buy limit price too low
             if (buyPrice < limitPrice)
                 buyPrice = limitPrice;
             limitPrice = ((decimal)lastTrade.Price * movementPercent) * 1.5M; // upper sell limit
             if (sellPrice > limitPrice)
                 sellPrice = limitPrice;
+
+            // TODO put the price trend that I had coded here. Put anything alse that could affect the prices.
 
             BuyPrice = buyPrice;
             SellPrice = sellPrice;
@@ -384,13 +374,13 @@ namespace StockApi
 
             if (lastTrade.BuySell == "Buy")
             {
-                buyQuantity = lastTrade.Quantity * .8M; // Buy less if you just bought
-                sellQuantity = lastTrade.Quantity * 1.08M; // Sell more if you just bought
+                // Buy the same amount if you just bought
+                sellQuantity = lastTrade.Quantity * 1.06M; // Sell more if you just bought
             }
             else
             {
-                buyQuantity = lastTrade.Quantity * 1.08M; // Buy more if you just sold
-                sellQuantity = lastTrade.Quantity * .8M; // Sell less if you just sold
+                buyQuantity = lastTrade.Quantity * 1.06M; // Buy more if you just sold
+                sellQuantity = lastTrade.Quantity * .75M; // Sell less if you just sold
             }
 
             //// Dividend  *** Not important. Metric rules.
@@ -411,10 +401,10 @@ namespace StockApi
             //    sellQuantity = sellQuantity / 1.05M;
             //}
 
-            if (_buyless)
+            if (position.TotalMetric < .8)
             {
                 buyQuantity = buyQuantity * .8M;
-                output.AppendLine($"Accumulate this stock slowly.");
+                output.AppendLine($"Sell this stock slowly.");
             }
 
             // Year price trend. Lower and Raise based on that.

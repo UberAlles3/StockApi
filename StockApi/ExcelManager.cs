@@ -55,6 +55,7 @@ namespace StockApi
                 CurrentRolloverPosition = new ExcelPosition();
                 CurrentRolloverPosition.Quantity = 1;
                 CurrentRolloverPosition.BuySell = "Buy";
+                CurrentRolloverPosition.TotalMetric = 1;
             }
 
             CurrentJointPosition    = JointPositionList.FirstOrDefault(x => x.Symbol == ticker);
@@ -64,6 +65,7 @@ namespace StockApi
                 CurrentJointPosition = new ExcelPosition();
                 CurrentJointPosition.Quantity = 1;
                 CurrentJointPosition.BuySell = "Buy";
+                CurrentJointPosition.TotalMetric = 1;
             }
 
             CurrentRolloverTrade = TradeList.LastOrDefault(x => x.Symbol == ticker);
