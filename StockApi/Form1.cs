@@ -756,9 +756,12 @@ namespace StockApi
             //////////////////////////////
         }
 
-        private void btnGetNextTradeTargets_Click(object sender, EventArgs e)
+        private async void btnGetNextTradeTargets_Click(object sender, EventArgs e)
         {
             bool rollover = lblTrades.Text.IndexOf("Rollover") > -1;
+
+            if (_stockDownloads.stockHistory.HistoricDataMonthAgo == null || _stockDownloads.stockHistory.HistoricData3MonthsAgo == null)
+                await _stockDownloads.stockHistory.GetPriceHistoryForTodayWeekMonthYear(_stockDownloads.stockSummary.Ticker, _stockDownloads.stockSummary);
 
             txtAnalysisOutput.Text = _analyze.GetNextTradeTargets(rollover, _stockDownloads, Convert.ToDecimal(txtMovementTargetPercent.Text)/100);
 

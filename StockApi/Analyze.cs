@@ -250,6 +250,10 @@ namespace StockApi
             ExcelPosition position = null;
             ExcelTrade lastTrade = null;
             decimal BuySellMetric = 1M;
+            decimal priceTrend3Month = 1.0M;
+            decimal percentToApply = 35;
+
+            output.AppendLine($"Current Metric = {FinalMetric.ToString("0.000")}");
 
             if (rollover)
             {
@@ -273,7 +277,6 @@ namespace StockApi
             else
                 output.AppendLine($"Last Trade Price = {(lastTrade.Price).ToString("0.00")}");
 
-            output.AppendLine($"Current Metric = {FinalMetric.ToString("0.000")}");
             output.AppendLine($"Movement Percent = {(movementPercent * 100).ToString("00")}%");
 
             // Consecutive buys or sells
@@ -315,8 +318,8 @@ namespace StockApi
             // TODO move lower and just apply to buy and sell price
             // Adjust based on series of buys or sells
 
-            //TODO Apply BuySellMetric later on.
-            //FinalMetric = FinalMetric * BuySellMetric;
+            //TODO Apply BuySellMetric later on.???
+            //metric = metric * BuySellMetric;
 
             // Adjust movement with the stocks volatility
             decimal volatilityMetric = 1;
@@ -360,7 +363,42 @@ namespace StockApi
             if (sellPrice > limitPrice)
                 sellPrice = limitPrice;
 
-            // TODO put the price trend that I had coded here. Put anything alse that could affect the prices.
+            //////////////////////////////////////////////////////////////////////////////////
+            // Look for price trends. Topping out or bottoming out. 1 year to 3 months. Last 3 months to today.
+            // Is the price rising faster in the last 3 months or falling?
+            decimal priceYear = stockDownloads.stockHistory.HistoricDataYearAgo.Price;
+
+            decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
+            decimal priceMonth   = stockDownloads.stockHistory.HistoricDataMonthAgo.Price;
+            decimal priceWeek    = stockDownloads.stockHistory.HistoricDataWeekAgo.Price;
+            decimal priceToday   = stockDownloads.stockHistory.HistoricDataToday.Price;
+
+            decimal yearMonthlyGain = (((price3Months - priceYear) / 9) / price3Months) * 100;
+            decimal threeMonthsMonthlyGain = (((priceToday - price3Months) / 3) / priceToday * 100);
+
+            output.AppendLine($"Price year ago:         {priceYear.ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Price 3 months ago:     {price3Months.ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Price today:            {priceToday.ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Monthly gain year:      {yearMonthlyGain.ToString("0.00").PadLeft(6)}%");
+            output.AppendLine($"Monthly gain 3 months:  {threeMonthsMonthlyGain.ToString("0.00").PadLeft(6)}%");
+
+            // Are both gains above 2%
+            if (threeMonthsMonthlyGain > 2 && yearMonthlyGain > 2)
+            {
+                priceTrend3Month += .1M;
+                output.AppendLine($"Both gains above 2%");
+            }
+
+            // Is the latest 3 month gains better the the previous 9 month gains?
+            if (threeMonthsMonthlyGain > yearMonthlyGain * 1.2M)
+            {
+                priceTrend3Month += .1M;
+                output.AppendLine($"Gains are rising        {priceTrend3Month.ToString("0.00").PadLeft(6)}");
+            }
+
+            output.AppendLine($"Buy Percent:            {(percentToApply / priceTrend3Month).ToString("0.00").PadLeft(6)}");
+            output.AppendLine($"Sell Percent:           {(percentToApply * priceTrend3Month).ToString("0.00").PadLeft(6)}");
+
 
             BuyPrice = buyPrice;
             SellPrice = sellPrice;
