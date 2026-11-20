@@ -322,6 +322,7 @@ namespace StockApi
             //metric = metric * BuySellMetric;
 
             // Adjust movement with the stocks volatility
+            movementPercent += 1;
             decimal volatilityMetric = 1;
             if(stockDownloads.stockSummary.VolatilityString.NumericValue < .9M || stockDownloads.stockSummary.VolatilityString.NumericValue > 1.1M )
             {
@@ -343,17 +344,18 @@ namespace StockApi
             //decimal upperMovementMultiplier = ((100M + MovementPercent) / 100M);         // if movement is 20% will assign 1.2
 
             // Calculate future buy or sells based on how much it moves and what our target movement is. 
-            decimal buyPrice = (decimal)lastTrade.Price / (1 + movementPercent);
-            decimal sellPrice = (decimal)lastTrade.Price * (1 + movementPercent);
+            decimal buyPrice = (decimal)lastTrade.Price / movementPercent;
+            decimal sellPrice = (decimal)lastTrade.Price * movementPercent;
 
-            output.AppendLine($"Buy price  = {buyPrice.ToString("##.##")}");
-            output.AppendLine($"Sell price = {sellPrice.ToString("##.##")}");
+            output.AppendLine($"Buy price  {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price {sellPrice.ToString("##.##")}");
 
             buyPrice  = buyPrice  * ((FinalMetric + 1) / 2);  // Adjusted so less affect
             sellPrice = sellPrice * ((FinalMetric + 1) / 2);  // Adjusted so less affect
 
-            output.AppendLine($"Buy price applying stock's metric  = {buyPrice.ToString("##.##")}");
-            output.AppendLine($"Sell price applying stock's metric = {sellPrice.ToString("##.##")}");
+            output.AppendLine($"----- Metric -----");
+            output.AppendLine($"Buy price  {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price {sellPrice.ToString("##.##")}");
 
             ///////// Limit price so it's with a range 
             decimal limitPrice = ((decimal)lastTrade.Price / movementPercent) * .75M; // lower buy limit price too low
@@ -371,34 +373,51 @@ namespace StockApi
             decimal price3Months = stockDownloads.stockHistory.HistoricData3MonthsAgo.Price;
             decimal priceMonth   = stockDownloads.stockHistory.HistoricDataMonthAgo.Price;
             decimal priceWeek    = stockDownloads.stockHistory.HistoricDataWeekAgo.Price;
-            decimal priceToday   = stockDownloads.stockHistory.HistoricDataToday.Price;
+            decimal priceToday   = stockDownloads.stockSummary.PriceString.NumericValue;
 
-            decimal yearMonthlyGain = (((price3Months - priceYear) / 9) / price3Months) * 100;
-            decimal threeMonthsMonthlyGain = (((priceToday - price3Months) / 3) / priceToday * 100);
+            decimal yearMonthlyGain = (((price3Months - priceYear) / priceYear) / 9) * 100;  //  ((Price Today - Price year ago) / Price year ago) / 9 months
+            decimal threeMonthsMonthlyGain = (((priceToday - price3Months) / price3Months) / 3 * 100);
 
+            output.AppendLine($"----- Price trend -----");
             output.AppendLine($"Price year ago:         {priceYear.ToString("0.00").PadLeft(6)}");
             output.AppendLine($"Price 3 months ago:     {price3Months.ToString("0.00").PadLeft(6)}");
             output.AppendLine($"Price today:            {priceToday.ToString("0.00").PadLeft(6)}");
-            output.AppendLine($"Monthly gain year:      {yearMonthlyGain.ToString("0.00").PadLeft(6)}%");
+            output.AppendLine($"Monthly gain 9 months:  {yearMonthlyGain.ToString("0.00").PadLeft(6)}%");
             output.AppendLine($"Monthly gain 3 months:  {threeMonthsMonthlyGain.ToString("0.00").PadLeft(6)}%");
 
             // Are both gains above 2%
-            if (threeMonthsMonthlyGain > 2 && yearMonthlyGain > 2)
+            if (threeMonthsMonthlyGain > 3 && yearMonthlyGain > 3)
             {
-                priceTrend3Month += .1M;
-                output.AppendLine($"Both gains above 2%");
+                priceTrend3Month += .04M;
+                output.AppendLine($"Both gains above 3%");
             }
 
             // Is the latest 3 month gains better the the previous 9 month gains?
             if (threeMonthsMonthlyGain > yearMonthlyGain * 1.2M)
             {
-                priceTrend3Month += .1M;
+                priceTrend3Month += .04M;
                 output.AppendLine($"Gains are rising        {priceTrend3Month.ToString("0.00").PadLeft(6)}");
             }
 
-            output.AppendLine($"Buy Percent:            {(percentToApply / priceTrend3Month).ToString("0.00").PadLeft(6)}");
-            output.AppendLine($"Sell Percent:           {(percentToApply * priceTrend3Month).ToString("0.00").PadLeft(6)}");
+            // Are both gains below 2%
+            if (threeMonthsMonthlyGain < 3 && yearMonthlyGain < 3)
+            {
+                priceTrend3Month -= .03M;
+                output.AppendLine($"Both losses below -3%");
+            }
 
+            // Is the latest 3 month gains better the the previous 9 month gains?
+            if (threeMonthsMonthlyGain < yearMonthlyGain * 1.2M)
+            {
+                priceTrend3Month -= .04M;
+                output.AppendLine($"Losses are increasing        {priceTrend3Month.ToString("0.00").PadLeft(6)}");
+            }
+
+            buyPrice *= priceTrend3Month;
+            sellPrice *= priceTrend3Month;
+
+            output.AppendLine($"Buy price  {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price {sellPrice.ToString("##.##")}");
 
             BuyPrice = buyPrice;
             SellPrice = sellPrice;
