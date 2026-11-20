@@ -385,7 +385,7 @@ namespace StockApi
             output.AppendLine($"Monthly gain 9 months:  {yearMonthlyGain.ToString("0.00").PadLeft(6)}%");
             output.AppendLine($"Monthly gain 3 months:  {threeMonthsMonthlyGain.ToString("0.00").PadLeft(6)}%");
 
-            // Are both gains above 2%
+            // Are both gains above 3%
             if (threeMonthsMonthlyGain > 3 && yearMonthlyGain > 3)
             {
                 priceTrend3Month += .04M;
@@ -399,17 +399,17 @@ namespace StockApi
                 output.AppendLine($"Gains are rising        {priceTrend3Month.ToString("0.00").PadLeft(6)}");
             }
 
-            // Are both gains below 2%
+            // Are both losses below -3%
             if (threeMonthsMonthlyGain < 3 && yearMonthlyGain < 3)
             {
                 priceTrend3Month -= .03M;
                 output.AppendLine($"Both losses below -3%");
             }
 
-            // Is the latest 3 month gains better the the previous 9 month gains?
+            // Is the latest 3 month losses increasing over the previous 9 month losses?
             if (threeMonthsMonthlyGain < yearMonthlyGain * 1.2M)
             {
-                priceTrend3Month -= .04M;
+g                priceTrend3Month -= .04M;
                 output.AppendLine($"Losses are increasing        {priceTrend3Month.ToString("0.00").PadLeft(6)}");
             }
 
