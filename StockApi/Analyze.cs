@@ -409,7 +409,7 @@ namespace StockApi
             // Is the latest 3 month losses increasing over the previous 9 month losses?
             if (threeMonthsMonthlyGain < yearMonthlyGain * 1.2M)
             {
-g                priceTrend3Month -= .04M;
+                priceTrend3Month -= .04M;
                 output.AppendLine($"Losses are increasing        {priceTrend3Month.ToString("0.00").PadLeft(6)}");
             }
 
