@@ -347,6 +347,7 @@ namespace StockApi
             decimal buyPrice = (decimal)lastTrade.Price / movementPercent;
             decimal sellPrice = (decimal)lastTrade.Price * movementPercent;
 
+            output.AppendLine($"----- Movement -----");
             output.AppendLine($"Buy price  {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price {sellPrice.ToString("##.##")}");
 
@@ -422,6 +423,7 @@ namespace StockApi
             BuyPrice = buyPrice;
             SellPrice = sellPrice;
 
+            output.AppendLine($"----- Buy and Sell Amount Calculations -----");
 
             //////////////////////////////////
             //      Quantity to Buy/Sell
