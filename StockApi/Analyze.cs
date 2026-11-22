@@ -253,7 +253,35 @@ namespace StockApi
             decimal priceTrend3Month = 1.0M;
             decimal percentToApply = 35;
 
+            List<SqlMetric> metrics = new List<SqlMetric>();
+            
+            //////////////////////////////////////////////////////////
+            /// Get all historic metric values and find the trend.
+            SqlCrudOperations sqlCrudOperations = new SqlCrudOperations();
+            metrics = sqlCrudOperations.GetMetricList(DateTime.Now.AddMonths(-12), _ticker);
+            metrics = metrics.Where(x => x.Year > DateTime.Now.Year - 2).ToList();
+            metrics = metrics.OrderBy(x => x.Year).ThenBy(x => x.Month).ToList();
+            double begMetric, finMetric;
+            if(metrics.Count > 12)
+            {
+                begMetric = (metrics[0].FinalMetric + metrics[2].FinalMetric + metrics[3].FinalMetric) / 3;
+                finMetric = (metrics[metrics.Count-1].FinalMetric + metrics[metrics.Count - 2].FinalMetric + metrics[metrics.Count - 3].FinalMetric) / 3;
+            }
+            else if (metrics.Count > 5)
+            {
+                begMetric = (metrics[0].FinalMetric + metrics[1].FinalMetric) / 2;
+                finMetric = (metrics[metrics.Count - 1].FinalMetric + metrics[metrics.Count - 2].FinalMetric)  / 2;
+            }
+            else
+            {
+                begMetric = 1;
+                finMetric = 1;
+            }
+
+
             output.AppendLine($"Current Metric = {FinalMetric.ToString("0.000")}");
+            output.AppendLine($"Metric Trend   = {begMetric.ToString("0.000")}  ->  {finMetric.ToString("0.000")}");
+
 
             if (rollover)
             {

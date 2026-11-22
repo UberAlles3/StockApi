@@ -50,7 +50,7 @@ namespace SqlLayer.SQL_Models
 
         public override string ToString()
         {
-            return $"Ticker: {Ticker}, Year: {Year}, Month: {Month}, UpdateDate: {UpdateDate}";
+            return $"Ticker: {Ticker}, Year: {Year}, Month: {Month}, UpdateDate: {UpdateDate}, FinalMetric: {FinalMetric}";
         }
     }
 }

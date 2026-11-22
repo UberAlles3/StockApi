@@ -261,14 +261,14 @@ namespace StockApi
                 // only add first and last metric
                 if (comboBox1.SelectedIndex < 3 || first.UpdateDate.AddMonths(4) > DateTime.Now) // 1 month or 3 months or not enough history
                 {
-                    if (r.FinalMetric > first.FinalMetric * 1.04 || r.FinalMetric < first.FinalMetric * .965)
+                    if (r.FinalMetric > first.FinalMetric * 1.05 || r.FinalMetric < first.FinalMetric * .96)
                     {
                         bigMover = true;
                     }
                 }
                 else
                 {
-                    if (r.FinalMetric > first.FinalMetric * 1.07 || r.FinalMetric < first.FinalMetric * .94)
+                    if (r.FinalMetric > first.FinalMetric * 1.08 || r.FinalMetric < first.FinalMetric * .93)
                     {
                         bigMover = true;
                     }

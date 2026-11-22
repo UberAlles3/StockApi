@@ -164,10 +164,6 @@ namespace StockApi
             decimal percent_diff = stockDownloads.stockSummary.PriceString.NumericValue / stockDownloads.stockHistory.HistoricData3YearsAgo.Price - 1M;
 
             decimal totalMetric = _analyze.AnalyzeStockData(stockDownloads);
-            if (ticker == "ABR" || ticker == "KIM" || ticker == "ACHR" || ticker == "AMZN")
-            {
-                Debug.WriteLine(_analyze.FormatMetricData());
-            }
 
             //stockMetricString = $"{stockDownloads.stockSummary.Ticker}, {stockDownloads.stockSummary.VolatilityString.NumericValue}, {stockDownloads.stockSummary.EarningsPerShareString.NumericValue}, {stockDownloads.stockSummary.OneYearTargetPriceString.NumericValue},"
             //                         + $" {stockDownloads.stockSummary.PriceBookString.NumericValue}, {stockDownloads.stockSummary.ProfitMarginString.NumericValue}, {stockDownloads.stockSummary.DividendString.NumericValue}, {stockDownloads.stockStatistics.ShortInterestString.NumericValue}"
