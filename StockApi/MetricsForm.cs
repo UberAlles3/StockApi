@@ -18,6 +18,7 @@ namespace StockApi
         private static Analyze _analyze = new Analyze();
         private string _ticker;
         private CancellationTokenSource cts = new CancellationTokenSource();
+        List<ExcelPosition> _positions;
 
         public MetricsForm(string ticker)
         {
@@ -351,6 +352,13 @@ namespace StockApi
         private async void btnRunMetrics_Click(object sender, EventArgs e)
         {
             Metrics metrics = new Metrics();
+
+            if (radAccount1.Checked == true)
+                _positions = ExcelManager.PositionList;
+            else
+                _positions = ExcelManager.JointPositionList;
+
+
             txtTickerList.Clear();
 
             btnCancelMetrics.Visible = true;
@@ -359,7 +367,7 @@ namespace StockApi
             // Allow cancelling DailyMetrics with the Cancel button
             try
             {
-                int x = await metrics.DailyGetMetrics(ExcelManager.PositionList, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
+                int x = await metrics.DailyGetMetrics(_positions, txtTickerList, txtBeginLetter.Text, txtEndLetter.Text, cts.Token);
             }
             catch (OperationCanceledException)
             {

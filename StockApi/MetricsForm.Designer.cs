@@ -29,8 +29,8 @@ namespace StockApi
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnSearch = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -46,6 +46,8 @@ namespace StockApi
             this.txtTickerList = new System.Windows.Forms.RichTextBox();
             this.btnCancelMetrics = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.radAccount2 = new System.Windows.Forms.RadioButton();
+            this.radAccount1 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -69,25 +71,25 @@ namespace StockApi
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(16)))), ((int)(((byte)(32)))));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Transparent;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -225,12 +227,38 @@ namespace StockApi
             this.panel1.Size = new System.Drawing.Size(1111, 595);
             this.panel1.TabIndex = 59;
             // 
+            // radAccount2
+            // 
+            this.radAccount2.AutoSize = true;
+            this.radAccount2.ForeColor = System.Drawing.Color.White;
+            this.radAccount2.Location = new System.Drawing.Point(1055, 52);
+            this.radAccount2.Name = "radAccount2";
+            this.radAccount2.Size = new System.Drawing.Size(50, 19);
+            this.radAccount2.TabIndex = 61;
+            this.radAccount2.Text = "Joint";
+            this.radAccount2.UseVisualStyleBackColor = true;
+            // 
+            // radAccount1
+            // 
+            this.radAccount1.AutoSize = true;
+            this.radAccount1.Checked = true;
+            this.radAccount1.ForeColor = System.Drawing.Color.White;
+            this.radAccount1.Location = new System.Drawing.Point(1055, 27);
+            this.radAccount1.Name = "radAccount1";
+            this.radAccount1.Size = new System.Drawing.Size(68, 19);
+            this.radAccount1.TabIndex = 60;
+            this.radAccount1.TabStop = true;
+            this.radAccount1.Text = "Rollover";
+            this.radAccount1.UseVisualStyleBackColor = true;
+            // 
             // MetricsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(48)))), ((int)(((byte)(96)))));
             this.ClientSize = new System.Drawing.Size(1358, 696);
+            this.Controls.Add(this.radAccount2);
+            this.Controls.Add(this.radAccount1);
             this.Controls.Add(this.btnCancelMetrics);
             this.Controls.Add(this.txtTickerList);
             this.Controls.Add(this.btnRunMetrics);
@@ -272,5 +300,7 @@ namespace StockApi
         private System.Windows.Forms.RichTextBox txtTickerList;
         private System.Windows.Forms.Button btnCancelMetrics;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton radAccount2;
+        private System.Windows.Forms.RadioButton radAccount1;
     }
 }
