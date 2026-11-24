@@ -277,6 +277,10 @@ namespace StockApi
                 begMetric = 1;
                 finMetric = 1;
             }
+            if (finMetric - begMetric > .05)
+                finMetric = begMetric * 1.05;
+            if (finMetric - begMetric < -.05)
+                finMetric = begMetric * .95;
 
 
             output.AppendLine($"Current Metric = {FinalMetric.ToString("0.000")}");
@@ -379,10 +383,17 @@ namespace StockApi
             output.AppendLine($"Buy price  {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price {sellPrice.ToString("##.##")}");
 
-            buyPrice  = buyPrice  * ((FinalMetric + 1) / 2);  // Adjusted so less affect
+            output.AppendLine($"----- Metric -----");
+            buyPrice = buyPrice * ((FinalMetric + 1) / 2);  // Adjusted so less affect
             sellPrice = sellPrice * ((FinalMetric + 1) / 2);  // Adjusted so less affect
 
-            output.AppendLine($"----- Metric -----");
+            output.AppendLine($"Buy price  {buyPrice.ToString("##.##")}");
+            output.AppendLine($"Sell price {sellPrice.ToString("##.##")}");
+
+            output.AppendLine($"----- Metric Trend -----");
+            buyPrice = buyPrice * (decimal)(finMetric/begMetric);  
+            sellPrice = sellPrice * (decimal)(finMetric / begMetric);
+
             output.AppendLine($"Buy price  {buyPrice.ToString("##.##")}");
             output.AppendLine($"Sell price {sellPrice.ToString("##.##")}");
 
