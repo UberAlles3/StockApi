@@ -27,6 +27,9 @@ namespace YahooLayer
             //QuoteRoot quotes = await GetJsonAsync("intc", unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
             //quotes = await GetJsonAsync("vgslx", unixStartTimestamp.ToString(), unixEndTimestamp.ToString());
 
+            if (quotes == null)
+                return listQuotes;
+
             if (quotes.chart.result[0].indicators.quote[0].close == null)
             {
                 double x = quotes.chart.result[0].meta.regularMarketPrice;
